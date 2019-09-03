@@ -1,0 +1,59 @@
+extends layout
+
+block content
+  if user
+    .content-wrapper
+      .content-header.row
+        .content-header-left.col-md-6.col-12.mb-2.breadcrumb-new
+          h3.content-header-title.mb-0 Lista pracowników
+          .row.breadcrumbs-top
+            .breadcrumb-wrapper.col-12
+              ol.breadcrumb
+                li.breadcrumb-item
+                  a(href='/dashboard') Dashboard
+                li.breadcrumb-item
+                  a(href='/dashboard') Pracownicy
+                li.breadcrumb-item.active
+                  a(href='#') Lista pracowników
+      .content-body
+        .row.match-height
+          .col-xl-12.col-12
+            .card
+              .card-header
+                a.heading-elements-toggle
+                  i.la.la-ellipsis-v.font-medium-3
+                .heading-elements
+                  ul.list-inline.mb-0
+                    li
+                      a(data-action='reload')
+                        i.ft-rotate-cw
+                    li
+                      a(data-action='expand')
+                        i.ft-maximize
+              .card-content.collapse.show
+                .card-body
+                  h1 Lista pracowników
+                .table-responsive
+                  table.table
+                    thead
+                      tr
+                        th #
+                        th First Name
+                        th Last Name
+                        th Username
+                    tbody
+                      tr
+                        th(scope='row') 1
+                        td Mark
+                        td Otto
+                        td @mdo
+                      tr
+                        th(scope='row') 2
+                        td Jacob
+                        td Thornton
+                        td @fat
+                      tr
+                        th(scope='row') 3
+                        td Larry
+                        td the Bird
+                        td @twitter

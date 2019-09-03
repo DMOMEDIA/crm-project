@@ -1,0 +1,116 @@
+doctype html
+// BEGIN:: Head
+head
+  // BEGIN:: Base Path (base relative path for assets of this page)
+  base(href='../')
+  meta(charset='utf-8')
+  title Logowanie do systemu CRM
+  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+  // BEGIN:: Fonts
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700')
+  // BEGIN:: Page Custom Styles (used by this page)
+  link(href='./assets/css/demo1/pages/login/login-1.css' rel='stylesheet' type='text/css')
+  // BEGIN:: Global Mandatory Vendors
+  link(href='./assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css' rel='stylesheet' type='text/css')
+  // BEGIN:: Global Optional Vendors
+  link(href='./assets/vendors/general/sweetalert2/dist/sweetalert2.css' rel='stylesheet' type='text/css')
+  link(href='./assets/vendors/general/socicon/css/socicon.css' rel='stylesheet' type='text/css')
+  link(href='./assets/vendors/custom/vendors/line-awesome/css/line-awesome.css' rel='stylesheet' type='text/css')
+  link(href='./assets/vendors/custom/vendors/flaticon/flaticon.css' rel='stylesheet' type='text/css')
+  link(href='./assets/vendors/custom/vendors/flaticon2/flaticon.css' rel='stylesheet' type='text/css')
+  link(href='./assets/vendors/general/@fortawesome/fontawesome-free/css/all.min.css' rel='stylesheet' type='text/css')
+  // BEGIN:: Global Theme Styles (used by all pages)
+  link(href='./assets/css/demo1/style.bundle.css' rel='stylesheet' type='text/css')
+  // BEGIN:: Layout Skins (used by all pages)
+  link(href='./assets/css/demo1/skins/header/base/light.css' rel='stylesheet' type='text/css')
+  link(href='./assets/css/demo1/skins/header/menu/light.css' rel='stylesheet' type='text/css')
+  link(href='./assets/css/demo1/skins/brand/dark.css' rel='stylesheet' type='text/css')
+  link(href='./assets/css/demo1/skins/aside/dark.css' rel='stylesheet' type='text/css')
+  link(rel='shortcut icon' href='./assets/media/logos/favicon.ico')
+// END:: Head
+// BEGIN:: Body
+// BEGIN:: Page
+.kt-grid.kt-grid--ver.kt-grid--root
+  #kt_login.kt-grid.kt-grid--hor.kt-grid--root.kt-login.kt-login--v1
+    .kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--desktop.kt-grid--ver-desktop.kt-grid--hor-tablet-and-mobile
+      // BEGIN:: Aside
+      .kt-grid__item.kt-grid__item--order-tablet-and-mobile-2.kt-grid.kt-grid--hor.kt-login__aside(style='background-image: url(./assets/media//bg/bg-4.jpg);')
+        .kt-grid__item
+          a.kt-login__logo(href='/')
+            img(width='127px' height='50px' src='./assets/media/logos/logo-4.png')
+        .kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--ver
+          .kt-grid__item.kt-grid__item--middle
+            h3.kt-login__title Nie narzekaj, że masz pod górę, gdy zmierzasz na szczyt.
+            h4.kt-login__subtitle
+              | Myślenie to najcięższa praca z możliwych i pewnie dlatego tak niewielu ją podejmuje.
+        .kt-grid__item
+          .kt-login__info
+            .kt-login__copyright
+              | 2019 &copy CRM System
+      // BEGIN:: Aside
+      // BEGIN:: Content
+      .kt-grid__item.kt-grid__item--fluid.kt-grid__item--order-tablet-and-mobile-1.kt-login__wrapper
+        // BEGIN:: Head
+        .kt-login__head
+          a.btn.btn-outline-brand(href='#')
+            i.fa.fa-question
+            |  Pomoc
+        // BEGIN:: Body
+        .kt-login__body
+          // BEGIN:: signin
+          .kt-login__form
+            .kt-login__title
+              h3 Logowanie do systemu CRM
+            // BEGIN:: Form
+            form.kt-form(action='/' method='POST' novalidate='novalidate')
+              .form-group
+                input.form-control(type='text' placeholder='Identyfikator (IDCRM-******)' name='identity' autocomplete='on')
+              .form-group
+                input.form-control(type='password' placeholder='Hasło' name='password')
+              .kt-login__actions
+                a.kt-link.kt-login__link-forgot(href='#') Nie pamiętasz hasła?
+                button#signin_submit.btn.btn-primary.btn-elevate.kt-login__btn-primary Zaloguj się
+            // END:: Form
+          // end::Signin
+        // end::Body
+      // end::Content
+// END:: Page
+// BEGIN:: Global Config(global config for global JS sciprts)
+script(src='./assets/js/private/options.js' type='text/javascript')
+// begin:: Global Mandatory Vendors
+script(src='./assets/vendors/general/jquery/dist/jquery.js' type='text/javascript')
+script(src='./assets/vendors/general/popper.js/dist/umd/popper.js' type='text/javascript')
+script(src='./assets/vendors/general/bootstrap/dist/js/bootstrap.min.js' type='text/javascript')
+script(src='./assets/vendors/general/js-cookie/src/js.cookie.js' type='text/javascript')
+script(src='./assets/vendors/general/moment/min/moment.min.js' type='text/javascript')
+script(src='./assets/vendors/general/tooltip.js/dist/umd/tooltip.min.js' type='text/javascript')
+script(src='./assets/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js' type='text/javascript')
+script(src='./assets/vendors/general/sticky-js/dist/sticky.min.js' type='text/javascript')
+script(src='./assets/vendors/general/wnumb/wNumb.js' type='text/javascript')
+// end:: Global Mandatory Vendors
+// begin:: Global Optional Vendors
+script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js' type='text/javascript')
+script(src='./assets/vendors/general/block-ui/jquery.blockUI.js' type='text/javascript')
+script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js' type='text/javascript')
+script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js' type='text/javascript')
+script(src='./assets/vendors/general/sweetalert2/dist/sweetalert2.min.js' type='text/javascript')
+script(src='./assets/vendors/custom/js/vendors/sweetalert2.init.js' type='text/javascript')
+// BEGIN:: Global Theme Bundle (used by all pages)
+script(src='./assets/js/demo1/scripts.bundle.js' type='text/javascript')
+// BEGIN:: Page Scripts(used by this page)
+script(src='./assets/js/private/login-1.js' type='text/javascript')
+if formMessage != ""
+  script.
+    $(document).ready(function() {
+      var form = $('.kt-form');
+      var showErrorMsg = function (form, type, msg) {
+    		var alert = $('<div class="kt-alert kt-alert--outline alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"></button><span></span></div>');
+    
+    		form.find('.alert').remove();
+    		alert.prependTo(form);
+    		//alert.animateClass('fadeIn animated');
+    		KTUtil.animateClass(alert[0], 'fadeIn animated');
+    		alert.find('span').html(msg);
+    	}
+      showErrorMsg(form, 'danger', '#{ formMessage }');
+    });

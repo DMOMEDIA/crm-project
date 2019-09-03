@@ -1,0 +1,675 @@
+- if(pageName != 'dashboard')
+  - var appdir = '../';
+- else
+  - var appdir = '../../';
+doctype html
+html(lang='en')
+  // Begin:: Head
+  head
+    // BEGIN:: Base Path (base relative path for assets of this page)
+    base(href=appdir)
+    // END:: Base Path
+    meta(charset='utf-8')
+    title #{ title }
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    // BEGIN:: Fonts
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700')
+    // BEGIN:: Global Mandatory Vendors
+    link(href='./assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css', rel='stylesheet', type='text/css')
+    // BEGIN:: Global Optional Vendors
+    link(href='./assets/vendors/general/tether/dist/css/tether.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-timepicker/css/bootstrap-timepicker.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-daterangepicker/daterangepicker.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/select2/dist/css/select2.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/ion-rangeslider/css/ion.rangeSlider.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/nouislider/distribute/nouislider.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/owl.carousel/dist/assets/owl.carousel.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/owl.carousel/dist/assets/owl.theme.default.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/dropzone/dist/dropzone.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/quill/dist/quill.snow.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/@yaireo/tagify/dist/tagify.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/summernote/dist/summernote.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/bootstrap-markdown/css/bootstrap-markdown.min.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/animate.css/animate.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/toastr/build/toastr.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/dual-listbox/dist/dual-listbox.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/morris.js/morris.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/sweetalert2/dist/sweetalert2.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/socicon/css/socicon.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/custom/vendors/line-awesome/css/line-awesome.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/custom/vendors/flaticon/flaticon.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/custom/vendors/flaticon2/flaticon.css', rel='stylesheet', type='text/css')
+    link(href='./assets/vendors/general/@fortawesome/fontawesome-free/css/all.min.css', rel='stylesheet', type='text/css')
+    // END:: Global Optional Vendors
+    // BEGIN:: Global Theme Styles (used by all pages)
+    link(href='./assets/css/demo1/style.bundle.css', rel='stylesheet', type='text/css')
+    // END:: Global Theme Styles
+    // BEGIN:: Layout Skins (used by all pages)
+    link(href='./assets/css/demo1/skins/header/base/light.css', rel='stylesheet', type='text/css')
+    link(href='./assets/css/demo1/skins/header/menu/light.css', rel='stylesheet', type='text/css')
+    link(href='./assets/css/demo1/skins/brand/dark.css', rel='stylesheet', type='text/css')
+    link(href='./assets/css/demo1/skins/aside/dark.css', rel='stylesheet', type='text/css')
+    // FAVICON
+    link(rel='shortcut icon', href='./assets/media/logos/favicon.ico')
+    // BEGIN:: Individual CSS stylesheet
+    block stylecss
+  // BEGIN::Body
+  body.kt-quick-panel--right.kt-demo-panel--right.kt-offcanvas-panel--right.kt-header--fixed.kt-header-mobile--fixed.kt-subheader--enabled.kt-subheader--fixed.kt-subheader--solid.kt-aside--enabled.kt-aside--fixed.kt-page--loading
+    // BEGIN:: Page
+    // BEGIN:: Header Mobile
+    #kt_header_mobile.kt-header-mobile.kt-header-mobile--fixed
+      .kt-header-mobile__logo
+        a(href='demo1/index.html')
+          img(alt='Logo', src='./assets/media/logos/logo-light.png')
+      .kt-header-mobile__toolbar
+        button#kt_aside_mobile_toggler.kt-header-mobile__toggler.kt-header-mobile__toggler--left
+          span
+        button#kt_header_mobile_toggler.kt-header-mobile__toggler
+          span
+        button#kt_header_mobile_topbar_toggler.kt-header-mobile__topbar-toggler
+          i.flaticon-more
+    // END:: Header Mobile
+    .kt-grid.kt-grid--hor.kt-grid--root
+      .kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--ver.kt-page
+        // BEGIN:: Aside
+        button#kt_aside_close_btn.kt-aside-close
+          i.la.la-close
+        #kt_aside.kt-aside.kt-aside--fixed.kt-grid__item.kt-grid.kt-grid--desktop.kt-grid--hor-desktop
+          // BEGIN:: Aside
+          #kt_aside_brand.kt-aside__brand.kt-grid__item
+            .kt-aside__brand-logo
+              a(href='demo1/index.html')
+                img(alt='Logo', src='./assets/media/logos/logo-light.png')
+            .kt-aside__brand-tools
+              button#kt_aside_toggler.kt-aside__brand-aside-toggler
+                span
+                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                      polygon#Shape(points='0 0 24 0 24 24 0 24')
+                      path#Path-94(d='M5.29288961,6.70710318 C4.90236532,6.31657888 4.90236532,5.68341391 5.29288961,5.29288961 C5.68341391,4.90236532 6.31657888,4.90236532 6.70710318,5.29288961 L12.7071032,11.2928896 C13.0856821,11.6714686 13.0989277,12.281055 12.7371505,12.675721 L7.23715054,18.675721 C6.86395813,19.08284 6.23139076,19.1103429 5.82427177,18.7371505 C5.41715278,18.3639581 5.38964985,17.7313908 5.76284226,17.3242718 L10.6158586,12.0300721 L5.29288961,6.70710318 Z', fill='#000000', fill-rule='nonzero', transform='translate(8.999997, 11.999999) scale(-1, 1) translate(-8.999997, -11.999999) ')
+                      path#Path-94(d='M10.7071009,15.7071068 C10.3165766,16.0976311 9.68341162,16.0976311 9.29288733,15.7071068 C8.90236304,15.3165825 8.90236304,14.6834175 9.29288733,14.2928932 L15.2928873,8.29289322 C15.6714663,7.91431428 16.2810527,7.90106866 16.6757187,8.26284586 L22.6757187,13.7628459 C23.0828377,14.1360383 23.1103407,14.7686056 22.7371482,15.1757246 C22.3639558,15.5828436 21.7313885,15.6103465 21.3242695,15.2371541 L16.0300699,10.3841378 L10.7071009,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(15.999997, 11.999999) scale(-1, 1) rotate(-270.000000) translate(-15.999997, -11.999999) ')          
+                span
+                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                      polygon#Shape(points='0 0 24 0 24 24 0 24')
+                      path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
+                      path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
+              // <button class="kt-aside__brand-aside-toggler kt-aside__brand-aside-toggler--left" id="kt_aside_toggler"><span></span></button>
+          // END:: Aside
+          // BEGIN:: Aside Menu
+          #kt_aside_menu_wrapper.kt-aside-menu-wrapper.kt-grid__item.kt-grid__item--fluid
+            #kt_aside_menu.kt-aside-menu(data-ktmenu-vertical='1', data-ktmenu-scroll='1', data-ktmenu-dropdown-timeout='500')
+              ul.kt-menu__nav
+                li.kt-menu__item(class=(pageName === "dashboard" ? "kt-menu__item--active" : undefined), aria-haspopup='true')
+                  a.kt-menu__link(href='/dashboard')
+                    span.kt-menu__link-icon
+                      svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                        g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                          polygon#Bound(points='0 0 24 0 24 24 0 24')
+                          path#Shape(d='M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z', fill='#000000', fill-rule='nonzero')
+                          path#Path(d='M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z', fill='#000000', opacity='0.3')
+                    span.kt-menu__link-text Dashboard
+                if userPermissions.find(o => o === 'crm.employees.show' || o === 'crm.employees.add' || o === 'crm.permissions.modify')
+                  li.kt-menu__section
+                    h4.kt-menu__section-text Zarządzanie i administracja
+                    i.kt-menu__section-icon.flaticon-more-v2
+                if userPermissions.includes('crm.employees.show') || userPermissions.includes('crm.employees.add')
+                  li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "userlist" || pageName == "useradd" ? "kt-menu__item--here kt-menu__item--open" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                    a.kt-menu__link.kt-menu__toggle(href='javascript:;')
+                      span.kt-menu__link-icon
+                        svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                          g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                            rect#bound(x='0', y='0', width='24', height='24')
+                            rect#Rectangle-7(fill='#000000', x='4', y='4', width='7', height='7', rx='1.5')
+                            path#Combined-Shape(d='M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z', fill='#000000', opacity='0.3')
+                      span.kt-menu__link-text Pracownicy
+                      i.kt-menu__ver-arrow.la.la-angle-right
+                    .kt-menu__submenu
+                      span.kt-menu__arrow
+                      ul.kt-menu__subnav
+                        li.kt-menu__item.kt-menu__item--parent(aria-haspopup='true')
+                          span.kt-menu__link
+                            span.kt-menu__link-text Pracownicy
+                        if userPermissions.includes('crm.employees.show')
+                          li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "userlist" ? "kt-menu__item--active" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                            a.kt-menu__link.kt-menu__toggle(href='#')
+                              i.kt-menu__link-bullet.kt-menu__link-bullet--dot
+                                span
+                              span.kt-menu__link-text Lista pracowników
+                        if userPermissions.includes('crm.employees.add')
+                          li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "useradd" ? "kt-menu__item--active" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                            a.kt-menu__link.kt-menu__toggle(href='/dashboard/useradd')
+                              i.kt-menu__link-bullet.kt-menu__link-bullet--dot
+                                span
+                              span.kt-menu__link-text Dodaj pracownika
+                if userPermissions.includes('crm.permissions.modify')
+                  li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "permissions" ? "kt-menu__item--active" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                    a.kt-menu__link.kt-menu__toggle(href='/dashboard/permissions')
+                      span.kt-menu__link-icon
+                        svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                          g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                            rect#bound(x='0', y='0', width='24', height='24')
+                            rect#Rectangle-151(fill='#000000', opacity='0.3', x='4', y='4', width='8', height='16')
+                            path#Combined-Shape(d='M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z', fill='#000000', fill-rule='nonzero')
+                      span.kt-menu__link-text Uprawnienia
+                li.kt-menu__section
+                  h4.kt-menu__section-text Ustawienia ogólne
+                  i.kt-menu__section-icon.flaticon-more-v2
+                li.kt-menu__item.kt-menu__item--submenu(aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                  a.kt-menu__link.kt-menu__toggle(href='javascript:;')
+                    span.kt-menu__link-icon
+                      svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                        g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                          rect#bound(x='0', y='0', width='24', height='24')
+                          path#Combined-Shape(d='M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z', fill='#000000', opacity='0.3')
+                          path#Combined-Shape(d='M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z', fill='#000000')
+                    span.kt-menu__link-text Dokumentacja
+          // END:: Aside Menu
+        // END:: Aside
+        #kt_wrapper.kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--hor.kt-wrapper
+          // BEGIN:: Header
+          #kt_header.kt-header.kt-grid__item.kt-header--fixed
+            // BEGIN:: Header Menu
+            button#kt_header_menu_mobile_close_btn.kt-header-menu-wrapper-close
+              i.la.la-close
+            #kt_header_menu_wrapper.kt-header-menu-wrapper
+              #kt_header_menu.kt-header-menu.kt-header-menu-mobile.kt-header-menu--layout-default
+                ul.kt-menu__nav
+                  li.kt-menu__item.kt-menu__item--submenu.kt-menu__item--rel.kt-menu__item--active(data-ktmenu-submenu-toggle='click', aria-haspopup='true')
+                    a#kt_dashboard_daterangepicker.kt-menu__link(href='javascript:;', data-toggle='kt-tooltip', title='Wyświetl kalendarz', data-placement='bottom')
+                      span#kt_dashboard_daterangepicker_title.kt-menu__link-text(style='color: #959cb6;') Dzisiaj jest:
+                      | &nbsp;
+                      span#kt_dashboard_daterangepicker_date.kt-menu__link-text 1 Styczeń 2019
+                      | &nbsp;&nbsp;   
+                      i.flaticon2-calendar-1
+            // END:: Header Menu
+            // BEGIN:: Header Topbar
+            .kt-header__topbar
+              // BEGIN:: Search
+              #kt_quick_search_toggle.kt-header__topbar-item.kt-header__topbar-item--search.dropdown
+                .kt-header__topbar-wrapper(data-toggle='dropdown', data-offset='10px,0px')
+                  span.kt-header__topbar-icon
+                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                        rect#bound(x='0', y='0', width='24', height='24')
+                        path#Path-2(d='M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                        path#Path(d='M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z', fill='#000000', fill-rule='nonzero')
+                .dropdown-menu.dropdown-menu-fit.dropdown-menu-right.dropdown-menu-anim.dropdown-menu-lg
+                  #kt_quick_search_dropdown.kt-quick-search.kt-quick-search--dropdown.kt-quick-search--result-compact
+                    form.kt-quick-search__form(method='get')
+                      .input-group
+                        .input-group-prepend
+                          span.input-group-text
+                            i.flaticon2-search-1  
+                        input.form-control.kt-quick-search__input(type='text', placeholder='Wyszukaj..')                
+                        .input-group-append
+                          span.input-group-text
+                            i.la.la-close.kt-quick-search__close   
+                    .kt-quick-search__wrapper.kt-scroll(data-scroll='true', data-height='325', data-mobile-height='200')
+              // END:: Search
+              // BEGIN:: Notifications
+              .kt-header__topbar-item.dropdown
+                .kt-header__topbar-wrapper(data-toggle='dropdown', data-offset='30px,0px', aria-expanded='true')
+                  span.kt-header__topbar-icon.kt-pulse.kt-pulse--brand
+                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                        rect#bound(x='0', y='0', width='24', height='24')
+                        path#Combined-Shape(d='M14.486222,18 L12.7974954,21.0565532 C12.530414,21.5399639 11.9220198,21.7153335 11.4386091,21.4482521 C11.2977127,21.3704077 11.1776907,21.2597005 11.0887419,21.1255379 L9.01653358,18 L5,18 C3.34314575,18 2,16.6568542 2,15 L2,6 C2,4.34314575 3.34314575,3 5,3 L19,3 C20.6568542,3 22,4.34314575 22,6 L22,15 C22,16.6568542 20.6568542,18 19,18 L14.486222,18 Z', fill='#000000', opacity='0.3')
+                        path#Combined-Shape(d='M6,7 L15,7 C15.5522847,7 16,7.44771525 16,8 C16,8.55228475 15.5522847,9 15,9 L6,9 C5.44771525,9 5,8.55228475 5,8 C5,7.44771525 5.44771525,7 6,7 Z M6,11 L11,11 C11.5522847,11 12,11.4477153 12,12 C12,12.5522847 11.5522847,13 11,13 L6,13 C5.44771525,13 5,12.5522847 5,12 C5,11.4477153 5.44771525,11 6,11 Z', fill='#000000', opacity='0.3')
+                    span.kt-pulse__ring
+                  span.kt-badge.kt-badge--dot.kt-badge--notify.kt-badge--sm.kt-badge--brand
+                .dropdown-menu.dropdown-menu-fit.dropdown-menu-right.dropdown-menu-anim.dropdown-menu-top-unround.dropdown-menu-lg
+                  form
+                    // BEGIN:: Head
+                    .kt-head.kt-head--skin-dark.kt-head--fit-x.kt-head--fit-b(style='background-image: url(./assets/media/misc/bg-1.jpg)')
+                      h3.kt-head__title
+                        | Powiadomienia&nbsp;&nbsp;
+                        span.btn.btn-success.btn-sm.btn-bold.btn-font-md 0 nowych
+                      ul.nav.nav-tabs.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-success.kt-notification-item-padding-x(role='tablist')
+                        li.nav-item
+                          a.nav-link.active.show(data-toggle='tab', href='#topbar_notifications_notifications', role='tab', aria-selected='true') Alerty
+                        li.nav-item
+                          a.nav-link(data-toggle='tab', href='#topbar_notifications_logs', role='tab', aria-selected='false') Dzienniki
+                    // END:: Head
+                    .tab-content
+                      #topbar_notifications_notifications.tab-pane.active.show(role='tabpanel')
+                        .kt-grid.kt-grid--ver(style='min-height: 200px;')
+                          .kt-grid.kt-grid--hor.kt-grid__item.kt-grid__item--fluid.kt-grid__item--middle
+                            .kt-grid__item.kt-grid__item--middle.kt-align-center
+                              | Brak nowych powiadomień.
+                      #topbar_notifications_logs.tab-pane(role='tabpanel')
+                        .kt-grid.kt-grid--ver(style='min-height: 200px;')
+                          .kt-grid.kt-grid--hor.kt-grid__item.kt-grid__item--fluid.kt-grid__item--middle
+                            .kt-grid__item.kt-grid__item--middle.kt-align-center
+                              | Brak nowych zdarzeń.
+              // END:: Notifications
+              // BEGIN:: Quick Actions
+              .kt-header__topbar-item.dropdown.kt-hidden
+                .kt-header__topbar-wrapper(data-toggle='dropdown', data-offset='30px,0px', aria-expanded='true')
+                  span.kt-header__topbar-icon
+                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                        rect#bound(x='0', y='0', width='24', height='24')
+                        rect#Rectangle-62-Copy(fill='#000000', opacity='0.3', x='13', y='4', width='3', height='16', rx='1.5')
+                        rect#Rectangle-62-Copy-2(fill='#000000', x='8', y='9', width='3', height='11', rx='1.5')
+                        rect#Rectangle-62-Copy-4(fill='#000000', x='18', y='11', width='3', height='9', rx='1.5')
+                        rect#Rectangle-62-Copy-3(fill='#000000', x='3', y='13', width='3', height='7', rx='1.5')                 
+                .dropdown-menu.dropdown-menu-fit.dropdown-menu-right.dropdown-menu-anim.dropdown-menu-top-unround.dropdown-menu-xl
+                  form
+                    // BEGIN:: Head
+                    .kt-head.kt-head--skin-dark(style='background-image: url(./assets/media/misc/bg-1.jpg)')
+                      h3.kt-head__title
+                        | User Quick Actions 
+                        span.kt-space-15
+                        span.btn.btn-success.btn-sm.btn-bold.btn-font-md 23 tasks pending
+                    // END:: Head
+                    // BEGIN:: Grid Nav
+                    .kt-grid-nav.kt-grid-nav--skin-light
+                      .kt-grid-nav__row
+                        a.kt-grid-nav__item(href='#')
+                          span.kt-grid-nav__icon
+                            svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--lg(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Combined-Shape(d='M4.3618034,10.2763932 L4.8618034,9.2763932 C4.94649941,9.10700119 5.11963097,9 5.30901699,9 L15.190983,9 C15.4671254,9 15.690983,9.22385763 15.690983,9.5 C15.690983,9.57762255 15.6729105,9.65417908 15.6381966,9.7236068 L15.1381966,10.7236068 C15.0535006,10.8929988 14.880369,11 14.690983,11 L4.80901699,11 C4.53287462,11 4.30901699,10.7761424 4.30901699,10.5 C4.30901699,10.4223775 4.32708954,10.3458209 4.3618034,10.2763932 Z M14.6381966,13.7236068 L14.1381966,14.7236068 C14.0535006,14.8929988 13.880369,15 13.690983,15 L4.80901699,15 C4.53287462,15 4.30901699,14.7761424 4.30901699,14.5 C4.30901699,14.4223775 4.32708954,14.3458209 4.3618034,14.2763932 L4.8618034,13.2763932 C4.94649941,13.1070012 5.11963097,13 5.30901699,13 L14.190983,13 C14.4671254,13 14.690983,13.2238576 14.690983,13.5 C14.690983,13.5776225 14.6729105,13.6541791 14.6381966,13.7236068 Z', fill='#000000', opacity='0.3')
+                                path#C(d='M17.369,7.618 C16.976998,7.08599734 16.4660031,6.69750122 15.836,6.4525 C15.2059968,6.20749878 14.590003,6.085 13.988,6.085 C13.2179962,6.085 12.5180032,6.2249986 11.888,6.505 C11.2579969,6.7850014 10.7155023,7.16999755 10.2605,7.66 C9.80549773,8.15000245 9.45550123,8.72399671 9.2105,9.382 C8.96549878,10.0400033 8.843,10.7539961 8.843,11.524 C8.843,12.3360041 8.96199881,13.0779966 9.2,13.75 C9.43800119,14.4220034 9.7774978,14.9994976 10.2185,15.4825 C10.6595022,15.9655024 11.1879969,16.3399987 11.804,16.606 C12.4200031,16.8720013 13.1129962,17.005 13.883,17.005 C14.681004,17.005 15.3879969,16.8475016 16.004,16.5325 C16.6200031,16.2174984 17.1169981,15.8010026 17.495,15.283 L19.616,16.774 C18.9579967,17.6000041 18.1530048,18.2404977 17.201,18.6955 C16.2489952,19.1505023 15.1360064,19.378 13.862,19.378 C12.6999942,19.378 11.6325049,19.1855019 10.6595,18.8005 C9.68649514,18.4154981 8.8500035,17.8765035 8.15,17.1835 C7.4499965,16.4904965 6.90400196,15.6645048 6.512,14.7055 C6.11999804,13.7464952 5.924,12.6860058 5.924,11.524 C5.924,10.333994 6.13049794,9.25950479 6.5435,8.3005 C6.95650207,7.34149521 7.5234964,6.52600336 8.2445,5.854 C8.96550361,5.18199664 9.8159951,4.66400182 10.796,4.3 C11.7760049,3.93599818 12.8399943,3.754 13.988,3.754 C14.4640024,3.754 14.9609974,3.79949954 15.479,3.8905 C15.9970026,3.98150045 16.4939976,4.12149906 16.97,4.3105 C17.4460024,4.49950095 17.8939979,4.7339986 18.314,5.014 C18.7340021,5.2940014 19.0909985,5.62999804 19.385,6.022 L17.369,7.618 Z', fill='#000000')               
+                          span.kt-grid-nav__title Accounting            
+                          span.kt-grid-nav__desc eCommerce                    
+                        a.kt-grid-nav__item(href='#')
+                          span.kt-grid-nav__icon
+                            svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--lg(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Combined-Shape(d='M14.8571499,13 C14.9499122,12.7223297 15,12.4263059 15,12.1190476 L15,6.88095238 C15,5.28984632 13.6568542,4 12,4 L11.7272727,4 C10.2210416,4 9,5.17258756 9,6.61904762 L10.0909091,6.61904762 C10.0909091,5.75117158 10.823534,5.04761905 11.7272727,5.04761905 L12,5.04761905 C13.0543618,5.04761905 13.9090909,5.86843034 13.9090909,6.88095238 L13.9090909,12.1190476 C13.9090909,12.4383379 13.8240964,12.7385644 13.6746497,13 L10.3253503,13 C10.1759036,12.7385644 10.0909091,12.4383379 10.0909091,12.1190476 L10.0909091,9.5 C10.0909091,9.06606198 10.4572216,8.71428571 10.9090909,8.71428571 C11.3609602,8.71428571 11.7272727,9.06606198 11.7272727,9.5 L11.7272727,11.3333333 L12.8181818,11.3333333 L12.8181818,9.5 C12.8181818,8.48747796 11.9634527,7.66666667 10.9090909,7.66666667 C9.85472911,7.66666667 9,8.48747796 9,9.5 L9,12.1190476 C9,12.4263059 9.0500878,12.7223297 9.14285008,13 L6,13 C5.44771525,13 5,12.5522847 5,12 L5,3 C5,2.44771525 5.44771525,2 6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,12 C19,12.5522847 18.5522847,13 18,13 L14.8571499,13 Z', fill='#000000', opacity='0.3')
+                                path#Combined-Shape(d='M9,10.3333333 L9,12.1190476 C9,13.7101537 10.3431458,15 12,15 C13.6568542,15 15,13.7101537 15,12.1190476 L15,10.3333333 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 L9,10.3333333 Z M10.0909091,11.1212121 L12,12.5 L13.9090909,11.1212121 L13.9090909,12.1190476 C13.9090909,13.1315697 13.0543618,13.952381 12,13.952381 C10.9456382,13.952381 10.0909091,13.1315697 10.0909091,12.1190476 L10.0909091,11.1212121 Z', fill='#000000')
+                          span.kt-grid-nav__title Administration            
+                          span.kt-grid-nav__desc Console     
+                      .kt-grid-nav__row
+                        a.kt-grid-nav__item(href='#')
+                          span.kt-grid-nav__icon
+                            svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--lg(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Combined-Shape(d='M4,9.67471899 L10.880262,13.6470401 C10.9543486,13.689814 11.0320333,13.7207107 11.1111111,13.740321 L11.1111111,21.4444444 L4.49070127,17.526473 C4.18655139,17.3464765 4,17.0193034 4,16.6658832 L4,9.67471899 Z M20,9.56911707 L20,16.6658832 C20,17.0193034 19.8134486,17.3464765 19.5092987,17.526473 L12.8888889,21.4444444 L12.8888889,13.6728275 C12.9050191,13.6647696 12.9210067,13.6561758 12.9368301,13.6470401 L20,9.56911707 Z', fill='#000000')
+                                path#Path(d='M4.21611835,7.74669402 C4.30015839,7.64056877 4.40623188,7.55087574 4.5299008,7.48500698 L11.5299008,3.75665466 C11.8237589,3.60013944 12.1762411,3.60013944 12.4700992,3.75665466 L19.4700992,7.48500698 C19.5654307,7.53578262 19.6503066,7.60071528 19.7226939,7.67641889 L12.0479413,12.1074394 C11.9974761,12.1365754 11.9509488,12.1699127 11.9085461,12.2067543 C11.8661433,12.1699127 11.819616,12.1365754 11.7691509,12.1074394 L4.21611835,7.74669402 Z', fill='#000000', opacity='0.3')      
+                          span.kt-grid-nav__title Projects  
+                          span.kt-grid-nav__desc Pending Tasks    
+                        a.kt-grid-nav__item(href='#')
+                          span.kt-grid-nav__icon
+                            svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--lg(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                polygon#Shape(points='0 0 24 0 24 24 0 24')
+                                path#Combined-Shape(d='M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                                path#Combined-Shape(d='M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z', fill='#000000', fill-rule='nonzero')                           
+                          span.kt-grid-nav__title Customers                                 
+                          span.kt-grid-nav__desc Latest cases
+                    // END:: Grid Nav
+              // END:: Quick Actions
+              // BEGIN:: Quick panel toggler
+              .kt-header__topbar-item.kt-header__topbar-item--quick-panel.kt-hidden(data-toggle='kt-tooltip', title='Quick panel', data-placement='right')
+                span#kt_quick_panel_toggler_btn.kt-header__topbar-icon
+                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                      rect#bound(x='0', y='0', width='24', height='24')
+                      rect#Rectangle-7(fill='#000000', x='4', y='4', width='7', height='7', rx='1.5')
+                      path#Combined-Shape(d='M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z', fill='#000000', opacity='0.3')
+              // END:: Quick panel toggler
+              // BEGIN:: User Bar
+              .kt-header__topbar-item.kt-header__topbar-item--user
+                .kt-header__topbar-wrapper(data-toggle='dropdown', data-offset='0px,0px')
+                  .kt-header__topbar-user
+                    - var user_full = userData.fullname.split(" ");
+                    span.kt-header__topbar-welcome.kt-hidden-mobile Cześć,
+                    span.kt-header__topbar-username.kt-hidden-mobile #{ user_full[0] }
+                    img.kt-hidden(alt='Pic', src='./assets/media/users/300_25.jpg')
+                    // Use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it)
+                    span.kt-badge.kt-badge--username.kt-badge--unified-success.kt-badge--lg.kt-badge--rounded.kt-badge--bold #{ userData.fullname.charAt(0) }
+                .dropdown-menu.dropdown-menu-fit.dropdown-menu-right.dropdown-menu-anim.dropdown-menu-top-unround.dropdown-menu-xl
+                  // BEGIN:: Head
+                  .kt-user-card.kt-user-card--skin-dark.kt-notification-item-padding-x(style='background-image: url(./assets/media/misc/bg-1.jpg)')
+                    .kt-user-card__avatar
+                      img.kt-hidden(alt='Pic', src='./assets/media/users/300_25.jpg')
+                      // Use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it)
+                      span.kt-badge.kt-badge--lg.kt-badge--rounded.kt-badge--bold.kt-font-success #{ userData.fullname.charAt(0) }
+                    .kt-user-card__name
+                      | #{ userData.fullname }
+                      br
+                      h6.kt-font-transform-u.kt-font-warning #{ userData.identity }
+                    .kt-user-card__badge
+                      span.btn.btn-success.btn-sm.btn-bold.btn-font-md 0 wiadomości
+                  // END:: Head
+                  // BEGIN:: Navigation
+                  .kt-notification
+                    a.kt-notification__item(href='#')
+                      .kt-notification__item-icon
+                        i.flaticon2-calendar-3.kt-font-success      
+                      .kt-notification__item-details
+                        .kt-notification__item-title.kt-font-bold
+                          | Mój profil
+                        .kt-notification__item-time
+                          | Ustawienia konta i powiadomień 
+                    a.kt-notification__item(href='#')
+                      .kt-notification__item-icon
+                        i.flaticon2-mail.kt-font-warning
+                      .kt-notification__item-details
+                        .kt-notification__item-title.kt-font-bold
+                          | Moje wiadomości
+                        .kt-notification__item-time
+                          | Skrzynka odbiorcza i zadania
+                    a.kt-notification__item(href='#')
+                      .kt-notification__item-icon
+                        i.flaticon2-rocket-1.kt-font-danger
+                      .kt-notification__item-details
+                        .kt-notification__item-title.kt-font-bold
+                          | Moja aktywność
+                        .kt-notification__item-time
+                          | Dzienniki i powiadomienia
+                    a.kt-notification__item(href='#')
+                      .kt-notification__item-icon
+                        i.flaticon2-hourglass.kt-font-brand             
+                      .kt-notification__item-details
+                        .kt-notification__item-title.kt-font-bold
+                          | Zadania
+                        .kt-notification__item-time
+                          | Najnowsze zadania i projekty 
+                    .kt-notification__custom.kt-space-between
+                      a.btn.btn-label.btn-label-brand.btn-sm.btn-bold(href='/logout') Wyloguj mnie
+                  // END:: Navigation
+              // END:: User Bar
+            // END:: Header Topbar
+          // END:: Header
+          #kt_content.kt-content.kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--hor
+            block content
+          // BEGIN:: Footer
+          #kt_footer.kt-footer.kt-grid__item.kt-grid.kt-grid--desktop.kt-grid--ver-desktop
+            .kt-container.kt-container--fluid
+              .kt-footer__copyright
+                | 2019&nbsp;&copy;&nbsp;
+                a.kt-link(href='#') CRM System
+                | , wersja aplikacji: 
+                a.kt-font-primary(href='#') &nbsp;1.0 development        
+              .kt-footer__menu
+                | Twórca aplikacji:
+                a.kt-footer__menu-link.kt-link(href='https://dmomedia.pl', target='_blank') DMOMEDIA.PL
+          // BEGIN:: Footer
+    // END:: Page
+    // BEGIN:: Quick Panel
+    #kt_quick_panel.kt-quick-panel
+      a#kt_quick_panel_close_btn.kt-quick-panel__close(href='#')
+        i.flaticon2-delete
+      .kt-quick-panel__nav
+        ul.nav.nav-tabs.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-brand.kt-notification-item-padding-x(role='tablist')
+          li.nav-item.active
+            a.nav-link.active(data-toggle='tab', href='#kt_quick_panel_tab_notifications', role='tab') Notifications
+          li.nav-item
+            a.nav-link(data-toggle='tab', href='#kt_quick_panel_tab_logs', role='tab') Audit Logs
+          li.nav-item
+            a.nav-link(data-toggle='tab', href='#kt_quick_panel_tab_settings', role='tab') Settings
+      .kt-quick-panel__content
+        .tab-content
+          #kt_quick_panel_tab_notifications.tab-pane.fade.show.kt-scroll.active(role='tabpanel')
+            .kt-notification
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-line-chart.kt-font-success
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New order has been received
+                  .kt-notification__item-time
+                    | 2 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-box-1.kt-font-brand
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New customer is registered   
+                  .kt-notification__item-time
+                    | 3 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-chart2.kt-font-danger
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | Application has been approved
+                  .kt-notification__item-time
+                    | 3 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-image-file.kt-font-warning
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New file has been uploaded
+                  .kt-notification__item-time
+                    | 5 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-drop.kt-font-info
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New user feedback received
+                  .kt-notification__item-time
+                    | 8 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-pie-chart-2.kt-font-success
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | System reboot has been successfully completed
+                  .kt-notification__item-time
+                    | 12 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-favourite.kt-font-danger
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New order has been placed
+                  .kt-notification__item-time
+                    | 15 hrs ago
+              a.kt-notification__item.kt-notification__item--read(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-safe.kt-font-primary
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | Company meeting canceled
+                  .kt-notification__item-time
+                    | 19 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-psd.kt-font-success
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New report has been received
+                  .kt-notification__item-time
+                    | 23 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon-download-1.kt-font-danger
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | Finance report has been generated
+                  .kt-notification__item-time
+                    | 25 hrs ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon-security.kt-font-warning
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New customer comment recieved
+                  .kt-notification__item-time
+                    | 2 days ago
+              a.kt-notification__item(href='#')
+                .kt-notification__item-icon
+                  i.flaticon2-pie-chart.kt-font-warning
+                .kt-notification__item-details
+                  .kt-notification__item-title
+                    | New customer is registered
+                  .kt-notification__item-time
+                    | 3 days ago
+          #kt_quick_panel_tab_logs.tab-pane.fade.kt-scroll(role='tabpanel')
+            .kt-notification-v2
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon-bell.kt-font-brand
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | 5 new user generated report    
+                  .kt-notification-v2__item-desc
+                    | Reports based on sales
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon2-box.kt-font-danger
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | 2 new items submited
+                  .kt-notification-v2__item-desc
+                    | by Grog John
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon-psd.kt-font-brand
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | 79 PSD files generated
+                  .kt-notification-v2__item-desc
+                    | Reports based on sales
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon2-supermarket.kt-font-warning
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | $2900 worth producucts sold
+                  .kt-notification-v2__item-desc
+                    | Total 234 items
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon-paper-plane-1.kt-font-success
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | 4.5h-avarage response time  
+                  .kt-notification-v2__item-desc
+                    | Fostest is Barry
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon2-information.kt-font-danger
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | Database server is down
+                  .kt-notification-v2__item-desc
+                    | 10 mins ago
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon2-mail-1.kt-font-brand
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | System report has been generated
+                  .kt-notification-v2__item-desc
+                    | Fostest is Barry
+              a.kt-notification-v2__item(href='#')
+                .kt-notification-v2__item-icon
+                  i.flaticon2-hangouts-logo.kt-font-warning
+                .kt-notification-v2__itek-wrapper
+                  .kt-notification-v2__item-title
+                    | 4.5h-avarage response time
+                  .kt-notification-v2__item-desc
+                    | Fostest is Barry
+          #kt_quick_panel_tab_settings.tab-pane.kt-quick-panel__content-padding-x.fade.kt-scroll(role='tabpanel')
+            form.kt-form
+              .kt-heading.kt-heading--sm.kt-heading--space-sm Customer Care
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Enable Notifications:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--success.kt-switch--sm
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_1')
+                      span
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Enable Case Tracking:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--success.kt-switch--sm
+                    label
+                      input(type='checkbox', name='quick_panel_notifications_2')
+                      span
+              .form-group.form-group-last.form-group-xs.row
+                label.col-8.col-form-label Support Portal:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--success.kt-switch--sm
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_2')
+                      span
+              .kt-separator.kt-separator--space-md.kt-separator--border-dashed
+              .kt-heading.kt-heading--sm.kt-heading--space-sm Reports
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Generate Reports:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--danger
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_3')
+                      span
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Enable Report Export:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--danger
+                    label
+                      input(type='checkbox', name='quick_panel_notifications_3')
+                      span
+              .form-group.form-group-last.form-group-xs.row
+                label.col-8.col-form-label Allow Data Collection:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--danger
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_4')
+                      span
+              .kt-separator.kt-separator--space-md.kt-separator--border-dashed         
+              .kt-heading.kt-heading--sm.kt-heading--space-sm Memebers
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Enable Member singup:                      
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--brand
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_5')
+                      span                   
+              .form-group.form-group-xs.row
+                label.col-8.col-form-label Allow User Feedbacks:            
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--brand
+                    label
+                      input(type='checkbox', name='quick_panel_notifications_5')
+                      span
+              .form-group.form-group-last.form-group-xs.row
+                label.col-8.col-form-label Enable Customer Portal:
+                .col-4.kt-align-right
+                  span.kt-switch.kt-switch--sm.kt-switch--brand
+                    label
+                      input(type='checkbox', checked='checked', name='quick_panel_notifications_6')
+                      span
+    // END:: Quick Panel
+    // BEGIN:: Scrolltop
+    #kt_scrolltop.kt-scrolltop
+      i.fa.fa-arrow-up
+    // BEGIN:: Global Config (global config for global JS scripts)
+    script(src='./assets/js/private/options.js', type='text/javascript')
+    // BEGIN:: Global Mandatory Vendors
+    script(src='./assets/vendors/general/jquery/dist/jquery.js', type='text/javascript')
+    script(src='./assets/vendors/general/popper.js/dist/umd/popper.js', type='text/javascript')
+    script(src='./assets/vendors/general/bootstrap/dist/js/bootstrap.min.js', type='text/javascript')
+    script(src='./assets/vendors/general/js-cookie/src/js.cookie.js', type='text/javascript')
+    script(src='./assets/vendors/general/moment/min/moment.min.js', type='text/javascript')
+    script(src='./assets/vendors/general/tooltip.js/dist/umd/tooltip.min.js', type='text/javascript')
+    script(src='./assets/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js', type='text/javascript')
+    script(src='./assets/vendors/general/sticky-js/dist/sticky.min.js', type='text/javascript')
+    script(src='./assets/vendors/general/wnumb/wNumb.js', type='text/javascript')
+    // BEGIN:: Global Optional Vendors
+    script(src='./assets/vendors/general/bootstrap-notify/bootstrap-notify.min.js' type='text/javascript')
+    script(src='./assets/vendors/custom/js/vendors/bootstrap-notify.init.js' type='text/javascript')
+    script(src='./assets/vendors/general/block-ui/jquery.blockUI.js', type='text/javascript')
+    script(src='./assets/vendors/general/sweetalert2/dist/sweetalert2.min.js', type='text/javascript')
+    script(src='./assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', type='text/javascript')
+    // BEGIN:: Global Theme Bundle(used by all pages)
+    script(src='./assets/js/demo1/scripts.bundle.js', type='text/javascript')
+    script(src='./assets/js/demo1/pages/dashboard.js', type='text/javascript')
+    // BEGIN:: Individual JS scripts
+    block scripts

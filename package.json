@@ -1,0 +1,29 @@
+{
+  "name": "crm-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "DMOMEDIA",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "bookshelf": "^0.15.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "date-format": "^2.1.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "express-validator": "^6.1.1",
+    "knex": "^0.19.1",
+    "mysql2": "^1.6.5",
+    "passport": "^0.4.0",
+    "passport-http": "^0.3.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.4"
+  }
+}
