@@ -137,7 +137,7 @@ html(lang='en')
                             span.kt-menu__link-text Pracownicy
                         if userPermissions.includes('crm.employees.show')
                           li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "userlist" ? "kt-menu__item--active" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
-                            a.kt-menu__link.kt-menu__toggle(href='#')
+                            a.kt-menu__link.kt-menu__toggle(href='/dashboard/userlist')
                               i.kt-menu__link-bullet.kt-menu__link-bullet--dot
                                 span
                               span.kt-menu__link-text Lista pracowników
