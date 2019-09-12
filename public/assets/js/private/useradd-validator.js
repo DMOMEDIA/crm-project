@@ -25,7 +25,6 @@ var KTUserAdd = function () {
 
 		// Change event
 		wizard.on('change', function(wizard) {
-			KTUtil.scrollTop();
       if(wizard.getStep() == 2) {
         var identity = 'IDCRM-' + Math.random().toString().substr(2,6);
         $("#gen-identity").val(identity).prop('disabled',true);

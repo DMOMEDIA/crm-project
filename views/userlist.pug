@@ -2,58 +2,406 @@ extends layout
 
 block content
   if user
-    .content-wrapper
-      .content-header.row
-        .content-header-left.col-md-6.col-12.mb-2.breadcrumb-new
-          h3.content-header-title.mb-0 Lista pracowników
-          .row.breadcrumbs-top
-            .breadcrumb-wrapper.col-12
-              ol.breadcrumb
-                li.breadcrumb-item
-                  a(href='/dashboard') Dashboard
-                li.breadcrumb-item
-                  a(href='/dashboard') Pracownicy
-                li.breadcrumb-item.active
-                  a(href='#') Lista pracowników
-      .content-body
-        .row.match-height
-          .col-xl-12.col-12
-            .card
-              .card-header
-                a.heading-elements-toggle
-                  i.la.la-ellipsis-v.font-medium-3
-                .heading-elements
-                  ul.list-inline.mb-0
-                    li
-                      a(data-action='reload')
-                        i.ft-rotate-cw
-                    li
-                      a(data-action='expand')
-                        i.ft-maximize
-              .card-content.collapse.show
-                .card-body
-                  h1 Lista pracowników
-                .table-responsive
-                  table.table
-                    thead
-                      tr
-                        th #
-                        th First Name
-                        th Last Name
-                        th Username
-                    tbody
-                      tr
-                        th(scope='row') 1
-                        td Mark
-                        td Otto
-                        td @mdo
-                      tr
-                        th(scope='row') 2
-                        td Jacob
-                        td Thornton
-                        td @fat
-                      tr
-                        th(scope='row') 3
-                        td Larry
-                        td the Bird
-                        td @twitter
+    html
+      head
+      body
+        #kt_subheader.kt-subheader.kt-grid__item
+          .kt-container.kt-container--fluid
+            .kt-subheader__main
+              h3.kt-subheader__title
+                | Lista pracowników
+              |             
+              span.kt-subheader__separator.kt-subheader__separator--v
+              |             
+              |             
+              #kt_subheader_search.kt-subheader__group
+                span#kt_subheader_total.kt-subheader__desc
+                  | 
+                |                 
+                |                                     
+                form#kt_subheader_search_form.kt-margin-l-20
+                  .kt-input-icon.kt-input-icon--right.kt-subheader__search
+                    input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
+                    |                             
+                    span.kt-input-icon__icon.kt-input-icon__icon--right
+                      span
+                        svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                          g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                            rect#bound(x='0', y='0', width='24', height='24')
+                            path#Path-2(d='M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                            path#Path(d='M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z', fill='#000000', fill-rule='nonzero')
+              |                             
+              #kt_subheader_group_actions.kt-subheader__group.kt-hidden
+                .kt-subheader__desc
+                  span#kt_subheader_group_selected_rows
+                  |  zaznaczono:
+                |                     
+                |                     
+                if userPermissions.includes('crm.employees.delete')
+                  .btn-toolbar.kt-margin-l-20
+                    button#kt_subheader_group_actions_delete_all.btn.btn-label-danger.btn-bold.btn-sm.btn-icon-h
+                      | Usuń zaznaczone
+                else
+                  |
+                  .btn-toolbar.kt-margin-l-20
+                    button(disabled='')#kt_subheader_group_actions_delete_all.btn.btn-label-danger.btn-bold.btn-sm.btn-icon-h
+                      | Usuń zaznaczone
+            |         
+            |         
+            .kt-subheader__toolbar
+              a(href='#')
+              |             
+              |                                                 
+              if userPermissions.includes('crm.employees.add')
+                a.btn.btn-label-brand.btn-bold(href='/dashboard/useradd')
+                  | Dodaj pracownika
+              |                                         
+              |                             
+              .kt-subheader__wrapper
+                .dropdown.dropdown-inline(data-toggle='kt-tooltip-', title='Quick actions', data-placement='left')
+                  a.btn.btn-icon(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--md(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                        polygon#Shape(points='0 0 24 0 24 24 0 24')
+                        path#Combined-Shape(d='M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                        path#Combined-Shape(d='M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z', fill='#000000')
+                  |                         
+                  .dropdown-menu.dropdown-menu-fit.dropdown-menu-md.dropdown-menu-right
+                    // begin::Nav
+                    ul.kt-nav
+                      li.kt-nav__head
+                        | Add New:                                    
+                        i.flaticon2-information(data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...')
+                      |                                 
+                      li.kt-nav__separator
+                      |                                 
+                      li.kt-nav__item
+                        a.kt-nav__link(href='#')
+                          i.kt-nav__link-icon.flaticon2-drop
+                          |                                         
+                          span.kt-nav__link-text Orders
+                      |                         
+                      |                                 
+                      li.kt-nav__item
+                        a.kt-nav__link(href='#')
+                          i.kt-nav__link-icon.flaticon2-new-email
+                          |                                         
+                          span.kt-nav__link-text Members
+                          |                                         
+                          span.kt-nav__link-badge
+                            span.kt-badge.kt-badge--brand.kt-badge--rounded 15
+                      |                                 
+                      li.kt-nav__item
+                        a.kt-nav__link(href='#')
+                          i.kt-nav__link-icon.flaticon2-calendar-8
+                          |                                         
+                          span.kt-nav__link-text Reports
+                      |                                 
+                      li.kt-nav__item
+                        a.kt-nav__link(href='#')
+                          i.kt-nav__link-icon.flaticon2-link
+                          |                                         
+                          span.kt-nav__link-text Finance
+                      |                                 
+                      li.kt-nav__separator
+                      |                                 
+                      li.kt-nav__foot
+                        a.btn.btn-label-brand.btn-bold.btn-sm(href='#') More options
+                        |                                     
+                        |                                     
+                        a.btn.btn-clean.btn-bold.btn-sm.kt-hidden(href='#', data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...') Learn more
+                    // end::Nav
+        // end:: Content Head
+        // begin:: Content
+        .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
+          // begin::Portlet
+          .kt-portlet.kt-portlet--mobile
+            .kt-portlet__body.kt-portlet__body--fit
+              // begin: Datatable
+              #kt_apps_user_list_datatable.kt-datatable
+              // end: Datatable
+          // end::Portlet
+          // begin::Modal
+          if userPermissions.includes('crm.employees.edit')
+            #kt_fetch_user.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+              .modal-dialog.modal-lg.modal-dialog-centered(role='document')
+                .modal-content
+                  .modal-header
+                    h5.modal-title Edycja użytkownika&nbsp;-&nbsp;
+                    h5.modal-title#modalTitle 
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                      span(aria-hidden='true')
+                  .modal-body
+                    .kt-portlet.kt-portlet--tabs
+                      .kt-portlet__head
+                        .kt-portlet__head-toolbar
+                          ul.nav.nav-tabs.nav-tabs-space-xl.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-brand(role='tablist')
+                            li.nav-item
+                              a.nav-link.active(data-toggle='tab', href='#kt_user_edit_tab_1', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    polygon#Bound(points='0 0 24 0 24 24 0 24')
+                                    path#Shape(d='M12.9336061,16.072447 L19.36,10.9564761 L19.5181585,10.8312381 C20.1676248,10.3169571 20.2772143,9.3735535 19.7629333,8.72408713 C19.6917232,8.63415859 19.6104327,8.55269514 19.5206557,8.48129411 L12.9336854,3.24257445 C12.3871201,2.80788259 11.6128799,2.80788259 11.0663146,3.24257445 L4.47482784,8.48488609 C3.82645598,9.00054628 3.71887192,9.94418071 4.23453211,10.5925526 C4.30500305,10.6811601 4.38527899,10.7615046 4.47382636,10.8320511 L4.63,10.9564761 L11.0659024,16.0730648 C11.6126744,16.5077525 12.3871218,16.5074963 12.9336061,16.072447 Z', fill='#000000', fill-rule='nonzero')
+                                    path#Path(d='M11.0563554,18.6706981 L5.33593024,14.122919 C4.94553994,13.8125559 4.37746707,13.8774308 4.06710397,14.2678211 C4.06471678,14.2708238 4.06234874,14.2738418 4.06,14.2768747 L4.06,14.2768747 C3.75257288,14.6738539 3.82516916,15.244888 4.22214834,15.5523151 C4.22358765,15.5534297 4.2250303,15.55454 4.22647627,15.555646 L11.0872776,20.8031356 C11.6250734,21.2144692 12.371757,21.2145375 12.909628,20.8033023 L19.7677785,15.559828 C20.1693192,15.2528257 20.2459576,14.6784381 19.9389553,14.2768974 C19.9376429,14.2751809 19.9363245,14.2734691 19.935,14.2717619 L19.935,14.2717619 C19.6266937,13.8743807 19.0546209,13.8021712 18.6572397,14.1104775 C18.654352,14.112718 18.6514778,14.1149757 18.6486172,14.1172508 L12.9235044,18.6705218 C12.377022,19.1051477 11.6029199,19.1052208 11.0563554,18.6706981 Z', fill='#000000', opacity='0.3')
+                                | Profil
+                            |                 
+                            li.nav-item
+                              a.nav-link(data-toggle='tab', href='#kt_user_edit_tab_2', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    polygon#Shape(points='0 0 24 0 24 24 0 24')
+                                    path#Mask(d='M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                                    path#Mask-Copy(d='M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z', fill='#000000', fill-rule='nonzero')
+                                | Logowanie i bezpieczeństwo
+                            |                 
+                            li.nav-item
+                              a.nav-link(data-toggle='tab', href='#kt_user_edit_tab_3', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    rect#bound(x='0', y='0', width='24', height='24')
+                                    path#Path-50(d='M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z', fill='#000000', opacity='0.3')
+                                    path#Mask(d='M12,11 C10.8954305,11 10,10.1045695 10,9 C10,7.8954305 10.8954305,7 12,7 C13.1045695,7 14,7.8954305 14,9 C14,10.1045695 13.1045695,11 12,11 Z', fill='#000000', opacity='0.3')
+                                    path#Mask-Copy(d='M7.00036205,16.4995035 C7.21569918,13.5165724 9.36772908,12 11.9907452,12 C14.6506758,12 16.8360465,13.4332455 16.9988413,16.5 C17.0053266,16.6221713 16.9988413,17 16.5815,17 C14.5228466,17 11.463736,17 7.4041679,17 C7.26484009,17 6.98863236,16.6619875 7.00036205,16.4995035 Z', fill='#000000', opacity='0.3')
+                                | Zmień hasło
+                            |                 
+                            li.nav-item.kt-hidden
+                              a.nav-link(data-toggle='tab', href='#kt_user_edit_tab_4', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    rect#bound(x='0', y='0', width='24', height='24')
+                                    path#Combined-Shape(d='M6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,12 C19,12.5522847 18.5522847,13 18,13 L6,13 C5.44771525,13 5,12.5522847 5,12 L5,3 C5,2.44771525 5.44771525,2 6,2 Z M7.5,5 C7.22385763,5 7,5.22385763 7,5.5 C7,5.77614237 7.22385763,6 7.5,6 L13.5,6 C13.7761424,6 14,5.77614237 14,5.5 C14,5.22385763 13.7761424,5 13.5,5 L7.5,5 Z M7.5,7 C7.22385763,7 7,7.22385763 7,7.5 C7,7.77614237 7.22385763,8 7.5,8 L10.5,8 C10.7761424,8 11,7.77614237 11,7.5 C11,7.22385763 10.7761424,7 10.5,7 L7.5,7 Z', fill='#000000', opacity='0.3')
+                                    path#Combined-Shape(d='M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z', fill='#000000')
+                                | Ustawienia
+                      |     
+                      .kt-portlet__body
+                        .tab-content
+                          #kt_user_edit_tab_1.tab-pane.active(role='tabpanel')
+                            form#kt_user_edit_personal
+                              input#idInput1(type='hidden', name='id')
+                              .kt-form.kt-form--label-right
+                                .kt-form__body
+                                  .kt-section.kt-section--first
+                                    .kt-section__body
+                                      .row
+                                        label.col-xl-3     
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Dane personalne:
+                                      |                                     
+                                      .form-group.row.kt-hidden
+                                        label.col-xl-3.col-lg-3.col-form-label Avatar
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          #kt_user_edit_avatar.kt-avatar.kt-avatar--outline.kt-avatar--circle-
+                                            .kt-avatar__holder(style='background-image: url("http://keenthemes.com/metronic/preview/default/custom/user/assets/media/users/300_20.jpg");')
+                                            |                                                 
+                                            label.kt-avatar__upload(data-toggle='kt-tooltip', title='', data-original-title='Change avatar')
+                                              i.fa.fa-pen
+                                              |                                                     
+                                              input(type='file', name='profile_avatar', accept='.png, .jpg, .jpeg')
+                                            |                                                 
+                                            span.kt-avatar__cancel(data-toggle='kt-tooltip', title='', data-original-title='Cancel avatar')
+                                              i.fa.fa-times
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Imię
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#firstnameInput.form-control(type='text', name='firstname')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Nazwisko
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#lastnameInput.form-control(type='text', name='lastname')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Numer telefonu
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .input-group
+                                            .input-group-prepend
+                                              span.input-group-text
+                                                i.la.la-phone
+                                            |                                                 
+                                            input#telephoneInput.form-control(type='text', name='pNumber', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Adres e-mail
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .input-group
+                                            .input-group-prepend
+                                              span.input-group-text
+                                                i.la.la-at
+                                            |                                                 
+                                            input#emailInput.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
+                                        |                             
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+                          #kt_user_edit_tab_2.tab-pane(role='tabpanel')
+                            form#kt_user_edit_login
+                              input#idInput2(type='hidden', name='id')
+                              .kt-form.kt-form--label-right
+                                .kt-form__body
+                                  .kt-section.kt-section--first
+                                    .kt-section__body
+                                      .row
+                                        label.col-xl-3
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Dane logowania:
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Identyfikator
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .kt-spinner.kt-spinner--sm.kt-spinner--success.kt-spinner--right.kt-spinner--input
+                                            input#identityInput.form-control(type='text', disabled='', name='identity')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Rola
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          select#roleInput.form-control(name='role')
+                                            option(value='0' selected='' disabled='') Wybierz rolę
+                                            option(value='administrator') Administrator
+                                            option(value='kierownik') Kierownik
+                                            option(value='posrednik') Pośrednik
+                                            option(value='pracownik') Pracownik
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-section.kt-section--first
+                                    .kt-section__body
+                                      .row
+                                        label.col-xl-3
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Bezpieczeństwo:
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Dwuetapowa weryfikacja
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          button.btn.btn-label-brand.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Skonfiguruj dwuetapową weryfikację
+                                          |                                             
+                                          span.form-text.text-muted
+                                            | W momencie logowania użytkownik zostanie poproszony o dodatkowe informacje w celu potwierdzenia tożsamości i ochrony konta przed włamaniem.
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Weryfikacja resetowania hasła
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .kt-checkbox-single
+                                            label.kt-checkbox
+                                              input(type='checkbox')
+                                              |  Wymagaj danych osobowych, aby zresetować hasło.                              
+                                              span
+                                          |                                             
+                                          span.form-text.text-muted
+                                            | Dla dodatkowego bezpieczeństwa wymaga to potwierdzenia adresu e-mail lub numeru telefonu po zresetowaniu hasła. 
+                                      |                                     
+                                      .form-group.row.kt-margin-t-10.kt-margin-b-10
+                                        label.col-xl-3.col-lg-3.col-form-label
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          button.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Dezaktywuj konto
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
+                                        |                             
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+                          #kt_user_edit_tab_3.tab-pane(role='tabpanel')
+                            form#kt_user_edit_password
+                              input#idInput3(type='hidden', name='id')
+                              .kt-form.kt-form--label-right
+                                .kt-form__body
+                                  .kt-section.kt-section--first
+                                    .kt-section__body
+                                      .alert.alert-solid-danger.alert-bold.fade.show.kt-margin-t-20.kt-margin-b-40(role='alert')
+                                        .alert-icon
+                                          i.fa.fa-exclamation-triangle
+                                        |                                         
+                                        .alert-text
+                                          | Skonfiguruj hasła użytkowników, aby okresowo wygasały.
+                                          br
+                                          | Użytkownicy będą potrzebować ostrzeżenia, że ​​ich hasła wygasną lub mogą zostać zablokowani w systemie aż do czasu utworzenia nowego hasła!
+                                        |                                         
+                                        .alert-close
+                                          button.close(type='button', data-dismiss='alert', aria-label='Close')
+                                            span(aria-hidden='true')
+                                              i.la.la-close
+                                      |                                     
+                                      .row
+                                        label.col-xl-3
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Zmień hasło użytkownika:
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Aktualne hasło
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#current_passwordInput.form-control(type='password', name='current_password', placeholder='Aktualne hasło')
+                                          |                                             
+                                          a.kt-link.kt-font-sm.kt-font-bold.kt-margin-t-5(href='javascript:;') Zapomniałeś hasła? Zresetuj je poniżej.
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Nowe hasło
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .input-group
+                                            .input-group-prepend
+                                              span#refresh-password.input-group-text
+                                                i.la.la-refresh(style='font-size:26px;')
+                                            .input-group-prepend
+                                              span#show-password.input-group-text
+                                                i.la.la-eye-slash(style='font-size:26px;')
+                                            input#new_passwordInput.form-control(type='password', name='new_password', placeholder='Nowe hasło')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Powtórz hasło
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#confirm_passwordInput.form-control(type='password', name='confirm_password', placeholder='Powtórz hasło')
+                                      |                         
+                                      |                         
+                                      .kt-separator.kt-separator--space-lg.kt-separator--fit.kt-separator--border-solid
+                                      |                             
+                                      |                         
+                                      .form-group.form-group-last.row
+                                        label.col-xl-3.col-lg-3.col-form-label Resetowanie hasła
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          button.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Resetuj hasło
+                                          |                                             
+                                          span.form-text.text-muted
+                                            | Jeżeli użytkownik zapomniał hasła do swojego konta możesz je jednym kliknięciem zresetować. Nowe hasło zostanie przesłane na adres e-mail właściciela konta.
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-success.btn-bold(type='submit') Zmień hasło
+                                        |                             
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+          // end::Modal
+block scripts
+  script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
+  script(src='./assets/js/demo1/pages/pGenerator.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-select/dist/js/bootstrap-select.js', type='text/javascript')
+  script(src="./assets/js/private/userlist.js" type="text/javascript")

@@ -6,17 +6,17 @@ const User = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
-module.exports.getUserByIdentity = function(user) {
+module.exports.getUserByIdentity = (user) => {
   const query = { identity: user };
   return new User().where(query).fetch();
 };
 
-module.exports.getUserById = function(id) {
+module.exports.getUserById = (id) => {
   const query = { id: id };
   return new User().where(query).fetch();
 };
 
-module.exports.blockAccount = function(id, datetime) {
+module.exports.blockAccount = (id, datetime) => {
   const query = { id: id };
   return new User().where(query).fetch().then(function(model) {
     if(model) {
@@ -26,7 +26,7 @@ module.exports.blockAccount = function(id, datetime) {
   })
 };
 
-module.exports.isBlocked = function(id, callback) {
+module.exports.isBlocked = (id, callback) => {
   const query = { id: id };
   return new User().where(query).fetch().then(function(model) {
     if(model) {
@@ -39,13 +39,12 @@ module.exports.isBlocked = function(id, callback) {
   })
 };
 
-module.exports.comparePassword = function(candidatePassword, password, callback) {
+module.exports.comparePassword = (candidatePassword, password, callback) => {
   bcrypt.compare(candidatePassword, password, function(err, isMatch) {
     callback(null, isMatch);
   });
 };
 
-// Opcja do zmiany
 module.exports.createUser = (user) => {
   bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(user.password, salt, function(err, hash) {
@@ -58,5 +57,76 @@ module.exports.createUser = (user) => {
         role: user.role
       }).save();
     });
+  });
+};
+
+module.exports.userList = (role, callback) => {
+  return new User().where({ role: role }).fetchAll().then(function(response) {
+    callback(response);
+  });
+};
+
+module.exports.userModify = (user, callback) => {
+  return new User().where({ id: user.id }).fetch().then(function(model) {
+    if(model) {
+      if(user.firstname && user.lastname) model.set('fullname', user.firstname + ' ' + user.lastname);
+      if(user.identity) model.set('identity', user.identity);
+      if(user.role) model.set('role', user.role);
+      if(user.email) model.set('email', user.email);
+      if(user.pNumber) model.set('telephone', user.pNumber);
+
+      model.save();
+
+      status = { status: 'success', message: 'Poprawnie zaktualizowano dane użytkownika.' };
+      callback(status);
+    } else {
+      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
+      callback(status);
+    }
+  })
+};
+
+module.exports.userChangePassword = (user, callback) => {
+  return new User().where({ id: user.id }).fetch().then(function(model) {
+    if(model) {
+      if(user.current_password && user.new_password && user.confirm_password) {
+        bcrypt.compare(user.current_password, model.get('password'), function(error, isMatch) {
+          if(error) {
+            var status = { status: 'error', message: 'Nie udało się zmienić hasła, spróbuj ponownie później.' };
+            callback(status);
+          }
+
+          if(isMatch) {
+            bcrypt.genSalt(10, function(err, salt) {
+              bcrypt.hash(user.new_password, salt, function(err, hash) {
+                model.set('password', hash);
+                model.save();
+                var status = { status: 'success', message: 'Poprawnie zmieniono hasło użytkownika.' };
+                callback(status);
+              });
+            });
+          } else {
+            var status = { status: 'error', message: 'Aktualne hasło jest niepoprawne.' };
+            callback(status);
+          }
+        });
+      }
+    } else {
+      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
+      callback(status);
+    }
+  });
+};
+
+module.exports.deleteUser = (id, callback) => {
+  return new User().where({ id: id }).fetch().then(function(model) {
+    if(model) {
+      status = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' };
+      callback(status);
+      return model.destroy();
+    } else {
+      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
+      callback(status);
+    }
   });
 };

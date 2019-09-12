@@ -16,6 +16,8 @@ router.post('/',
   LoginController.getPermissions
 );
 
+LoginController.validate,
+LoginController.checkValidation,
 LoginController.passportSerializeUser,
 LoginController.passportDeserializeUser,
 LoginController.passportUse

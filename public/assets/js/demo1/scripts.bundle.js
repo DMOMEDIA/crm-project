@@ -502,6 +502,20 @@ var KTUtil = function() {
             _windowResizeHandler();
         },
 
+        getUserPermissions: function(role) {
+          $.ajax({
+            url: '/rest/permissions',
+            method: 'GET',
+            data: { role: role },
+            success: function(res) {
+              return res;
+            },
+            error: function(err) {
+              KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+            }
+          });
+        },
+
         showNotifyAlert: function(type, message, title, icon) {
           var content = {};
 
@@ -514,6 +528,7 @@ var KTUtil = function() {
 
           $.notify(content, {
             type: type,
+            z_index: 100000,
             allow_dismiss: true,
             newest_on_top: true,
             mouse_over: true,
@@ -524,7 +539,7 @@ var KTUtil = function() {
                 align: 'right'
             },
             offset: {
-              x: 10,
+              x: 15,
               y: 10
             },
             animate: {
@@ -5245,7 +5260,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
 				return datatable;
 			},
-
 			/**
 			 * Extract static HTML table content into datasource
 			 */
@@ -8561,23 +8575,23 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 		// By default the stirngs will be in the plugin source and here can override it
 		translate: {
 			records: {
-				processing: 'Please wait...',
-				noRecords: 'No records found',
+				processing: 'Proszę czekać..',
+				noRecords: 'Brak danych do wyświetlenia',
 			},
 			toolbar: {
 				pagination: {
 					items: {
 						default: {
-							first: 'First',
-							prev: 'Previous',
-							next: 'Next',
-							last: 'Last',
-							more: 'More pages',
+							first: 'Pierwsza strona',
+							prev: 'Poprzednia strona',
+							next: 'Następna strona',
+							last: 'Ostatnia strona',
+							more: 'Więcej stron',
 							input: 'Page number',
-							select: 'Select page size',
+							select: 'Wybierz rozmiar strony',
 							all: 'all',
 						},
-						info: 'Showing {{start}} - {{end}} of {{total}}',
+						info: 'Wyświetlono {{start}} - {{end}} z {{total}}',
 					},
 				},
 			},

@@ -2,7 +2,16 @@
 
 // Class definition
 var KTDashboard = function() {
-	
+
+		var notificationSound = function() {
+			var audioElement = document.createElement('audio');
+			audioElement.setAttribute('src', '/assets/media/misc/pull-out.mp3');
+
+			$('#notification_play').click(function() {
+				audioElement.play();
+			})
+		}
+
     // Daterangepicker Init
     var daterangepickerInit = function() {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
@@ -29,13 +38,14 @@ var KTDashboard = function() {
 
         cb(date, '');
 	}
-	
+
     return {
         // Init demos
         init: function() {
             // init daterangepicker
             daterangepickerInit();
-            
+						notificationSound();
+
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Ładowanie ...'});
             loading.show();

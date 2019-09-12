@@ -64,7 +64,7 @@ html(lang='en')
     // BEGIN:: Header Mobile
     #kt_header_mobile.kt-header-mobile.kt-header-mobile--fixed
       .kt-header-mobile__logo
-        a(href='demo1/index.html')
+        a(href='/dashboard')
           img(alt='Logo', src='./assets/media/logos/logo-light.png')
       .kt-header-mobile__toolbar
         button#kt_aside_mobile_toggler.kt-header-mobile__toggler.kt-header-mobile__toggler--left
@@ -83,7 +83,7 @@ html(lang='en')
           // BEGIN:: Aside
           #kt_aside_brand.kt-aside__brand.kt-grid__item
             .kt-aside__brand-logo
-              a(href='demo1/index.html')
+              a(href='/dashboard')
                 img(alt='Logo', src='./assets/media/logos/logo-light.png')
             .kt-aside__brand-tools
               button#kt_aside_toggler.kt-aside__brand-aside-toggler
@@ -215,7 +215,7 @@ html(lang='en')
               // BEGIN:: Notifications
               .kt-header__topbar-item.dropdown
                 .kt-header__topbar-wrapper(data-toggle='dropdown', data-offset='30px,0px', aria-expanded='true')
-                  span.kt-header__topbar-icon.kt-pulse.kt-pulse--brand
+                  span#notification_play.kt-header__topbar-icon.kt-pulse.kt-pulse--brand
                     svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
                       g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
                         rect#bound(x='0', y='0', width='24', height='24')
@@ -651,6 +651,8 @@ html(lang='en')
     #kt_scrolltop.kt-scrolltop
       i.fa.fa-arrow-up
     // BEGIN:: Global Config (global config for global JS scripts)
+    script(type='text/javascript').
+      var user_local_perm = !{JSON.stringify(userPermissions)}
     script(src='./assets/js/private/options.js', type='text/javascript')
     // BEGIN:: Global Mandatory Vendors
     script(src='./assets/vendors/general/jquery/dist/jquery.js', type='text/javascript')
