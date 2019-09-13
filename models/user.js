@@ -1,5 +1,6 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
+const Messages = require('../config/messages.js');
 
 const User = bookshelf.Model.extend({
   tableName: 'crm_users',
@@ -77,12 +78,8 @@ module.exports.userModify = (user, callback) => {
 
       model.save();
 
-      status = { status: 'success', message: 'Poprawnie zaktualizowano dane użytkownika.' };
-      callback(status);
-    } else {
-      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
-      callback(status);
-    }
+      callback(Messages.message('success_updated_user', null));
+    } else callback(Messages.message('not_found_user_identity', null));
   })
 };
 
@@ -91,42 +88,29 @@ module.exports.userChangePassword = (user, callback) => {
     if(model) {
       if(user.current_password && user.new_password && user.confirm_password) {
         bcrypt.compare(user.current_password, model.get('password'), function(error, isMatch) {
-          if(error) {
-            var status = { status: 'error', message: 'Nie udało się zmienić hasła, spróbuj ponownie później.' };
-            callback(status);
-          }
+          if(error)
+            callback(Messages.message('password_not_changed', null));
 
           if(isMatch) {
             bcrypt.genSalt(10, function(err, salt) {
               bcrypt.hash(user.new_password, salt, function(err, hash) {
                 model.set('password', hash);
                 model.save();
-                var status = { status: 'success', message: 'Poprawnie zmieniono hasło użytkownika.' };
-                callback(status);
+                callback(Messages.message('success_change_password', null));
               });
             });
-          } else {
-            var status = { status: 'error', message: 'Aktualne hasło jest niepoprawne.' };
-            callback(status);
-          }
+          } else callback(Messages.message('current_pass_incorrect', null));
         });
       }
-    } else {
-      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
-      callback(status);
-    }
+    } else callback(Messages.message('not_found_user_identity', null));
   });
 };
 
 module.exports.deleteUser = (id, callback) => {
   return new User().where({ id: id }).fetch().then(function(model) {
     if(model) {
-      status = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' };
-      callback(status);
+      callback(Messages.message('success_user_deleted', null));
       return model.destroy();
-    } else {
-      status = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' };
-      callback(status);
-    }
+    } else callback(Messages.message('not_found_user_identity', null));
   });
 };

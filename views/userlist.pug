@@ -137,7 +137,7 @@ block content
                         .kt-portlet__head-toolbar
                           ul.nav.nav-tabs.nav-tabs-space-xl.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-brand(role='tablist')
                             li.nav-item
-                              a.nav-link.active(data-toggle='tab', href='#kt_user_edit_tab_1', role='tab')
+                              a.nav-link.active(data-toggle='tab', href='#profil', role='tab')
                                 svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
                                   g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
                                     polygon#Bound(points='0 0 24 0 24 24 0 24')
@@ -146,7 +146,7 @@ block content
                                 | Profil
                             |                 
                             li.nav-item
-                              a.nav-link(data-toggle='tab', href='#kt_user_edit_tab_2', role='tab')
+                              a.nav-link(data-toggle='tab', href='#logowanie_i_bezpieczenstwo', role='tab')
                                 svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
                                   g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
                                     polygon#Shape(points='0 0 24 0 24 24 0 24')
@@ -155,7 +155,7 @@ block content
                                 | Logowanie i bezpieczeństwo
                             |                 
                             li.nav-item
-                              a.nav-link(data-toggle='tab', href='#kt_user_edit_tab_3', role='tab')
+                              a.nav-link(data-toggle='tab', href='#zmien_haslo', role='tab')
                                 svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
                                   g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
                                     rect#bound(x='0', y='0', width='24', height='24')
@@ -175,7 +175,7 @@ block content
                       |     
                       .kt-portlet__body
                         .tab-content
-                          #kt_user_edit_tab_1.tab-pane.active(role='tabpanel')
+                          #profil.tab-pane.active(role='tabpanel')
                             form#kt_user_edit_personal
                               input#idInput1(type='hidden', name='id')
                               .kt-form.kt-form--label-right
@@ -244,7 +244,7 @@ block content
                                         button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
                                         |                             
                                         button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
-                          #kt_user_edit_tab_2.tab-pane(role='tabpanel')
+                          #logowanie_i_bezpieczenstwo.tab-pane(role='tabpanel')
                             form#kt_user_edit_login
                               input#idInput2(type='hidden', name='id')
                               .kt-form.kt-form--label-right
@@ -321,7 +321,7 @@ block content
                                         button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
                                         |                             
                                         button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
-                          #kt_user_edit_tab_3.tab-pane(role='tabpanel')
+                          #zmien_haslo.tab-pane(role='tabpanel')
                             form#kt_user_edit_password
                               input#idInput3(type='hidden', name='id')
                               .kt-form.kt-form--label-right
