@@ -6,14 +6,16 @@ block content
     #kt_subheader.kt-subheader.kt-grid__item
       .kt-container.kt-container--fluid
         .kt-subheader__main
-          h3.kt-subheader__title Uprawnienia
+          h3.kt-subheader__title Lista klientów
           span.kt-subheader__separator.kt-subheader__separator--v.kt-hidden
           span.kt-subheader__desc.kt-hidden #XRS-45670
           .kt-subheader__breadcrumbs
             a.kt-subheader__breadcrumbs-home(href='#')
               i.flaticon2-shelter
             span.kt-subheader__breadcrumbs-separator
-            a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/permissions') Uprawnienia
+            a.kt-subheader__breadcrumbs-link(href='#') Klienci
+            span.kt-subheader__breadcrumbs-separator
+            a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/clientlist') Lista klientów
         .kt-subheader__toolbar
           .kt-subheader__wrapper
             .dropdown.dropdown-inline(data-toggle-='kt-tooltip', title='Szybkie działania', data-placement='left')
@@ -56,13 +58,14 @@ block content
     // END:: Content Head
     // BEGIN:: Content
     .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
+      // BEGIN:: Dashboard 1
       // BEGIN:: Row
       .row
         .col-xl-12.order-lg-2.order-xl-1
           .kt-portlet.kt-portlet--height-fluid.kt-portlet--mobile
             .kt-portlet__head.kt-portlet__head--lg.kt-portlet__head--noborder.kt-portlet__head--break-sm
               .kt-portlet__head-label
-                h3.kt-portlet__head-title Zarządzanie uprawnieniami
+                h3.kt-portlet__head-title Lista klientów 
               .kt-portlet__head-toolbar
                 .dropdown.dropdown-inline
                   button.btn.btn-clean.btn-sm.btn-icon.btn-icon-md(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
@@ -104,104 +107,4 @@ block content
                         a.btn.btn-clean.btn-bold.btn-sm(href='#', data-toggle='kt-tooltip', data-placement='right', title='Kliknij aby przeczytać więcej') Learn more
                     // END:: Nav            
             .kt-portlet__body
-              .alert.alert-secondary(role='alert')
-                .alert-icon
-                  i.flaticon-exclamation-2.kt-font-brand
-                .alert-text
-                  b.kt-font-brand.kt-font-lg Zanim zaczniesz..
-                  br
-                  | Pamiętaj aby rozważnie zarządzać uprawnieniami ról i użytkowników, nadanie uprawnień które nie są przystosowane dla niektórych ról
-                  | to potencjalne zagrożenie przejęcia kontroli nad systemem przez osoby trzecie. Ostatecznie: 
-                  b Nadawaj wyższe uprawnienia tylko zaufanym użytkownikom.
-              .col-md-5.kt-margin-l-20
-                label(for='role_select') Wybierz rolę dla której chcesz zmodyfikować uprawnienia: 
-                select#role_select.form-control.form-control-lg
-                  option(selected='', value='0', disabled='') Wybierz rolę
-                  option(value='administrator') Administrator
-                  option(value='kierownik') Kierownik
-                  option(value='posrednik') Pośrednik
-                  option(value='pracownik') Pracownik
-        #show_table_perm.col-xl-12.order-lg-2.order-xl-1.kt-hidden
-          .kt-portlet.kt-portlet--mobile
-            .kt-portlet__body
-              form.form-perm-modify.kt-form
-                input#role_form(type='hidden', name='role', value='0')
-                i.flaticon2-world.kt-font-xl.d-inline-block &nbsp;&nbsp;
-                h5.kt-font-dark.d-inline-block
-                  | Uprawnienia ogólne
-                hr
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', disabled='disabled', name='crm.statistics.default')
-                        span
-                  label.col-9.col-form-label Zezwól na wyświetlanie podstawowych statystyk na stronie głównej.
-                i.flaticon2-bell-5.kt-font-xl.d-inline-block &nbsp;&nbsp;
-                h5.kt-font-dark.kt-padding-t-20.d-inline-block
-                  | Uprawnienia powiadomień
-                hr
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', disabled='disabled', name='crm.notifications.offers')
-                        span
-                  label.col-9.col-form-label Zezwól na wyświetlanie powiadomień o nowych ofertach.
-                i.flaticon2-group.kt-font-xl.d-inline-block &nbsp;&nbsp;
-                h5.kt-font-dark.kt-padding-t-20.d-inline-block
-                  | Uprawnienia zarządzania
-                hr
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.employees.show', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na wyświetlanie listy pracowników.
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.employees.add', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na dodawanie nowych pracowników.
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.employees.edit', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na zarządzanie pracownikami.
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.employees.delete', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na usuwanie pracowników.
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.clients.show', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na wyświatlanie listy klientów.
-                i.flaticon2-rocket-1.kt-font-xl.d-inline-block &nbsp;&nbsp;
-                h5.kt-font-dark.kt-padding-t-20.d-inline-block
-                  | Uprawnienia systemowe
-                hr
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.permissions.modify', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na zarządzanie systemowymi uprawnieniami.&nbsp;&nbsp;
-                    span#red-communicate.kt-hidden(data-skin="dark", data-toggle="kt-tooltip", data-placement="bottom", title="", data-original-title="To uprawnienie jest zastrzeżone dla administratora.")
-                      i.flaticon2-warning-1.kt-font-lg.kt-font-danger
-                button#button-save.btn.btn-brand.btn-elevate.btn-pill.btn-wide.kt-margin-t-20(type='submit', disabled='disabled', name='saveperm')
-                  i.flaticon2-checkmark
-                  |  Zapisz zmiany
-block scripts
-  script(src='./assets/js/private/modpermission.js' type='text/javascript')
+              | lista klientow tu kiedys bedzie

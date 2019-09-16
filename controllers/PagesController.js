@@ -69,4 +69,14 @@ exports.userlist = (req, res) => {
   });
 };
 
+exports.clientlist = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.clients.show')) return res.redirect('/dashboard');
+
+  res.render('clientlist', {
+    title: 'Lista klientów',
+    pageName: 'clientlist'
+  })
+};
+
 // {STOP} Strony po zalogowaniu
