@@ -123,10 +123,14 @@ block content
                                     .col-lg-9.col-xl-9
                                       select#roleL.form-control(name='urole')
                                         option(value='0' selected='' disabled='') Wybierz rolę
-                                        option(value='administrator') Administrator
-                                        option(value='kierownik') Kierownik
-                                        option(value='posrednik') Pośrednik
-                                        option(value='pracownik') Pracownik                     
+                                        if userPermissions.includes('crm.employees.add.administrator')
+                                          option(value='administrator') Administrator
+                                        if userPermissions.includes('crm.employees.add.kierownik')
+                                          option(value='kierownik') Kierownik
+                                        if userPermissions.includes('crm.employees.add.posrednik')
+                                          option(value='posrednik') Pośrednik
+                                        if userPermissions.includes('crm.employees.add.pracownik')
+                                          option(value='pracownik') Pracownik                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Hasło:
                                     .col-lg-9.col-xl-9

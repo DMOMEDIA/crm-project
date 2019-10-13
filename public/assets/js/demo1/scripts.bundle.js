@@ -516,6 +516,10 @@ var KTUtil = function() {
           });
         },
 
+        clearInputInForm: function(form) {
+          $(':input',form).not(':button, :submit, :reset, :hidden, :radio[name="client_type"]').val('').prop('checked', false).prop('selected', false);
+        },
+
         showNotifyAlert: function(type, message, title, icon) {
           var content = {};
 
@@ -9452,7 +9456,7 @@ var KTQuickSearch = function() {
                     hasResult = false;
                     hideProgress();
                     KTUtil.addClass(target, resultClass);
-                    KTUtil.setHTML(resultWrapper, '<span class="kt-quick-search__message">Connection error. Pleae try again later.</div>');
+                    KTUtil.setHTML(resultWrapper, '<span class="kt-quick-search__message">Brak połączenia. Spróbuj ponownie później.</div>');
                     showDropdown();
                     KTUtil.scrollUpdate(resultWrapper);
                 }

@@ -1,5 +1,6 @@
 const Roles = require('../models/roles');
 const User = require('../models/user');
+const Client = require('../models/clients');
 const Messages = require('../config/messages.js');
 const async = require('async');
 
@@ -25,6 +26,10 @@ exports.permissionsModify = (req, res) => {
 
 exports.addUser = (req, res) => {
   if(req.isAuthenticated()) {
+    var permission = 'crm.employees.add.' + req.body.urole;
+    if(!res.locals.userPermissions.includes(permission)) {
+      return res.json(Messages.message('save_user_critical_err', null));
+    }
     if(req.body.password != req.body.confirm_password) {
       return res.json(Messages.message('save_user_critical_err', null));
     }
@@ -48,39 +53,61 @@ exports.addUser = (req, res) => {
 exports.getUserlist = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.show')) {
-      var output = {}, count = 0, callback = [];
-      var roles = ['administrator','posrednik','kierownik','pracownik'];
-      async.each(roles, async function(value, cb) {
-        await User.userList(value, cb => {
-          for(var i of cb.toJSON().values()) {
-            callback.push(i);
-            count++;
-          }
+      var output = {};
+      if(req.session.userData.role == 'administrator') {
+        User.userList(null, function(result, nums) {
+          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['data'] = result;
+          res.json(output);
         });
-      }, function() {
-        output['meta'] = { page: 1, pages: 1, perpage: -1, total: count, sort: 'asc', field: 'id' };
-        output['data'] = callback;
-        res.send(output);
-      });
-      /* await User.userList(function(result, nums) {
-        output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
-        output['data'] = result;
-        res.json(output);
-      }); */
+      } else {
+        User.userListByAssignedId(null, req.session.userData.id, function(result, nums) {
+          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['data'] = result;
+          res.json(output);
+        });
+      }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getUserlistName = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.client.assign_edit')) {
+      if(req.session.userData.role == 'administrator') {
+        User.userList(['id','fullname','role'], function(result,  nums) {
+          res.json(result);
+        });
+      } else {
+        User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_authorization', null));
+    }
 };
 
 exports.getUserById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.edit')) {
       if(req.body.id != null) {
-        User.getUserById(req.body.id).then(function(user) {
+        User.getUserById(null, req.body.id).then(function(user) {
           if(user != null) res.json(user);
           else res.json(Messages.message('not_found_user_identity', null));
         });
       } else res.json(Messages.message('identity_not_selected', null));
     } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getUserByIdLimited = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body.id != null) {
+      User.getUserById(['id','fullname','role'], req.body.id).then(function(user) {
+        if(user != null) res.json(user);
+        else res.json(Messages.message('not_found_user_identity', null));
+      });
+    } else res.json(Messages.message('identity_not_selected', null));
   } else res.json(Messages.message('no_authorization', null));
 };
 
@@ -130,3 +157,39 @@ exports.deleteSelectedUsers = (req, res) => {
     }
   } else res.json(Messages.message('no_authorization', null));
 }
+
+// == Client page REST
+
+exports.getClientList = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.show')) {
+      var output = {};
+      if(req.session.userData.role == 'administrator') {
+        Client.clientList(function(result, nums) {
+          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['data'] = result;
+          res.json(output);
+        });
+      } else {
+        Client.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
+          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['data'] = result;
+          res.json(output);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getClientById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.edit')) {
+      if(req.body.id != null) {
+        Client.getClientById(req.body.id).then(function(user) {
+          if(user != null) res.json(user);
+          else res.json(Messages.message('not_found_client_identity', null));
+        });
+      } else res.json(Messages.message('identity_not_selected', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};

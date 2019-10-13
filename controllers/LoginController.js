@@ -25,6 +25,16 @@ exports.checkValidation = (req, res, next) => {
   next();
 };
 
+// Udane logowanie / zbieranie danych do sesji
+exports.successLogin = (req, res, next) => {
+  req.session.userData = req.user;
+
+  req.session.expireSession = (new Date().getTime() + 900000);
+  req.session.failLogin = null;
+
+  res.redirect('/dashboard');
+};
+
 exports.getPermissions = async (req, res, next) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role != null) {
@@ -33,17 +43,6 @@ exports.getPermissions = async (req, res, next) => {
       });
     }
   }
-  res.redirect('/dashboard');
-};
-
-// Udane logowanie / zbieranie danych do sesji
-exports.successLogin = (req, res, next) => {
-  req.session.userData = req.user;
-
-  req.session.expireSession = (new Date().getTime() + 900000);
-  req.session.failLogin = null;
-
-  next();
 };
 
 // {START} Funkcje autoryzacji, uwierzytelniania.
@@ -54,7 +53,7 @@ exports.passportSerializeUser = passport.serializeUser(function(user, done) {
 });
 
 exports.passportDeserializeUser = passport.deserializeUser(function(id, done) {
-  User.getUserById(id).then(function(user) {
+  User.getUserById(null,id).then(function(user) {
     done(null, user);
   });
 });

@@ -8,6 +8,18 @@ var KTModPermission = function () {
       updateData(this.value);
     });
 
+    $(':checkbox[name="crm.employees.add"]').on('click', function() {
+      if($(':checkbox[name="crm.employees.add"]').is(':checked')) {
+        $('#other-role-elements').removeClass('kt-hidden');
+      } else {
+        $('#other-role-elements').addClass('kt-hidden');
+        $(':checkbox[name="crm.employees.add.administrator"]').prop('checked', false);
+        $(':checkbox[name="crm.employees.add.kierownik"]').prop('checked', false);
+        $(':checkbox[name="crm.employees.add.posrednik"]').prop('checked', false);
+        $(':checkbox[name="crm.employees.add.pracownik"]').prop('checked', false);
+      }
+    });
+
     $('.form-perm-modify').on('submit', function (e) {
       e.preventDefault();
       var form = $(this);
@@ -28,6 +40,10 @@ var KTModPermission = function () {
           if(field.value == 'administrator') array.push('crm.permissions.modify');
         } else {
           if(field.value == 'on') array.push(field.name);
+        }
+
+        if(field.name == 'crm.employees.add') {
+          array.push('crm.employees.add.pracownik');
         }
       });
       values['permissions'] = array;
@@ -92,6 +108,12 @@ var KTModPermission = function () {
           $.each(res, function(i, value) {
             $(':checkbox[name="' + value + '"]').prop('checked', true);
           });
+
+          if($(':checkbox[name="crm.employees.add"]').is(':checked')) {
+            $('#other-role-elements').removeClass('kt-hidden');
+          } else {
+            $('#other-role-elements').addClass('kt-hidden');
+          }
         },
         error: function(err) {
           KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś poszło nie tak..', 'flaticon-warning-sign');

@@ -261,19 +261,19 @@ block content
                                         label.col-xl-3.col-lg-3.col-form-label Identyfikator
                                         |                                         
                                         .col-lg-9.col-xl-6
-                                          .kt-spinner.kt-spinner--sm.kt-spinner--success.kt-spinner--right.kt-spinner--input
-                                            input#identityInput.form-control(type='text', disabled='', name='identity')
+                                          input#identityInput.form-control(type='text', disabled='', name='identity')
                                       |                                     
-                                      .form-group.row
-                                        label.col-xl-3.col-lg-3.col-form-label Rola
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          select#roleInput.form-control(name='role')
-                                            option(value='0' selected='' disabled='') Wybierz rolę
-                                            option(value='administrator') Administrator
-                                            option(value='kierownik') Kierownik
-                                            option(value='posrednik') Pośrednik
-                                            option(value='pracownik') Pracownik
+                                      if userData.role == 'administrator'
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Rola
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            select#roleInput.form-control(name='role')
+                                              option(value='0' selected='' disabled='') Wybierz rolę
+                                              option(value='administrator') Administrator
+                                              option(value='kierownik') Kierownik
+                                              option(value='posrednik') Pośrednik
+                                              option(value='pracownik') Pracownik
                                   |                             
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                   |                             

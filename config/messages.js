@@ -4,6 +4,7 @@ exports.message = (type, argument) => {
     case 'no_permission': selected = { status: 'error', message: 'Nie posiadasz uprawnień do wykonania tej czynności.' }; break;
     case 'no_authorization': selected = { status: 'error', message: 'Brak autoryzacji do wykonania tej czynności.' }; break;
     case 'not_found_user_identity': selected = { status: 'error', message: 'Użytkownik o podanym identyfikatorze nie istnieje.' }; break;
+    case 'not_found_client_identity': selected = { status: 'error', message: 'Klient o podanym identyfikatorze nie istnieje.' }; break;
     case 'password_not_changed': selected = { status: 'error', message: 'Nie udało się zmienić hasła, spróbuj ponownie później.' }; break;
     case 'current_pass_incorrect': selected = { status: 'error', message: 'Aktualne hasło jest niepoprawne.' }; break;
     case 'data_get_error': selected = { status: 'error', message: 'Wystąpił problem podczas wczytywania danych, spróbuj ponownie później.' }; break;
@@ -15,6 +16,7 @@ exports.message = (type, argument) => {
     case 'success_user_deleted': selected = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' }; break;
     case 'success_change_password': selected = { status: 'success', message: 'Pomyślnie zmieniono hasło użytkownika.' }; break;
     case 'success_updated_user': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane użytkownika.' }; break;
+    case 'no_param': selected = { status: 'error', message: 'Niepoprawny lub brak parametru.' }; break;
   }
 
   return selected;

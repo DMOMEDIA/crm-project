@@ -15,6 +15,7 @@ const dash = require('./routes/dashboard');
 const restapi = require('./routes/restapi');
 const errorsHandler = require('./middlewares/errors');
 const ExpireSession = require('./controllers/ExpireSession');
+const LoginController = require('./controllers/LoginController');
 
 const app = express();
 
@@ -36,6 +37,11 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(async function(req, res, next) {
+  await LoginController.getPermissions(req, res, next);
+  next();
+});
 
 app.use(function(req, res, next) {
  res.locals.user = req.user || null;

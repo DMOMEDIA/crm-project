@@ -132,68 +132,115 @@ block content
                 hr
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', disabled='disabled', name='crm.statistics.default')
                         span
                   label.col-9.col-form-label Zezwól na wyświetlanie podstawowych statystyk na stronie głównej.
+                .form-group.row.kt-margin-b-0
+                  .col-1
+                    span.kt-switch.kt-switch--brand
+                      label
+                        input(type='checkbox', disabled='disabled', name='crm.profile.show')
+                        span
+                  label.col-9.col-form-label Zezwól na wyświetlanie własnego profilu.
                 i.flaticon2-bell-5.kt-font-xl.d-inline-block &nbsp;&nbsp;
                 h5.kt-font-dark.kt-padding-t-20.d-inline-block
                   | Uprawnienia powiadomień
                 hr
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', disabled='disabled', name='crm.notifications.offers')
                         span
                   label.col-9.col-form-label Zezwól na wyświetlanie powiadomień o nowych ofertach.
                 i.flaticon2-group.kt-font-xl.d-inline-block &nbsp;&nbsp;
                 h5.kt-font-dark.kt-padding-t-20.d-inline-block
-                  | Uprawnienia zarządzania
+                  | Uprawnienia dot. zarządzania pracownikami
                 hr
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', name='crm.employees.show', disabled='')
                         span
                   label.col-9.col-form-label Zezwól na wyświetlanie listy pracowników.
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
-                      label
-                        input(type='checkbox', name='crm.employees.add', disabled='')
-                        span
-                  label.col-9.col-form-label Zezwól na dodawanie nowych pracowników.
-                .form-group.row.kt-margin-b-0
-                  .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', name='crm.employees.edit', disabled='')
                         span
-                  label.col-9.col-form-label Zezwól na zarządzanie pracownikami.
+                  label.col-9.col-form-label Zezwól na modyfikację pracowników.
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', name='crm.employees.delete', disabled='')
                         span
                   label.col-9.col-form-label Zezwól na usuwanie pracowników.
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
+                      label
+                        input(type='checkbox', name='crm.employees.add', disabled='')
+                        span
+                  label.col-9.col-form-label Zezwól na dodawanie nowych pracowników.
+                #other-role-elements.kt-hidden
+                  .form-group.row.kt-margin-b-0.kt-margin-l-40
+                    .col-1
+                      span.kt-switch.kt-switch--sm.kt-switch--brand
+                        label
+                          input(type='checkbox', name='crm.employees.add.administrator', disabled='')
+                          span
+                    label.col-9.col-form-label(style='margin-left:-15px;') Zezwól na dodawanie administratorów.
+                  .form-group.row.kt-margin-b-0.kt-margin-l-40
+                    .col-1
+                      span.kt-switch.kt-switch--sm.kt-switch--brand
+                        label
+                          input(type='checkbox', name='crm.employees.add.kierownik', disabled='')
+                          span
+                    label.col-9.col-form-label(style='margin-left:-15px;') Zezwól na dodawanie kierowników.
+                  .form-group.row.kt-margin-b-0.kt-margin-l-40
+                    .col-1
+                      span.kt-switch.kt-switch--sm.kt-switch--brand
+                        label
+                          input(type='checkbox', name='crm.employees.add.posrednik', disabled='')
+                          span
+                    label.col-9.col-form-label(style='margin-left:-15px;') Zezwól na dodawanie pośredników.
+                i.flaticon-avatar.kt-font-xl.d-inline-block &nbsp;&nbsp;
+                h5.kt-font-dark.kt-padding-t-20.d-inline-block
+                  | Uprawnienia dot. zarządzania klientami
+                hr
+                .form-group.row.kt-margin-b-0
+                  .col-1
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', name='crm.clients.show', disabled='')
                         span
-                  label.col-9.col-form-label Zezwól na wyświatlanie listy klientów.
+                  label.col-9.col-form-label Zezwól na wyświetlanie listy klientów.
+                .form-group.row.kt-margin-b-0
+                  .col-1
+                    span.kt-switch.kt-switch--brand
+                      label
+                        input(type='checkbox', name='crm.clients.edit', disabled='')
+                        span
+                  label.col-9.col-form-label Zezwól na edycję przypisanych klientów.
+                .form-group.row.kt-margin-b-0
+                  .col-1
+                    span.kt-switch.kt-switch--brand
+                      label
+                        input(type='checkbox', name='crm.client.assign_edit', disabled='')
+                        span
+                  label.col-9.col-form-label Zezwól na przypisanie konta klienta do pracownika.
                 i.flaticon2-rocket-1.kt-font-xl.d-inline-block &nbsp;&nbsp;
                 h5.kt-font-dark.kt-padding-t-20.d-inline-block
                   | Uprawnienia systemowe
                 hr
                 .form-group.row.kt-margin-b-0
                   .col-1
-                    span.kt-switch
+                    span.kt-switch.kt-switch--brand
                       label
                         input(type='checkbox', name='crm.permissions.modify', disabled='')
                         span

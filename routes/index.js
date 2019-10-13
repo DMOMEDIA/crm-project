@@ -12,8 +12,7 @@ router.get('/logout', PagesController.logout);
 
 router.post('/',
   LoginController.passportAuthenticate,
-  LoginController.successLogin,
-  LoginController.getPermissions
+  LoginController.successLogin
 );
 
 LoginController.validate,

@@ -1920,7 +1920,7 @@ S2.define('select2/selection/allowClear',[
       return;
     }
 
-    var removeAll = this.options.get('translations').get('removeAllItems');   
+    var removeAll = this.options.get('translations').get('removeAllItems');
 
     var $remove = $(
       '<span class="select2-selection__clear" title="' + removeAll() +'">' +
@@ -4606,12 +4606,12 @@ S2.define('select2/i18n/en',[],function () {
     inputTooShort: function (args) {
       var remainingChars = args.minimum - args.input.length;
 
-      var message = 'Please enter ' + remainingChars + ' or more characters';
+      var message = 'Wprowadź ' + remainingChars + ' lub więcej znaków.';
 
       return message;
     },
     loadingMore: function () {
-      return 'Loading more results…';
+      return 'Ładuję więcej wyników…';
     },
     maximumSelected: function (args) {
       var message = 'You can only select ' + args.maximum + ' item';
@@ -4623,10 +4623,10 @@ S2.define('select2/i18n/en',[],function () {
       return message;
     },
     noResults: function () {
-      return 'No results found';
+      return 'Brak wyników wyszukiwania';
     },
     searching: function () {
-      return 'Searching…';
+      return 'Wyszukiwanie…';
     },
     removeAllItems: function () {
       return 'Remove all items';

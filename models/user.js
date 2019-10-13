@@ -12,9 +12,14 @@ module.exports.getUserByIdentity = (user) => {
   return new User().where(query).fetch();
 };
 
-module.exports.getUserById = (id) => {
-  const query = { id: id };
-  return new User().where(query).fetch();
+module.exports.getUserById = (args, id) => {
+  if(args != null) {
+    const query = { id: id };
+    return new User().where(query).fetch({ columns: args });
+  } else {
+    const query = { id: id };
+    return new User().where(query).fetch();
+  }
 };
 
 module.exports.blockAccount = (id, datetime) => {
@@ -61,10 +66,36 @@ module.exports.createUser = (user) => {
   });
 };
 
-module.exports.userList = (role, callback) => {
-  return new User().where({ role: role }).fetchAll().then(function(response) {
-    callback(response);
-  });
+module.exports.userList = (args, callback) => {
+  if(args != null) {
+    return new User().fetchAll({ columns: args }).then(function(response) {
+      User.forge().count().then(function(cnt) {
+        callback(response, cnt);
+      });
+    });
+  } else {
+    return new User().fetchAll().then(function(response) {
+      User.forge().count().then(function(cnt) {
+        callback(response, cnt);
+      });
+    });
+  }
+};
+
+module.exports.userListByAssignedId = (args, id, callback) => {
+  if(args != null) {
+    return new User().where({ assigned_to: id }).fetchAll({ columns: args }).then(function(response) {
+      User.where({ assigned_to: id }).count().then(function(cnt) {
+        callback(response, cnt);
+      });
+    });
+  } else {
+    return new User().where({ assigned_to: id }).fetchAll().then(function(response) {
+      User.where({ assigned_to: id }).count().then(function(cnt) {
+        callback(response, cnt);
+      });
+    });
+  }
 };
 
 module.exports.userModify = (user, callback) => {

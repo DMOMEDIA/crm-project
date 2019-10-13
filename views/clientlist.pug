@@ -2,109 +2,291 @@ extends layout
 
 block content
   if user
-    // begin:: Content Head
     #kt_subheader.kt-subheader.kt-grid__item
       .kt-container.kt-container--fluid
         .kt-subheader__main
-          h3.kt-subheader__title Lista klientów
-          span.kt-subheader__separator.kt-subheader__separator--v.kt-hidden
-          span.kt-subheader__desc.kt-hidden #XRS-45670
-          .kt-subheader__breadcrumbs
-            a.kt-subheader__breadcrumbs-home(href='#')
-              i.flaticon2-shelter
-            span.kt-subheader__breadcrumbs-separator
-            a.kt-subheader__breadcrumbs-link(href='#') Klienci
-            span.kt-subheader__breadcrumbs-separator
-            a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/clientlist') Lista klientów
+          h3.kt-subheader__title
+            | Lista klientów
+          |             
+          span.kt-subheader__separator.kt-subheader__separator--v
+          |             
+          |             
+          #kt_subheader_search.kt-subheader__group
+            span#kt_subheader_total.kt-subheader__desc
+              | 
+            |                 
+            |                                     
+            form#kt_subheader_search_form.kt-margin-l-20
+              .kt-input-icon.kt-input-icon--right.kt-subheader__search
+                input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
+                |                             
+                span.kt-input-icon__icon.kt-input-icon__icon--right
+                  span
+                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                        rect#bound(x='0', y='0', width='24', height='24')
+                        path#Path-2(d='M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                        path#Path(d='M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z', fill='#000000', fill-rule='nonzero')
+          |                             
+          #kt_subheader_group_actions.kt-subheader__group.kt-hidden
+            .kt-subheader__desc
+              span#kt_subheader_group_selected_rows
+              |  zaznaczono:
+            |                     
+            |                     
+            if userPermissions.includes('crm.clients.delete')
+              .btn-toolbar.kt-margin-l-20
+                button#kt_subheader_group_actions_delete_all.btn.btn-label-danger.btn-bold.btn-sm.btn-icon-h
+                  | Usuń zaznaczone
+            else
+              |
+              .btn-toolbar.kt-margin-l-20
+                button(disabled='')#kt_subheader_group_actions_delete_all.btn.btn-label-danger.btn-bold.btn-sm.btn-icon-h
+                  | Usuń zaznaczone
+        |         
+        |         
         .kt-subheader__toolbar
-          .kt-subheader__wrapper
-            .dropdown.dropdown-inline(data-toggle-='kt-tooltip', title='Szybkie działania', data-placement='left')
-              a.btn.btn-icon(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--md(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                    polygon#Shape(points='0 0 24 0 24 24 0 24')          
-                    path#Combined-Shape(d='M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
-                    path#Combined-Shape(d='M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z', fill='#000000')               
-              .dropdown-menu.dropdown-menu-fit.dropdown-menu-md.dropdown-menu-right
-                // BEGIN:: Nav
-                ul.kt-nav
-                  li.kt-nav__head
-                    | Add anything or jump to:
-                    i.flaticon2-information(data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...')                   
-                  li.kt-nav__separator                
-                  li.kt-nav__item
-                    a.kt-nav__link(href='#')
-                      i.kt-nav__link-icon.flaticon2-drop                  
-                      span.kt-nav__link-text Order                   
-                  li.kt-nav__item
-                    a.kt-nav__link(href='#')
-                      i.kt-nav__link-icon.flaticon2-calendar-8                           
-                      span.kt-nav__link-text Ticket                               
-                  li.kt-nav__item
-                    a.kt-nav__link(href='#')
-                      i.kt-nav__link-icon.flaticon2-telegram-logo                                    
-                      span.kt-nav__link-text Goal                                
-                  li.kt-nav__item
-                    a.kt-nav__link(href='#')
-                      i.kt-nav__link-icon.flaticon2-new-email                                       
-                      span.kt-nav__link-text Support Case                                   
-                      span.kt-nav__link-badge
-                        span.kt-badge.kt-badge--brand.kt-badge--rounded 5            
-                  li.kt-nav__separator                       
-                  li.kt-nav__foot
-                    a.btn.btn-label-brand.btn-bold.btn-sm(href='#') Upgrade plan 
-                    a.btn.btn-clean.btn-bold.btn-sm.kt-hidden(href='#', data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...') Learn more
-                // END:: Nav
-    // END:: Content Head
-    // BEGIN:: Content
+          a(href='#')
+          |             
+          |                                                 
+          if userPermissions.includes('crm.clients.add')
+            a.btn.btn-label-brand.btn-bold(href='/dashboard/clientadd')
+              | Dodaj klienta   
+    // end:: Content Head
+    // begin:: Content
     .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
-      // BEGIN:: Dashboard 1
-      // BEGIN:: Row
-      .row
-        .col-xl-12.order-lg-2.order-xl-1
-          .kt-portlet.kt-portlet--height-fluid.kt-portlet--mobile
-            .kt-portlet__head.kt-portlet__head--lg.kt-portlet__head--noborder.kt-portlet__head--break-sm
-              .kt-portlet__head-label
-                h3.kt-portlet__head-title Lista klientów 
-              .kt-portlet__head-toolbar
-                .dropdown.dropdown-inline
-                  button.btn.btn-clean.btn-sm.btn-icon.btn-icon-md(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                    i.flaticon-more-1                  
-                  .dropdown-menu.dropdown-menu-right.dropdown-menu-md.dropdown-menu-fit
-                    // BEGIN:: Nav
-                    ul.kt-nav
-                      li.kt-nav__head
-                        | Export Options
-                        span(data-toggle='kt-tooltip', data-placement='right', title='Kliknij aby przeczytać więcej')
-                          svg.kt-svg-icon.kt-svg-icon--brand.kt-svg-icon--md1(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                            g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                              rect#bound(x='0', y='0', width='24', height='24')
-                              circle#Oval-5(fill='#000000', opacity='0.3', cx='12', cy='12', r='10')
-                              rect#Rectangle-9(fill='#000000', x='11', y='10', width='2', height='7', rx='1')
-                              rect#Rectangle-9-Copy(fill='#000000', x='11', y='7', width='2', height='2', rx='1')                           
-                      li.kt-nav__separator                                
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-drop                                   
-                          span.kt-nav__link-text Activity                               
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-calendar-8                                      
-                          span.kt-nav__link-text FAQ                  
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-telegram-logo                                  
-                          span.kt-nav__link-text Settings                       
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-new-email                                     
-                          span.kt-nav__link-text Support                                  
-                          span.kt-nav__link-badge
-                            span.kt-badge.kt-badge--success.kt-badge--rounded 5                          
-                      li.kt-nav__separator                         
-                      li.kt-nav__foot
-                        a.btn.btn-label-danger.btn-bold.btn-sm(href='#') Upgrade plan                                     
-                        a.btn.btn-clean.btn-bold.btn-sm(href='#', data-toggle='kt-tooltip', data-placement='right', title='Kliknij aby przeczytać więcej') Learn more
-                    // END:: Nav            
-            .kt-portlet__body
-              | lista klientow tu kiedys bedzie
+      // begin::Portlet
+      .kt-portlet.kt-portlet--mobile
+        .kt-portlet__body.kt-portlet__body--fit
+          // begin: Datatable
+          #kt_apps_client_list_datatable.kt-datatable
+          // end: Datatable
+      // begin::Modal
+      if userPermissions.includes('crm.clients.edit')
+        #kt_fetch_client.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+          .modal-dialog.modal-lg.modal-dialog-centered(role='document')
+            .modal-content
+              .modal-header
+                h5.modal-title Podgląd&nbsp;-&nbsp;
+                h5.modal-title#modalTitle 
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                  span(aria-hidden='true')
+              .modal-body
+                .kt-portlet.kt-portlet--tabs
+                  .kt-portlet__head
+                    .kt-portlet__head-toolbar
+                      ul.nav.nav-tabs.nav-tabs-space-xl.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-brand(role='tablist')
+                        li.nav-item
+                          a.nav-link.active(data-toggle='tab', href='#dane_personalne', role='tab')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                polygon#Bound(points='0 0 24 0 24 24 0 24')
+                                path#Combined-Shape(d='M10.5857864,12 L5.46446609,6.87867966 C5.0739418,6.48815536 5.0739418,5.85499039 5.46446609,5.46446609 C5.85499039,5.0739418 6.48815536,5.0739418 6.87867966,5.46446609 L12,10.5857864 L18.1923882,4.39339828 C18.5829124,4.00287399 19.2160774,4.00287399 19.6066017,4.39339828 C19.997126,4.78392257 19.997126,5.41708755 19.6066017,5.80761184 L13.4142136,12 L19.6066017,18.1923882 C19.997126,18.5829124 19.997126,19.2160774 19.6066017,19.6066017 C19.2160774,19.997126 18.5829124,19.997126 18.1923882,19.6066017 L12,13.4142136 L6.87867966,18.5355339 C6.48815536,18.9260582 5.85499039,18.9260582 5.46446609,18.5355339 C5.0739418,18.1450096 5.0739418,17.5118446 5.46446609,17.1213203 L10.5857864,12 Z', fill='#000000', opacity='0.3', transform='translate(12.535534, 12.000000) rotate(-360.000000) translate(-12.535534, -12.000000) ')
+                                path#Combined-Shape(d='M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z', fill='#000000', fill-rule='nonzero')
+                            | Dane personalne i przypisy
+                        |                 
+                        li.nav-item
+                          a.nav-link(data-toggle='tab', href='#pliki', role='tab')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Combined-Shape(d='M4.5,21 L21.5,21 C22.3284271,21 23,20.3284271 23,19.5 L23,8.5 C23,7.67157288 22.3284271,7 21.5,7 L11,7 L8.43933983,4.43933983 C8.15803526,4.15803526 7.77650439,4 7.37867966,4 L4.5,4 C3.67157288,4 3,4.67157288 3,5.5 L3,19.5 C3,20.3284271 3.67157288,21 4.5,21 Z', fill='#000000', opacity='0.3')
+                                path#Combined-Shape-Copy(d='M2.5,19 L19.5,19 C20.3284271,19 21,18.3284271 21,17.5 L21,6.5 C21,5.67157288 20.3284271,5 19.5,5 L9,5 L6.43933983,2.43933983 C6.15803526,2.15803526 5.77650439,2 5.37867966,2 L2.5,2 C1.67157288,2 1,2.67157288 1,3.5 L1,17.5 C1,18.3284271 1.67157288,19 2.5,19 Z', fill='#000000')
+                            | Pliki
+                        |                 
+                        li.nav-item
+                          a.nav-link(data-toggle='tab', href='#zmien_haslo', role='tab')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Path-50(d='M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z', fill='#000000', opacity='0.3')
+                                path#Mask(d='M12,11 C10.8954305,11 10,10.1045695 10,9 C10,7.8954305 10.8954305,7 12,7 C13.1045695,7 14,7.8954305 14,9 C14,10.1045695 13.1045695,11 12,11 Z', fill='#000000', opacity='0.3')
+                                path#Mask-Copy(d='M7.00036205,16.4995035 C7.21569918,13.5165724 9.36772908,12 11.9907452,12 C14.6506758,12 16.8360465,13.4332455 16.9988413,16.5 C17.0053266,16.6221713 16.9988413,17 16.5815,17 C14.5228466,17 11.463736,17 7.4041679,17 C7.26484009,17 6.98863236,16.6619875 7.00036205,16.4995035 Z', fill='#000000', opacity='0.3')
+                            | Zmień hasło
+                  |     
+                  .kt-portlet__body
+                    .tab-content
+                      #dane_personalne.tab-pane.active(role='tabpanel')
+                        form#kt_client_edit_personal
+                          input#idInput1(type='hidden', name='id')
+                          .kt-form.kt-form--label-right
+                            .kt-form__body
+                              .kt-section.kt-section--first
+                                .kt-section__body
+                                  .row
+                                    label.col-xl-3     
+                                    .col-lg-9.col-xl-6
+                                      h3.kt-section__title.kt-section__title-sm Dane personalne:
+                                  |                                                               
+                                  .form-group.row.kt-margin-t-10
+                                    label.col-xl-3.col-lg-3.col-form-label Typ konta
+                                    |                                         
+                                    .col-9
+                                      .kt-radio-inline
+                                        label.kt-radio.kt-radio--bold.kt-radio--brand
+                                          input(type='radio', name='client_type', value='1')
+                                          |  Firma
+                                          |                      
+                                          span
+                                        |                       
+                                        label.kt-radio.kt-radio--bold.kt-radio--brand
+                                          input(type='radio', name='client_type', value='0')
+                                          |  Osoba prywatna
+                                          |              
+                                          span
+                                        |              
+                                  #private_user
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Imię
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#firstnameInput.form-control(type='text', name='firstname')
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwisko
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#lastnameInput.form-control(type='text', name='lastname')
+                                    |                                     
+                                  #company_user
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#fullnameInput.form-control(type='text', name='fullname')
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label NIP
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#nipInput.form-control(type='text', name='nip', maxlength='10')
+                                    |                                     
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Numer telefonu
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      .input-group
+                                        .input-group-prepend
+                                          span.input-group-text
+                                            i.la.la-phone
+                                        |                                                 
+                                        input#telephoneInput.form-control(type='text', name='pNumber', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                                  |                                     
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Adres e-mail
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      .input-group
+                                        .input-group-prepend
+                                          span.input-group-text
+                                            i.la.la-at
+                                        |                                                 
+                                        input#emailInput.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                  if userPermissions.includes('crm.client.assign_edit') 
+                                    |                             
+                                    .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                    |                            
+                                    .row
+                                      label.col-xl-3     
+                                      .col-lg-9.col-xl-6
+                                        h3.kt-section__title.kt-section__title-sm Przypisz konto do pracownika:
+                                    |                                                   
+                                    .form-group.row
+                                      label.col-form-label.col-lg-3.col-sm-12 Pracownik
+                                      .col-lg-9.col-xl-6
+                                        select#remoteEmployeer.form-control.kt-select2(name='param')
+                                          option
+                              |                             
+                              .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                              |                             
+                              .kt-form__actions
+                                .row
+                                  .col-lg-12.col-xl-12.kt-align-right
+                                    button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
+                                    |                             
+                                    button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+                      #zmien_haslo.tab-pane(role='tabpanel')
+                        form#kt_user_edit_password
+                          input#idInput3(type='hidden', name='id')
+                          .kt-form.kt-form--label-right
+                            .kt-form__body
+                              .kt-section.kt-section--first
+                                .kt-section__body
+                                  .alert.alert-solid-danger.alert-bold.fade.show.kt-margin-t-20.kt-margin-b-40(role='alert')
+                                    .alert-icon
+                                      i.fa.fa-exclamation-triangle
+                                    |                                         
+                                    .alert-text
+                                      | Skonfiguruj hasła użytkowników, aby okresowo wygasały.
+                                      br
+                                      | Użytkownicy będą potrzebować ostrzeżenia, że ​​ich hasła wygasną lub mogą zostać zablokowani w systemie aż do czasu utworzenia nowego hasła!
+                                    |                                         
+                                    .alert-close
+                                      button.close(type='button', data-dismiss='alert', aria-label='Close')
+                                        span(aria-hidden='true')
+                                          i.la.la-close
+                                  |                                     
+                                  .row
+                                    label.col-xl-3
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      h3.kt-section__title.kt-section__title-sm Zmień hasło użytkownika:
+                                  |                                     
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Aktualne hasło
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      input#current_passwordInput.form-control(type='password', name='current_password', placeholder='Aktualne hasło')
+                                      |                                             
+                                      a.kt-link.kt-font-sm.kt-font-bold.kt-margin-t-5(href='javascript:;') Zapomniałeś hasła? Zresetuj je poniżej.
+                                  |                                     
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Nowe hasło
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      .input-group
+                                        .input-group-prepend
+                                          span#refresh-password.input-group-text
+                                            i.la.la-refresh(style='font-size:26px;')
+                                        .input-group-prepend
+                                          span#show-password.input-group-text
+                                            i.la.la-eye-slash(style='font-size:26px;')
+                                        input#new_passwordInput.form-control(type='password', name='new_password', placeholder='Nowe hasło')
+                                  |                                     
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Powtórz hasło
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      input#confirm_passwordInput.form-control(type='password', name='confirm_password', placeholder='Powtórz hasło')
+                                  |                         
+                                  |                         
+                                  .kt-separator.kt-separator--space-lg.kt-separator--fit.kt-separator--border-solid
+                                  |                             
+                                  |                         
+                                  .form-group.form-group-last.row
+                                    label.col-xl-3.col-lg-3.col-form-label Resetowanie hasła
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      button.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Resetuj hasło
+                                      |                                             
+                                      span.form-text.text-muted
+                                        | Jeżeli użytkownik zapomniał hasła do swojego konta możesz je jednym kliknięciem zresetować. Nowe hasło zostanie przesłane na adres e-mail właściciela konta.
+                              |                             
+                              .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                              |                             
+                              .kt-form__actions
+                                .row
+                                  .col-lg-12.col-xl-12.kt-align-right
+                                    button.btn.btn-success.btn-bold(type='submit') Zmień hasło
+                                    |                             
+                                    button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+block scripts
+  script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
+  script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
+  script(src='./assets/js/demo1/pages/pGenerator.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-select/dist/js/bootstrap-select.js', type='text/javascript')
+  script(src="./assets/js/private/clientlist.js" type="text/javascript")

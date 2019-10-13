@@ -39,7 +39,6 @@ var KTUserListDatatable = function() {
 
 			search: {
 				input: $('#generalSearch'),
-				delay: 400,
 			},
 
 			// columns definition
@@ -55,6 +54,7 @@ var KTUserListDatatable = function() {
 			}, {
 				field: "efullname",
 				title: "Pracownik",
+				sortable: 'asc',
 				width: 200,
 				// callback function support for column rendering
 				template: function(data, i) {
@@ -422,6 +422,9 @@ var KTUserListDatatable = function() {
 									modalEl.find('#lastnameInput').val(name[1]);
 									modalEl.find('#telephoneInput').val(res.telephone);
 									modalEl.find('#emailInput').val(res.email);
+									modalEl.find('#current_passwordInput').val('');
+									modalEl.find('#new_passwordInput').val('');
+									modalEl.find('#confirm_passwordInput').val('');
 
 									modalEl.find('#identityInput').val(res.identity);
 									modalEl.find('#roleInput').val(res.role);

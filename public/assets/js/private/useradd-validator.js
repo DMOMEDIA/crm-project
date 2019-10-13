@@ -210,6 +210,7 @@ var KTUserAdd = function () {
                 wizard.goTo(1, true);
               } else {
                 KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
+								wizard.goTo(1, true);
               }
             },
             error: function(err) {

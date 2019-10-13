@@ -421,12 +421,12 @@ var Dropzone = function (_Emitter) {
         /**
          * The text used before any files are dropped.
          */
-        dictDefaultMessage: "Drop files here to upload",
+        dictDefaultMessage: "Upuść pliki tutaj, aby przesłać",
 
         /**
          * The text that replaces the default message text it the browser is not supported.
          */
-        dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+        dictFallbackMessage: "Twoja przeglądarka nie obsługuje przesyłania plików metodą przeciągnij i upuść.",
 
         /**
          * The text that will be added before the fallback form.
@@ -439,12 +439,12 @@ var Dropzone = function (_Emitter) {
          * If the filesize is too big.
          * `{{filesize}}` and `{{maxFilesize}}` will be replaced with the respective configuration values.
          */
-        dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
+        dictFileTooBig: "Plik jest za duży ({{filesize}}MB). Maksymalny rozmiar pliku: {{maxFilesize}}MB.",
 
         /**
          * If the file doesn't match the file type.
          */
-        dictInvalidFileType: "You can't upload files of this type.",
+        dictInvalidFileType: "Nie możesz przesyłać plików tego typu.",
 
         /**
          * If the server response was invalid.
@@ -455,22 +455,22 @@ var Dropzone = function (_Emitter) {
         /**
          * If `addRemoveLinks` is true, the text to be used for the cancel upload link.
          */
-        dictCancelUpload: "Cancel upload",
+        dictCancelUpload: "Anuluj przesyłanie",
 
         /**
          * The text that is displayed if an upload was manually canceled
          */
-        dictUploadCanceled: "Upload canceled.",
+        dictUploadCanceled: "Przesyłanie anulowane.",
 
         /**
          * If `addRemoveLinks` is true, the text to be used for confirmation when cancelling upload.
          */
-        dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+        dictCancelUploadConfirmation: "Czy na pewno chcesz anulować to przesyłanie?",
 
         /**
          * If `addRemoveLinks` is true, the text to be used to remove a file.
          */
-        dictRemoveFile: "Remove file",
+        dictRemoveFile: "Usuń plik",
 
         /**
          * If this is not null, then the user will be prompted before removing a file.
@@ -481,7 +481,7 @@ var Dropzone = function (_Emitter) {
          * Displayed if `maxFiles` is st and exceeded.
          * The string `{{maxFiles}}` will be replaced by the configuration value.
          */
-        dictMaxFilesExceeded: "You can not upload any more files.",
+        dictMaxFilesExceeded: "Nie możesz przesłać więcej plików.",
 
         /**
          * Allows you to translate the different units. Starting with `tb` for terabytes and going down to

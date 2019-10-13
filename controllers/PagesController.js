@@ -30,7 +30,7 @@ exports.logout = (req, res) => {
 exports.dashboard = (req, res) => {
   if(req.isAuthenticated()) {
     res.render('dashboard', {
-      title: 'Dashboard - CRM System',
+      title: 'Pulpit nawigacyjny',
       pageName: 'dashboard',
       formMessage: req.flash('success')
     });
@@ -77,6 +77,32 @@ exports.clientlist = (req, res) => {
     title: 'Lista klientów',
     pageName: 'clientlist'
   })
+};
+
+exports.userProfile = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.profile.show')) return res.redirect('/dashboard');
+
+  res.render('profile', {
+    title: 'Mój profil - ' + res.locals.userData.fullname,
+    pageName: 'userprofile'
+  });
+};
+
+exports.docs = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  res.render('documentation', {
+    title: 'Pełna dokumentacja systemu CRM',
+    pageName: 'documentation'
+  });
+};
+
+exports.report = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  res.render('report', {
+    title: 'Zgłoś błąd w aplikacji',
+    pageName: 'report'
+  });
 };
 
 // {STOP} Strony po zalogowaniu
