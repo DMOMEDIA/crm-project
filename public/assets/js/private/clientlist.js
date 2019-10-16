@@ -106,7 +106,7 @@ var KTClientListDatatable = function() {
 				template: function(row) {
 				return '\
 						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_client_data" data-id="' + row.id + '">\
-							<i class="flaticon-eye"></i>\
+							<i class="flaticon2-menu-1"></i>\
 						</a>\
 					';
 				}
@@ -196,6 +196,7 @@ var KTClientListDatatable = function() {
 								if(res.status == null) {
 									modalEl.modal('show');
 									modalEl.find('#modalTitle').html(res.fullname);
+									modalEl.find('#idInput1').val(res.id);
 									var type = res.company, name = res.fullname.split(' ');
 
 									// 1 - Firma
@@ -340,7 +341,7 @@ var KTClientListDatatable = function() {
 					for(var i = 0; i < res.length; i++) data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
 
 					$('#remoteEmployeer').select2({
-						placeholder: "Select a value",
+						placeholder: "Wybierz pracownika",
 						width: '100%',
 						data: data
 					});
@@ -364,8 +365,25 @@ var KTClientListDatatable = function() {
 				btn_pers.attr('disabled', true);
 
 				setTimeout(function() {
-					KTApp.unprogress(btn_pers);
-					console.log('Poszlo');
+					form_personal.ajaxSubmit({
+						url: '/rest/clients/modify',
+						method: 'POST',
+						data: form_personal.serialize(),
+						success: function(res) {
+							KTApp.unprogress(btn_pers);
+							btn_pers.attr('disabled', false);
+
+							if(res.status == 'success') {
+								KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+								datatable.reload();
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+						}
+					});
 				}, 1000);
 			}
 		});

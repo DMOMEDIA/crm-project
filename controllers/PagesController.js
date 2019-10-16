@@ -105,4 +105,13 @@ exports.report = (req, res) => {
   });
 };
 
+exports.offers = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+
+  res.render('offers', {
+    title: 'Zapytania ofertowe Twoich klientów',
+    pageName: 'offerslist'
+  });
+};
+
 // {STOP} Strony po zalogowaniu

@@ -16,7 +16,9 @@ exports.message = (type, argument) => {
     case 'success_user_deleted': selected = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' }; break;
     case 'success_change_password': selected = { status: 'success', message: 'Pomyślnie zmieniono hasło użytkownika.' }; break;
     case 'success_updated_user': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane użytkownika.' }; break;
+    case 'success_updated_client': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane klienta.' }; break;
     case 'no_param': selected = { status: 'error', message: 'Niepoprawny lub brak parametru.' }; break;
+    case 'not_found_roffer': selected = { status: 'error', message: 'Zapytanie ofertowe nie istnieje.' }; break;
   }
 
   return selected;

@@ -23,6 +23,9 @@ router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
 
 // {REST} dot. klientów
 router.post('/rest/clients/list', REST.getClientList);
+router.post('/rest/clients/modify', REST.modifyClientById);
 router.post('/rest/client/show', REST.getClientById);
+router.post('/rest/offer/list', REST.getOfferRequests);
+router.post('/rest/offer/get', REST.getOfferById);
 
 module.exports = router;

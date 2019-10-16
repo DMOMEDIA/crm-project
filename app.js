@@ -38,6 +38,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.locals.env = process.env;
+
 app.use(async function(req, res, next) {
   await LoginController.getPermissions(req, res, next);
   next();

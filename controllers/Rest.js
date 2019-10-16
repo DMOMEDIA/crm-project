@@ -1,6 +1,7 @@
 const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
+const ROffer = require('../models/roffers');
 const Messages = require('../config/messages.js');
 const async = require('async');
 
@@ -190,6 +191,55 @@ exports.getClientById = (req, res) => {
           else res.json(Messages.message('not_found_client_identity', null));
         });
       } else res.json(Messages.message('identity_not_selected', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.modifyClientById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.edit')) {
+      if(req.body.id != null) {
+        Client.saveClientData(req, result => { res.send(result) });
+      }
+      else res.json(Messages.message('identity_not_selected', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+// { Zapytania ofertowe }
+exports.getOfferRequests = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.show')) {
+      var output = {};
+
+      if(req.session.userData.role == 'administrator') {
+        ROffer.getClientOffers(function(data, nums) {
+          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['data'] = data;
+          res.json(output);
+        });
+      } else {
+        ROffer.getClientOffersAssigned(req.session.userData.id, function(data, nums) {
+          if(data != null) {
+            output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+            output['data'] = data;
+            res.json(output);
+          }
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getOfferById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.show')) {
+      if(req.body.id != null) {
+        ROffer.getOfferById(req.body.id, function(data) {
+          if(data != null) res.json(data);
+          else res.json(Messages.message('not_found_roffer', null));
+        });
+      }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
