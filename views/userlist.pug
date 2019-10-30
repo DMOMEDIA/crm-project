@@ -56,61 +56,6 @@ block content
                 a.btn.btn-label-brand.btn-bold(href='/dashboard/useradd')
                   | Dodaj pracownika
               |                                         
-              |                             
-              .kt-subheader__wrapper
-                .dropdown.dropdown-inline(data-toggle='kt-tooltip-', title='Quick actions', data-placement='left')
-                  a.btn.btn-icon(href='#', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                    svg.kt-svg-icon.kt-svg-icon--success.kt-svg-icon--md(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                        polygon#Shape(points='0 0 24 0 24 24 0 24')
-                        path#Combined-Shape(d='M5.85714286,2 L13.7364114,2 C14.0910962,2 14.4343066,2.12568431 14.7051108,2.35473959 L19.4686994,6.3839416 C19.8056532,6.66894833 20,7.08787823 20,7.52920201 L20,20.0833333 C20,21.8738751 19.9795521,22 18.1428571,22 L5.85714286,22 C4.02044787,22 4,21.8738751 4,20.0833333 L4,3.91666667 C4,2.12612489 4.02044787,2 5.85714286,2 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
-                        path#Combined-Shape(d='M11,14 L9,14 C8.44771525,14 8,13.5522847 8,13 C8,12.4477153 8.44771525,12 9,12 L11,12 L11,10 C11,9.44771525 11.4477153,9 12,9 C12.5522847,9 13,9.44771525 13,10 L13,12 L15,12 C15.5522847,12 16,12.4477153 16,13 C16,13.5522847 15.5522847,14 15,14 L13,14 L13,16 C13,16.5522847 12.5522847,17 12,17 C11.4477153,17 11,16.5522847 11,16 L11,14 Z', fill='#000000')
-                  |                         
-                  .dropdown-menu.dropdown-menu-fit.dropdown-menu-md.dropdown-menu-right
-                    // begin::Nav
-                    ul.kt-nav
-                      li.kt-nav__head
-                        | Add New:                                    
-                        i.flaticon2-information(data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...')
-                      |                                 
-                      li.kt-nav__separator
-                      |                                 
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-drop
-                          |                                         
-                          span.kt-nav__link-text Orders
-                      |                         
-                      |                                 
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-new-email
-                          |                                         
-                          span.kt-nav__link-text Members
-                          |                                         
-                          span.kt-nav__link-badge
-                            span.kt-badge.kt-badge--brand.kt-badge--rounded 15
-                      |                                 
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-calendar-8
-                          |                                         
-                          span.kt-nav__link-text Reports
-                      |                                 
-                      li.kt-nav__item
-                        a.kt-nav__link(href='#')
-                          i.kt-nav__link-icon.flaticon2-link
-                          |                                         
-                          span.kt-nav__link-text Finance
-                      |                                 
-                      li.kt-nav__separator
-                      |                                 
-                      li.kt-nav__foot
-                        a.btn.btn-label-brand.btn-bold.btn-sm(href='#') More options
-                        |                                     
-                        |                                     
-                        a.btn.btn-clean.btn-bold.btn-sm.kt-hidden(href='#', data-toggle='kt-tooltip', data-placement='right', title='Click to learn more...') Learn more
-                    // end::Nav
         // end:: Content Head
         // begin:: Content
         .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
@@ -274,47 +219,21 @@ block content
                                               option(value='kierownik') Kierownik
                                               option(value='posrednik') Pośrednik
                                               option(value='pracownik') Pracownik
+                                      if userPermissions.includes('crm.users.assign_edit')
+                                        .row
+                                          label.col-xl-3
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            h3.kt-section__title.kt-section__title-sm Przypisz pracownika wyższego szczebla:
+                                        |                          
+                                        .form-group.row
+                                          label.col-form-label.col-lg-3.col-sm-12 Pracownik
+                                          .col-lg-9.col-xl-6
+                                            select#remoteUser.form-control.kt-select2(name='param')
+                                              option      
                                   |                             
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
-                                  |                             
-                                  .kt-section.kt-section--first
-                                    .kt-section__body
-                                      .row
-                                        label.col-xl-3
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          h3.kt-section__title.kt-section__title-sm Bezpieczeństwo:
-                                      |                                     
-                                      .form-group.row
-                                        label.col-xl-3.col-lg-3.col-form-label Dwuetapowa weryfikacja
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          button.btn.btn-label-brand.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Skonfiguruj dwuetapową weryfikację
-                                          |                                             
-                                          span.form-text.text-muted
-                                            | W momencie logowania użytkownik zostanie poproszony o dodatkowe informacje w celu potwierdzenia tożsamości i ochrony konta przed włamaniem.
-                                      |                                     
-                                      .form-group.row
-                                        label.col-xl-3.col-lg-3.col-form-label Weryfikacja resetowania hasła
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          .kt-checkbox-single
-                                            label.kt-checkbox
-                                              input(type='checkbox')
-                                              |  Wymagaj danych osobowych, aby zresetować hasło.                              
-                                              span
-                                          |                                             
-                                          span.form-text.text-muted
-                                            | Dla dodatkowego bezpieczeństwa wymaga to potwierdzenia adresu e-mail lub numeru telefonu po zresetowaniu hasła. 
-                                      |                                     
-                                      .form-group.row.kt-margin-t-10.kt-margin-b-10
-                                        label.col-xl-3.col-lg-3.col-form-label
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          button.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='button') Dezaktywuj konto
-                                  |                             
-                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
-                                  |                             
+                                  |              
                                   .kt-form__actions
                                     .row
                                       .col-lg-12.col-xl-12.kt-align-right
@@ -399,6 +318,7 @@ block content
           // end::Modal
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
   script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')

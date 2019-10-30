@@ -7,6 +7,30 @@ const Client = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+module.exports.createClient = (client) => {
+  if(client.company == 0) {
+    return new Client({
+      fullname: client.fullname,
+      pesel: client.pesel,
+      phone: client.phone,
+      email: client.email,
+      company: client.company,
+      state: client.state,
+      user_id: client.user_id
+    }).save();
+  } else {
+    return new Client({
+      fullname: client.companyName,
+      nip: client.nip,
+      phone: client.phone,
+      email: client.email,
+      company: client.company,
+      state: client.state,
+      user_id: client.user_id
+    }).save();
+  }
+};
+
 module.exports.clientList = (callback) => {
   return new Client().fetchAll().then(function(response) {
     Client.forge().count().then(function(cnt) {
@@ -41,13 +65,27 @@ module.exports.saveClientData = (req, callback) => {
         if(client.nip) model.set('nip', client.nip);
       }
 
+      if(client.pesel) model.set('pesel', client.pesel);
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
 
       if(req.session.userData.role == 'administrator') {
-        if(client.param) model.set('user_id', client.param);
+        if(client.param) {
+          model.set('user_id', client.param);
+          if(client.client_type == 0 && model.get('pesel') != null) {
+            model.set('state', 2);
+          } else if(client.client_type == 1 && model.get('nip') != null) {
+            model.set('state', 2);
+          } else model.set('state', 1);
+        }
       } else if(model.get('user_id') == req.session.userData.id) {
-        if(client.param) model.set('user_id', client.param);
+        if(client.param) {
+          if(client.client_type == 0 && model.get('pesel') != null) {
+            model.set('state', 2);
+          } else if(client.client_type == 1 && model.get('nip') != null) {
+            model.set('state', 2);
+          } else model.set('state', 1);
+        }
       }
 
       model.save();

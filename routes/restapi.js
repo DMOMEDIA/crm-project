@@ -18,14 +18,20 @@ router.post('/rest/user/showlimited', REST.getUserByIdLimited);
 router.post('/rest/users/modify', REST.modifyUserById);
 router.post('/rest/users/changepwd', REST.changeUserPassword);
 router.get('/rest/users/name', REST.getUserlistName);
+router.get('/rest/users/namebyrole', REST.getUserlistByRole);
 router.post('/rest/user/delete', REST.deleteUserById);
 router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
 
 // {REST} dot. klientów
+router.post('/rest/clients/add', REST.addClient);
 router.post('/rest/clients/list', REST.getClientList);
 router.post('/rest/clients/modify', REST.modifyClientById);
 router.post('/rest/client/show', REST.getClientById);
 router.post('/rest/offer/list', REST.getOfferRequests);
 router.post('/rest/offer/get', REST.getOfferById);
+
+// {REST} powiadomienia
+router.post('/rest/notifications', REST.getUserNotifications);
+router.post('/rest/notification/unread', REST.notificationSetUnread);
 
 module.exports = router;

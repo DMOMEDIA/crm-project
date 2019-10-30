@@ -400,6 +400,8 @@ var KTUserListDatatable = function() {
 			$('.show_user_data').on('click', function() {
 				var id = $(this).attr('data-id');
 
+				modalEl.find('select#remoteUser').html('<option></option>');
+
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
 				$.ajax({
@@ -428,6 +430,22 @@ var KTUserListDatatable = function() {
 
 									modalEl.find('#identityInput').val(res.identity);
 									modalEl.find('#roleInput').val(res.role);
+
+									if(res.assigned_to != null) {
+										$.ajax({
+											url: '/rest/user/showlimited',
+											method: 'POST',
+											data: { id: res.assigned_to },
+											success: function(response) {
+												modalEl.find('select#remoteUser').html('<option value="' + response.id + '">' + response.fullname + ', ' + response.role + '</option>');
+											},
+											error: function(err) {}
+										}).done(function(data) {
+											remoteUser(res.role);
+										});
+									} else {
+										remoteUser(res.role);
+									}
 								} else {
 									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
 								}
@@ -483,6 +501,34 @@ var KTUserListDatatable = function() {
 					}
 				});
 			});
+		});
+	}
+
+	var remoteUser = function(role) {
+		var data = [];
+
+		$.ajax({
+			url: '/rest/users/namebyrole',
+			method: 'GET',
+			data: {},
+			success: function(res) {
+				if(res.status == null) {
+					for(var i = 0; i < res.length; i++) {
+						if(role == res[i].role) continue;
+						if(res[i].role == 'pracownik') continue;
+						else data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
+					}
+
+					$('#remoteUser').select2({
+						placeholder: "Wybierz pracownika",
+						width: '100%',
+						data: data
+					});
+				}
+			},
+			error: function(err) {
+				console.log('Błąd wczytywania');
+			}
 		});
 	}
 

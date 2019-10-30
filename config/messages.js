@@ -10,6 +10,7 @@ exports.message = (type, argument) => {
     case 'data_get_error': selected = { status: 'error', message: 'Wystąpił problem podczas wczytywania danych, spróbuj ponownie później.' }; break;
     case 'save_user_critical_err': selected = { status: 'error', message: 'Wystąpił błąd krytyczny przy zapisie danych (1).' }; break;
     case 'added_new_user': selected = { status: 'success', message: 'Dodano nowego użytkownika o identyfikatorze ' + argument }; break;
+    case 'added_new_client': selected = { status: 'success', message: 'Pomyślnie dodano nowego klienta.' }; break;
     case 'identity_not_selected': selected = { status: 'error', message: 'Identyfikator nie został uwzględniony.' }; break;
     case 'err_selected_users': selected = { status: 'error', message: 'Błąd podczas usuwania użytkowników, spróbuj ponownie.' }; break;
     case 'success_delete_selected_users': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' użytkowników.' }; break;
@@ -19,6 +20,7 @@ exports.message = (type, argument) => {
     case 'success_updated_client': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane klienta.' }; break;
     case 'no_param': selected = { status: 'error', message: 'Niepoprawny lub brak parametru.' }; break;
     case 'not_found_roffer': selected = { status: 'error', message: 'Zapytanie ofertowe nie istnieje.' }; break;
+    case 'no_notification': selected = { status: 'error', message: 'Brak nowych powiadomień.' }; break;
   }
 
   return selected;

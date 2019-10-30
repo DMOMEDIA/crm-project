@@ -1,0 +1,184 @@
+extends layout
+
+block stylecss
+  link(href='./assets/css/demo1/pages/wizard/wizard-3.css', rel='stylesheet', type='text/css')
+
+block content
+  if user
+    html
+      head
+      body
+        #kt_subheader.kt-subheader.kt-grid__item
+          .kt-container.kt-container--fluid
+            .kt-subheader__main
+              h3.kt-subheader__title
+                | Dodaj nowego klienta
+              .kt-subheader__breadcrumbs
+                a.kt-subheader__breadcrumbs-home(href='#')
+                  i.flaticon2-shelter
+                span.kt-subheader__breadcrumbs-separator
+                a.kt-subheader__breadcrumbs-link(href='#') Klienci
+                span.kt-subheader__breadcrumbs-separator
+                a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/clientadd') Dodaj klienta
+        // begin:: Content
+        .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
+        html
+          head
+          body
+            .kt-portlet
+              .kt-portlet__body.kt-portlet__body--fit
+                #kt_client_add_client.kt-grid.kt-wizard-v3.kt-wizard-v3--white(data-ktwizard-state='first')
+                  .kt-grid__item
+                    // begin: Form Wizard Nav
+                    .kt-wizard-v3__nav
+                      .kt-wizard-v3__nav-items
+                        // doc: Replace A tag with SPAN tag to disable the step link click
+                        a.kt-wizard-v3__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='current')
+                          .kt-wizard-v3__nav-body
+                            .kt-wizard-v3__nav-label
+                              span 1
+                              |  Dane personalne
+                            .kt-wizard-v3__nav-bar
+                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        a.kt-wizard-v3__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                          .kt-wizard-v3__nav-body
+                            .kt-wizard-v3__nav-label
+                              span 2
+                              |  Konto i przypisy
+                            .kt-wizard-v3__nav-bar
+                        a.kt-wizard-v3__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                          .kt-wizard-v3__nav-body
+                            .kt-wizard-v3__nav-label
+                              span 3
+                              |  Podsumowanie
+                            .kt-wizard-v3__nav-bar
+                    // end: Form Wizard Nav
+                  .kt-grid__item.kt-grid__item--fluid.kt-wizard-v3__wrapper
+                    // begin: Form Wizard Form
+                    form#kt_form_personal.kt-form(novalidate='novalidate')
+                      // begin: Form Wizard Step 1
+                      .kt-wizard-v3__content(data-ktwizard-type='step-content', data-ktwizard-state='current')
+                        .kt-heading.kt-heading--md Dane personalne
+                        .kt-form__section.kt-form__section--first
+                          .kt-wizard-v3__form
+                            .form-group
+                              label Typ konta                 
+                              .col-9
+                                .kt-radio-inline
+                                  label.kt-radio.kt-radio--bold.kt-radio--brand
+                                    input(type='radio', data-name='Firma', name='client_type', value='1')
+                                    |  Firma
+                                    |                      
+                                    span
+                                  |                       
+                                  label.kt-radio.kt-radio--bold.kt-radio--brand
+                                    input(type='radio', data-name='Osoba prywatna', name='client_type', checked='', value='0')
+                                    |  Osoba prywatna
+                                    |              
+                                    span
+                            #private_client
+                              .form-group
+                                label Imię
+                                input#firstnameI.form-control(type='text', name='firstname', placeholder='Wprowadź imię klienta')
+                              .form-group
+                                label Nazwisko
+                                input#lastnameI.form-control(type='text', name='lastname', placeholder='Wprowadź nazwisko klienta')
+                              .row
+                                .col-xl-6
+                                  .form-group
+                                    label PESEL
+                                    .input-group
+                                      .input-group-prepend
+                                        span.input-group-text
+                                          i.la.la-check-square        
+                                      input#peselI.form-control(type='text', name='pesel', maxlength='11', placeholder='Wprowadź PESEL klienta', aria-describedby='basic-addon1')
+                            #company_client
+                              .form-group
+                                label Nazwa firmy
+                                input#companyNameI.form-control(type='text', name='companyName', placeholder='Wprowadź nazwę firmy klienta')
+                              .row
+                                .col-xl-6
+                                  .form-group
+                                    label NIP
+                                    .input-group
+                                      .input-group-prepend
+                                        span.input-group-text
+                                          i.la.la-check-square        
+                                      input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź NIP firmy', aria-describedby='basic-addon1')
+                            .row
+                              .col-xl-6
+                                .form-group
+                                  label Adres e-mail
+                                  .input-group
+                                    .input-group-prepend
+                                      span.input-group-text
+                                        i.la.la-at                
+                                    input#emailI.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                            .row
+                              .col-xl-6
+                                .form-group
+                                  label Numer telefonu
+                                  .input-group
+                                    .input-group-prepend
+                                      span.input-group-text
+                                        i.la.la-phone            
+                                    input#phoneI.form-control(type='text', name='phone', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                      // end: Form Wizard Step 1
+                      // begin: Form Wizard Step 2
+                      .kt-wizard-v3__content(data-ktwizard-type='step-content')
+                        .kt-heading.kt-heading--md Przypisz pracownika do klienta
+                        .kt-form__section.kt-form__section--first
+                          .kt-wizard-v3__form
+                            .form-group
+                              label.col-form-label.col-lg-3.col-sm-12 Pracownik
+                              .col-lg-9.col-xl-6
+                                select#remoteEmployeer.form-control.kt-select2(name='param')
+                                  option
+                      // end: Form Wizard Step 2
+                      // begin: Form Wizard Step 5
+                      .kt-wizard-v3__content(data-ktwizard-type='step-content')
+                        .kt-heading.kt-heading--md Sprawdź wprowadzone dane i wyślij
+                        .kt-form__section.kt-form__section--first
+                          .kt-wizard-v3__review
+                            .kt-wizard-v3__review-item
+                              .kt-wizard-v3__review-title
+                                | Dane personalne
+                              .kt-wizard-v3__review-content
+                                p.kt-margin-0 Typ konta: 
+                                  span#client_typeP
+                                br
+                                p#fullnameP.kt-margin-0
+                                p#peselHide.kt-margin-0 PESEL: 
+                                  span#peselP
+                                p#nipHide.kt-margin-0 NIP: 
+                                  span#nipP
+                                p.kt-margin-0 Adres e-mail: 
+                                  span#emailP
+                                p.kt-margin-0 Numer telefonu: 
+                                  span#phoneP
+                            .kt-wizard-v3__review-item
+                              .kt-wizard-v3__review-title
+                                | Przypisany pracownik
+                              .kt-wizard-v3__review-content
+                                p#employeeP.kt-margin-0 Daniel Ostałowski, administrator
+                      // end: Form Wizard Step 5
+                      // begin: Form Actions
+                      .kt-form__actions
+                        button.btn.btn-secondary.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-prev')
+                          | Powrót
+                        button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-submit')
+                          | Zapisz
+                        button.btn.btn-brand.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-next')
+                          | Dalej
+                      // end: Form Actions
+                    // end: Form Wizard Form
+
+block scripts
+  script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
+  script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
+  script(src='./assets/js/demo1/pages/pGenerator.js', type='text/javascript')
+  script(src='./assets/js/private/clientadd-validator.js', type='text/javascript')

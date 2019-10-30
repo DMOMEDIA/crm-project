@@ -2,6 +2,7 @@ const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
+const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
 const async = require('async');
 
@@ -84,8 +85,18 @@ exports.getUserlistName = (req, res) => {
           res.json(result);
         });
       }
-    } else res.json(Messages.message('no_authorization', null));
-    }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getUserlistByRole = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.users.assign_edit')) {
+      User.userList(['id','fullname','role'], function(result,  nums) {
+        res.json(result);
+      });
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
 };
 
 exports.getUserById = (req, res) => {
@@ -160,6 +171,41 @@ exports.deleteSelectedUsers = (req, res) => {
 }
 
 // == Client page REST
+
+String.prototype.trunc = String.prototype.trunc ||
+function(n){
+    return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
+};
+
+exports.addClient = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.add')) {
+
+      // Zapis do bazy danych
+      if(req.body != null) {
+
+          if(req.body.client_type == 0) var clientname = req.body.firstname + ' ' + req.body.lastname;
+          else var clientname = req.body.companyName;
+
+          Client.createClient({
+            fullname: req.body.firstname + ' ' + req.body.lastname,
+            companyName: req.body.companyName,
+            pesel: req.body.pesel,
+            nip: req.body.nip,
+            phone: req.body.phone,
+            email: req.body.email,
+            company: req.body.client_type,
+            state: 2,
+            user_id: req.body.param
+          }).then(function() {
+            Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
+          });
+        }
+
+        res.json(Messages.message('added_new_client', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
 
 exports.getClientList = (req, res) => {
   if(req.isAuthenticated()) {
@@ -243,3 +289,30 @@ exports.getOfferById = (req, res) => {
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
+
+// Notifications //
+
+exports.getUserNotifications = (req, res) => {
+  if(req.isAuthenticated()) {
+    var output = {};
+    Notification.getUserNotifications(req.session.userData.id, function(data, unread) {
+      if(data != null) {
+        output = { unread: unread };
+        output['notifications'] = data;
+        res.json(output);
+      } else res.json(Messages.message('no_notification', null));
+    });
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.notificationSetUnread = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body.id != null) {
+      Notification.setUnreadNotification(req.body.id, function(result) {
+        res.json(result);
+      });
+    } else res.json({ status: 'error' });
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+// ------------ //

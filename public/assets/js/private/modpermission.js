@@ -47,7 +47,6 @@ var KTModPermission = function () {
         }
       });
       values['permissions'] = array;
-      console.log(values);
 
       $('#button-save').removeClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', false);
 

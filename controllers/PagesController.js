@@ -79,6 +79,16 @@ exports.clientlist = (req, res) => {
   })
 };
 
+exports.clientadd = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.clients.add')) return res.redirect('/dashboard');
+
+  res.render('clientadd', {
+    title: 'Dodawanie nowego klienta',
+    pageName: 'clientadd'
+  })
+};
+
 exports.userProfile = (req, res) => {
   if(!req.isAuthenticated()) return res.redirect('/dashboard');
   if(!res.locals.userPermissions.includes('crm.profile.show')) return res.redirect('/dashboard');

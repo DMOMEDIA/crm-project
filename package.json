@@ -1,7 +1,7 @@
 {
   "name": "crm-project",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.3.0",
+  "description": "CRM System project",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "express-validator": "^6.1.1",
+    "http": "0.0.0",
     "knex": "^0.19.5",
     "mysql2": "^1.6.5",
     "passport": "^0.4.0",

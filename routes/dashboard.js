@@ -12,6 +12,7 @@ router.get('/dashboard/useradd', PagesController.useradd);
 router.get('/dashboard/userlist', PagesController.userlist);
 // Klienci
 router.get('/dashboard/clientlist', PagesController.clientlist);
+router.get('/dashboard/clientadd', PagesController.clientadd);
 router.get('/dashboard/offers', PagesController.offers);
 // Uprawnienia
 router.get('/dashboard/permissions', PagesController.permissionPage);

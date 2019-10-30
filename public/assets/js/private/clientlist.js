@@ -121,6 +121,12 @@ var KTClientListDatatable = function() {
 				appendToParent: true
     });
 
+		$('#peselInput').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
 		validator_personal = form_personal.validate({
 			ignore: ':hidden',
 
@@ -156,8 +162,8 @@ var KTClientListDatatable = function() {
 				},
 				nip: {
 					required: "To pole jest wymagane.",
-					minlength: "NIP musi składać się z 10 cyfr.",
-					maxlength: "NIP musi składać się z 10 cyfr."
+					minlength: "Numer NIP musi składać się z 10 cyfr.",
+					maxlength: "Numer NIP musi składać się z 10 cyfr."
 				},
 				email: {
 					required: "To pole jest wymagane.",
@@ -182,6 +188,8 @@ var KTClientListDatatable = function() {
 
 			$('.show_client_data').on('click', function() {
 				var id = $(this).attr('data-id');
+
+				modalEl.find('select#remoteEmployeer').html('<option></option>');
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
@@ -210,6 +218,7 @@ var KTClientListDatatable = function() {
 										modalEl.find('#private_user').show();
 										modalEl.find('#firstnameInput').val(name[0]).attr('hidden', false);
 										modalEl.find('#lastnameInput').val(name[1]).attr('hidden', false);
+										modalEl.find('#peselInput').val(res.pesel);
 										modalEl.find('#fullnameInput').attr('hidden', true);
 										modalEl.find('#nipInput').attr('hidden', true);
 									} else {
