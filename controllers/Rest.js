@@ -2,9 +2,17 @@ const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
+const Offer = require('../models/offers');
 const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
 const async = require('async');
+
+// String truncate
+String.prototype.trunc = String.prototype.trunc ||
+function(n){
+    return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
+};
+//
 
 exports.permissions = async (req, res) => {
   if(req.isAuthenticated()) {
@@ -42,9 +50,15 @@ exports.addUser = (req, res) => {
         identity: req.body.gen_identity,
         password: req.body.password,
         fullname: req.body.firstname + ' ' + req.body.lastname,
+        address: req.body.address,
+        postcode: req.body.postcode,
+        city: req.body.city,
+        voivodeship: req.body.voivodeship,
+        country: req.body.country,
         email: req.body.email,
         telephone: req.body.pNumber,
-        role: req.body.urole
+        role: req.body.urole,
+        isCompany: req.body.isCompany
       });
 
       res.json(Messages.message('added_new_user', req.body.gen_identity));
@@ -92,9 +106,11 @@ exports.getUserlistName = (req, res) => {
 exports.getUserlistByRole = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.users.assign_edit')) {
-      User.userList(['id','fullname','role'], function(result,  nums) {
-        res.json(result);
-      });
+      if(req.query.role != null) {
+        User.userlistByRole(['id','fullname','role'], req.query.role, function(result) {
+          res.json(result);
+        });
+      }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
@@ -172,11 +188,6 @@ exports.deleteSelectedUsers = (req, res) => {
 
 // == Client page REST
 
-String.prototype.trunc = String.prototype.trunc ||
-function(n){
-    return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
-};
-
 exports.addClient = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.clients.add')) {
@@ -188,13 +199,12 @@ exports.addClient = (req, res) => {
           else var clientname = req.body.companyName;
 
           Client.createClient({
-            fullname: req.body.firstname + ' ' + req.body.lastname,
-            companyName: req.body.companyName,
-            pesel: req.body.pesel,
+            fullname: clientname,
             nip: req.body.nip,
             phone: req.body.phone,
             email: req.body.email,
             company: req.body.client_type,
+            company_type: req.body.company_type,
             state: 2,
             user_id: req.body.param
           }).then(function() {
@@ -255,7 +265,7 @@ exports.modifyClientById = (req, res) => {
 // { Zapytania ofertowe }
 exports.getOfferRequests = (req, res) => {
   if(req.isAuthenticated()) {
-    if(res.locals.userPermissions.includes('crm.offers.show')) {
+    if(res.locals.userPermissions.includes('crm.roffers.show')) {
       var output = {};
 
       if(req.session.userData.role == 'administrator') {
@@ -279,7 +289,7 @@ exports.getOfferRequests = (req, res) => {
 
 exports.getOfferById = (req, res) => {
   if(req.isAuthenticated()) {
-    if(res.locals.userPermissions.includes('crm.offers.show')) {
+    if(res.locals.userPermissions.includes('crm.roffers.show')) {
       if(req.body.id != null) {
         ROffer.getOfferById(req.body.id, function(data) {
           if(data != null) res.json(data);
@@ -316,3 +326,40 @@ exports.notificationSetUnread = (req, res) => {
 };
 
 // ------------ //
+
+// Oferty //
+
+exports.loadOfferlist = (req, res) => {
+  var output = {};
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.show')) {
+      Offer.getOffers(function(result, nums) {
+        output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+        output['data'] = result;
+        res.json(result);
+      });
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.clientRemoteList = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.session.userData.role == 'administrator') {
+      Client.clientList(function(result, nums) {
+        res.json(result);
+      });
+    } else {
+      Client.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
+        res.json(result);
+      });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.companyRemoteList = (req, res) => {
+  if(req.isAuthenticated()) {
+    Offer.companyList(function(result) {
+      res.json(result);
+    });
+  } else res.json(Messages.message('no_authorization', null));
+};

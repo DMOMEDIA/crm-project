@@ -66,14 +66,14 @@ block content
                               .col-9
                                 .kt-radio-inline
                                   label.kt-radio.kt-radio--bold.kt-radio--brand
-                                    input(type='radio', data-name='Firma', name='client_type', value='1')
-                                    |  Firma
+                                    input(type='radio', data-name='Spółka', name='client_type', value='1')
+                                    |  Spółka
                                     |                      
                                     span
                                   |                       
                                   label.kt-radio.kt-radio--bold.kt-radio--brand
-                                    input(type='radio', data-name='Osoba prywatna', name='client_type', checked='', value='0')
-                                    |  Osoba prywatna
+                                    input(type='radio', data-name='Osoba fizyczna', name='client_type', checked='', value='0')
+                                    |  Osoba fizyczna
                                     |              
                                     span
                             #private_client
@@ -83,28 +83,26 @@ block content
                               .form-group
                                 label Nazwisko
                                 input#lastnameI.form-control(type='text', name='lastname', placeholder='Wprowadź nazwisko klienta')
-                              .row
-                                .col-xl-6
-                                  .form-group
-                                    label PESEL
-                                    .input-group
-                                      .input-group-prepend
-                                        span.input-group-text
-                                          i.la.la-check-square        
-                                      input#peselI.form-control(type='text', name='pesel', maxlength='11', placeholder='Wprowadź PESEL klienta', aria-describedby='basic-addon1')
                             #company_client
                               .form-group
-                                label Nazwa firmy
-                                input#companyNameI.form-control(type='text', name='companyName', placeholder='Wprowadź nazwę firmy klienta')
-                              .row
-                                .col-xl-6
-                                  .form-group
-                                    label NIP
-                                    .input-group
-                                      .input-group-prepend
-                                        span.input-group-text
-                                          i.la.la-check-square        
-                                      input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź NIP firmy', aria-describedby='basic-addon1')
+                                label Nazwa spółki
+                                input#companyNameI.form-control(type='text', name='companyName', placeholder='Wprowadź nazwę spółki')
+                              .form-group
+                                label Typ spółki
+                                select#company_typeI.form-control(name='company_type')
+                                  option(selected='', disabled='', value='') Wybierz typ spółki
+                                  option(value='0') akcyjna
+                                  option(value='1') komandytowa
+                                  option(value='2') z ograniczoną odpowiedzialnością
+                            .row
+                              .col-xl-6
+                                .form-group
+                                  label NIP
+                                  .input-group
+                                    .input-group-prepend
+                                      span.input-group-text
+                                        i.la.la-check-square        
+                                    input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź numer NIP', aria-describedby='basic-addon1')
                             .row
                               .col-xl-6
                                 .form-group
@@ -147,10 +145,14 @@ block content
                                 p.kt-margin-0 Typ konta: 
                                   span#client_typeP
                                 br
-                                p#fullnameP.kt-margin-0
-                                p#peselHide.kt-margin-0 PESEL: 
-                                  span#peselP
-                                p#nipHide.kt-margin-0 NIP: 
+                                #p_client
+                                  p#fullnameP.kt-margin-0
+                                #c_client
+                                  p.kt-margin-0 Nazwa spółki: 
+                                    span#companyNameP
+                                  p.kt-margin-0 Typ spółki: 
+                                    span#company_typeP
+                                p.kt-margin-0 NIP: 
                                   span#nipP
                                 p.kt-margin-0 Adres e-mail: 
                                   span#emailP

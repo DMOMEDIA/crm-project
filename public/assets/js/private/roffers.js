@@ -1,26 +1,21 @@
 "use strict";
 // Class definition
 
-var KTOfferListDatatable = function() {
+var KTROfferListDatatable = function() {
 
 	// variables
 	var datatable;
 
 	// init
 	var init = function() {
-		String.prototype.trunc = String.prototype.trunc ||
-		function(n){
-		    return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
-		};
-
 		// init the datatables. Learn more: https://keenthemes.com/metronic/?page=docs&section=datatable
-		datatable = $('#kt_apps_offerlist').KTDatatable({
+		datatable = $('#kt_apps_offer_list_datatable').KTDatatable({
 			// datasource definition
 			data: {
 				type: 'remote',
 				source: {
 					read: {
-						url: '/rest/offerlist'
+						url: '/rest/offer/list'
 					},
 				},
 				pageSize: 10, // display 20 records per page
@@ -56,43 +51,34 @@ var KTOfferListDatatable = function() {
 				},
 				textAlign: 'center',
 			}, {
-				field: "idOffer",
-				title: "ID oferty",
+				field: "idZlecenia",
+				title: "ID zlecenia",
 				sortable: false,
 				autoHide: false,
 				width: 100,
 				template: function(row) {
 					var date = moment(row.created_at).local().format('YYYY');
-					return '<a href="javascript:;" class="show_offer_data" data-id="' + row.id + '">00' + row.id + '/' + row.offer_type.charAt(0).toUpperCase() + '/' + date + '</a>';
+					return '<a href="javascript:;" class="show_offer_data" data-id="' + row.id + '">00' + row.id + '/' + date + '</a>';
 				}
 			}, {
 				field: "created_at",
-				title: "Data utworzenia",
+				title: "Data dostarczenia",
 				sortable: false,
 				template: function(row) {
 					return moment(row.created_at).local().format('YYYY-MM-DD HH:mm');
 				}
 			}, {
-				field: "client",
+				field: "fullname",
 				title: "Klient",
+				width: 200,
 				template: function(row) {
-					return row.client.fullname;
+					return row.client_info.fullname;
 				}
 			}, {
-				field: "company",
-				title: "Firma",
+				field: "phone",
+				title: "Telefon",
 				template: function(row) {
-					return '<span data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="' + row.company.fullname + '">' + row.company.fullname.trunc(15) + '</span>';
-				}
-			}, {
-				field: "offer_type",
-				title: "Typ oferty",
-				template: function(row) {
-					var output = null;
-					if(row.offer_type == 'rent') output = 'wypożyczenie';
-					else if(row.offer_type == 'insurance') output = 'ubezpieczenie';
-					else output = 'leasing';
-					return '<span class="kt-badge kt-badge--dark kt-badge--inline kt-badge--pill">' + output + '</span>';
+					return row.client_info.phone;
 				}
 			}, {
 				field: 'state',
@@ -100,9 +86,9 @@ var KTOfferListDatatable = function() {
 				autoHide: false,
 				template: function(row) {
 					var status = {
-						0: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
-						1: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
-						2: {'title': 'Zrealizowana', 'class': ' kt-badge--success'},
+						0: {'title': 'Nowe', 'class': 'kt-badge--warning'},
+						1: {'title': 'Oczekujące', 'class': ' kt-badge--dark'},
+						2: {'title': 'Zrealizowane', 'class': ' kt-badge--success'},
 					};
 					return '<span class="kt-badge ' + status[row.state].class + ' kt-badge--inline kt-badge--pill">' + status[row.state].title + '</span>';
 				},
@@ -145,13 +131,48 @@ var KTOfferListDatatable = function() {
 									modalEl.modal('show');
 
 									var status = {
-										0: {'title': 'Oczekująca', 'class': 'kt-font-brand'},
-										1: {'title': 'Anulowana', 'class': ' kt-font-danger'},
-										2: {'title': 'Zrealizowana', 'class': ' kt-font-success'},
+										0: {'title': 'Nowe', 'class': 'kt-font-warning'},
+										1: {'title': 'Oczekujące', 'class': ' kt-font-dark'},
+										2: {'title': 'Zrealizowane', 'class': ' kt-font-success'},
 									};
-                }
 
-                  // Twój stary
+									var date = moment(res.created_at).local().format('YYYY');
+									modalEl.find('#modalTitle').html('00' + res.id + '/' + date);
+
+									if(res.type == 'leasing') modalEl.find('#leasing_options').show();
+									else modalEl.find('#leasing_options').hide();
+
+									if(res.client_info.company == 0) {
+										modalEl.find('#private_user').show();
+										modalEl.find('#company_user').hide();
+									} else {
+										modalEl.find('#private_user').hide();
+										modalEl.find('#company_user').show();
+									}
+
+									modalEl.find('#fullnameInput').html(res.client_info.fullname);
+									modalEl.find('#companyInput').html(res.client_info.fullname);
+									modalEl.find('#nipInput').html(res.client_info.nip);
+									modalEl.find('#emailInput').html(res.client_info.email);
+									modalEl.find('#phoneInput').html(res.client_info.phone);
+									//
+									modalEl.find('#idInput').html('00' + res.id + '/' + date);
+									modalEl.find('#statusInput').html(status[res.state].title);
+									modalEl.find('#typeInput').html(res.type);
+									modalEl.find('#dateInput').html(moment(res.created_at).local().format('YYYY-MM-DD HH:mm'));
+									modalEl.find('#nameofferInput').html(res.name);
+									modalEl.find('#pyearInput').html(res.pyear);
+									modalEl.find('#nettoInput').html(res.netto + ' PLN');
+									modalEl.find('#instalmentsInput').html(res.instalments);
+									modalEl.find('#cbInput').html(res.contribution + '%');
+									modalEl.find('#rvInput').html(res.red_value + ' PLN');
+									if(res.attentions != null) modalEl.find('#attentInput').html(res.attentions);
+									else modalEl.find('#attentInput').html('Brak');
+									if(res.other != null) modalEl.find('#otherInput').html(res.other);
+									else modalEl.find('#otherInput').html('Brak');
+								} else {
+									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+								}
 						}, 1000);
 					},
 					error: function(err) {
@@ -271,5 +292,5 @@ var KTOfferListDatatable = function() {
 
 // On document ready
 KTUtil.ready(function() {
-	KTOfferListDatatable.init();
+	KTROfferListDatatable.init();
 });

@@ -144,6 +144,21 @@ var KTUserListDatatable = function() {
 				email: {
 					required: true,
 					email: true
+				},
+				address: {
+					required: true
+				},
+				postcode: {
+					required: true
+				},
+				city: {
+					required: true
+				},
+				voivodeship: {
+					required: true
+				},
+				country: {
+					required: true
 				}
 			},
 			messages: {
@@ -156,7 +171,22 @@ var KTUserListDatatable = function() {
 				email: {
 					required: "To pole jest wymagane.",
 					email: "Wprowadź poprawny adres e-mail."
-				}
+				},
+				address: {
+					required: "To pole jest wymagane."
+				},
+				postcode: {
+					required: "To pole jest wymagane."
+				},
+				city: {
+					required: "To pole jest wymagane."
+				},
+				voivodeship: {
+					required: "To pole jest wymagane."
+				},
+				country: {
+					required: "To pole jest wymagane."
+				},
 			},
 			// Display error
 			invalidHandler: function(event, validator_personal) {
@@ -397,10 +427,22 @@ var KTUserListDatatable = function() {
 		datatable.on('kt-datatable--on-layout-updated', function(e) {
 			var modalEl = $('#kt_fetch_user');
 
+			$("#postcodeInput").inputmask({
+					"mask": "99-999",
+					placeholder: "" // remove underscores from the input mask
+			});
+
 			$('.show_user_data').on('click', function() {
 				var id = $(this).attr('data-id');
 
+				KTUtil.clearInputInForm(form_personal);
+				modalEl.find('#voivodeshipInput option[value=""]').prop('selected', true);
 				modalEl.find('select#remoteUser').html('<option></option>');
+
+				$('#isCompanyInput').on('change',function(e) {
+					if($(this).is(':checked')) modalEl.find('#addressAlert').show();
+					else modalEl.find('#addressAlert').hide();
+				});
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
@@ -424,12 +466,24 @@ var KTUserListDatatable = function() {
 									modalEl.find('#lastnameInput').val(name[1]);
 									modalEl.find('#telephoneInput').val(res.telephone);
 									modalEl.find('#emailInput').val(res.email);
+									modalEl.find('#addressInput').val(res.address);
+									modalEl.find('#postcodeInput').val(res.postcode);
+									modalEl.find('#cityInput').val(res.city);
+									modalEl.find('#voivodeshipInput option[value="' + res.voivodeship + '"]').prop('selected', true);
 									modalEl.find('#current_passwordInput').val('');
 									modalEl.find('#new_passwordInput').val('');
 									modalEl.find('#confirm_passwordInput').val('');
 
 									modalEl.find('#identityInput').val(res.identity);
 									modalEl.find('#roleInput').val(res.role);
+
+									if(res.company == 1) {
+										modalEl.find('#isCompanyInput').prop('checked', true);
+										modalEl.find('#addressAlert').show();
+									} else {
+										modalEl.find('#isCompanyInput').prop('checked', false);
+										modalEl.find('#addressAlert').hide();
+									}
 
 									if(res.assigned_to != null) {
 										$.ajax({
@@ -510,13 +564,11 @@ var KTUserListDatatable = function() {
 		$.ajax({
 			url: '/rest/users/namebyrole',
 			method: 'GET',
-			data: {},
+			data: { role: role },
 			success: function(res) {
 				if(res.status == null) {
 					for(var i = 0; i < res.length; i++) {
-						if(role == res[i].role) continue;
-						if(res[i].role == 'pracownik') continue;
-						else data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
+						data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
 					}
 
 					$('#remoteUser').select2({

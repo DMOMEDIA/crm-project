@@ -34,4 +34,9 @@ router.post('/rest/offer/get', REST.getOfferById);
 router.post('/rest/notifications', REST.getUserNotifications);
 router.post('/rest/notification/unread', REST.notificationSetUnread);
 
+// {REST} Oferty
+router.post('/rest/offerlist', REST.loadOfferlist);
+router.get('/rest/client/remotelist', REST.clientRemoteList);
+router.get('/rest/company/remotelist', REST.companyRemoteList);
+
 module.exports = router;

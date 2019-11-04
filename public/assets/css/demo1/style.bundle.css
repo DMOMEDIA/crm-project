@@ -21345,6 +21345,53 @@ strong {
 .kt-radio.kt-radio--danger.kt-radio--solid > input:focus ~ span {
   border: 1px solid transparent !important; }
 
+.custom-form-group .form__answer {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 30%;
+	margin: 0px 1% 20px 0;
+	height: 180px;
+	vertical-align: top;
+	font-size: 22px;
+	text-align: center;
+}
+
+.custom-form-group .kt-svg-icon {
+  height: 116px;
+  width: 116px;
+}
+
+.custom-form-group input[type="radio"] {
+	opacity: 0;
+	width: 0;
+  height: 0;
+}
+
+.custom-form-group input[type="radio"]:active ~ label {
+  opacity: 1;
+}
+
+.custom-form-group input[type="radio"]:checked ~ label {
+  opacity: 1;
+	border: 1px solid #777777;
+}
+
+
+.custom-form-group label {
+  border: 1px solid rgba(#777777,.35);
+  box-sizing: border-box;
+  display: block;
+  height: 100%;
+  width: 100%;
+  padding: 10px 10px 30px 10px;
+  cursor: pointer;
+  opacity: .5;
+  transition: all .5s ease-in-out;
+  &:hover, &:focus, &:active {
+    border: 1px solid rgba(#777777,.5);
+  }
+}
+
 .kt-radio.kt-radio--danger.kt-radio--solid > input:checked ~ span {
   background: #fd397a; }
 

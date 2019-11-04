@@ -83,7 +83,7 @@ var KTDashboard = function() {
 
 							if(res.notifications != null) {
 								topbar_notify.html('<div id="notifications_all" class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" data-scroll="true" data-height="300" data-mobile-height="200" style="height: 200px; overflow: auto;"></div>');
-								
+
 								res.notifications.forEach(function(item) {
 									var arrived = timeDifference(moment().unix(),moment(item.created_at).unix());
 
@@ -120,7 +120,7 @@ var KTDashboard = function() {
 						else cnt_notify.html(res.unread + ' nowych');
 					}
 
-					if(res.notifications != null) {
+					if(res.notifications.length > 0) {
 						topbar_notify.html('<div id="notifications_all" class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" data-scroll="true" data-height="300" data-mobile-height="200" style="height: 200px; overflow: auto;"></div>');
 
 						res.notifications.forEach(function(item) {
@@ -168,6 +168,26 @@ var KTDashboard = function() {
 			});
 		}
 
+		// Timeout user session
+		var sessionTimeout = function() {
+			$(document).idle({
+			  onIdle: function(){
+			    swal.fire({
+						"title": "Twoja sesja wygasła",
+						"text": "Wykryliśmy Twoją nieaktywność. Ze względów bezpieczeństwa zostałeś wylogowany, zaloguj się ponownie.",
+						"type": "warning",
+						"confirmButtonClass": "btn btn-secondary"
+					}).then((isConfirm) => {
+			        swal.fire({ "text": "Przekierowanie", "confirmButtonClass": "btn btn-secondary" });
+			        window.location.href = "/logout";
+					});
+
+			    $(".swal-text").css("text-align", "center");
+			  },
+			  idle: 900000
+			})
+		}
+
     // Daterangepicker Init
     var daterangepickerInit = function() {
         if ($('#kt_dashboard_daterangepicker').length == 0) {
@@ -204,6 +224,7 @@ var KTDashboard = function() {
 						insertNotifications();
 						updateNotifications();
 						setUnreadNotification();
+						sessionTimeout();
 
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Ładowanie ...'});

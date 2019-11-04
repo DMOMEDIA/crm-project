@@ -13,7 +13,10 @@ router.get('/dashboard/userlist', PagesController.userlist);
 // Klienci
 router.get('/dashboard/clientlist', PagesController.clientlist);
 router.get('/dashboard/clientadd', PagesController.clientadd);
-router.get('/dashboard/offers', PagesController.offers);
+router.get('/dashboard/roffers', PagesController.roffers);
+// Oferty
+router.get('/dashboard/offerlist', PagesController.offers);
+router.get('/dashboard/offeradd', PagesController.offerAdd);
 // Uprawnienia
 router.get('/dashboard/permissions', PagesController.permissionPage);
 // Profil

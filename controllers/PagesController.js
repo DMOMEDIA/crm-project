@@ -115,12 +115,33 @@ exports.report = (req, res) => {
   });
 };
 
+exports.roffers = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.roffers.show')) return res.redirect('/dashboard');
+
+  res.render('roffers', {
+    title: 'Zapytania ofertowe Twoich klientów',
+    pageName: 'rofferslist'
+  });
+};
+
 exports.offers = (req, res) => {
   if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.offers.show')) return res.redirect('/dashboard');
 
   res.render('offers', {
-    title: 'Zapytania ofertowe Twoich klientów',
-    pageName: 'offerslist'
+    title: 'Lista ofert',
+    pageName: 'offerlist'
+  });
+};
+
+exports.offerAdd = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.offers.add')) return res.redirect('/dashboard');
+
+  res.render('offeradd', {
+    title: 'Dodaj nową ofertę',
+    pageName: 'offeradd'
   });
 };
 

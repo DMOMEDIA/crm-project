@@ -180,6 +180,73 @@ block content
                                                 i.la.la-at
                                             |                                                 
                                             input#emailInput.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                      .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
+                                      .row
+                                        label.col-xl-3     
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Adres siedziby/zamieszkania pracownika:
+                                      |                               
+                                      .form-group.row
+                                        label.col-3.col-form-label
+                                        .col-9
+                                          .kt-checkbox-single
+                                            label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                              input#isCompanyInput(type='checkbox', name='isCompany', value='1')
+                                              input(type='hidden', name='isCompany', value='0')
+                                              |  Pracownik posiada własną działalność gospodarczą.
+                                              span
+                                      #addressAlert
+                                        .alert.alert-outline-brand.fade.show(role='alert')
+                                          .alert-icon
+                                            i.flaticon-questions-circular-button
+                                          .alert-text
+                                            b Uwaga!
+                                            |  Pracownik posiada własną działalność gospodarczą, poniżej wprowadź adres siedziby działalności pracownika.
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Adres
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#addressInput.form-control(type='text', name='address', placeholder='Adres')
+                                      |       
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Kod pocztowy
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#postcodeInput.form-control(type='text', name='postcode', placeholder='Kod pocztowy')          
+                                      | 
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Miasto
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#cityInput.form-control(type='text', name='city', placeholder='Miasto')
+                                      |                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Województwo
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          select#voivodeshipInput.form-control(name='voivodeship')
+                                            option(selected='', checked='', value='') Wybierz województwo
+                                            option(value='dolnośląskie') dolnośląskie
+                                            option(value='lubelskie') lubelskie
+                                            option(value='lubuskie') lubuskie
+                                            option(value='łódzkie') łódzkie
+                                            option(value='małopolskie') małopolskie
+                                            option(value='mazowieckie') mazowieckie
+                                            option(value='opolskie') opolskie
+                                            option(value='podkarpackie') podkarpackie
+                                            option(value='podlaskie') podlaskie
+                                            option(value='śląskie') śląskie
+                                            option(value='świętokrzyskie') świętokrzyskie
+                                            option(value='warmińsko-mazurskie') warmińsko-mazurskie
+                                            option(value='wielkopolskie') wielkopolskie
+                                            option(value='zachodniopomorskie') zachodniopomorskie
+                                      |            
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Kraj
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#countryInput.form-control(type='text', name='country', placeholder='Kraj', disabled='', value='Polska')
+                                      |                     
                                   |                             
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                   |                             
@@ -318,6 +385,9 @@ block content
           // end::Modal
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js', type='text/javascript')
   script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')

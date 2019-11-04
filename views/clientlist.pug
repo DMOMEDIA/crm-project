@@ -125,13 +125,13 @@ block content
                                       .kt-radio-inline
                                         label.kt-radio.kt-radio--bold.kt-radio--brand
                                           input(type='radio', name='client_type', value='1')
-                                          |  Firma
+                                          |  Spółka
                                           |                      
                                           span
                                         |                       
                                         label.kt-radio.kt-radio--bold.kt-radio--brand
                                           input(type='radio', name='client_type', value='0')
-                                          |  Osoba prywatna
+                                          |  Osoba fizyczna
                                           |              
                                           span
                                         |              
@@ -148,25 +148,29 @@ block content
                                       .col-lg-9.col-xl-6
                                         input#lastnameInput.form-control(type='text', name='lastname')
                                     |                       
-                                    .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label PESEL
-                                      |                                         
-                                      .col-lg-9.col-xl-6
-                                        input#peselInput.form-control(type='text', name='pesel', maxlength='11')
-                                    |                       
                                   #company_user
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
                                       |                                         
                                       .col-lg-9.col-xl-6
                                         input#fullnameInput.form-control(type='text', name='companyname')
-                                    |                                     
+                                    |              
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label NIP
+                                      label.col-xl-3.col-lg-3.col-form-label Typ spółki
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        input#nipInput.form-control(type='text', name='nip', maxlength='10')
-                                    |                                     
+                                        select#company_type.form-control(name='company_type')
+                                          option(selected='', disabled='', value='') Wybierz typ spółki
+                                          option(value='0') akcyjna
+                                          option(value='1') komandytowa
+                                          option(value='2') z ograniczoną odpowiedzialnością
+                                    |              
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label NIP
+                                    |                                         
+                                    .col-lg-9.col-xl-6
+                                      input#nipInput.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
+                                  |                                                            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Numer telefonu
                                     |                                         

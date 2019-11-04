@@ -29,10 +29,17 @@ var KTUserAdd = function () {
         var identity = 'IDCRM-' + Math.random().toString().substr(2,6);
         $("#gen-identity").val(identity).prop('disabled',true);
       } else if(wizard.getStep() == 3) {
-        var fullname = $("#firstname").val() + ' ' + $("#lastname").val();
+        var fullname = $("#firstname").val() + ' ' + $("#lastname").val(),
+				psCity = $('#postcode').val() + ' ' + $('#city').val();
         $("#fullnameP").html(fullname);
         $("#emailP").html($("#email").val());
         $("#telephoneP").html($("#telephone").val());
+				$("#addressP").html($("#address").val());
+				$("#psCity").html(psCity);
+				$("#voivodeshipP").html($("#voivodeship").val());
+				$("#countryP").html($("#country").val());
+				if($("#isCompany").is(':checked')) $("#isCompanyP").html("Tak");
+				else $("#isCompanyP").html("Nie");
 
         $("#identityP").html($("#gen-identity").val());
         $("#roleP").html($("#roleL").val());
@@ -93,6 +100,18 @@ var KTUserAdd = function () {
   }
 
 	var initValidation = function() {
+		$("#postcode").inputmask({
+				"mask": "99-999",
+				placeholder: "" // remove underscores from the input mask
+		});
+
+		$("#addressAlert").hide();
+
+		$('#isCompany').on('change',function(e) {
+			if($(this).is(':checked')) $('#addressAlert').show();
+			else $('#addressAlert').hide();
+		});
+
 		validator = formEl.validate({
 			// Validate only visible fields
 			ignore: ":hidden",
@@ -115,6 +134,21 @@ var KTUserAdd = function () {
           digits: true,
           minlength: 3,
           maxlength: 9
+				},
+				address: {
+					required: true
+				},
+				postcode: {
+					required: true
+				},
+				city: {
+					required: true
+				},
+				voivodeship: {
+					required: true
+				},
+				country: {
+					required: true
 				},
         // Step 2
         urole: {
@@ -146,6 +180,21 @@ var KTUserAdd = function () {
           minlength: 'Numer telefonu musi składać się z minimalnie {0} cyfr.',
           maxlength: 'Numer telefonu musi składać się z maksymalnie {0} cyfr.'
         },
+				address: {
+					required: 'To pole jest wymagane.'
+				},
+				postcode: {
+					required: 'To pole jest wymagane.'
+				},
+				city: {
+					required: 'To pole jest wymagane.'
+				},
+				voivodeship: {
+					required: 'To pole jest wymagane.'
+				},
+				country: {
+					required: 'To pole jest wymagane.'
+				},
         password: {
           minlength: "Hasło musi składać się z minimum {0} znaków.",
           pwcheck: "Hasło musi posiadać:</br>- przynajmniej jedną wielką literę,</br>- minimum 8 znaków,</br>- jedną małą literę,</br>- jedną cyfrę,</br>- jeden znak symboliczny"

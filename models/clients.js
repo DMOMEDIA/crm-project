@@ -8,27 +8,16 @@ const Client = bookshelf.Model.extend({
 });
 
 module.exports.createClient = (client) => {
-  if(client.company == 0) {
-    return new Client({
-      fullname: client.fullname,
-      pesel: client.pesel,
-      phone: client.phone,
-      email: client.email,
-      company: client.company,
-      state: client.state,
-      user_id: client.user_id
-    }).save();
-  } else {
-    return new Client({
-      fullname: client.companyName,
-      nip: client.nip,
-      phone: client.phone,
-      email: client.email,
-      company: client.company,
-      state: client.state,
-      user_id: client.user_id
-    }).save();
-  }
+  return new Client({
+    fullname: client.fullname,
+    nip: client.nip,
+    phone: client.phone,
+    email: client.email,
+    company: client.company,
+    company_type: client.company_type,
+    state: client.state,
+    user_id: client.user_id
+  }).save();
 };
 
 module.exports.clientList = (callback) => {
@@ -61,28 +50,24 @@ module.exports.saveClientData = (req, callback) => {
         if(client.firstname && client.lastname) model.set('fullname', client.firstname + ' ' + client.lastname);
       } else {
         model.set('company', client.client_type);
+        model.set('company_type', client.company_type);
         if(client.companyname) model.set('fullname', client.companyname);
-        if(client.nip) model.set('nip', client.nip);
       }
 
-      if(client.pesel) model.set('pesel', client.pesel);
+      if(client.nip) model.set('nip', client.nip);
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
 
       if(req.session.userData.role == 'administrator') {
         if(client.param) {
           model.set('user_id', client.param);
-          if(client.client_type == 0 && model.get('pesel') != null) {
-            model.set('state', 2);
-          } else if(client.client_type == 1 && model.get('nip') != null) {
+          if(model.get('nip') != null) {
             model.set('state', 2);
           } else model.set('state', 1);
         }
       } else if(model.get('user_id') == req.session.userData.id) {
         if(client.param) {
-          if(client.client_type == 0 && model.get('pesel') != null) {
-            model.set('state', 2);
-          } else if(client.client_type == 1 && model.get('nip') != null) {
+          if(model.get('nip') != null) {
             model.set('state', 2);
           } else model.set('state', 1);
         }

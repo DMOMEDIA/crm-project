@@ -54,20 +54,21 @@ var KTClientAdd = function () {
 		wizard.on('change', function(wizard) {
       if(wizard.getStep() == 3) {
         if($('input[type="radio"][name="client_type"]:checked').val() == 0) {
-          $("#peselHide").show();
-          $("#nipHide").hide();
           var fullname = $("#firstnameI").val() + ' ' + $("#lastnameI").val();
           $("#client_typeP").html($('input[type="radio"][name="client_type"]:checked').data('name'));
+					$("#p_client").show();
+					$("#c_client").hide();
           $("#fullnameP").html(fullname);
-          $("#peselP").html($("#peselI").val());
+          $("#nipP").html($("#nipI").val());
           $("#emailP").html($("#emailI").val());
           $("#phoneP").html($("#phoneI").val());
 
           $("#employeeP").html($("#remoteEmployeer option:selected").text());
         } else {
-          $("#peselHide").hide();
-          $("#nipHide").show();
-          $("#fullnameP").html($("#companyNameI").val());
+					$("#p_client").hide();
+					$("#c_client").show();
+          $("#companyNameP").html($("#companyNameI").val());
+					$("#company_typeP").html($("#company_typeI option:selected").text());
           $("#client_typeP").html($('input[type="radio"][name="client_type"]:checked').data('name'));
           $("#nipP").html($("#nipI").val());
           $("#emailP").html($("#emailI").val());
@@ -96,12 +97,9 @@ var KTClientAdd = function () {
         companyName: {
           required: true
         },
-        pesel: {
-          required: true,
-          digits: true,
-          minlength: 11,
-          maxlength: 11
-        },
+				company_type: {
+					required: true
+				},
         nip: {
           required: true,
           digits: true,
@@ -133,12 +131,9 @@ var KTClientAdd = function () {
         companyName: {
           required: 'To pole jest wymagane.'
         },
-        pesel: {
-          required: 'To pole jest wymagane.',
-          digits: 'Numer PESEL może zawierać jedynie cyfry.',
-          minlength: 'Numer PESEL musi składać się z {0} cyfr.',
-          maxlength: 'Numer PESEL musi składać się z {0} cyfr.'
-        },
+				company_type: {
+          required: 'To pole jest wymagane.'
+				},
         nip: {
           required: 'To pole jest wymagane.',
           digits: 'Numer NIP może zawierać jedynie cyfry.',

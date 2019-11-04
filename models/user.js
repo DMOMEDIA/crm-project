@@ -58,9 +58,15 @@ module.exports.createUser = (user) => {
         identity: user.identity,
         password: hash,
         fullname: user.fullname,
+        address: user.address,
+        postcode: user.postcode,
+        city: user.city,
+        voivodeship: user.voivodeship,
+        country: user.country,
         email: user.email,
         telephone: user.telephone,
-        role: user.role
+        role: user.role,
+        company: parseInt(user.isCompany)
       }).save();
     });
   });
@@ -98,6 +104,27 @@ module.exports.userListByAssignedId = (args, id, callback) => {
   }
 };
 
+module.exports.userlistByRole = (args, role, callback) => {
+  var roles = [], data = [];
+  if(role == 'pracownik') roles = ['posrednik', 'kierownik', 'administrator'];
+  else if(role == 'posrednik') roles = ['kierownik', 'administrator'];
+  else if(role == 'kierownik') roles = ['administrator'];
+  else roles = ['null'];
+  var total_nums = roles.length, nums = 0;
+
+  roles.forEach(function(item) {
+    return new User().where({ role: item }).fetchAll({ columns: args }).then(function(response) {
+      nums++;
+      if(response) {
+        data = data.concat(response.toJSON());
+        if(total_nums == nums) {
+          callback(data);
+        }
+      }
+    });
+  });
+};
+
 module.exports.userModify = (user, callback) => {
   return new User().where({ id: user.id }).fetch().then(function(model) {
     if(model) {
@@ -105,7 +132,14 @@ module.exports.userModify = (user, callback) => {
       if(user.identity) model.set('identity', user.identity);
       if(user.role) model.set('role', user.role);
       if(user.email) model.set('email', user.email);
+      if(user.address) model.set('address', user.address);
+      if(user.postcode) model.set('postcode', user.postcode);
+      if(user.voivodeship) model.set('voivodeship', user.voivodeship);
+      if(user.country) model.set('country', user.country);
+      if(user.city) model.set('city', user.city);
       if(user.pNumber) model.set('telephone', user.pNumber);
+      if(user.param) model.set('assigned_to', user.param);
+      if(user.isCompany) model.set('company', parseInt(user.isCompany));
 
       model.save();
 
