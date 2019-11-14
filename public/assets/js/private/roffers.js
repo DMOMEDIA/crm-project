@@ -15,7 +15,7 @@ var KTROfferListDatatable = function() {
 				type: 'remote',
 				source: {
 					read: {
-						url: '/rest/offer/list'
+						url: '/rest/roffer/list'
 					},
 				},
 				pageSize: 10, // display 20 records per page
@@ -120,7 +120,7 @@ var KTROfferListDatatable = function() {
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
 				$.ajax({
-					url: '/rest/offer/get',
+					url: '/rest/roffer/get',
 					method: 'POST',
 					data: { id: id },
 					success: function(res) {

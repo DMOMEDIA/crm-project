@@ -54,17 +54,16 @@ block content
                         span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
                           .kt-wizard-v1__nav-body
                             .kt-wizard-v1__nav-icon
-                              i.flaticon-truck
+                              i.flaticon-file-2
                             .kt-wizard-v1__nav-label
-                              | 4. Delivery Address
+                              | 4. Dokumenty
                         span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
                           .kt-wizard-v1__nav-body
                             .kt-wizard-v1__nav-icon
                               i.flaticon-globe
                             .kt-wizard-v1__nav-label
-                              | 5. Review and Submit
+                              | 5. Podsumowanie
                     // end: Form Wizard Nav
-                  | &#x9;&#x9;&#x9;
                   .kt-grid__item.kt-grid__item--fluid.kt-wizard-v1__wrapper
                     // begin: Form Wizard Form
                     form#kt_offer_form.kt-form(novalidate='novalidate')
@@ -136,38 +135,38 @@ block content
                             .kt-wizard-v1__form
                               .form-group
                                 label Rodzaj/typ pojazdu: 
-                                select.form-control(name='item_type')
+                                select.form-control(name='item_type_l')
                                   option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
                                   option(value='samochód osobowy') samochód osobowy
                                   option(value='samochód ciężarowy') samochód ciężarowy
                               .form-group
                                 label Marka/model pojazdu: 
-                                input.form-control(type='text', name='brand', placeholder='Marka/model pojazdu')
+                                input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
                               .form-group
                                 label Pojazd: 
-                                select.form-control(name='condition')
+                                select.form-control(name='condition_l')
                                   option(value='nowy', selected='') nowy
                                   option(value='używany') używany
                               .form-group
                                 label Rok produkcji: 
-                                input#pyear.form-control(type='text', name='pyear', placeholder='Rok produkcji')
+                                input#pyear_l.form-control(type='text', name='pyear_l', placeholder='Rok produkcji')
                               .form-group
-                                label Cena netto: 
-                                input#price_netto.form-control(type='text', name='netto', placeholder='Cena netto')
+                                label Wartość netto: 
+                                input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
                               .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                           .kt-heading.kt-heading--md Warianty ofertowe
                           .kt-form__section.kt-form__section--first
                             .kt-wizard-v1__form
                               #leasing_variants
                                 #leasing_variants.form-group.form-group-last.row
-                                  .col-lg-12(data-repeater-list='')
+                                  .col-lg-12(data-repeater-list='variants')
                                     .form-group.align-items-center(data-repeater-item='')
                                       .row
                                         .col-md-5
                                           .kt-form__group--inline
                                             .kt-form__label
                                               label Okres umowy (w miesiącach):
-                                              input.form-control(type='number', min='12', max='79', name='contract', placeholder='Okres umowy')
+                                              input.form-control(type='number', name='contract', placeholder='Okres umowy')
                                         .col-md-5
                                           .kt-form__group--inline
                                             .kt-form__label
@@ -206,620 +205,259 @@ block content
                                     a.btn.btn-bold.btn-sm.btn-label-brand(href='javascript:;', data-repeater-create='')
                                       i.la.la-plus
                                       | Dodaj wariant
+                        #rent_type_box(style='display:none;')
+                          .kt-heading.kt-heading--md Dane przedmiotu ofertowego
+                          .kt-form__section.kt-form__section--first
+                            .kt-wizard-v1__form
+                              .form-group
+                                label Marka/model pojazdu: 
+                                input.form-control(type='text', name='brand_r', placeholder='Marka/model pojazdu')
+                              .form-group
+                                label Typ nadwozia pojazdu: 
+                                select.form-control(name='body_type_r')
+                                  option(value='', selected='', disabled='') Wybierz typ nadwozia
+                                  option(value='SUV') SUV
+                                  option(value='coupé') coupé
+                                  option(value='fastback') fastback
+                                  option(value='hatchback') hatchback
+                                  option(value='kabriolet') kabriolet
+                                  option(value='liftback') liftback
+                                  option(value='limuzyna') limuzyna
+                                  option(value='mikrovan') mikrovan
+                                  option(value='minivan') minivan
+                                  option(value='pick-up') pick-up
+                                  option(value='roadster') roadster
+                                  option(value='sedan') sedan
+                                  option(value='van') van
+                              .form-group
+                                label Rodzaj paliwa: 
+                                select.form-control(name='fuel_type_r')
+                                  option(value='', selected='', disabled='') Wybierz rodzaj paliwa
+                                  option(value='diesel') diesel
+                                  option(value='benzyna') benzyna
+                                  option(value='benzyna/gaz') benzyna/gaz
+                                  option(value='hybryda') hybryda
+                                  option(value='elektryczny') elektryczny 
+                              .form-group
+                                label Skrzynia biegów: 
+                                select.form-control(name='gear_type_r')
+                                  option(value='', selected='', disabled='') Wybierz typ skrzyni biegów
+                                  option(value='manualna') manualna
+                                  option(value='automatyczna') automatyczna
+                              .form-group
+                                label.col-form-label.col-lg-6.col-sm-12 Wysokość raty miesięcznej:
+                                .col-lg-12.col-md-12.col-sm-12
+                                  .kt-ion-range-slider
+                                    input#month_installment(type='hidden')
+                                  .form-text.text-muted.kt-font-bold.kt-font-brand
+                                    | Kliknij suwak i modyfikuj wartości za pomocą strzałek w lewo i prawo, ta metoda pozwoli Ci na precyzyjne ustawienie wartości.
+                              .form-group
+                                label Wartość pojazdu: 
+                                input#vehicle_val_r.form-control(type='number', name='vehicle_val_r', placeholder='Wartość pojazdu')
+                              .form-group
+                                label Okres wynajmu (w miesiącach): 
+                                input#rent_time_r.form-control(type='text', name='rent_time_r', placeholder='Okres wynajmu')
+                              .form-group
+                                label Wpłata własna: 
+                                input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
+                              .form-group
+                                label Roczny limit kilometrów: 
+                                input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
+                              .form-group
+                                label.kt-margin-b-10 Pakiety w ofercie: 
+                                .kt-checkbox-inline
+                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                    input(type='checkbox', value='serwis', name='service_pack')
+                                    |  Serwis
+                                    span
+                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                    input(type='checkbox', value='wymiana opon', name='tire_pack')
+                                    |  Wymiana opon
+                                    span
+                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                    input(type='checkbox', value='ubezpieczenie', name='insurance_pack')
+                                    |  Ubezpieczenie
+                                    span
+                        #insurance_type_box(style='display:none;')
+                          .kt-heading.kt-heading--md Dane przedmiotu ofertowego
+                          .kt-form__section.kt-form__section--first
+                            .kt-wizard-v1__form
+                              .form-group
+                                label Marka/model pojazdu: 
+                                input.form-control(type='text', name='brand_i', placeholder='Marka/model pojazdu')
+                              .form-group
+                                label Typ nadwozia pojazdu: 
+                                select.form-control(name='body_type_i')
+                                  option(value='', selected='', disabled='') Wybierz typ nadwozia
+                                  option(value='SUV') SUV
+                                  option(value='coupé') coupé
+                                  option(value='fastback') fastback
+                                  option(value='hatchback') hatchback
+                                  option(value='kabriolet') kabriolet
+                                  option(value='liftback') liftback
+                                  option(value='limuzyna') limuzyna
+                                  option(value='mikrovan') mikrovan
+                                  option(value='minivan') minivan
+                                  option(value='pick-up') pick-up
+                                  option(value='roadster') roadster
+                                  option(value='sedan') sedan
+                                  option(value='van') van
+                              .form-group
+                                label Rok produkcji: 
+                                input#pyear_i.form-control(type='text', name='pyear_i', placeholder='Rok produkcji')
+                              .form-group
+                                label Przebieg pojazdu: 
+                                input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
+                              .form-group
+                                label Pojemność silnika (w cm³): 
+                                input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
+                              .form-group
+                                label Numer VIN: 
+                                input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
+                              .form-group
+                                label Numer rejestracyjny: 
+                                input#reg_number.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
+                              .form-group
+                                label Wartość pojazdu netto: 
+                                input#vehicle_val_i.form-control(type='number', name='vehicle_val_i', placeholder='Wartość pojazdu netto')
                       // end: Form Wizard Step 3
                       // begin: Form Wizard Step 4
                       .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        .kt-heading.kt-heading--md Setup Your Delivery Location
-                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        .kt-heading.kt-heading--md Załącz dokumenty
                         .kt-form__section.kt-form__section--first
                           .kt-wizard-v1__form
                             .form-group
-                              label Address Line 1
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              input.form-control(type='text', name='locaddress1', placeholder='Address Line 1', value='Address Line 1')
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              span.form-text.text-muted Please enter your Address.
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                            .form-group
-                              label Address Line 2
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              input.form-control(type='text', name='locaddress2', placeholder='Address Line 2', value='Address Line 2')
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              span.form-text.text-muted Please enter your Address.
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                            .row
-                              .col-xl-6
-                                .form-group
-                                  label Postcode
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  input.form-control(type='text', name='locpostcode', placeholder='Postcode', value='3072')
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  span.form-text.text-muted Please enter your Postcode.
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              .col-xl-6
-                                .form-group
-                                  label City
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  input.form-control(type='text', name='loccity', placeholder='City', value='Preston')
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  span.form-text.text-muted Please enter your City.
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                            .row
-                              .col-xl-6
-                                .form-group
-                                  label State
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  input.form-control(type='text', name='locstate', placeholder='State', value='VIC')
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  span.form-text.text-muted Please enter your Postcode.
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              .col-xl-6
-                                .form-group
-                                  label Country:
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  select.form-control(name='loccountry')
-                                    option(value='') Select
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AF') Afghanistan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AX') &angst;land Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AL') Albania
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DZ') Algeria
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AS') American Samoa
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AD') Andorra
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AO') Angola
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AI') Anguilla
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AQ') Antarctica
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AG') Antigua and Barbuda
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AR') Argentina
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AM') Armenia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AW') Aruba
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AU', selected='') Australia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AT') Austria
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AZ') Azerbaijan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BS') Bahamas
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BH') Bahrain
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BD') Bangladesh
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BB') Barbados
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BY') Belarus
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BE') Belgium
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BZ') Belize
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BJ') Benin
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BM') Bermuda
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BT') Bhutan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BO') Bolivia, Plurinational State of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BQ') Bonaire, Sint Eustatius and Saba
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BA') Bosnia and Herzegovina
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BW') Botswana
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BV') Bouvet Island
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BR') Brazil
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IO') British Indian Ocean Territory
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BN') Brunei Darussalam
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BG') Bulgaria
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BF') Burkina Faso
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BI') Burundi
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KH') Cambodia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CM') Cameroon
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CA') Canada
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CV') Cape Verde
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KY') Cayman Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CF') Central African Republic
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TD') Chad
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CL') Chile
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CN') China
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CX') Christmas Island
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CC') Cocos (Keeling) Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CO') Colombia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KM') Comoros
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CG') Congo
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CD') Congo, the Democratic Republic of the
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CK') Cook Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CR') Costa Rica
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CI') C&ocirc;te d&apos;Ivoire
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HR') Croatia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CU') Cuba
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CW') Cura&ccedil;ao
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CY') Cyprus
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CZ') Czech Republic
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DK') Denmark
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DJ') Djibouti
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DM') Dominica
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DO') Dominican Republic
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='EC') Ecuador
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='EG') Egypt
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SV') El Salvador
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GQ') Equatorial Guinea
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ER') Eritrea
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='EE') Estonia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ET') Ethiopia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FK') Falkland Islands (Malvinas)
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FO') Faroe Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FJ') Fiji
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FI') Finland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FR') France
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GF') French Guiana
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PF') French Polynesia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TF') French Southern Territories
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GA') Gabon
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GM') Gambia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GE') Georgia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='DE') Germany
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GH') Ghana
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GI') Gibraltar
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GR') Greece
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GL') Greenland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GD') Grenada
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GP') Guadeloupe
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GU') Guam
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GT') Guatemala
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GG') Guernsey
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GN') Guinea
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GW') Guinea-Bissau
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GY') Guyana
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HT') Haiti
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HM') Heard Island and McDonald Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VA') Holy See (Vatican City State)
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HN') Honduras
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HK') Hong Kong
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='HU') Hungary
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IS') Iceland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IN') India
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ID') Indonesia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IR') Iran, Islamic Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IQ') Iraq
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IE') Ireland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IM') Isle of Man
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IL') Israel
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='IT') Italy
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='JM') Jamaica
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='JP') Japan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='JE') Jersey
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='JO') Jordan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KZ') Kazakhstan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KE') Kenya
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KI') Kiribati
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KP') Korea, Democratic People&apos;s Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KR') Korea, Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KW') Kuwait
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KG') Kyrgyzstan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LA') Lao People&apos;s Democratic Republic
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LV') Latvia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LB') Lebanon
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LS') Lesotho
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LR') Liberia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LY') Libya
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LI') Liechtenstein
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LT') Lithuania
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LU') Luxembourg
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MO') Macao
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MK') Macedonia, the former Yugoslav Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MG') Madagascar
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MW') Malawi
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MY') Malaysia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MV') Maldives
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ML') Mali
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MT') Malta
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MH') Marshall Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MQ') Martinique
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MR') Mauritania
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MU') Mauritius
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='YT') Mayotte
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MX') Mexico
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='FM') Micronesia, Federated States of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MD') Moldova, Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MC') Monaco
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MN') Mongolia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ME') Montenegro
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MS') Montserrat
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MA') Morocco
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MZ') Mozambique
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MM') Myanmar
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NA') Namibia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NR') Nauru
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NP') Nepal
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NL') Netherlands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NC') New Caledonia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NZ') New Zealand
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NI') Nicaragua
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NE') Niger
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NG') Nigeria
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NU') Niue
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NF') Norfolk Island
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MP') Northern Mariana Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='NO') Norway
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='OM') Oman
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PK') Pakistan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PW') Palau
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PS') Palestinian Territory, Occupied
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PA') Panama
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PG') Papua New Guinea
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PY') Paraguay
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PE') Peru
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PH') Philippines
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PN') Pitcairn
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PL') Poland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PT') Portugal
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PR') Puerto Rico
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='QA') Qatar
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='RE') R&eacute;union
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='RO') Romania
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='RU') Russian Federation
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='RW') Rwanda
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='BL') Saint Barth&eacute;lemy
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SH') Saint Helena, Ascension and Tristan da Cunha
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='KN') Saint Kitts and Nevis
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LC') Saint Lucia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='MF') Saint Martin (French part)
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='PM') Saint Pierre and Miquelon
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VC') Saint Vincent and the Grenadines
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='WS') Samoa
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SM') San Marino
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ST') Sao Tome and Principe
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SA') Saudi Arabia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SN') Senegal
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='RS') Serbia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SC') Seychelles
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SL') Sierra Leone
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SG') Singapore
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SX') Sint Maarten (Dutch part)
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SK') Slovakia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SI') Slovenia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SB') Solomon Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SO') Somalia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ZA') South Africa
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GS') South Georgia and the South Sandwich Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SS') South Sudan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ES') Spain
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='LK') Sri Lanka
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SD') Sudan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SR') Suriname
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SJ') Svalbard and Jan Mayen
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SZ') Swaziland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SE') Sweden
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='CH') Switzerland
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='SY') Syrian Arab Republic
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TW') Taiwan, Province of China
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TJ') Tajikistan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TZ') Tanzania, United Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TH') Thailand
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TL') Timor-Leste
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TG') Togo
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TK') Tokelau
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TO') Tonga
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TT') Trinidad and Tobago
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TN') Tunisia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TR') Turkey
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TM') Turkmenistan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TC') Turks and Caicos Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='TV') Tuvalu
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='UG') Uganda
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='UA') Ukraine
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='AE') United Arab Emirates
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='GB') United Kingdom
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='US') United States
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='UM') United States Minor Outlying Islands
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='UY') Uruguay
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='UZ') Uzbekistan
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VU') Vanuatu
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VE') Venezuela, Bolivarian Republic of
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VN') Viet Nam
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VG') Virgin Islands, British
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='VI') Virgin Islands, U.S.
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='WF') Wallis and Futuna
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='EH') Western Sahara
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='YE') Yemen
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ZM') Zambia
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                    option(value='ZW') Zimbabwe
+                              .col-lg-12.col-md-12.col-sm-12
+                                #kt_dropzone_offer.dropzone.dropzone-default.dropzone-success.dz-clickable
+                                  .dropzone-msg.dz-message.needsclick
+                                    h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
+                                    span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xml)
+                                .form-text.text-muted.kt-font-bold.kt-font-brand
+                                  | Dodaj wszystkie wymagane pliki aby sfinalizować ofertę.
                       // end: Form Wizard Step 4
                       // begin: Form Wizard Step 5
                       .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        .kt-heading.kt-heading--md Review your Details and Submit
-                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        .kt-heading.kt-heading--md Podsumowanie
                         .kt-form__section.kt-form__section--first
                           .kt-wizard-v1__review
                             .kt-wizard-v1__review-item
                               .kt-wizard-v1__review-title
-                                | Current Address
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                | Dane podstawowe
                               .kt-wizard-v1__review-content
-                                | Address Line 1
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Address Line 2
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Melbourne 3000, VIC, Australia
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                p.kt-margin-b-0 Typ oferty: 
+                                  span#offer_typeP
+                                p.kt-margin-b-0 Klient: 
+                                  span#clientP
+                                p.kt-margin-b-0 Firma: 
+                                  span#companyP
                             .kt-wizard-v1__review-item
                               .kt-wizard-v1__review-title
-                                | Delivery Details
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                | Dane ofertowe
                               .kt-wizard-v1__review-content
-                                | Package: Complete Workstation (Monitor, Computer, Keyboard &amp; Mouse)
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Weight: 25kg
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Dimensions: 110cm (w) x 90cm (h) x 150cm (L)
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                #leasing_offer_type
+                                  p.kt-margin-b-0 Rodzaj/typ pojazdu: 
+                                    span#item_type_lP
+                                  p.kt-margin-b-0 Marka/model pojazdu: 
+                                    span#brand_lP
+                                  p.kt-margin-b-0 Pojazd: 
+                                    span#condition_lP
+                                  p.kt-margin-b-0 Rok produkcji: 
+                                    span#pyear_lP
+                                  p Wartość netto: 
+                                    span#netto_lP
+                                  .kt-wizard-v1__review-title
+                                    | Warianty
+                                  #pull_variants
+                                #rent_offer_type(style='display:none;')
+                                  p.kt-margin-b-0 Marka/model pojazdu: 
+                                    span#brand_rP
+                                  p.kt-margin-b-0 Typ nadwozia pojazdu: 
+                                    span#body_type_rP
+                                  p.kt-margin-b-0 Rodzaj paliwa: 
+                                    span#fuel_type_rP
+                                  p.kt-margin-b-0 Skrzynia biegów: 
+                                    span#gear_type_rP
+                                  p.kt-margin-b-0 Wysokość raty miesięcznej: 
+                                    span#month_install_rP
+                                  p.kt-margin-b-0 Wartość pojazdu: 
+                                    span#vehicle_val_rP
+                                  p.kt-margin-b-0 Okres wynajmu: 
+                                    span#rent_time_rP
+                                  p.kt-margin-b-0 Wpłata własna: 
+                                    span#self_deposit_rP
+                                  p.kt-margin-b-0 Roczny limit kilometrów: 
+                                    span#km_limit_rP
+                                  p.kt-margin-b-0 Pakiety w ofercie: 
+                                    span#service_packP
+                                    | ,
+                                    span#tire_packP
+                                    | ,
+                                    span#insurance_packP
+                                #insurance_offer_type(style='display:none;')
+                                  p.kt-margin-b-0 Marka/model pojazdu: 
+                                    span#brand_iP
+                                  p.kt-margin-b-0 Typ nadwozia pojazdu: 
+                                    span#body_type_iP
+                                  p.kt-margin-b-0 Rok produkcji: 
+                                    span#pyear_iP
+                                  p.kt-margin-b-0 Przebieg pojazdu: 
+                                    span#km_val_iP
+                                  p.kt-margin-b-0 Pojemność silnika: 
+                                    span#engine_cap_iP
+                                  p.kt-margin-b-0 Numer VIN: 
+                                    span#vin_numberP
+                                  p.kt-margin-b-0 Numer rejestracyjny: 
+                                    span#reg_numberP
+                                  p.kt-margin-b-0 Wartość pojazdu netto: 
+                                    span#vehicle_val_iP
                             .kt-wizard-v1__review-item
-                              .kt-wizard-v1__review-title
-                                | Delivery Service Type
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                              .kt-wizard-v1__review-title.kt-margin-b-10
+                                | Załączone pliki
                               .kt-wizard-v1__review-content
-                                | Overnight Delivery with Regular Packaging
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Preferred Morning (8:00AM - 11:00AM) Delivery
-                            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                            .kt-wizard-v1__review-item
-                              .kt-wizard-v1__review-title
-                                | Delivery Address
-                              | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                              .kt-wizard-v1__review-content
-                                | Address Line 1
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Address Line 2
-                                br
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;Preston 3072, VIC, Australia
+                                .kt-widget4
+                                  .kt-widget4__item
+                                    .kt-widget4__pic.kt-widget4__pic--icon
+                                      img(src='./assets/media/files/doc.svg', alt='')
+                                    a.kt-widget4__title(href='#')
+                                      | instrukcja_dzialania.docx
+                                    .kt-widget4__tools
+                                      a.btn.btn-clean.btn-icon.btn-sm(href='#')
+                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                                  .kt-widget4__item
+                                    .kt-widget4__pic.kt-widget4__pic--icon
+                                      img(src='./assets/media/files/pdf.svg', alt='')
+                                    a.kt-widget4__title(href='#')
+                                      | oferta_494_BNP_5032P.pdf
+                                    .kt-widget4__tools
+                                      a.btn.btn-clean.btn-icon.btn-sm(href='#')
+                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                                  .kt-widget4__item
+                                    .kt-widget4__pic.kt-widget4__pic--icon
+                                      img(src='./assets/media/files/pdf.svg', alt='')
+                                    | &#x9;&#x9;&#x9;&#x9;
+                                    a.kt-widget4__title(href='#')
+                                      | umowa_nr93203.pdf
+                                    .kt-widget4__tools
+                                      a.btn.btn-clean.btn-icon.btn-sm(href='javascript:;')
+                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                      #debug_op
                       // end: Form Wizard Step 5
                       // begin: Form Actions
                       .kt-form__actions
                         button.btn.btn-secondary.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-prev')
                           | Powrót
-                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                        button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-submit')
-                          | Zatwierdź
-                        | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                        button.btn.btn-warning.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='add-submit', data-ktwizard-type='action-submit') 
+                          | Dodaj ofertę
+                        | &nbsp;
+                        button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='addendsend-submit', data-ktwizard-type='action-submit', data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="Opcja chwilowo niedostępna")
+                          | Dodaj i wyślij ofertę
                         button.btn.btn-brand.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-next')
                           | Dalej
                       // end: Form Actions
                     // end: Form Wizard Form
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/ion-rangeslider/js/ion.rangeSlider.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery.repeater/src/lib.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery.repeater/src/jquery.input.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery.repeater/src/repeater.js', type='text/javascript')
@@ -831,5 +469,6 @@ block scripts
   script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
   script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
-  script(src='./assets/js/demo1/pages/pGenerator.js', type='text/javascript')
+  script(src='./assets/vendors/general/dropzone/dist/dropzone.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/dropzone.init.js', type='text/javascript')
   script(src='./assets/js/private/offeradd.js', type='text/javascript')

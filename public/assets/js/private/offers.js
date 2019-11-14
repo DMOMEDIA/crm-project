@@ -4,7 +4,7 @@
 var KTOfferListDatatable = function() {
 
 	// variables
-	var datatable;
+	var datatable, formEl, validator, slider_min = 0, slider_max = 0;
 
 	// init
 	var init = function() {
@@ -63,7 +63,7 @@ var KTOfferListDatatable = function() {
 				width: 100,
 				template: function(row) {
 					var date = moment(row.created_at).local().format('YYYY');
-					return '<a href="javascript:;" class="show_offer_data" data-id="' + row.id + '">00' + row.id + '/' + row.offer_type.charAt(0).toUpperCase() + '/' + date + '</a>';
+					return '<a href="javascript:;" class="show_offer_data" data-id="' + row.id + '" data-type="' + row.offer_type + '">00' + row.id + '/' + row.offer_type.charAt(0).toUpperCase() + '/' + date + '</a>';
 				}
 			}, {
 				field: "created_at",
@@ -115,7 +115,7 @@ var KTOfferListDatatable = function() {
 				overflow: 'visible',
 				template: function(row) {
 				return '\
-						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_offer_data" data-id="' + row.id + '">\
+						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_offer_data" data-id="' + row.id + '" data-type="' + row.offer_type + '">\
 							<i class="flaticon2-menu-1"></i>\
 						</a>\
 					';
@@ -129,14 +129,18 @@ var KTOfferListDatatable = function() {
 			var modalEl = $('#kt_fetch_offer');
 
 			$('.show_offer_data').on('click', function() {
-				var id = $(this).attr('data-id');
+				var id = $(this).attr('data-id'),
+				type = $(this).attr('data-type');
+
+				KTUtil.clearInputInForm(formEl);
+				modalEl.find('select[name="condition_l"] option[value="nowy"]').prop('selected', true);
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
 				$.ajax({
 					url: '/rest/offer/get',
 					method: 'POST',
-					data: { id: id },
+					data: { id: id, type: type },
 					success: function(res) {
 						setTimeout(function() {
 								KTApp.unblockPage();
@@ -144,14 +148,106 @@ var KTOfferListDatatable = function() {
 								if(res.status == null) {
 									modalEl.modal('show');
 
+									var date = moment(res.created_at).local().format('YYYY');
 									var status = {
-										0: {'title': 'Oczekująca', 'class': 'kt-font-brand'},
-										1: {'title': 'Anulowana', 'class': ' kt-font-danger'},
-										2: {'title': 'Zrealizowana', 'class': ' kt-font-success'},
+										0: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
+										1: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
+										2: {'title': 'Zrealizowana', 'class': ' kt-badge--success'},
 									};
-                }
+									var offer_type = {
+										'rent': 'wypożyczenie',
+										'insurance': 'ubezpieczenie',
+										'leasing': 'leasing'
+									};
+									//
+									modalEl.find('#idInput1').val(res.id);
+									modalEl.find('#typeInput1').val(res.offer_type);
+                	modalEl.find('#modalTitle').html('00' + res.id + '/' + res.offer_type.charAt(0).toUpperCase() + '/' + date + ' - Klient: ' + res.client.fullname);
+									modalEl.find('#offer_status').addClass(status[res.state].class).html(status[res.state].title);
+									modalEl.find('#offer_date').html(moment(res.created_at).local().format('YYYY-MM-DD HH:mm'));
 
-                  // Twój stary
+									if(res.client.company == 0) {
+										modalEl.find('#private_user').show();
+										modalEl.find('#company_user').hide();
+									} else {
+										modalEl.find('#private_user').hide();
+										modalEl.find('#company_user').show();
+									}
+
+									modalEl.find('#client_fullname').html(res.client.fullname);
+									modalEl.find('#client_company').html(res.client.fullname);
+									modalEl.find('#client_nip').html(res.client.nip);
+									modalEl.find('#client_email').html(res.client.email);
+									modalEl.find('#client_phone').html(res.client.phone);
+									//
+									modalEl.find('#company_name').html(res.company.fullname);
+									modalEl.find('#company_nip').html(res.company.nip);
+									modalEl.find('#company_address').html(res.company.address);
+									modalEl.find('#company_address_cd').html(res.company.postcode + ' ' + res.company.city);
+									modalEl.find('#company_voivodeship').html(res.company.voivodeship);
+									modalEl.find('#company_email').html(res.company.email);
+									modalEl.find('#company_phone').html(res.company.phone);
+
+									if(res.offer_type == 'leasing') {
+										$('#leasing_type_box').show();
+										$('#rent_type_box').hide();
+										$('#insurance_type_box').hide();
+										//
+										modalEl.find('select[name="item_type_l"] option[value="' + res.item_type + '"]').prop('selected', true);
+										modalEl.find('input[name="brand_l"]').val(res.name);
+										modalEl.find('select[name="condition_l"] option[value="' + res.condititon + '"]').prop('selected', true);
+										modalEl.find('input[name="pyear_l"]').val(res.production_year);
+										modalEl.find('input[name="netto_l"]').val(res.netto);
+
+										modalEl.find('input[name="vid"]').val(res.variants.id);
+										modalEl.find('input[name="contract"]').val(res.variants.okres);
+										modalEl.find('input[name="inital_fee"]').val(res.variants.wklad);
+										modalEl.find('input[name="leasing_install"]').val(res.variants.leasing_install);
+										modalEl.find('input[name="repurchase"]').val(res.variants.wykup);
+										modalEl.find('input[name="sum_fee"]').val(res.variants.total_fees);
+									} else if(res.offer_type == 'rent') {
+										$('#leasing_type_box').hide();
+										$('#rent_type_box').show();
+										$('#insurance_type_box').hide();
+										//
+										var value_installment = res.rata.split(',');
+										modalEl.find('input[name="brand_r"]').val(res.marka_model);
+										modalEl.find('select[name="body_type_r"] option[value="' + res.typ + '"]').prop('selected', true);
+										modalEl.find('select[name="fuel_type_r"] option[value="' + res.fuel_type + '"]').prop('selected', true);
+										modalEl.find('select[name="gear_type_r"] option[value="' + res.gear_type + '"]').prop('selected', true);
+										$('#month_installment').ionRangeSlider({
+												type: "double",
+												grid: true,
+												min: 0,
+												max: 5000,
+												from: value_installment[0],
+												to: value_installment[1],
+												postfix: " PLN",
+												onStart: function(data) {
+													slider_min = data.from;
+													slider_max = data.to;
+												},
+												onFinish: function(data) {
+													slider_min = data.from;
+													slider_max = data.to;
+												}
+										});
+										modalEl.find('input[name="vehicle_val_r"]').val(res.brutto);
+										modalEl.find('input[name="rent_time_r"]').val(res.okres);
+										modalEl.find('input[name="self_deposit_r"]').val(res.wplata);
+										modalEl.find('input[name="km_limit_r"]').val(res.limit);
+									} else {
+										$('#leasing_type_box').hide();
+										$('#rent_type_box').hide();
+										$('#insurance_type_box').show();
+										//
+									}
+
+									// Hide modal event
+									$('#kt_fetch_offer').on('hidden.bs.modal', function (e) {
+										modalEl.find('#offer_status').removeClass(status[res.state].class);
+									});
+                }
 						}, 1000);
 					},
 					error: function(err) {
@@ -250,6 +346,249 @@ var KTOfferListDatatable = function() {
 		});
 	}
 
+	var initValidation = function() {
+    $("#pyear_l").inputmask('9999');
+		$("#pyear_i").inputmask('9999');
+		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
+		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
+		$("#rent_time_r").inputmask('99 miesięcy');
+		$("#km_limit_r").inputmask('999999 km', { numericInput: true, placeholder: "" });
+
+		$('#vin_number').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
+		validator = formEl.validate({
+			// Validate only visible fields
+			ignore: ":hidden",
+
+			// Validation rules
+			rules: {
+				//= Step 3
+				// Typ - leasing
+				item_type_l: {
+					required: true
+				},
+				brand_l: {
+					required: true
+				},
+				condition_l: {
+					required: true
+				},
+				pyear_l: {
+					required: true
+				},
+				netto_l: {
+					required: true
+				},
+				// Typ - Wypożyczenie
+				brand_r: {
+					required: true
+				},
+				body_type_r: {
+					required: true
+				},
+				fuel_type_r: {
+					required: true
+				},
+				gear_type_r: {
+					required: true
+				},
+				vehicle_val_r: {
+					required: true
+				},
+				rent_time_r: {
+					required: true
+				},
+				self_deposit_r: {
+					required: true
+				},
+				km_limit_r: {
+					required: true
+				},
+				// Typ - ubezpieczenie
+				brand_i: {
+					required: true
+				},
+				body_type_i: {
+					required: true
+				},
+				pyear_i: {
+					required: true,
+					digits: true,
+					minlength: 4,
+					maxlength: 4
+				},
+				km_val_i: {
+					required: true
+				},
+				engine_cap_i: {
+					required: true
+				},
+				vin_number: {
+					required: true,
+					minlength: 17,
+					maxlength: 17
+				},
+				reg_number: {
+					required: true
+				},
+				vehicle_val_i: {
+					required: true
+				}
+			},
+			messages: {
+				client_id: {
+					required: 'To pole jest wymagane.'
+				},
+				company_id: {
+					required: 'To pole jest wymagane.'
+				},
+				item_type_l: {
+					required: 'To pole jest wymagane.'
+				},
+				brand_l: {
+					required: 'To pole jest wymagane.'
+				},
+				condition_l: {
+					required: 'To pole jest wymagane.'
+				},
+				pyear_l: {
+					required: 'To pole jest wymagane.'
+				},
+				netto_l: {
+					required: 'To pole jest wymagane.'
+				},
+				brand_r: {
+					required: 'To pole jest wymagane.'
+				},
+				body_type_r: {
+					required: 'To pole jest wymagane.'
+				},
+				fuel_type_r: {
+					required: 'To pole jest wymagane.'
+				},
+				gear_type_r: {
+					required: 'To pole jest wymagane.'
+				},
+				vehicle_val_r: {
+					required: 'To pole jest wymagane.'
+				},
+				rent_time_r: {
+					required: 'To pole jest wymagane.'
+				},
+				self_deposit_r: {
+					required: 'To pole jest wymagane.'
+				},
+				km_limit_r: {
+					required: 'To pole jest wymagane.'
+				},
+				brand_i: {
+					required: 'To pole jest wymagane.'
+				},
+				body_type_i: {
+					required: 'To pole jest wymagane.'
+				},
+				pyear_i: {
+					required: 'To pole jest wymagane.',
+					digits: 'To pole może zawierać jedynie cyfry.',
+					minlength: 'To pole musi składać się z {0} cyfr.',
+					maxlength: 'To pole musi składać się z {0} cyfr.'
+				},
+				km_val_i: {
+					required: 'To pole jest wymagane.'
+				},
+				engine_cap_i: {
+					required: 'To pole jest wymagane.'
+				},
+				vin_number: {
+					required: 'To pole jest wymagane.',
+					minlength: 'Numer VIN musi składać się z {0} znaków.',
+					maxlength: 'Numer VIN musi składać się z {0} znaków.'
+				},
+				reg_number: {
+					required: 'To pole jest wymagane.'
+				},
+				vehicle_val_i: {
+					required: 'To pole jest wymagane.'
+				}
+			},
+
+			// Display error
+			invalidHandler: function(event, validator) {
+        KTUtil.scrollTop();
+
+        KTUtil.showNotifyAlert('danger', 'Uzupełnij wymagane pola', 'Wystąpił błąd', 'flaticon-warning-sign');
+			},
+
+			// Submit valid form
+			submitHandler: function (form) { }
+		});
+	}
+
+	var initUploadData = function() {
+		var modalEl = $('#kt_fetch_user'),
+		btn = $('button[type="submit"]', formEl);
+
+		// Submit personal form
+		btn.on('click', function(e) {
+			e.preventDefault();
+
+			if(validator.form()) {
+				console.log('Zweryfikowano formularz i wysłano.');
+			}
+			/* if(validator_personal.form()) {
+				KTApp.progress(btn_pers);
+				btn_pers.attr('disabled', true);
+
+				setTimeout(function() {
+					form_personal.ajaxSubmit({
+						url: '/rest/users/modify',
+						method: 'POST',
+						data: form_personal.serialize(),
+						success: function(res) {
+							KTApp.unprogress(btn_pers);
+							btn_pers.attr('disabled', false);
+
+							if(res.status == 'success') {
+								KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+								datatable.reload();
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+						}
+					});
+				}, 1000);
+			} */
+		});
+	}
+
+	var initRepeater = function() {
+    $('#leasing_variants').repeater({
+        initEmpty: false,
+        defaultValues: {
+            'text-input': 'foo'
+        },
+        show: function () {
+            $(this).slideDown();
+						$('[name*="contract"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+						$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+						$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+						$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+						$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+        },
+        hide: function (deleteElement) {
+            $(this).slideUp(deleteElement);
+        },
+        isFirstItemUndeletable: true
+    });
+	}
+
 	var updateTotal = function() {
 		datatable.on('kt-datatable--on-layout-updated', function () {
 			//$('#kt_subheader_total').html(datatable.getTotalRows() + ' Total');
@@ -259,9 +598,12 @@ var KTOfferListDatatable = function() {
 	return {
 		// public functions
 		init: function() {
+			formEl = $('#kt_offer_edit');
 
 			init();
 			initOfferData();
+			initValidation();
+			initUploadData();
 			selection();
 			selectedDelete();
 			updateTotal();

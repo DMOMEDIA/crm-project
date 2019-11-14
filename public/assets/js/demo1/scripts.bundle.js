@@ -517,7 +517,8 @@ var KTUtil = function() {
         },
 
         clearInputInForm: function(form) {
-          $(':input',form).not(':button, :submit, :reset, :hidden, :radio[name="client_type"]').val('').prop('checked', false).prop('selected', false);
+          $(':input',form).not(':button, :submit, :reset, :hidden, :radio[name="client_type"]').val('').prop('checked', false);
+          $('select option[value=""]',form).prop('selected', true);
         },
 
         showNotifyAlert: function(type, message, title, icon) {

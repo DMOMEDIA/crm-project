@@ -27,8 +27,8 @@ router.post('/rest/clients/add', REST.addClient);
 router.post('/rest/clients/list', REST.getClientList);
 router.post('/rest/clients/modify', REST.modifyClientById);
 router.post('/rest/client/show', REST.getClientById);
-router.post('/rest/offer/list', REST.getOfferRequests);
-router.post('/rest/offer/get', REST.getOfferById);
+router.post('/rest/roffer/list', REST.getOfferRequests);
+router.post('/rest/roffer/get', REST.getRequestOfferById);
 
 // {REST} powiadomienia
 router.post('/rest/notifications', REST.getUserNotifications);
@@ -36,6 +36,7 @@ router.post('/rest/notification/unread', REST.notificationSetUnread);
 
 // {REST} Oferty
 router.post('/rest/offerlist', REST.loadOfferlist);
+router.post('/rest/offer/get', REST.getOfferById);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
 

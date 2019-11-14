@@ -4,11 +4,17 @@ const Messages = require('../config/messages');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
-  hasTimestamps: true
+  hasTimestamps: true,
+
 });
 
 const Company = bookshelf.Model.extend({
   tableName: 'crm_companies',
+  hasTimestamps: true
+});
+
+const User = bookshelf.Model.extend({
+  tableName: 'crm_users',
   hasTimestamps: true
 });
 
@@ -71,6 +77,25 @@ module.exports.getOffers = (callback) => {
         });
       });
   });
+};
+
+module.exports.getOfferById = (id, type, callback) => {
+  if(type == 'rent') {
+    return new OfferRent().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
+    .then(function(result) {
+      callback(result);
+    });
+  } else if(type == 'insurance') {
+    return new OfferInsurance().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
+    .then(function(result) {
+      callback(result);
+    });
+  } else {
+    return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['variants', 'client', 'company'] })
+    .then(function(result) {
+      callback(result);
+    });
+  }
 };
 
 module.exports.companyList = (callback) => {

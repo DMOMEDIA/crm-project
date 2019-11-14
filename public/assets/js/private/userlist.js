@@ -436,7 +436,6 @@ var KTUserListDatatable = function() {
 				var id = $(this).attr('data-id');
 
 				KTUtil.clearInputInForm(form_personal);
-				modalEl.find('#voivodeshipInput option[value=""]').prop('selected', true);
 				modalEl.find('select#remoteUser').html('<option></option>');
 
 				$('#isCompanyInput').on('change',function(e) {

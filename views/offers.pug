@@ -54,12 +54,12 @@ block content
           #kt_apps_offerlist.kt-datatable
           // end: Datatable
       // begin::Modal
-      // if userPermissions.includes('crm.offers.show')
+      if userPermissions.includes('crm.offers.show')
         #kt_fetch_offer.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
           .modal-dialog.modal-lg.modal-dialog-centered(role='document')
             .modal-content
               .modal-header
-                h5.modal-title Oferta&nbsp;-&nbsp;
+                h5.modal-title Oferta&nbsp;
                 h5.modal-title#modalTitle 
                 button.close(type='button', data-dismiss='modal', aria-label='Close')
                   span(aria-hidden='true')
@@ -75,118 +75,443 @@ block content
                                 polygon#Bound(points='0 0 24 0 24 24 0 24')
                                 path#Combined-Shape(d='M10.5857864,12 L5.46446609,6.87867966 C5.0739418,6.48815536 5.0739418,5.85499039 5.46446609,5.46446609 C5.85499039,5.0739418 6.48815536,5.0739418 6.87867966,5.46446609 L12,10.5857864 L18.1923882,4.39339828 C18.5829124,4.00287399 19.2160774,4.00287399 19.6066017,4.39339828 C19.997126,4.78392257 19.997126,5.41708755 19.6066017,5.80761184 L13.4142136,12 L19.6066017,18.1923882 C19.997126,18.5829124 19.997126,19.2160774 19.6066017,19.6066017 C19.2160774,19.997126 18.5829124,19.997126 18.1923882,19.6066017 L12,13.4142136 L6.87867966,18.5355339 C6.48815536,18.9260582 5.85499039,18.9260582 5.46446609,18.5355339 C5.0739418,18.1450096 5.0739418,17.5118446 5.46446609,17.1213203 L10.5857864,12 Z', fill='#000000', opacity='0.3', transform='translate(12.535534, 12.000000) rotate(-360.000000) translate(-12.535534, -12.000000) ')
                                 path#Combined-Shape(d='M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z', fill='#000000', fill-rule='nonzero')
-                            | Podgląd
+                            | Podgląd oferty
                         |                 
                         li.nav-item
-                          a.nav-link(data-toggle='tab', href='#wyslij_do', role='tab')
+                          a.nav-link(data-toggle='tab', href='#klient_firma', role='tab')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                polygon#Shape(points='0 0 24 0 24 24 0 24')
+                                path#Combined-Shape(d='M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                                path#Combined-Shape(d='M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z', fill='#000000', fill-rule='nonzero')
+                            | Klient i firma obsługująca
+                        |                 
+                        li.nav-item
+                          a.nav-link(data-toggle='tab', href='#statusy', role='tab')
                             svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
                               g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
                                 rect#bound(x='0', y='0', width='24', height='24')
-                                path#Combined-Shape(d='M4,16 L5,16 C5.55228475,16 6,16.4477153 6,17 C6,17.5522847 5.55228475,18 5,18 L4,18 C3.44771525,18 3,17.5522847 3,17 C3,16.4477153 3.44771525,16 4,16 Z M1,11 L5,11 C5.55228475,11 6,11.4477153 6,12 C6,12.5522847 5.55228475,13 5,13 L1,13 C0.44771525,13 6.76353751e-17,12.5522847 0,12 C-6.76353751e-17,11.4477153 0.44771525,11 1,11 Z M3,6 L5,6 C5.55228475,6 6,6.44771525 6,7 C6,7.55228475 5.55228475,8 5,8 L3,8 C2.44771525,8 2,7.55228475 2,7 C2,6.44771525 2.44771525,6 3,6 Z', fill='#000000', opacity='0.3')
-                                path#Combined-Shape(d='M10,6 L22,6 C23.1045695,6 24,6.8954305 24,8 L24,16 C24,17.1045695 23.1045695,18 22,18 L10,18 C8.8954305,18 8,17.1045695 8,16 L8,8 C8,6.8954305 8.8954305,6 10,6 Z M21.0849395,8.0718316 L16,10.7185839 L10.9150605,8.0718316 C10.6132433,7.91473331 10.2368262,8.02389331 10.0743092,8.31564728 C9.91179228,8.60740125 10.0247174,8.9712679 10.3265346,9.12836619 L15.705737,11.9282847 C15.8894428,12.0239051 16.1105572,12.0239051 16.294263,11.9282847 L21.6734654,9.12836619 C21.9752826,8.9712679 22.0882077,8.60740125 21.9256908,8.31564728 C21.7631738,8.02389331 21.3867567,7.91473331 21.0849395,8.0718316 Z', fill='#000000')
-                            | Wyślij zapytanie do banku
+                                path#Path-107(d='M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z', fill='#000000')
+                                path#Combined-Shape(d='M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z', fill='#000000', opacity='0.3')
+                            | Oś czasu i status
                   |     
                   .kt-portlet__body
                     .tab-content
                       #podglad.tab-pane.active(role='tabpanel')
-                        .row
-                          .col-lg-9.col-xl-6
-                            i.fa.fa-user-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
-                            h5.kt-section__title.kt-section__title-sm.d-inline-block Dane klienta:
-                        |                                                               
-                        .kt-widget13
-                          #private_user
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | Imię i nazwisko:
-                              span#fullnameInput.kt-widget13__text.kt-widget13__text--bold
-                          #company_user
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | Nazwa firmy:
-                              span#companyInput.kt-widget13__text.kt-widget13__text--bold
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | NIP:
-                              span#nipInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Adres email:
-                            span#emailInput.kt-widget13__text
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Telefon:
-                            span#phoneInput.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
-                        .row
-                          label.col-xl-3     
-                          .col-lg-9.col-xl-6
-                            i.fa.fa-code-branch.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
-                            h5.kt-section__title.kt-section__title-sm.d-inline-block Szczegóły zapytania ofertowego:
-                        |             
-                        .kt-widget13
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | ID zapytania:
-                            span#idInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Status:
-                            span#statusInput.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc.kt-align-right
-                              | Typ:
-                            span#typeInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc.kt-align-right
-                              | Data dostarczenia:
-                            span#dateInput.kt-widget13__text
-                          hr
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Nazwa przedmiotu/maszyny/pojazdu:
-                            span#nameofferInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Rok produkcji:
-                            span#pyearInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Wartość netto:
-                            span#nettoInput.kt-widget13__text.kt-widget13__text--bold
-                          #leasing_options
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | Okres rat leasingowych:
-                              span#instalmentsInput.kt-widget13__text.kt-widget13__text--bold
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | Wkład własny:
-                              span#cbInput.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
-                            .kt-widget13__item
-                              span.kt-widget13__desc
-                                | Wartość wykupu:
-                              span#rvInput.kt-widget13__text.kt-widget13__text--bold
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Uwagi:
-                            span#attentInput.kt-widget13__text
-                          .kt-widget13__item
-                            span.kt-widget13__desc
-                              | Inne:
-                            span#otherInput.kt-widget13__text
-                          |                             
-                          .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
-                          |                             
-                          .kt-form__actions
+                        form#kt_offer_edit
+                          input#idInput1(type='hidden', name='id')
+                          input#typeInput1(type='hidden', name='type')
+                          .kt-form.kt-form--label-right
+                            .kt-form__body
+                              .kt-section.kt-section--first
+                                .kt-section__body
+                                  .row
+                                    label.col-xl-3     
+                                    .col-lg-9.col-xl-6
+                                      h3.kt-section__title.kt-section__title-sm Dane oferty:
+                                  |     
+                                  .row
+                                    .col-sm-3.col-md-3
+                                      h3.kt-section__title.kt-section__title-sm(style='text-align:right;') Status oferty:
+                                    .col-sm-3.col-md-3(style='margin-top:-2px;')
+                                      span#offer_status.kt-badge.kt-badge--inline.kt-badge--pill
+                                  .row
+                                    .col-sm-3.col-md-3
+                                      h3.kt-section__title.kt-section__title-sm(style='text-align:right;') Data otwarcia oferty:
+                                    .col-sm-3.col-md-3(style='margin-top:-3px;')
+                                      span#offer_date.kt-font-lg
+                                  .row
+                                    .col-sm-3.col-md-3
+                                      h3.kt-section__title.kt-section__title-sm(style='text-align:right;') Pracownik:
+                                    .col-sm-3.col-md-3(style='margin-top:-3px;')
+                                      span.kt-font-lg -
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .row
+                                    label.col-xl-3     
+                                    .col-lg-9.col-xl-6
+                                      h3.kt-section__title.kt-section__title-sm Dane przedmiotu:
+                                  |                                            
+                                  #leasing_type_box
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rodzaj/typ pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='item_type_l')
+                                          option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
+                                          option(value='samochód osobowy') samochód osobowy
+                                          option(value='samochód ciężarowy') samochód ciężarowy
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Pojazd:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='condition_l')
+                                          option(value='nowy', selected='') nowy
+                                          option(value='używany') używany
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#pyear_l.form-control(type='text', name='pyear_l', placeholder='Rok produkcji')
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość netto:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
+                                    |                      
+                                    .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
+                                    input(type='hidden' name='vid')
+                                    .kt-heading.kt-heading--sm Warianty przedmiotu:   
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Okres umowy:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='contract', placeholder='Okres umowy')
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Opłata wstępna:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='inital_fee', placeholder='Opłata wstępna')
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rata leasingowa:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='leasing_install', placeholder='Rata leasingowa')
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wykup:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='repurchase', placeholder='Wykup') 
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Suma opłat:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='sum_fee', placeholder='Suma opłat')
+                                  #rent_type_box(style='display:none;')
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='brand_r', placeholder='Marka/model pojazdu')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Typ nadwozia pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='body_type_r')
+                                          option(value='', selected='', disabled='') Wybierz typ nadwozia
+                                          option(value='SUV') SUV
+                                          option(value='coupé') coupé
+                                          option(value='fastback') fastback
+                                          option(value='hatchback') hatchback
+                                          option(value='kabriolet') kabriolet
+                                          option(value='liftback') liftback
+                                          option(value='limuzyna') limuzyna
+                                          option(value='mikrovan') mikrovan
+                                          option(value='minivan') minivan
+                                          option(value='pick-up') pick-up
+                                          option(value='roadster') roadster
+                                          option(value='sedan') sedan
+                                          option(value='van') van
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rodzaj paliwa:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='fuel_type_r')
+                                          option(value='', selected='', disabled='') Wybierz rodzaj paliwa
+                                          option(value='diesel') diesel
+                                          option(value='benzyna') benzyna
+                                          option(value='benzyna/gaz') benzyna/gaz
+                                          option(value='hybryda') hybryda
+                                          option(value='elektryczny') elektryczny 
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Skrzynia biegów:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='gear_type_r')
+                                          option(value='', selected='', disabled='') Wybierz typ skrzyni biegów
+                                          option(value='manualna') manualna
+                                          option(value='automatyczna') automatyczna
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wysokość raty miesięcznej:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        .kt-ion-range-slider
+                                          input#month_installment(type='hidden')
+                                        .form-text.text-muted.kt-font-bold.kt-font-brand
+                                          | Kliknij suwak i modyfikuj wartości za pomocą strzałek w lewo i prawo, ta metoda pozwoli Ci na precyzyjne ustawienie wartości.
+                                    |                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#vehicle_val_r.form-control(type='number', name='vehicle_val_r', placeholder='Wartość pojazdu')
+                                    |                      
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Okres wynajmu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#rent_time_r.form-control(type='text', name='rent_time_r', placeholder='Okres wynajmu')
+                                    |                      
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wpłata własna:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
+                                    |                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Roczny limit kilometrów:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
+                                    |                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Pakiety w ofercie: 
+                                      |
+                                      .col-lg-9.col-xl-6
+                                        .kt-checkbox-inline
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='serwis', name='service_pack', disabled='')
+                                            |  Serwis
+                                            span
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='wymiana opon', name='tire_pack', disabled='')
+                                            |  Wymiana opon
+                                            span
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='ubezpieczenie', name='insurance_pack', disabled='')
+                                            |  Ubezpieczenie
+                                            span
+                                  #insurance_type_box(style='display:none;')
+                                    | Brak danych
+                                  |                        
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-success.btn-bold(type='submit', name='save') Zmień dane
+                                        | 
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+                      #klient_firma.tab-pane(role='tabpanel')
+                        .kt-section.kt-section--first
+                          .kt-section__body
                             .row
-                              .col-lg-12.col-xl-12.kt-align-right
-                                button.btn.btn-success.btn-bold Wyślij zapytanie do banku
-                                |                             
-                                button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
-                      #wyslij_do.tab-pane(role='tabpanel')
-                        h1.kt-align-center.kt-margin-t-100.kt-margin-b-100 Podstrona w budowie..
+                              label.col-xl-3     
+                              .col-lg-9.col-xl-6
+                                h3.kt-section__title Dane klienta:
+                            |                                          
+                            .kt-widget13
+                              #private_user
+                                .kt-widget13__item
+                                  span.kt-widget13__desc
+                                    | Imię i nazwisko:
+                                  span#client_fullname.kt-widget13__text.kt-widget13__text--bold
+                              #company_user(style='display:none;')
+                                .kt-widget13__item
+                                  span.kt-widget13__desc
+                                    | Nazwa firmy:
+                                  span#client_company.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | NIP:
+                                span#client_nip.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Adres email:
+                                span#client_email.kt-widget13__text
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Telefon:
+                                span#client_phone.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
+                            .row
+                              label.col-xl-3     
+                              .col-lg-9.col-xl-6
+                                h3.kt-section__title Dane firmy od której otrzymano ofertę:
+                            |                                        
+                            .kt-widget13
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Nazwa firmy:
+                                span#company_name.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | NIP:
+                                span#company_nip.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Adres:
+                                span#company_address.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Adres cd.:
+                                span#company_address_cd.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Województwo:
+                                span#company_voivodeship.kt-widget13__text.kt-widget13__text--bold
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Adres email:
+                                span#company_email.kt-widget13__text
+                              .kt-widget13__item
+                                span.kt-widget13__desc
+                                  | Telefon:
+                                span#company_phone.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
+                      #statusy.tab-pane(role='tabpanel')
+                        .kt-section.kt-section--first
+                          .kt-section__body
+                            .row
+                              label.col-xl-3     
+                              .col-lg-9.col-xl-6
+                                h3.kt-section__title Oś czasu:
+                            |                 
+                            .kt-timeline-v2.kt-margin-l-60.kt-margin-b-20
+                              .kt-timeline-v2__items.kt-padding-t-25.kt-padding-b-30
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 10-11-19 09:04
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-danger
+                                  .kt-timeline-v2__item-text
+                                    | Oferta nr. 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='javascript:;') 001/L/2019
+                                    |  została utworzona.
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 10-11-19 09:04
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-success
+                                  .kt-timeline-v2__item-text
+                                    | Przedstawiono ofertę klientowi 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='javascript:;') Stefan Grzeszowiak
+                                    |  oraz nadano jej status 
+                                    span.kt-badge.kt-badge--brand.kt-badge--inline.kt-badge--pill Oczekująca
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 14:00
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-brand
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | Make Deposit 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') USD 700
+                                    |  To ESL.
+                                | &#x9;&#x9;&#x9;&#x9;&#x9;
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 16:00
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-warning
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | Lorem ipsum dolor sit amit,consectetur eiusmdd tempor
+                                    br
+                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;incididunt ut labore et dolore magna elit enim at minim
+                                    br
+                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;veniam quis nostrud
+                                | &#x9;&#x9;&#x9;&#x9;&#x9;
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 17:00
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-info
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | Placed a new order in 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') SIGNATURE MOBILE
+                                    |  marketplace.
+                                | &#x9;&#x9;&#x9;&#x9;&#x9;
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 16:00
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-brand
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | Lorem ipsum dolor sit amit,consectetur eiusmdd tempor
+                                    br
+                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;incididunt ut labore et dolore magna elit enim at minim
+                                    br
+                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;veniam quis nostrud
+                                | &#x9;&#x9;&#x9;&#x9;&#x9;
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 17:00
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-danger
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | Received a new feedback on 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') FinancePro App
+                                    |  product.
+                                | &#x9;&#x9;&#x9;&#x9;&#x9;
+                                .kt-timeline-v2__item
+                                  span.kt-timeline-v2__item-time 15:30
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-cricle
+                                    i.fa.fa-genderless.kt-font-danger
+                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                                  .kt-timeline-v2__item-text
+                                    | New notification message has been received on 
+                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') LoopFin Pro
+                                    |  product.
+                            .row
+                              label.col-xl-3     
+                              .col-lg-9.col-xl-6
+                                h3.kt-section__title Zmiana statusu oferty:
+                            |                 
+                            .kt-form.kt-form--label-right
+                              .kt-form__body
+                                form#form_change_status
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label Status
+                                    |                                         
+                                    .col-lg-6.col-xl-6
+                                      .input-group
+                                        input#idInput3(type='hidden', name='id')
+                                        input#typeInput3(type='hidden', name='type')
+                                        select.form-control(name='change_type')
+                                          option niewysłana
+                                          option(selected='') oczekująca
+                                          option anulowana
+                                          option zrealizowana
+                                        .input-group-append
+                                          button.btn.btn-brand(type='button') Zmień
+                                      |                                             
+                            |                             
+                            .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                            |                             
+                            .kt-form__actions
+                              .row
+                                .col-lg-12.col-xl-12.kt-align-right
+                                  button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/ion-rangeslider/js/ion.rangeSlider.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery.repeater/src/lib.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery.repeater/src/jquery.input.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery.repeater/src/repeater.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
   script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')

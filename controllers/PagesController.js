@@ -121,7 +121,7 @@ exports.roffers = (req, res) => {
 
   res.render('roffers', {
     title: 'Zapytania ofertowe Twoich klientów',
-    pageName: 'rofferslist'
+    pageName: 'rofferlist'
   });
 };
 

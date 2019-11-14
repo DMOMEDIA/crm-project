@@ -26988,7 +26988,7 @@ body.swal2-height-auto {
   .kt-timeline-v2:before {
     content: '';
     position: absolute;
-    left: 4.85rem;
+    left: 9.85rem;
     width: 0.214rem;
     top: 5px;
     bottom: 5px;
@@ -27011,7 +27011,7 @@ body.swal2-height-auto {
       border: 0.89rem solid white;
       z-index: 1;
       top: 0.2rem;
-      left: 4.12rem;
+      left: 9.12rem;
       position: relative; }
       .kt-timeline-v2 .kt-timeline-v2__items .kt-timeline-v2__item .kt-timeline-v2__item-cricle > i {
         font-size: 1.78rem;
@@ -27022,7 +27022,8 @@ body.swal2-height-auto {
       display: table-cell;
       vertical-align: top;
       font-size: 1rem;
-      padding: 0.35rem 0 0 5rem;
+      padding: 0.35rem 0 0 10rem;
+      padding-top: 5px;
       color: #74788d; }
       .kt-timeline-v2 .kt-timeline-v2__items .kt-timeline-v2__item .kt-timeline-v2__item-text.kt-timeline-v2__item-text--bold {
         font-size: 1.2rem;

@@ -287,7 +287,7 @@ exports.getOfferRequests = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
-exports.getOfferById = (req, res) => {
+exports.getRequestOfferById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.roffers.show')) {
       if(req.body.id != null) {
@@ -361,5 +361,17 @@ exports.companyRemoteList = (req, res) => {
     Offer.companyList(function(result) {
       res.json(result);
     });
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getOfferById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.show')) {
+      if(req.body.id != null && req.body.type != null) {
+        Offer.getOfferById(req.body.id, req.body.type, function(result) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
