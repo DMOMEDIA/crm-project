@@ -1,6 +1,7 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages');
+const System = require('../models/system');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
@@ -75,6 +76,7 @@ module.exports.saveClientData = (req, callback) => {
 
       model.save();
 
+      System.createLog('modify_client_log', 'Modyfikacja klienta ' + model.get('fullname') + ' przez (USER=' + req.session.userData.id + ')');
       callback(Messages.message('success_updated_client', null));
     } else callback(Messages.message('not_found_client_identity', null));
   });

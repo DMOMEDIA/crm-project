@@ -5,456 +5,487 @@ block stylecss
 
 block content
   if user
-    html
-      head
-      body
-        #kt_subheader.kt-subheader.kt-grid__item
-          .kt-container.kt-container--fluid
-            .kt-subheader__main
-              h3.kt-subheader__title
-                | Dodaj nową ofertę
-              .kt-subheader__breadcrumbs
-                a.kt-subheader__breadcrumbs-home(href='#')
-                  i.flaticon2-shelter
-                span.kt-subheader__breadcrumbs-separator
-                a.kt-subheader__breadcrumbs-link(href='#') Oferty
-                span.kt-subheader__breadcrumbs-separator
-                a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/offeradd') Dodaj ofertę
-        // begin:: Content
-        .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
-        html
-          head
-          body
-            .kt-portlet
-              .kt-portlet__body.kt-portlet__body--fit
-                #kt_offer_add.kt-grid.kt-wizard-v1.kt-wizard-v1--white(data-ktwizard-state='first')
-                  .kt-grid__item
-                    // begin: Form Wizard Nav
-                    .kt-wizard-v1__nav
-                      .kt-wizard-v1__nav-items
-                        // doc: Replace A tag with SPAN tag to disable the step link click
-                        span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='current')
-                          .kt-wizard-v1__nav-body
-                            .kt-wizard-v1__nav-icon
-                              i.flaticon-notes
-                            .kt-wizard-v1__nav-label
-                              | 1. Typ oferty
-                        span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
-                          .kt-wizard-v1__nav-body
-                            .kt-wizard-v1__nav-icon
-                              i.flaticon-users
-                            .kt-wizard-v1__nav-label
-                              | 2. Klient i firma
-                        span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
-                          .kt-wizard-v1__nav-body
-                            .kt-wizard-v1__nav-icon
-                              i.flaticon-list
-                            .kt-wizard-v1__nav-label
-                              | 3. Dane ofertowe
-                        span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
-                          .kt-wizard-v1__nav-body
-                            .kt-wizard-v1__nav-icon
-                              i.flaticon-file-2
-                            .kt-wizard-v1__nav-label
-                              | 4. Dokumenty
-                        span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
-                          .kt-wizard-v1__nav-body
-                            .kt-wizard-v1__nav-icon
-                              i.flaticon-globe
-                            .kt-wizard-v1__nav-label
-                              | 5. Podsumowanie
-                    // end: Form Wizard Nav
-                  .kt-grid__item.kt-grid__item--fluid.kt-wizard-v1__wrapper
-                    // begin: Form Wizard Form
-                    form#kt_offer_form.kt-form(novalidate='novalidate')
-                      // begin: Form Wizard Step 1
-                      .kt-wizard-v1__content(data-ktwizard-type='step-content', data-ktwizard-state='current')
-                        .kt-heading.kt-heading--md Wybierz typ oferty
-                        .kt-form__section.kt-form__section--first
-                          .kt-wizard-v1__form
-                            .custom-form-group
-                              p.form__answer
-                                input#match_1(type='radio', name='offer_type', value='leasing', checked='')
-                                |  
-                                | &#x9;&#x9;&#x9;&#x9;
-                                label(for='match_1')
-                                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                      rect#bound(x='0', y='0', width='24', height='24')
-                                      |         
-                                      path#Combined-Shape-Copy(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z', fill='#000000', opacity='0.3', transform='translate(11.500000, 12.000000) rotate(-345.000000) translate(-11.500000, -12.000000) ')
-                                      |         
-                                      path#Combined-Shape(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z M11.5,14 C12.6045695,14 13.5,13.1045695 13.5,12 C13.5,10.8954305 12.6045695,10 11.5,10 C10.3954305,10 9.5,10.8954305 9.5,12 C9.5,13.1045695 10.3954305,14 11.5,14 Z', fill='#000000')
+    #kt_subheader.kt-subheader.kt-grid__item
+      .kt-container.kt-container--fluid
+        .kt-subheader__main
+          h3.kt-subheader__title
+            | Dodaj nową ofertę
+          .kt-subheader__breadcrumbs
+            a.kt-subheader__breadcrumbs-home(href='#')
+              i.flaticon2-shelter
+            span.kt-subheader__breadcrumbs-separator
+            a.kt-subheader__breadcrumbs-link(href='#') Oferty
+            span.kt-subheader__breadcrumbs-separator
+            a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/offeradd') Dodaj ofertę
+    // begin:: Content
+    .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
+      .kt-portlet
+        .kt-portlet__body.kt-portlet__body--fit
+          #kt_offer_add.kt-grid.kt-wizard-v1.kt-wizard-v1--white(data-ktwizard-state='first')
+            .kt-grid__item
+              // begin: Form Wizard Nav
+              .kt-wizard-v1__nav
+                .kt-wizard-v1__nav-items
+                  // doc: Replace A tag with SPAN tag to disable the step link click
+                  span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='current')
+                    .kt-wizard-v1__nav-body
+                      .kt-wizard-v1__nav-icon
+                        i.flaticon-notes
+                      .kt-wizard-v1__nav-label
+                        | 1. Typ oferty
+                  span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                    .kt-wizard-v1__nav-body
+                      .kt-wizard-v1__nav-icon
+                        i.flaticon-users
+                      .kt-wizard-v1__nav-label
+                        | 2. Klient i firma
+                  span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                    .kt-wizard-v1__nav-body
+                      .kt-wizard-v1__nav-icon
+                        i.flaticon-list
+                      .kt-wizard-v1__nav-label
+                        | 3. Dane ofertowe
+                  span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                    .kt-wizard-v1__nav-body
+                      .kt-wizard-v1__nav-icon
+                        i.flaticon-file-2
+                      .kt-wizard-v1__nav-label
+                        | 4. Dokumenty
+                  span.kt-wizard-v1__nav-item(href='javascript:;', data-ktwizard-type='step', data-ktwizard-state='pending')
+                    .kt-wizard-v1__nav-body
+                      .kt-wizard-v1__nav-icon
+                        i.flaticon-globe
+                      .kt-wizard-v1__nav-label
+                        | 5. Podsumowanie i prowizje
+              // end: Form Wizard Nav
+            .kt-grid__item.kt-grid__item--fluid.kt-wizard-v1__wrapper
+              // begin: Form Wizard Form
+              form#kt_offer_form.kt-form(novalidate='novalidate')
+                // begin: Form Wizard Step 1
+                .kt-wizard-v1__content(data-ktwizard-type='step-content', data-ktwizard-state='current')
+                  .kt-heading.kt-heading--md Wybierz typ oferty
+                  .kt-form__section.kt-form__section--first
+                    .kt-wizard-v1__form
+                      .custom-form-group
+                        p.form__answer
+                          input#match_1(type='radio', name='offer_type', value='leasing', checked='')
+                          |  
+                          | &#x9;&#x9;&#x9;&#x9;
+                          label(for='match_1')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                |         
+                                path#Combined-Shape-Copy(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z', fill='#000000', opacity='0.3', transform='translate(11.500000, 12.000000) rotate(-345.000000) translate(-11.500000, -12.000000) ')
+                                |         
+                                path#Combined-Shape(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z M11.5,14 C12.6045695,14 13.5,13.1045695 13.5,12 C13.5,10.8954305 12.6045695,10 11.5,10 C10.3954305,10 9.5,10.8954305 9.5,12 C9.5,13.1045695 10.3954305,14 11.5,14 Z', fill='#000000')
 
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;Leasing
-                              p.form__answer
-                                input#match_2(type='radio', name='offer_type', value='rent')
-                                |  
-                                | &#x9;&#x9;&#x9;&#x9;
-                                label(for='match_2')
-                                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                      rect#bound(x='0', y='0', width='24', height='24')
-                                      path#Mask(d='M12,22 C7.02943725,22 3,17.9705627 3,13 C3,8.02943725 7.02943725,4 12,4 C16.9705627,4 21,8.02943725 21,13 C21,17.9705627 16.9705627,22 12,22 Z', fill='#000000', opacity='0.3')
-                                      path#Path-107(d='M11.9630156,7.5 L12.0475062,7.5 C12.3043819,7.5 12.5194647,7.69464724 12.5450248,7.95024814 L13,12.5 L16.2480695,14.3560397 C16.403857,14.4450611 16.5,14.6107328 16.5,14.7901613 L16.5,15 C16.5,15.2109164 16.3290185,15.3818979 16.1181021,15.3818979 C16.0841582,15.3818979 16.0503659,15.3773725 16.0176181,15.3684413 L11.3986612,14.1087258 C11.1672824,14.0456225 11.0132986,13.8271186 11.0316926,13.5879956 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z', fill='#000000')
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;Wypożyczenie
-                              p.form__answer
-                                input#match_3(type='radio', name='offer_type', value='insurance')
-                                |  
-                                | &#x9;&#x9;&#x9;&#x9;
-                                label(for='match_3')
-                                  svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                                    g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                      rect#bound(x='0', y='0', width='24', height='24')
-                                      path#Path-50(d='M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z', fill='#000000', opacity='0.3')
-                                      path#check-path(d='M11.1750002,14.75 C10.9354169,14.75 10.6958335,14.6541667 10.5041669,14.4625 L8.58750019,12.5458333 C8.20416686,12.1625 8.20416686,11.5875 8.58750019,11.2041667 C8.97083352,10.8208333 9.59375019,10.8208333 9.92916686,11.2041667 L11.1750002,12.45 L14.3375002,9.2875 C14.7208335,8.90416667 15.2958335,8.90416667 15.6791669,9.2875 C16.0625002,9.67083333 16.0625002,10.2458333 15.6791669,10.6291667 L11.8458335,14.4625 C11.6541669,14.6541667 11.4145835,14.75 11.1750002,14.75 Z', fill='#000000')
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;Ubezpieczenie
-                          .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
-                      // end: Form Wizard Step 1
-                      // begin: Form Wizard Step 2
-                      .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        .kt-heading.kt-heading--md Wybierz klienta oraz firmę
-                        .kt-form__section.kt-form__section--first
-                          .kt-wizard-v1__form
-                            .form-group
-                              label Wybierz klienta
-                              select#clientsRemote.form-control.kt-select2(name='client_id')
-                                option
-                              span.form-text.text-muted.kt-font-bold.kt-font-brand Oferta zostanie przedstawiona wybranemu klientowi.
-                            .form-group
-                              label Wybierz firmę
-                              select#companiesRemote.form-control.kt-select2(name='company_id')
-                                option
-                              span.form-text.text-muted.kt-font-bold.kt-font-brand Wybierz tą firmę do której została wysłana oferta.
-                      // end: Form Wizard Step 2
-                      // begin: Form Wizard Step 3
-                      .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        #leasing_type_box
-                          .kt-heading.kt-heading--md Dane przedmiotu ofertowego
-                          .kt-form__section.kt-form__section--first
-                            .kt-wizard-v1__form
-                              .form-group
-                                label Rodzaj/typ pojazdu: 
-                                select.form-control(name='item_type_l')
-                                  option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
-                                  option(value='samochód osobowy') samochód osobowy
-                                  option(value='samochód ciężarowy') samochód ciężarowy
-                              .form-group
-                                label Marka/model pojazdu: 
-                                input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
-                              .form-group
-                                label Pojazd: 
-                                select.form-control(name='condition_l')
-                                  option(value='nowy', selected='') nowy
-                                  option(value='używany') używany
-                              .form-group
-                                label Rok produkcji: 
-                                input#pyear_l.form-control(type='text', name='pyear_l', placeholder='Rok produkcji')
-                              .form-group
-                                label Wartość netto: 
-                                input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
-                              .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
-                          .kt-heading.kt-heading--md Warianty ofertowe
-                          .kt-form__section.kt-form__section--first
-                            .kt-wizard-v1__form
-                              #leasing_variants
-                                #leasing_variants.form-group.form-group-last.row
-                                  .col-lg-12(data-repeater-list='variants')
-                                    .form-group.align-items-center(data-repeater-item='')
-                                      .row
-                                        .col-md-5
-                                          .kt-form__group--inline
-                                            .kt-form__label
-                                              label Okres umowy (w miesiącach):
-                                              input.form-control(type='number', name='contract', placeholder='Okres umowy')
-                                        .col-md-5
-                                          .kt-form__group--inline
-                                            .kt-form__label
-                                              label.kt-label.m-label--single Opłata wstępna:
-                                              input.form-control(type='number', name='inital_fee', placeholder='Opłata wstępna') 
-                                        .col-md-2.kt-margin-t-30
-                                          a.btn-sm.btn.btn-label-danger.btn-bold(href='javascript:;', data-repeater-delete='')
-                                            i.la.la-trash-o
-                                            | Usuń
-                                      .row.kt-margin-t-10
-                                        .col-md-5
-                                          .kt-form__group--inline
-                                            .kt-form__label
-                                              label.kt-label Rata leasingowa:
-                                              input.form-control(type='number', name='leasing_install', placeholder='Rata leasingowa')
-                                        |                                
-                                        .col-md-5
-                                          .kt-form__group--inline
-                                            .kt-form__label
-                                              label.kt-label.m-label--single Wykup:
-                                              input.form-control(type='number', name='repurchase', placeholder='Wykup') 
-                                        |                                
-                                      .row.kt-margin-t-10
-                                        .col-md-10
-                                          .kt-form__group--inline
-                                            .kt-form__label
-                                              label.kt-label.m-label--single Suma opłat:
-                                              input.form-control(type='number', name='sum_fee', placeholder='Suma opłat') 
-                                        |                
-                                      .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
-                                |                      
-                                .form-group.form-group-last.row
-                                  label.col-lg-2.col-form-label
-                                  |                         
-                                  .col-lg-4
-                                    a.btn.btn-bold.btn-sm.btn-label-brand(href='javascript:;', data-repeater-create='')
-                                      i.la.la-plus
-                                      | Dodaj wariant
-                        #rent_type_box(style='display:none;')
-                          .kt-heading.kt-heading--md Dane przedmiotu ofertowego
-                          .kt-form__section.kt-form__section--first
-                            .kt-wizard-v1__form
-                              .form-group
-                                label Marka/model pojazdu: 
-                                input.form-control(type='text', name='brand_r', placeholder='Marka/model pojazdu')
-                              .form-group
-                                label Typ nadwozia pojazdu: 
-                                select.form-control(name='body_type_r')
-                                  option(value='', selected='', disabled='') Wybierz typ nadwozia
-                                  option(value='SUV') SUV
-                                  option(value='coupé') coupé
-                                  option(value='fastback') fastback
-                                  option(value='hatchback') hatchback
-                                  option(value='kabriolet') kabriolet
-                                  option(value='liftback') liftback
-                                  option(value='limuzyna') limuzyna
-                                  option(value='mikrovan') mikrovan
-                                  option(value='minivan') minivan
-                                  option(value='pick-up') pick-up
-                                  option(value='roadster') roadster
-                                  option(value='sedan') sedan
-                                  option(value='van') van
-                              .form-group
-                                label Rodzaj paliwa: 
-                                select.form-control(name='fuel_type_r')
-                                  option(value='', selected='', disabled='') Wybierz rodzaj paliwa
-                                  option(value='diesel') diesel
-                                  option(value='benzyna') benzyna
-                                  option(value='benzyna/gaz') benzyna/gaz
-                                  option(value='hybryda') hybryda
-                                  option(value='elektryczny') elektryczny 
-                              .form-group
-                                label Skrzynia biegów: 
-                                select.form-control(name='gear_type_r')
-                                  option(value='', selected='', disabled='') Wybierz typ skrzyni biegów
-                                  option(value='manualna') manualna
-                                  option(value='automatyczna') automatyczna
-                              .form-group
-                                label.col-form-label.col-lg-6.col-sm-12 Wysokość raty miesięcznej:
-                                .col-lg-12.col-md-12.col-sm-12
-                                  .kt-ion-range-slider
-                                    input#month_installment(type='hidden')
-                                  .form-text.text-muted.kt-font-bold.kt-font-brand
-                                    | Kliknij suwak i modyfikuj wartości za pomocą strzałek w lewo i prawo, ta metoda pozwoli Ci na precyzyjne ustawienie wartości.
-                              .form-group
-                                label Wartość pojazdu: 
-                                input#vehicle_val_r.form-control(type='number', name='vehicle_val_r', placeholder='Wartość pojazdu')
-                              .form-group
-                                label Okres wynajmu (w miesiącach): 
-                                input#rent_time_r.form-control(type='text', name='rent_time_r', placeholder='Okres wynajmu')
-                              .form-group
-                                label Wpłata własna: 
-                                input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
-                              .form-group
-                                label Roczny limit kilometrów: 
-                                input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
-                              .form-group
-                                label.kt-margin-b-10 Pakiety w ofercie: 
-                                .kt-checkbox-inline
-                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                    input(type='checkbox', value='serwis', name='service_pack')
-                                    |  Serwis
-                                    span
-                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                    input(type='checkbox', value='wymiana opon', name='tire_pack')
-                                    |  Wymiana opon
-                                    span
-                                  label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                    input(type='checkbox', value='ubezpieczenie', name='insurance_pack')
-                                    |  Ubezpieczenie
-                                    span
-                        #insurance_type_box(style='display:none;')
-                          .kt-heading.kt-heading--md Dane przedmiotu ofertowego
-                          .kt-form__section.kt-form__section--first
-                            .kt-wizard-v1__form
-                              .form-group
-                                label Marka/model pojazdu: 
-                                input.form-control(type='text', name='brand_i', placeholder='Marka/model pojazdu')
-                              .form-group
-                                label Typ nadwozia pojazdu: 
-                                select.form-control(name='body_type_i')
-                                  option(value='', selected='', disabled='') Wybierz typ nadwozia
-                                  option(value='SUV') SUV
-                                  option(value='coupé') coupé
-                                  option(value='fastback') fastback
-                                  option(value='hatchback') hatchback
-                                  option(value='kabriolet') kabriolet
-                                  option(value='liftback') liftback
-                                  option(value='limuzyna') limuzyna
-                                  option(value='mikrovan') mikrovan
-                                  option(value='minivan') minivan
-                                  option(value='pick-up') pick-up
-                                  option(value='roadster') roadster
-                                  option(value='sedan') sedan
-                                  option(value='van') van
-                              .form-group
-                                label Rok produkcji: 
-                                input#pyear_i.form-control(type='text', name='pyear_i', placeholder='Rok produkcji')
-                              .form-group
-                                label Przebieg pojazdu: 
-                                input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
-                              .form-group
-                                label Pojemność silnika (w cm³): 
-                                input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
-                              .form-group
-                                label Numer VIN: 
-                                input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
-                              .form-group
-                                label Numer rejestracyjny: 
-                                input#reg_number.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
-                              .form-group
-                                label Wartość pojazdu netto: 
-                                input#vehicle_val_i.form-control(type='number', name='vehicle_val_i', placeholder='Wartość pojazdu netto')
-                      // end: Form Wizard Step 3
-                      // begin: Form Wizard Step 4
-                      .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        .kt-heading.kt-heading--md Załącz dokumenty
-                        .kt-form__section.kt-form__section--first
-                          .kt-wizard-v1__form
-                            .form-group
-                              .col-lg-12.col-md-12.col-sm-12
-                                #kt_dropzone_offer.dropzone.dropzone-default.dropzone-success.dz-clickable
-                                  .dropzone-msg.dz-message.needsclick
-                                    h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
-                                    span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xml)
-                                .form-text.text-muted.kt-font-bold.kt-font-brand
-                                  | Dodaj wszystkie wymagane pliki aby sfinalizować ofertę.
-                      // end: Form Wizard Step 4
-                      // begin: Form Wizard Step 5
-                      .kt-wizard-v1__content(data-ktwizard-type='step-content')
-                        .kt-heading.kt-heading--md Podsumowanie
-                        .kt-form__section.kt-form__section--first
-                          .kt-wizard-v1__review
-                            .kt-wizard-v1__review-item
-                              .kt-wizard-v1__review-title
-                                | Dane podstawowe
-                              .kt-wizard-v1__review-content
-                                p.kt-margin-b-0 Typ oferty: 
-                                  span#offer_typeP
-                                p.kt-margin-b-0 Klient: 
-                                  span#clientP
-                                p.kt-margin-b-0 Firma: 
-                                  span#companyP
-                            .kt-wizard-v1__review-item
-                              .kt-wizard-v1__review-title
-                                | Dane ofertowe
-                              .kt-wizard-v1__review-content
-                                #leasing_offer_type
-                                  p.kt-margin-b-0 Rodzaj/typ pojazdu: 
-                                    span#item_type_lP
-                                  p.kt-margin-b-0 Marka/model pojazdu: 
-                                    span#brand_lP
-                                  p.kt-margin-b-0 Pojazd: 
-                                    span#condition_lP
-                                  p.kt-margin-b-0 Rok produkcji: 
-                                    span#pyear_lP
-                                  p Wartość netto: 
-                                    span#netto_lP
-                                  .kt-wizard-v1__review-title
-                                    | Warianty
-                                  #pull_variants
-                                #rent_offer_type(style='display:none;')
-                                  p.kt-margin-b-0 Marka/model pojazdu: 
-                                    span#brand_rP
-                                  p.kt-margin-b-0 Typ nadwozia pojazdu: 
-                                    span#body_type_rP
-                                  p.kt-margin-b-0 Rodzaj paliwa: 
-                                    span#fuel_type_rP
-                                  p.kt-margin-b-0 Skrzynia biegów: 
-                                    span#gear_type_rP
-                                  p.kt-margin-b-0 Wysokość raty miesięcznej: 
-                                    span#month_install_rP
-                                  p.kt-margin-b-0 Wartość pojazdu: 
-                                    span#vehicle_val_rP
-                                  p.kt-margin-b-0 Okres wynajmu: 
-                                    span#rent_time_rP
-                                  p.kt-margin-b-0 Wpłata własna: 
-                                    span#self_deposit_rP
-                                  p.kt-margin-b-0 Roczny limit kilometrów: 
-                                    span#km_limit_rP
-                                  p.kt-margin-b-0 Pakiety w ofercie: 
-                                    span#service_packP
-                                    | ,
-                                    span#tire_packP
-                                    | ,
-                                    span#insurance_packP
-                                #insurance_offer_type(style='display:none;')
-                                  p.kt-margin-b-0 Marka/model pojazdu: 
-                                    span#brand_iP
-                                  p.kt-margin-b-0 Typ nadwozia pojazdu: 
-                                    span#body_type_iP
-                                  p.kt-margin-b-0 Rok produkcji: 
-                                    span#pyear_iP
-                                  p.kt-margin-b-0 Przebieg pojazdu: 
-                                    span#km_val_iP
-                                  p.kt-margin-b-0 Pojemność silnika: 
-                                    span#engine_cap_iP
-                                  p.kt-margin-b-0 Numer VIN: 
-                                    span#vin_numberP
-                                  p.kt-margin-b-0 Numer rejestracyjny: 
-                                    span#reg_numberP
-                                  p.kt-margin-b-0 Wartość pojazdu netto: 
-                                    span#vehicle_val_iP
-                            .kt-wizard-v1__review-item
-                              .kt-wizard-v1__review-title.kt-margin-b-10
-                                | Załączone pliki
-                              .kt-wizard-v1__review-content
-                                .kt-widget4
-                                  .kt-widget4__item
-                                    .kt-widget4__pic.kt-widget4__pic--icon
-                                      img(src='./assets/media/files/doc.svg', alt='')
-                                    a.kt-widget4__title(href='#')
-                                      | instrukcja_dzialania.docx
-                                    .kt-widget4__tools
-                                      a.btn.btn-clean.btn-icon.btn-sm(href='#')
-                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
-                                  .kt-widget4__item
-                                    .kt-widget4__pic.kt-widget4__pic--icon
-                                      img(src='./assets/media/files/pdf.svg', alt='')
-                                    a.kt-widget4__title(href='#')
-                                      | oferta_494_BNP_5032P.pdf
-                                    .kt-widget4__tools
-                                      a.btn.btn-clean.btn-icon.btn-sm(href='#')
-                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
-                                  .kt-widget4__item
-                                    .kt-widget4__pic.kt-widget4__pic--icon
-                                      img(src='./assets/media/files/pdf.svg', alt='')
-                                    | &#x9;&#x9;&#x9;&#x9;
-                                    a.kt-widget4__title(href='#')
-                                      | umowa_nr93203.pdf
-                                    .kt-widget4__tools
-                                      a.btn.btn-clean.btn-icon.btn-sm(href='javascript:;')
-                                        i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
-                      #debug_op
-                      // end: Form Wizard Step 5
-                      // begin: Form Actions
-                      .kt-form__actions
-                        button.btn.btn-secondary.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-prev')
-                          | Powrót
-                        button.btn.btn-warning.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='add-submit', data-ktwizard-type='action-submit') 
-                          | Dodaj ofertę
-                        | &nbsp;
-                        button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='addendsend-submit', data-ktwizard-type='action-submit', data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="Opcja chwilowo niedostępna")
-                          | Dodaj i wyślij ofertę
-                        button.btn.btn-brand.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-next')
-                          | Dalej
-                      // end: Form Actions
-                    // end: Form Wizard Form
+                            | &#x9;&#x9;&#x9;&#x9;&#x9;Leasing
+                        p.form__answer
+                          input#match_2(type='radio', name='offer_type', value='rent')
+                          |  
+                          | &#x9;&#x9;&#x9;&#x9;
+                          label(for='match_2')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Mask(d='M12,22 C7.02943725,22 3,17.9705627 3,13 C3,8.02943725 7.02943725,4 12,4 C16.9705627,4 21,8.02943725 21,13 C21,17.9705627 16.9705627,22 12,22 Z', fill='#000000', opacity='0.3')
+                                path#Path-107(d='M11.9630156,7.5 L12.0475062,7.5 C12.3043819,7.5 12.5194647,7.69464724 12.5450248,7.95024814 L13,12.5 L16.2480695,14.3560397 C16.403857,14.4450611 16.5,14.6107328 16.5,14.7901613 L16.5,15 C16.5,15.2109164 16.3290185,15.3818979 16.1181021,15.3818979 C16.0841582,15.3818979 16.0503659,15.3773725 16.0176181,15.3684413 L11.3986612,14.1087258 C11.1672824,14.0456225 11.0132986,13.8271186 11.0316926,13.5879956 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z', fill='#000000')
+                            | &#x9;&#x9;&#x9;&#x9;&#x9;Wynajem
+                        p.form__answer
+                          input#match_3(type='radio', name='offer_type', value='insurance')
+                          |  
+                          | &#x9;&#x9;&#x9;&#x9;
+                          label(for='match_3')
+                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                rect#bound(x='0', y='0', width='24', height='24')
+                                path#Path-50(d='M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z', fill='#000000', opacity='0.3')
+                                path#check-path(d='M11.1750002,14.75 C10.9354169,14.75 10.6958335,14.6541667 10.5041669,14.4625 L8.58750019,12.5458333 C8.20416686,12.1625 8.20416686,11.5875 8.58750019,11.2041667 C8.97083352,10.8208333 9.59375019,10.8208333 9.92916686,11.2041667 L11.1750002,12.45 L14.3375002,9.2875 C14.7208335,8.90416667 15.2958335,8.90416667 15.6791669,9.2875 C16.0625002,9.67083333 16.0625002,10.2458333 15.6791669,10.6291667 L11.8458335,14.4625 C11.6541669,14.6541667 11.4145835,14.75 11.1750002,14.75 Z', fill='#000000')
+                            | &#x9;&#x9;&#x9;&#x9;&#x9;Ubezpieczenie
+                    .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
+                // end: Form Wizard Step 1
+                // begin: Form Wizard Step 2
+                .kt-wizard-v1__content(data-ktwizard-type='step-content')
+                  .kt-heading.kt-heading--md Wybierz klienta oraz firmę
+                  .kt-form__section.kt-form__section--first
+                    .kt-wizard-v1__form
+                      .form-group
+                        label Wybierz klienta
+                        select#clientsRemote.form-control.kt-select2(name='client_id')
+                          option
+                        span.form-text.text-muted.kt-font-bold.kt-font-brand Oferta zostanie przedstawiona wybranemu klientowi.
+                      .form-group
+                        label Wybierz firmę
+                        select#companiesRemote.form-control.kt-select2(name='company_id')
+                          option
+                        span.form-text.text-muted.kt-font-bold.kt-font-brand Wybierz tą firmę do której została wysłana oferta.
+                // end: Form Wizard Step 2
+                // begin: Form Wizard Step 3
+                .kt-wizard-v1__content(data-ktwizard-type='step-content')
+                  #leasing_type_box
+                    .kt-heading.kt-heading--md Dane przedmiotu ofertowego
+                    .kt-form__section.kt-form__section--first
+                      .kt-wizard-v1__form
+                        .form-group
+                          label Rodzaj/typ pojazdu: 
+                          select.form-control(name='item_type_l')
+                            option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
+                            option(value='samochód osobowy') samochód osobowy
+                            option(value='samochód ciężarowy') samochód ciężarowy
+                        .form-group
+                          label Marka/model pojazdu: 
+                          input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
+                        .form-group
+                          label Pojazd: 
+                          select.form-control(name='condition_l')
+                            option(value='nowy', selected='') nowy
+                            option(value='używany') używany
+                        .form-group
+                          label Rok produkcji: 
+                          input#pyear_l.form-control(type='text', name='pyear_l', placeholder='Rok produkcji')
+                        .form-group
+                          label Wartość netto: 
+                          input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
+                        .form-group
+                          label Faktura: 
+                          select.form-control(name='invoice_l')
+                            option(value='', selected='', disabled='') Wybierz rodzaj faktury
+                            option(value='VAT') VAT
+                            option(value='VAT marża') VAT marża
+                        .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
+                    .kt-heading.kt-heading--md Warianty ofertowe
+                    .kt-form__section.kt-form__section--first
+                      .kt-wizard-v1__form
+                        #leasing_variants
+                          #leasing_variants.form-group.form-group-last.row
+                            .col-lg-12(data-repeater-list='variant')
+                              .form-group.align-items-center(data-repeater-item='')
+                                .row
+                                  .col-md-5
+                                    .kt-form__group--inline
+                                      .kt-form__label
+                                        label Okres umowy (w miesiącach):
+                                        input.form-control(type='number', name='contract', placeholder='Okres umowy')
+                                  .col-md-5
+                                    .kt-form__group--inline
+                                      .kt-form__label
+                                        label.kt-label.m-label--single Opłata wstępna:
+                                        input.form-control(type='number', name='inital', placeholder='Opłata wstępna') 
+                                  .col-md-2.kt-margin-t-30
+                                    a.btn-sm.btn.btn-label-danger.btn-bold(href='javascript:;', data-repeater-delete='')
+                                      i.la.la-trash-o
+                                      | Usuń
+                                .row.kt-margin-t-10
+                                  .col-md-5
+                                    .kt-form__group--inline
+                                      .kt-form__label
+                                        label.kt-label Rata leasingowa:
+                                        input.form-control(type='number', name='leasing_install', placeholder='Rata leasingowa')
+                                  |                                
+                                  .col-md-5
+                                    .kt-form__group--inline
+                                      .kt-form__label
+                                        label.kt-label.m-label--single Wykup (%):
+                                        input.form-control(type='number', name='repurchase', placeholder='Wykup') 
+                                  |                                
+                                .row.kt-margin-t-10
+                                  .col-md-10
+                                    .kt-form__group--inline
+                                      .kt-form__label
+                                        label.kt-label.m-label--single Suma opłat:
+                                        input.form-control(type='number', name='sum_fee', placeholder='Suma opłat') 
+                                  |                
+                                .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
+                          |                      
+                          .form-group.form-group-last.row
+                            label.col-lg-2.col-form-label
+                            |                         
+                            .col-lg-4
+                              a.btn.btn-bold.btn-sm.btn-label-brand(href='javascript:;', data-repeater-create='')
+                                i.la.la-plus
+                                | Dodaj wariant
+                  #rent_type_box(style='display:none;')
+                    .kt-heading.kt-heading--md Dane przedmiotu ofertowego
+                    .kt-form__section.kt-form__section--first
+                      .kt-wizard-v1__form
+                        .form-group
+                          label Marka/model pojazdu: 
+                          input.form-control(type='text', name='brand_r', placeholder='Marka/model pojazdu')
+                        .form-group
+                          label Typ nadwozia pojazdu: 
+                          select.form-control(name='body_type_r')
+                            option(value='', selected='', disabled='') Wybierz typ nadwozia
+                            option(value='SUV') SUV
+                            option(value='coupé') coupé
+                            option(value='fastback') fastback
+                            option(value='hatchback') hatchback
+                            option(value='kabriolet') kabriolet
+                            option(value='liftback') liftback
+                            option(value='limuzyna') limuzyna
+                            option(value='mikrovan') mikrovan
+                            option(value='minivan') minivan
+                            option(value='pick-up') pick-up
+                            option(value='roadster') roadster
+                            option(value='sedan') sedan
+                            option(value='van') van
+                        .form-group
+                          label Rodzaj paliwa: 
+                          select.form-control(name='fuel_type_r')
+                            option(value='', selected='', disabled='') Wybierz rodzaj paliwa
+                            option(value='diesel') diesel
+                            option(value='benzyna') benzyna
+                            option(value='benzyna/gaz') benzyna/gaz
+                            option(value='hybryda') hybryda
+                            option(value='elektryczny') elektryczny 
+                        .form-group
+                          label Skrzynia biegów: 
+                          select.form-control(name='gear_type_r')
+                            option(value='', selected='', disabled='') Wybierz typ skrzyni biegów
+                            option(value='manualna') manualna
+                            option(value='automatyczna') automatyczna
+                        .form-group
+                          label.col-form-label.col-lg-6.col-sm-12 Wysokość raty miesięcznej:
+                          .col-lg-12.col-md-12.col-sm-12
+                            .kt-ion-range-slider
+                              input#month_installment(type='hidden', name='installment_val')
+                            .form-text.text-muted.kt-font-bold.kt-font-brand
+                              | Kliknij suwak i modyfikuj wartości za pomocą strzałek w lewo i prawo, ta metoda pozwoli Ci na precyzyjne ustawienie wartości.
+                        .form-group
+                          label Wartość pojazdu netto: 
+                          input#vehicle_val_r.form-control(type='number', name='vehicle_val_r', placeholder='Wartość pojazdu')
+                        .form-group
+                          label Okres wynajmu (w miesiącach): 
+                          input#rent_time_r.form-control(type='text', name='rent_time_r', placeholder='Okres wynajmu')
+                        .form-group
+                          label Wpłata własna: 
+                          input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
+                        .form-group
+                          label Roczny limit kilometrów: 
+                          input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
+                        .form-group
+                          label Faktura: 
+                          select.form-control(name='invoice_r')
+                            option(value='', selected='', disabled='') Wybierz rodzaj faktury
+                            option(value='VAT') VAT
+                            option(value='VAT marża') VAT marża
+                        .form-group
+                          label.kt-margin-b-10 Pakiety w ofercie: 
+                          .kt-checkbox-inline
+                            label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                              input(type='checkbox', value='serwis', name='service_pack')
+                              |  Serwis
+                              span
+                            label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                              input(type='checkbox', value='wymiana opon', name='tire_pack')
+                              |  Wymiana opon
+                              span
+                            label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                              input(type='checkbox', value='ubezpieczenie', name='insurance_pack')
+                              |  Ubezpieczenie
+                              span
+                  #insurance_type_box(style='display:none;')
+                    .kt-heading.kt-heading--md Dane przedmiotu ofertowego
+                    .kt-form__section.kt-form__section--first
+                      .kt-wizard-v1__form
+                        .form-group
+                          label Marka/model pojazdu: 
+                          input.form-control(type='text', name='brand_i', placeholder='Marka/model pojazdu')
+                        .form-group
+                          label Wersja pojazdu: 
+                          input.form-control(type='text', name='version_i', placeholder='Wersja pojazdu')
+                        .form-group
+                          label Typ nadwozia pojazdu: 
+                          select.form-control(name='body_type_i')
+                            option(value='', selected='', disabled='') Wybierz typ nadwozia
+                            option(value='SUV') SUV
+                            option(value='coupé') coupé
+                            option(value='fastback') fastback
+                            option(value='hatchback') hatchback
+                            option(value='kabriolet') kabriolet
+                            option(value='liftback') liftback
+                            option(value='limuzyna') limuzyna
+                            option(value='mikrovan') mikrovan
+                            option(value='minivan') minivan
+                            option(value='pick-up') pick-up
+                            option(value='roadster') roadster
+                            option(value='sedan') sedan
+                            option(value='van') van
+                        .form-group
+                          label Rok produkcji: 
+                          input#pyear_i.form-control(type='text', name='pyear_i', placeholder='Rok produkcji')
+                        .form-group
+                          label Przebieg pojazdu: 
+                          input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
+                        .form-group
+                          label Pojemność silnika (w cm³): 
+                          input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
+                        .form-group
+                          label Moc silnika (w km): 
+                          input#power_cap_i.form-control(type='text', name='power_cap_i', placeholder='Moc silnika')
+                        .form-group
+                          label Numer VIN: 
+                          input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
+                        .form-group
+                          label Numer rejestracyjny: 
+                          input#reg_number.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
+                        .form-group
+                          label Wartość pojazdu netto: 
+                          input#vehicle_val_i.form-control(type='number', name='vehicle_val_i', placeholder='Wartość pojazdu netto')
+                        .form-group
+                          label Koszt ubezpieczenia: 
+                          input.form-control(type='number', name='insurance_cost', placeholder='Koszt ubezpieczenia')
+                // end: Form Wizard Step 3
+                // begin: Form Wizard Step 4
+                .kt-wizard-v1__content(data-ktwizard-type='step-content')
+                  .kt-heading.kt-heading--md Załącz dokumenty
+                  .kt-form__section.kt-form__section--first
+                    .kt-wizard-v1__form
+                      .form-group
+                        .col-lg-12.col-md-12.col-sm-12
+                          #kt_dropzone_offer.dropzone.dropzone-default.dropzone-success.dz-clickable
+                            .dropzone-msg.dz-message.needsclick
+                              h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
+                              span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xml)
+                          .form-text.text-muted.kt-font-bold.kt-font-brand
+                            | Dodaj wszystkie wymagane pliki aby sfinalizować ofertę.
+                // end: Form Wizard Step 4
+                // begin: Form Wizard Step 5
+                .kt-wizard-v1__content(data-ktwizard-type='step-content')
+                  .kt-heading.kt-heading--md Podsumowanie
+                  .kt-form__section.kt-form__section--first
+                    .kt-wizard-v1__review
+                      .kt-wizard-v1__review-item
+                        .kt-wizard-v1__review-title
+                          | Dane podstawowe
+                        .kt-wizard-v1__review-content
+                          p.kt-margin-b-0 Typ oferty: 
+                            span#offer_typeP
+                          p.kt-margin-b-0 Klient: 
+                            span#clientP
+                          p.kt-margin-b-0 Firma: 
+                            span#companyP
+                      .kt-wizard-v1__review-item
+                        .kt-wizard-v1__review-title
+                          | Dane ofertowe
+                        .kt-wizard-v1__review-content
+                          #leasing_offer_type
+                            p.kt-margin-b-0 Rodzaj/typ pojazdu: 
+                              span#item_type_lP
+                            p.kt-margin-b-0 Marka/model pojazdu: 
+                              span#brand_lP
+                            p.kt-margin-b-0 Pojazd: 
+                              span#condition_lP
+                            p.kt-margin-b-0 Rok produkcji: 
+                              span#pyear_lP
+                            p.kt-margin-b-0 Wartość netto: 
+                              span#netto_lP
+                            p Rodzaj faktury: 
+                              span#invoice_lP
+                            .kt-wizard-v1__review-title
+                              | Warianty
+                            #pull_variants
+                          #rent_offer_type(style='display:none;')
+                            p.kt-margin-b-0 Marka/model pojazdu: 
+                              span#brand_rP
+                            p.kt-margin-b-0 Typ nadwozia pojazdu: 
+                              span#body_type_rP
+                            p.kt-margin-b-0 Rodzaj paliwa: 
+                              span#fuel_type_rP
+                            p.kt-margin-b-0 Skrzynia biegów: 
+                              span#gear_type_rP
+                            p.kt-margin-b-0 Wysokość raty miesięcznej: 
+                              span#month_install_rP
+                            p.kt-margin-b-0 Wartość pojazdu: 
+                              span#vehicle_val_rP
+                            p.kt-margin-b-0 Okres wynajmu: 
+                              span#rent_time_rP
+                            p.kt-margin-b-0 Wpłata własna: 
+                              span#self_deposit_rP
+                            p.kt-margin-b-0 Roczny limit kilometrów: 
+                              span#km_limit_rP
+                            p.kt-margin-b-0 Rodzaj faktury: 
+                              span#invoice_rP
+                            p.kt-margin-b-0 Pakiety w ofercie: 
+                              span#service_packP
+                              | ,
+                              span#tire_packP
+                              | ,
+                              span#insurance_packP
+                          #insurance_offer_type(style='display:none;')
+                            p.kt-margin-b-0 Marka/model pojazdu: 
+                              span#brand_iP
+                            p.kt-margin-b-0 Wersja pojazdu: 
+                              span#version_iP
+                            p.kt-margin-b-0 Typ nadwozia pojazdu: 
+                              span#body_type_iP
+                            p.kt-margin-b-0 Rok produkcji: 
+                              span#pyear_iP
+                            p.kt-margin-b-0 Przebieg pojazdu: 
+                              span#km_val_iP
+                            p.kt-margin-b-0 Pojemność silnika: 
+                              span#engine_cap_iP
+                            p.kt-margin-b-0 Moc silnika: 
+                              span#power_cap_iP
+                            p.kt-margin-b-0 Numer VIN: 
+                              span#vin_numberP
+                            p.kt-margin-b-0 Numer rejestracyjny: 
+                              span#reg_numberP
+                            p.kt-margin-b-0 Wartość pojazdu netto: 
+                              span#vehicle_val_iP
+                            p Koszt ubezpieczenia: 
+                              span#insurance_costP
+                      .kt-wizard-v1__review-item
+                        .kt-wizard-v1__review-title.kt-margin-b-10
+                          | Załączone pliki
+                        .kt-wizard-v1__review-content
+                          .kt-widget4
+                            .kt-widget4__item
+                              .kt-widget4__pic.kt-widget4__pic--icon
+                                img(src='./assets/media/files/doc.svg', alt='')
+                              a.kt-widget4__title(href='#')
+                                | instrukcja_dzialania.docx
+                              .kt-widget4__tools
+                                a.btn.btn-clean.btn-icon.btn-sm(href='#')
+                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                            .kt-widget4__item
+                              .kt-widget4__pic.kt-widget4__pic--icon
+                                img(src='./assets/media/files/pdf.svg', alt='')
+                              a.kt-widget4__title(href='#')
+                                | oferta_494_BNP_5032P.pdf
+                              .kt-widget4__tools
+                                a.btn.btn-clean.btn-icon.btn-sm(href='#')
+                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                            .kt-widget4__item
+                              .kt-widget4__pic.kt-widget4__pic--icon
+                                img(src='./assets/media/files/pdf.svg', alt='')
+                              | &#x9;&#x9;&#x9;&#x9;
+                              a.kt-widget4__title(href='#')
+                                | umowa_nr93203.pdf
+                              .kt-widget4__tools
+                                a.btn.btn-clean.btn-icon.btn-sm(href='javascript:;')
+                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                      .kt-heading.kt-heading--md Prowizje
+                      .kt-form__section.kt-form__section--first
+                        .kt-wizard-v1__review
+                          .kt-wizard-v1__review-item
+                            .kt-wizard-v1__review-title.kt-margin-b-10
+                              | Twoja prognozowana prowizja
+                            h2.kt-font-dark#provision
+                // end: Form Wizard Step 5
+                // begin: Form Actions
+                .kt-form__actions
+                  button.btn.btn-secondary.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-prev')
+                    | Powrót
+                  button.btn.btn-warning.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='add-submit', data-ktwizard-type='action-submit') 
+                    | Dodaj ofertę
+                  | &nbsp;
+                  button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='addendsend-submit', data-ktwizard-type='action-submit', data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="Opcja chwilowo niedostępna")
+                    | Dodaj i wyślij ofertę
+                  button.btn.btn-brand.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-next')
+                    | Dalej
+                // end: Form Actions
+              // end: Form Wizard Form
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
   script(src='./assets/vendors/general/ion-rangeslider/js/ion.rangeSlider.js', type='text/javascript')

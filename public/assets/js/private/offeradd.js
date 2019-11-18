@@ -65,7 +65,7 @@ var KTWizardOfferAdd = function () {
 					$('#leasing_offer_type').hide();
 					$('#rent_offer_type').show();
 					$('#insurance_offer_type').hide();
-					$('#offer_typeP').html('wypożyczenie');
+					$('#offer_typeP').html('wynajem');
 				}
 				else if(offerType == 'insurance') {
 					$('#leasing_offer_type').hide();
@@ -86,16 +86,17 @@ var KTWizardOfferAdd = function () {
 
 				// Typ - leasing
 				if(offerType == 'leasing') {
-					$('#item_type_lP').html($('input[name="item_type_l"]').val()); // Rodzaj pojazdu
+					$('#item_type_lP').html($('select[name="item_type_l"] option:selected').text()); // Rodzaj pojazdu
 					$('#brand_lP').html($('input[name="brand_l"]').val()); // Marka i model
-					$('#condition_lP').html($('input[name="condition_l"]').val()); // Stan
+					$('#condition_lP').html($('select[name="condition_l"] option:selected').text()); // Stan
 					$('#pyear_lP').html($('input[name="pyear_l"]').val()); // Rok produkcji
 					$('#netto_lP').html($('input[name="netto_l"]').val() + ' PLN'); // Wartość netto pojazdu
+					$('#invoice_lP').html($('select[name="invoice_l"] option:selected').text()); // Faktura
 
 					// Warianty
 					var contract = [], inital_fee = [], leasing_install = [], repurchase = [], sum_fee = [];
 					$('input[name*="contract"]').each(function() { contract.push($(this).val()) });
-					$('input[name*="inital_fee"]').each(function() { inital_fee.push($(this).val()) });
+					$('input[name*="inital"]').each(function() { inital_fee.push($(this).val()) });
 					$('input[name*="leasing_install"]').each(function() { leasing_install.push($(this).val()) });
 					$('input[name*="repurchase"]').each(function() { repurchase.push($(this).val()) });
 					$('input[name*="sum_fee"]').each(function() { sum_fee.push($(this).val()) });
@@ -103,8 +104,14 @@ var KTWizardOfferAdd = function () {
 					$('#pull_variants').html('');
 
 					for(var i = 0; i < contract.length; i++) {
-						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Opłata wstępna: ' + inital_fee[i] + ' PLN</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup: ' + repurchase[i] + ' PLN</p><p class="kt-margin-b-0">Suma opłat: ' + sum_fee[i] + ' PLN</p></br>');
+						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Opłata wstępna: ' + inital_fee[i] + ' PLN</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p><p class="kt-margin-b-0">Suma opłat: ' + sum_fee[i] + ' PLN</p></br>');
 					}
+
+					var netto_val = parseFloat($('input[name="netto_l"]').val());
+					var provision = (netto_val*0.015); // globalna prowizja 1.5%
+					provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
+					provision = Math.round((provision*0.45)*100)/100; // 45% dla pośrednika
+					$('#provision').html(provision + ' PLN');
 				}
 
 				// Typ - wypożyczenie
@@ -119,20 +126,34 @@ var KTWizardOfferAdd = function () {
 					$('#rent_time_rP').html($('input[name="rent_time_r"]').val()); // Okres wynajmu
 					$('#self_deposit_rP').html($('input[name="self_deposit_r"]').val() + ' PLN'); // Wpłata własna
 					$('#km_limit_rP').html($('input[name="km_limit_r"]').val()); // Limit kilometrów
+					$('#invoice_rP').html($('select[name="invoice_r"] option:selected').text());
 					if($('input[name="service_pack"]:checked')) $('#service_packP').html($('input[name="service_pack"]:checked').val());
 					if($('input[name="tire_pack"]:checked')) $('#tire_packP').html($('input[name="tire_pack"]:checked').val());
 					if($('input[name="insurance_pack"]:checked')) $('#insurance_packP').html($('input[name="insurance_pack"]:checked').val());
+
+					var netto_val = parseFloat($('input[name="vehicle_val_r"]').val());
+					var provision = (netto_val*0.015); // globalna prowizja 1.5%
+					provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
+					provision = Math.round((provision*0.45)*100)/100; // 45% dla pośrednika
+					$('#provision').html(provision + ' PLN');
 				}
 
 				if(offerType == 'insurance') {
 					$('#brand_iP').html($('input[name="brand_i"]').val()); // Marka i model
 					$('#body_type_iP').html($('select[name="body_type_i"] option:selected').text()); // Nadwozie
+					$('#version_iP').html($('input[name="version_i"]').val()); // Wersja pojazdu
 					$('#pyear_iP').html($('input[name="pyear_i"]').val()); // Rok produkcji
 					$('#km_val_iP').html($('input[name="km_val_i"]').val()); // Przebieg pojazdu
 					$('#engine_cap_iP').html($('input[name="engine_cap_i"]').val()); // Pojemność
+					$('#power_cap_iP').html($('input[name="power_cap_i"]').val()); // Moc
 					$('#vin_numberP').html($('input[name="vin_number"]').val()); // Numer VIN
 					$('#reg_numberP').html($('input[name="reg_number"]').val()); // Numer rejestracyjny
 					$('#vehicle_val_iP').html($('input[name="vehicle_val_i"]').val() + ' PLN'); // Wartość netto
+					$('#insurance_costP').html($('input[name="insurance_cost"]').val() + ' PLN'); // Koszt ubezp.
+
+					var netto_val = parseFloat($('input[name="insurance_cost"]').val());
+					var provision = Math.round((netto_val*0.06)*100)/100; // 6% dla pośrednika
+					$('#provision').html(provision + ' PLN');
 				}
 			}
 		});
@@ -145,6 +166,7 @@ var KTWizardOfferAdd = function () {
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
 		$("#rent_time_r").inputmask('99 miesięcy');
 		$("#km_limit_r").inputmask('999999 km', { numericInput: true, placeholder: "" });
+		$("#power_cap_i").inputmask('999 km', { numericInput: true, placeholder: "" });
 
 		$('#vin_number').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
@@ -184,8 +206,10 @@ var KTWizardOfferAdd = function () {
 					required: true
 				},
 				netto_l: {
-					required: true,
-					digits: true
+					required: true
+				},
+				invoice_l: {
+					required: true
 				},
 				// Typ - Wypożyczenie
 				brand_r: {
@@ -214,6 +238,9 @@ var KTWizardOfferAdd = function () {
 				km_limit_r: {
 					required: true
 				},
+				invoice_r: {
+					required: true
+				},
 				// Typ - ubezpieczenie
 				brand_i: {
 					required: true
@@ -233,6 +260,9 @@ var KTWizardOfferAdd = function () {
 				engine_cap_i: {
 					required: true
 				},
+				power_cap_i: {
+					required: true
+				},
 				vin_number: {
 					required: true,
 					minlength: 17,
@@ -242,8 +272,10 @@ var KTWizardOfferAdd = function () {
 					required: true
 				},
 				vehicle_val_i: {
-					required: true,
-					digits: true
+					required: true
+				},
+				insurance_cost: {
+					required: true
 				}
 			},
 			messages: {
@@ -266,8 +298,10 @@ var KTWizardOfferAdd = function () {
 					required: 'To pole jest wymagane.'
 				},
 				netto_l: {
-					required: 'To pole jest wymagane.',
-					digits: 'To pole może zawierać jedynie cyfry.'
+					required: 'To pole jest wymagane.'
+				},
+				invoice_l: {
+					required: 'To pole jest wymagane.'
 				},
 				brand_r: {
 					required: 'To pole jest wymagane.'
@@ -295,6 +329,9 @@ var KTWizardOfferAdd = function () {
 				km_limit_r: {
 					required: 'To pole jest wymagane.'
 				},
+				invoice_r: {
+					required: 'To pole jest wymagane.'
+				},
 				brand_i: {
 					required: 'To pole jest wymagane.'
 				},
@@ -313,6 +350,9 @@ var KTWizardOfferAdd = function () {
 				engine_cap_i: {
 					required: 'To pole jest wymagane.'
 				},
+				power_cap_i: {
+					required: 'To pole jest wymagane.'
+				},
 				vin_number: {
 					required: 'To pole jest wymagane.',
 					minlength: 'Numer VIN musi składać się z {0} znaków.',
@@ -322,8 +362,10 @@ var KTWizardOfferAdd = function () {
 					required: 'To pole jest wymagane.'
 				},
 				vehicle_val_i: {
-					required: 'To pole jest wymagane.',
-					digits: 'To pole może zawierać jedynie cyfry.'
+					required: 'To pole jest wymagane.'
+				},
+				insurance_cost: {
+					required: 'To pole jest wymagane.'
 				}
 			},
 
@@ -368,21 +410,26 @@ var KTWizardOfferAdd = function () {
 
 				// See: http://malsup.com/jquery/form/#ajaxSubmit
 				setTimeout(function() {
-					$('#debug_op').html('<pre>' + JSON.stringify(formEl.serializeObject(),null,2) + '</pre>');
 					formEl.ajaxSubmit({
+						url: '/rest/offer/insert',
 						method: 'POST',
 						data: formEl.serialize(),
 						clearForm: true,
-						success: function() {
+						success: function(res) {
 							KTApp.unprogress(btn);
 							//KTApp.unblock(formEl);
-
-							swal.fire({
-								"title": "",
-								"text": "The application has been successfully submitted!",
-								"type": "success",
-								"confirmButtonClass": "btn btn-secondary"
-							});
+							if(res.status == 'success') {
+								swal.fire({
+									"title": "",
+									"text": res.message,
+									"type": "success",
+									"confirmButtonClass": "btn btn-secondary"
+								});
+								wizard.goTo(1, true);
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
+								wizard.goTo(1, true);
+							}
 						},
             error: function(err) {
               KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');

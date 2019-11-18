@@ -164,8 +164,8 @@ var KTROfferListDatatable = function() {
 									modalEl.find('#pyearInput').html(res.pyear);
 									modalEl.find('#nettoInput').html(res.netto + ' PLN');
 									modalEl.find('#instalmentsInput').html(res.instalments);
-									modalEl.find('#cbInput').html(res.contribution + '%');
-									modalEl.find('#rvInput').html(res.red_value + ' PLN');
+									modalEl.find('#cbInput').html(res.contribution + ' PLN');
+									modalEl.find('#rvInput').html(res.red_value + '%');
 									if(res.attentions != null) modalEl.find('#attentInput').html(res.attentions);
 									else modalEl.find('#attentInput').html('Brak');
 									if(res.other != null) modalEl.find('#otherInput').html(res.other);

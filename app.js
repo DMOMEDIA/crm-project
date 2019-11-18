@@ -16,8 +16,13 @@ const restapi = require('./routes/restapi');
 const errorsHandler = require('./middlewares/errors');
 const ExpireSession = require('./controllers/ExpireSession');
 const LoginController = require('./controllers/LoginController');
+const Cron = require('./controllers/Cron');
 
 const app = express();
+
+// CronTab events
+Cron.ScheduleEveryDay();
+//
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

@@ -37,7 +37,12 @@ router.post('/rest/notification/unread', REST.notificationSetUnread);
 // {REST} Oferty
 router.post('/rest/offerlist', REST.loadOfferlist);
 router.post('/rest/offer/get', REST.getOfferById);
+router.post('/rest/offer/insert', REST.insertOffer);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
+
+// {REST} Firmy
+router.post('/rest/company/list', REST.loadCompanylist);
+router.post('/rest/company/add', REST.addCompany);
 
 module.exports = router;

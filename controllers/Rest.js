@@ -3,8 +3,10 @@ const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
 const Offer = require('../models/offers');
+const Company = require('../models/companies');
 const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
+const System = require('../models/system');
 const async = require('async');
 
 // String truncate
@@ -209,6 +211,7 @@ exports.addClient = (req, res) => {
             user_id: req.body.param
           }).then(function() {
             Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
+            System.createLog('create_client_log', 'Klient ' + clientname.trunc(25) + ' został utworzony (USER=' + req.session.userData.id + ').');
           });
         }
 
@@ -333,7 +336,7 @@ exports.loadOfferlist = (req, res) => {
   var output = {};
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.show')) {
-      Offer.getOffers(function(result, nums) {
+      Offer.getOffers(req, function(result, nums) {
         output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
         output['data'] = result;
         res.json(result);
@@ -371,6 +374,42 @@ exports.getOfferById = (req, res) => {
         Offer.getOfferById(req.body.id, req.body.type, function(result) {
           res.json(result);
         });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.insertOffer = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.add')) {
+      if(req.body != null) {
+        Offer.createOffer(req);
+        res.json(Messages.message('added_new_offer'));
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+// Firmy
+
+exports.loadCompanylist = (req, res) => {
+  var output = {};
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.companies.show')) {
+      Company.getCompanyList(function(result, nums) {
+        output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+        output['data'] = result;
+        res.json(result);
+      });
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.addCompany = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.companies.add')) {
+      if(req.body != null) {
+        Company.addNewCompany(req.body, result => { res.json(result) });
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));

@@ -89,7 +89,7 @@ var KTOfferListDatatable = function() {
 				title: "Typ oferty",
 				template: function(row) {
 					var output = null;
-					if(row.offer_type == 'rent') output = 'wypożyczenie';
+					if(row.offer_type == 'rent') output = 'wynajem';
 					else if(row.offer_type == 'insurance') output = 'ubezpieczenie';
 					else output = 'leasing';
 					return '<span class="kt-badge kt-badge--dark kt-badge--inline kt-badge--pill">' + output + '</span>';
@@ -155,13 +155,15 @@ var KTOfferListDatatable = function() {
 										2: {'title': 'Zrealizowana', 'class': ' kt-badge--success'},
 									};
 									var offer_type = {
-										'rent': 'wypożyczenie',
+										'rent': 'wynajem',
 										'insurance': 'ubezpieczenie',
 										'leasing': 'leasing'
 									};
 									//
 									modalEl.find('#idInput1').val(res.id);
+									modalEl.find('#idInput3').val(res.id);
 									modalEl.find('#typeInput1').val(res.offer_type);
+									modalEl.find('#typeInput3').val(res.offer_type);
                 	modalEl.find('#modalTitle').html('00' + res.id + '/' + res.offer_type.charAt(0).toUpperCase() + '/' + date + ' - Klient: ' + res.client.fullname);
 									modalEl.find('#offer_status').addClass(status[res.state].class).html(status[res.state].title);
 									modalEl.find('#offer_date').html(moment(res.created_at).local().format('YYYY-MM-DD HH:mm'));
@@ -198,6 +200,7 @@ var KTOfferListDatatable = function() {
 										modalEl.find('select[name="condition_l"] option[value="' + res.condititon + '"]').prop('selected', true);
 										modalEl.find('input[name="pyear_l"]').val(res.production_year);
 										modalEl.find('input[name="netto_l"]').val(res.netto);
+										modalEl.find('select[name="invoice_l"] option[value="' + res.invoice + '"]').prop('selected', true);
 
 										modalEl.find('input[name="vid"]').val(res.variants.id);
 										modalEl.find('input[name="contract"]').val(res.variants.okres);
@@ -210,7 +213,7 @@ var KTOfferListDatatable = function() {
 										$('#rent_type_box').show();
 										$('#insurance_type_box').hide();
 										//
-										var value_installment = res.rata.split(',');
+										var value_installment = res.rata.split(';');
 										modalEl.find('input[name="brand_r"]').val(res.marka_model);
 										modalEl.find('select[name="body_type_r"] option[value="' + res.typ + '"]').prop('selected', true);
 										modalEl.find('select[name="fuel_type_r"] option[value="' + res.fuel_type + '"]').prop('selected', true);
@@ -232,15 +235,27 @@ var KTOfferListDatatable = function() {
 													slider_max = data.to;
 												}
 										});
-										modalEl.find('input[name="vehicle_val_r"]').val(res.brutto);
+										modalEl.find('input[name="vehicle_val_r"]').val(res.netto);
 										modalEl.find('input[name="rent_time_r"]').val(res.okres);
 										modalEl.find('input[name="self_deposit_r"]').val(res.wplata);
 										modalEl.find('input[name="km_limit_r"]').val(res.limit);
+										modalEl.find('select[name="invoice_r"] option[value="' + res.invoice + '"]').prop('selected', true);
 									} else {
 										$('#leasing_type_box').hide();
 										$('#rent_type_box').hide();
 										$('#insurance_type_box').show();
 										//
+										modalEl.find('input[name="brand_i"]').val(res.marka_model);
+										modalEl.find('input[name="version_i"]').val(res.wersja);
+										modalEl.find('select[name="body_type_i"] option[value="' + res.typ + '"]').prop('selected', true);
+										modalEl.find('input[name="pyear_i"]').val(res.rok_produkcji);
+										modalEl.find('input[name="km_val_i"]').val(res.przebieg);
+										modalEl.find('input[name="vehicle_val_i"]').val(res.netto);
+										modalEl.find('input[name="insurance_cost"]').val(res.insurance_cost);
+										modalEl.find('input[name="engine_cap_i"]').val(res.pojemnosc);
+										modalEl.find('input[name="power_cap_i"]').val(res.moc);
+										modalEl.find('input[name="vin_number"]').val(res.vin_number);
+										modalEl.find('input[name="reg_number"]').val(res.reg_number);
 									}
 
 									// Hide modal event
@@ -353,6 +368,7 @@ var KTOfferListDatatable = function() {
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
 		$("#rent_time_r").inputmask('99 miesięcy');
 		$("#km_limit_r").inputmask('999999 km', { numericInput: true, placeholder: "" });
+		$("#power_cap_i").inputmask('999 km', { numericInput: true, placeholder: "" });
 
 		$('#vin_number').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
@@ -383,6 +399,9 @@ var KTOfferListDatatable = function() {
 				netto_l: {
 					required: true
 				},
+				invoice_l: {
+					required: true
+				},
 				// Typ - Wypożyczenie
 				brand_r: {
 					required: true
@@ -408,6 +427,9 @@ var KTOfferListDatatable = function() {
 				km_limit_r: {
 					required: true
 				},
+				invoice_r: {
+					required: true
+				},
 				// Typ - ubezpieczenie
 				brand_i: {
 					required: true
@@ -427,6 +449,9 @@ var KTOfferListDatatable = function() {
 				engine_cap_i: {
 					required: true
 				},
+				power_cap_i: {
+					required: true
+				},
 				vin_number: {
 					required: true,
 					minlength: 17,
@@ -436,6 +461,9 @@ var KTOfferListDatatable = function() {
 					required: true
 				},
 				vehicle_val_i: {
+					required: true
+				},
+				insurance_cost: {
 					required: true
 				}
 			},
@@ -459,6 +487,9 @@ var KTOfferListDatatable = function() {
 					required: 'To pole jest wymagane.'
 				},
 				netto_l: {
+					required: 'To pole jest wymagane.'
+				},
+				invoice_l: {
 					required: 'To pole jest wymagane.'
 				},
 				brand_r: {
@@ -485,6 +516,9 @@ var KTOfferListDatatable = function() {
 				km_limit_r: {
 					required: 'To pole jest wymagane.'
 				},
+				invoice_r: {
+					required: 'To pole jest wymagane.'
+				},
 				brand_i: {
 					required: 'To pole jest wymagane.'
 				},
@@ -503,6 +537,9 @@ var KTOfferListDatatable = function() {
 				engine_cap_i: {
 					required: 'To pole jest wymagane.'
 				},
+				power_cap_i: {
+					required: 'To pole jest wymagane.'
+				},
 				vin_number: {
 					required: 'To pole jest wymagane.',
 					minlength: 'Numer VIN musi składać się z {0} znaków.',
@@ -512,6 +549,9 @@ var KTOfferListDatatable = function() {
 					required: 'To pole jest wymagane.'
 				},
 				vehicle_val_i: {
+					required: 'To pole jest wymagane.'
+				},
+				insurance_cost: {
 					required: 'To pole jest wymagane.'
 				}
 			},
@@ -525,6 +565,24 @@ var KTOfferListDatatable = function() {
 
 			// Submit valid form
 			submitHandler: function (form) { }
+		});
+	}
+
+	var initChangeStatus = function() {
+		var form_status = $('#form_change_status'),
+		btn = $('button[type="submit"]', form_status);
+
+		btn.on('click', function(e) {
+			e.preventDefault();
+
+			KTApp.progress(btn);
+			btn.attr('disabled', true);
+
+			setTimeout(function() {
+				KTApp.unprogress(btn);
+				btn.attr('disabled', false);
+				console.log('Zmiana statusu nieudana');
+			}, 1000);
 		});
 	}
 
@@ -604,6 +662,7 @@ var KTOfferListDatatable = function() {
 			initOfferData();
 			initValidation();
 			initUploadData();
+			initChangeStatus();
 			selection();
 			selectedDelete();
 			updateTotal();

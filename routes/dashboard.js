@@ -10,6 +10,9 @@ router.get('/dashboard', PagesController.dashboard);
 // Pracownicy
 router.get('/dashboard/useradd', PagesController.useradd);
 router.get('/dashboard/userlist', PagesController.userlist);
+// Firmy
+router.get('/dashboard/companylist', PagesController.companylist);
+router.get('/dashboard/companyadd', PagesController.companyadd);
 // Klienci
 router.get('/dashboard/clientlist', PagesController.clientlist);
 router.get('/dashboard/clientadd', PagesController.clientadd);

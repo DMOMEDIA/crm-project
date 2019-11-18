@@ -145,4 +145,24 @@ exports.offerAdd = (req, res) => {
   });
 };
 
+exports.companylist = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.companies.show')) return res.redirect('/dashboard');
+
+  res.render('companies', {
+    title: 'Lista firm',
+    pageName: 'companylist'
+  });
+};
+
+exports.companyadd = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.companies.add')) return res.redirect('/dashboard');
+
+  res.render('companyadd', {
+    title: 'Dodaj firmę',
+    pageName: 'companyadd'
+  });
+};
+
 // {STOP} Strony po zalogowaniu

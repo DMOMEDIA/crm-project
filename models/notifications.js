@@ -7,6 +7,11 @@ const Notification = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+const User = bookshelf.Model.extend({
+  tableName: 'crm_users',
+  hasTimestamps: true
+});
+
 module.exports.getUserNotifications = (id, callback) => {
   return new Notification().where({ user_id: id }).orderBy('created_at', 'DESC').fetchAll().then(function(result) {
     if(result) {
@@ -37,4 +42,19 @@ module.exports.sendNotificationToUser = (id, icon, notification) => {
     icon_color: icon,
     notification: notification
   }).save();
+};
+
+module.exports.sendNotificationByRole = (role, icon, notification) => {
+  return new User().where({ role: role }).fetchAll()
+  .then(function(result) {
+    data_json = result.toJSON();
+
+    data_json.forEach(function(item) {
+      new Notification({
+        user_id: item.id,
+        icon_color: icon,
+        notification: notification
+      }).save();
+    });
+  });
 };

@@ -21,6 +21,8 @@ exports.message = (type, argument) => {
     case 'no_param': selected = { status: 'error', message: 'Niepoprawny lub brak parametru.' }; break;
     case 'not_found_roffer': selected = { status: 'error', message: 'Zapytanie ofertowe nie istnieje.' }; break;
     case 'no_notification': selected = { status: 'error', message: 'Brak nowych powiadomień.' }; break;
+    case 'added_new_offer': selected = { status: 'success', message: 'Nowa oferta została pomyślnie dodana.' }; break;
+    case 'company_added': selected = { status: 'success', message: 'Pomyślnie dodano nową firmę.' }; break;
   }
 
   return selected;

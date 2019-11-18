@@ -93,7 +93,7 @@ block content
                                 rect#bound(x='0', y='0', width='24', height='24')
                                 path#Path-107(d='M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z', fill='#000000')
                                 path#Combined-Shape(d='M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z', fill='#000000', opacity='0.3')
-                            | Oś czasu i status
+                            | Oś czasu i prowizje
                   |     
                   .kt-portlet__body
                     .tab-content
@@ -169,6 +169,15 @@ block content
                                       .col-lg-9.col-xl-6
                                         input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
                                     |                      
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Faktura:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='invoice_l')
+                                          option(value='', selected='', disabled='') Wybierz rodzaj faktury
+                                          option(value='VAT') VAT
+                                          option(value='VAT marża') VAT marża
+                                    |                     
                                     .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                                     input(type='hidden' name='vid')
                                     .kt-heading.kt-heading--sm Warianty przedmiotu:   
@@ -283,6 +292,15 @@ block content
                                         input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
                                     |                     
                                     .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Faktura:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='invoice_r')
+                                          option(value='', selected='', disabled='') Wybierz rodzaj faktury
+                                          option(value='VAT') VAT
+                                          option(value='VAT marża') VAT marża
+                                    |                     
+                                    .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Pakiety w ofercie: 
                                       |
                                       .col-lg-9.col-xl-6
@@ -300,7 +318,86 @@ block content
                                             |  Ubezpieczenie
                                             span
                                   #insurance_type_box(style='display:none;')
-                                    | Brak danych
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='brand_i', placeholder='Marka/model pojazdu')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wersja pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='version_i', placeholder='Wersja pojazdu')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Typ nadwozia pojazdu: 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        select.form-control(name='body_type_i')
+                                          option(value='', selected='', disabled='') Wybierz typ nadwozia
+                                          option(value='SUV') SUV
+                                          option(value='coupé') coupé
+                                          option(value='fastback') fastback
+                                          option(value='hatchback') hatchback
+                                          option(value='kabriolet') kabriolet
+                                          option(value='liftback') liftback
+                                          option(value='limuzyna') limuzyna
+                                          option(value='mikrovan') mikrovan
+                                          option(value='minivan') minivan
+                                          option(value='pick-up') pick-up
+                                          option(value='roadster') roadster
+                                          option(value='sedan') sedan
+                                          option(value='van') van
+                                    |           
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#pyear_i.form-control(type='text', name='pyear_i', placeholder='Rok produkcji')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Przebieg pojazdu:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Pojemność silnika (w cm³): 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Moc silnika (w km): 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#power_cap_i.form-control(type='text', name='power_cap_i', placeholder='Moc silnika')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Numer VIN: 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
+                                    |         
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Numer rejestracyjny: 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#reg_number.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
+                                    |         
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość pojazdu netto: 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#vehicle_val_i.form-control(type='number', name='vehicle_val_i', placeholder='Wartość pojazdu netto')
+                                    |         
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Koszt ubezpieczenia: 
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='number', name='insurance_cost', placeholder='Koszt ubezpieczenia')
+                                    |         
                                   |                        
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                   |                             
@@ -403,75 +500,6 @@ block content
                                     a.kt-link.kt-link--brand.kt-font-bolder(href='javascript:;') Stefan Grzeszowiak
                                     |  oraz nadano jej status 
                                     span.kt-badge.kt-badge--brand.kt-badge--inline.kt-badge--pill Oczekująca
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 14:00
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-brand
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | Make Deposit 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') USD 700
-                                    |  To ESL.
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 16:00
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-warning
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | Lorem ipsum dolor sit amit,consectetur eiusmdd tempor
-                                    br
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;incididunt ut labore et dolore magna elit enim at minim
-                                    br
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;veniam quis nostrud
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 17:00
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-info
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | Placed a new order in 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') SIGNATURE MOBILE
-                                    |  marketplace.
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 16:00
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-brand
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | Lorem ipsum dolor sit amit,consectetur eiusmdd tempor
-                                    br
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;incididunt ut labore et dolore magna elit enim at minim
-                                    br
-                                    | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;veniam quis nostrud
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 17:00
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-danger
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | Received a new feedback on 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') FinancePro App
-                                    |  product.
-                                | &#x9;&#x9;&#x9;&#x9;&#x9;
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 15:30
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-danger
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-text
-                                    | New notification message has been received on 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='#') LoopFin Pro
-                                    |  product.
                             .row
                               label.col-xl-3     
                               .col-lg-9.col-xl-6
@@ -488,12 +516,11 @@ block content
                                         input#idInput3(type='hidden', name='id')
                                         input#typeInput3(type='hidden', name='type')
                                         select.form-control(name='change_type')
-                                          option niewysłana
-                                          option(selected='') oczekująca
-                                          option anulowana
-                                          option zrealizowana
+                                          option(value='0', selected='') oczekująca
+                                          option(value='1') anulowana
+                                          option(value='2') zrealizowana
                                         .input-group-append
-                                          button.btn.btn-brand(type='button') Zmień
+                                          button.btn.btn-brand(type='submit') Zmień
                                       |                                             
                             |                             
                             .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
