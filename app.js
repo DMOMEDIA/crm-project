@@ -2,6 +2,7 @@ require('dotenv').config({ path: '.env' });
 
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');

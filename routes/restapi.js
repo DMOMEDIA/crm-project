@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('multer')();
 
 // Kontrolery
 const REST = require('../controllers/Rest');
@@ -38,8 +39,17 @@ router.post('/rest/notification/unread', REST.notificationSetUnread);
 router.post('/rest/offerlist', REST.loadOfferlist);
 router.post('/rest/offer/get', REST.getOfferById);
 router.post('/rest/offer/insert', REST.insertOffer);
+router.post('/rest/offer/sdelete', REST.deleteSelectedOffers);
+router.post('/rest/offer/status', REST.changeOfferStatus);
+router.post('/rest/offer/data', REST.changeOfferData);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
+
+// {REST} Upload files
+router.post('/rest/files/upload', upload.array('source_file[]'), REST.uploadOfferFiles);
+router.post('/rest/files/get', REST.getOfferFiles);
+router.post('/rest/file/download', REST.downloadFile);
+router.post('/rest/file/delete', REST.deleteFile);
 
 // {REST} Firmy
 router.post('/rest/company/list', REST.loadCompanylist);

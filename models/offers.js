@@ -130,7 +130,7 @@ module.exports.getOfferById = (id, type, callback) => {
   }
 };
 
-module.exports.createOffer = (req) => {
+module.exports.createOffer = (req, callback) => {
   var value = req.body;
   if(value.offer_type == 'leasing') {
     return new OfferLeasing({
@@ -153,6 +153,7 @@ module.exports.createOffer = (req) => {
           okres: value.variant[i]['contract']
         }).save();
       }
+      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/L/' + moment().format('YYYY') + '</b>.');
     });
   } else if(value.offer_type == 'insurance') {
@@ -171,6 +172,7 @@ module.exports.createOffer = (req) => {
       netto: value.vehicle_val_i,
       insurance_cost: value.insurance_cost
     }).save().then(function(result) {
+      callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
     });
   } else {
@@ -188,6 +190,7 @@ module.exports.createOffer = (req) => {
       limit: value.km_limit_r,
       invoice: value.invoice_r
     }).save().then(function(result) {
+      callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/R/' + moment().format('YYYY') + '</b>.');
     });
   }
@@ -197,4 +200,143 @@ module.exports.companyList = (callback) => {
   return new Company().fetchAll().then(function(result) {
     callback(result);
   });
+}
+
+module.exports.changeData = (value, callback) => {
+  if(value.type == 'leasing') {
+    return new OfferLeasing().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        if(value.item_type_l) model.set('item_type', value.item_type_l);
+        if(value.brand_l) model.set('name', value.brand_l);
+        if(value.condition_l) model.set('condition', value.condition_l);
+        if(value.pyear_l) model.set('production_year', value.pyear_l);
+        if(value.netto_l) model.set('netto', value.netto_l);
+        if(value.invoice_l) model.set('invoice', value.invoice_l);
+
+        callback(Messages.message('offer_data_change', null));
+
+        model.save().then(function(result) {
+          return new LeasingVariants().where({ id: value.vid }).fetch()
+          .then(function(variant) {
+            if(variant) {
+              if(value.contract) variant.set('okres', value.contract);
+              if(value.inital_fee) variant.set('wklad', value.inital_fee);
+              if(value.leasing_install) variant.set('leasing_install', value.leasing_install);
+              if(value.repurchase) variant.set('wykup', value.repurchase);
+              if(value.sum_fee) variant.set('total_fees', value.sum_fee);
+
+              variant.save();
+            }
+          });
+        });
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
+    });
+  } else if(value.type == 'rent') {
+    return new OfferRent().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        if(value.brand_r) model.set('marka_model', value.brand_r);
+        if(value.body_type_r) model.set('typ', value.body_type_r);
+        if(value.fuel_type_r) model.set('fuel_type', value.fuel_type_r);
+        if(value.gear_type_r) model.set('gear_type', value.gear_type_r);
+        if(value.installment_val) model.set('rata', value.installment_val);
+        if(value.vehicle_val_r) model.set('netto', value.vehicle_val_r);
+        if(value.rent_time_r) model.set('okres', value.rent_time_r);
+        if(value.self_deposit_r) model.set('wplata', value.self_deposit_r);
+        if(value.km_limit_r) model.set('limit', value.km_limit_r);
+        if(value.invoice_r) model.set('invoice', value.invoice_r);
+
+        callback(Messages.message('offer_data_change', null));
+
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
+    });
+  } else {
+    return new OfferInsurance().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        if(value.brand_i) model.set('marka_model', value.brand_i);
+        if(value.version_i) model.set('wersja', value.version_i);
+        if(value.typ) model.set('body_type_i', value.body_type_i);
+        if(value.pyear_i) model.set('rok_produkcji', value.pyear_i);
+        if(value.km_val_i) model.set('przebieg', value.km_val_i);
+        if(value.engine_cap_i) model.set('pojemnosc', value.engine_cap_i);
+        if(value.power_cap_i) model.set('moc', value.power_cap_i);
+        if(value.vin_number) model.set('vin_number', value.vin_number);
+        if(value.reg_number) model.set('reg_number', value.reg_number);
+        if(value.vehicle_val_i) model.set('netto', value.vehicle_val_i);
+        if(value.insurance_cost) model.set('insurance_cost', value.insurance_cost);
+
+        callback(Messages.message('offer_data_change', null));
+
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
+    });
+  }
+};
+
+module.exports.deleteOffer = (value, callback) => {
+  if(value.type == 'leasing') {
+    LeasingVariants.where({ offer_id: value.id }).destroy();
+
+    return new OfferLeasing().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        callback(Messages.message('success_offer_deleted', null));
+        return model.destroy();
+      } else callback(Messages.message('not_found_offer', null));
+    });
+  } else if(value.type == 'wynajem') {
+    return new OfferRent().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        callback(Messages.message('success_offer_deleted', null));
+        return model.destroy();
+      } else callback(Messages.message('not_found_offer', null));
+    });
+  } else {
+    return new OfferInsurance().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        callback(Messages.message('success_offer_deleted', null));
+        return model.destroy();
+      } else callback(Messages.message('not_found_offer', null));
+    });
+  }
+};
+
+module.exports.changeStatus = (value, callback) => {
+  if(value.type == 'leasing') {
+    return new OfferLeasing().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('state', value.change_type);
+
+        model.save();
+
+        callback(Messages.message('offer_status_change', null));
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });
+    });
+  } else if(value.type == 'rent') {
+    return new OfferRent().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('state', value.change_type);
+
+        model.save();
+
+        callback(Messages.message('offer_status_change', null));
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });
+    });
+  } else {
+    return new OfferInsurance().where({ id: value.id }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('state', value.change_type);
+
+        model.save();
+
+        callback(Messages.message('offer_status_change', null));
+      } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });
+    });
+  }
 }

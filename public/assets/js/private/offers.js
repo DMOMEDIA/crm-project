@@ -4,15 +4,27 @@
 var KTOfferListDatatable = function() {
 
 	// variables
-	var datatable, formEl, validator, slider_min = 0, slider_max = 0;
+	var datatable, formEl, validator, slider_min = 0, slider_max = 0, f_path;
+
+	var ext = {
+		'odt': 'doc',
+		'docx': 'doc',
+		'doc': 'doc',
+		'pdf': 'pdf',
+		'css': 'css',
+		'csv': 'csv',
+		'html': 'html',
+		'js': 'javascript',
+		'jpg': 'jpg',
+		'jpeg': 'jpg',
+		'mp4': 'mp4',
+		'xml': 'xml',
+		'zip': 'zip',
+		'rar': 'zip'
+	};
 
 	// init
 	var init = function() {
-		String.prototype.trunc = String.prototype.trunc ||
-		function(n){
-		    return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
-		};
-
 		// init the datatables. Learn more: https://keenthemes.com/metronic/?page=docs&section=datatable
 		datatable = $('#kt_apps_offerlist').KTDatatable({
 			// datasource definition
@@ -82,7 +94,7 @@ var KTOfferListDatatable = function() {
 				field: "company",
 				title: "Firma",
 				template: function(row) {
-					return '<span data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="' + row.company.fullname + '">' + row.company.fullname.trunc(15) + '</span>';
+					return '<span data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="' + row.company.fullname + '">' + row.company.fullname + '</span>';
 				}
 			}, {
 				field: "offer_type",
@@ -100,9 +112,10 @@ var KTOfferListDatatable = function() {
 				autoHide: false,
 				template: function(row) {
 					var status = {
-						0: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
-						1: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
-						2: {'title': 'Zrealizowana', 'class': ' kt-badge--success'},
+						0: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
+						1: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
+						2: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
+						3: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
 					};
 					return '<span class="kt-badge ' + status[row.state].class + ' kt-badge--inline kt-badge--pill">' + status[row.state].title + '</span>';
 				},
@@ -147,18 +160,23 @@ var KTOfferListDatatable = function() {
 
 								if(res.status == null) {
 									modalEl.modal('show');
+									modalEl.find('#attached_files').html('');
 
 									var date = moment(res.created_at).local().format('YYYY');
 									var status = {
-										0: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
-										1: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
-										2: {'title': 'Zrealizowana', 'class': ' kt-badge--success'},
+										0: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
+										1: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
+										2: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
+										3: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
 									};
 									var offer_type = {
 										'rent': 'wynajem',
 										'insurance': 'ubezpieczenie',
 										'leasing': 'leasing'
 									};
+
+									modalEl.find('select[name="change_type"] option[value="' + res.state + '"]').prop('selected', true);
+
 									//
 									modalEl.find('#idInput1').val(res.id);
 									modalEl.find('#idInput3').val(res.id);
@@ -197,7 +215,7 @@ var KTOfferListDatatable = function() {
 										//
 										modalEl.find('select[name="item_type_l"] option[value="' + res.item_type + '"]').prop('selected', true);
 										modalEl.find('input[name="brand_l"]').val(res.name);
-										modalEl.find('select[name="condition_l"] option[value="' + res.condititon + '"]').prop('selected', true);
+										modalEl.find('select[name="condition_l"] option[value="' + res.condition + '"]').prop('selected', true);
 										modalEl.find('input[name="pyear_l"]').val(res.production_year);
 										modalEl.find('input[name="netto_l"]').val(res.netto);
 										modalEl.find('select[name="invoice_l"] option[value="' + res.invoice + '"]').prop('selected', true);
@@ -258,6 +276,38 @@ var KTOfferListDatatable = function() {
 										modalEl.find('input[name="reg_number"]').val(res.reg_number);
 									}
 
+									f_path = 'offer_' + res.id + '_' + res.offer_type.charAt(0).toUpperCase() + '_' + moment(res.created_at).local().format('YYYY');
+									$.ajax({
+										url: '/rest/files/get',
+										method: 'POST',
+										data: { folder_path: f_path },
+										success: function(res) {
+											if(res.files.length != 0) {
+												res.files.forEach(file => {
+													var extension = file.split('.');
+													modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
+															<div class="kt-widget4__pic kt-widget4__pic--icon">\
+																<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+															</div>\
+															<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
+															<div class="kt-widget4__tools">\
+																<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+																	<i class="flaticon2-download"></i>\
+																</a>\
+																<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+																	<i class="flaticon2-delete"></i>\
+																</a>\
+															</div>\
+														</div>\
+													');
+												});
+											}
+										},
+										error: function(err) {
+											throw err;
+										}
+									});
+
 									// Hide modal event
 									$('#kt_fetch_offer').on('hidden.bs.modal', function (e) {
 										modalEl.find('#offer_status').removeClass(status[res.state].class);
@@ -273,6 +323,87 @@ var KTOfferListDatatable = function() {
 						}, 1000);
 					}
 				});
+			});
+		});
+	}
+
+	var initFileButtons = function() {
+		$(document).on('click', '.download_file', function() {
+			var path = 'offer/' + $(this).attr('data-path');
+
+			$.ajax({
+				url: '/rest/file/download',
+				method: 'POST',
+				data: { path: path },
+				xhrFields: {
+					responseType: 'blob'
+				},
+				success: function(res, status, xhr) {
+					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
+					fileName = fileName.replace(/\"/g, '');
+
+					var a = document.createElement('a');
+			    var url = window.URL.createObjectURL(res);
+			    a.href = url;
+			    a.download = fileName;
+			    a.click();
+			    window.URL.revokeObjectURL(url);
+				},
+				error: function(err) {
+					KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+				}
+			});
+		});
+
+		/**
+			@Information Wydarzenie usuwające wybrany plik z systemu
+		**/
+
+		$(document).on('click', '.remove_file', function() {
+			var path = 'offer/' + $(this).attr('data-path'),
+			element = $(this);
+
+			swal.fire({
+				text: "Jesteś pewny że chcesz usunąć ten plik?",
+				type: 'info',
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if(result.value) {
+					$.ajax({
+						url: '/rest/file/delete',
+						method: 'POST',
+						data: { path: path },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: res.status,
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								element.parents('.kt-widget4__item').remove();
+							} else {
+								swal.fire({
+									title: 'Błąd',
+									text: res.message,
+									type: res.status,
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
 			});
 		});
 	}
@@ -302,61 +433,6 @@ var KTOfferListDatatable = function() {
 			} else {
 				$('#kt_subheader_search').removeClass('kt-hidden');
 				$('#kt_subheader_group_actions').addClass('kt-hidden');
-			}
-		});
-	}
-
-	// selected records delete
-	var selectedDelete = function() {
-		$('#kt_subheader_group_actions_delete_all').on('click', function() {
-			// fetch selected IDs
-			var ids = datatable.rows('.kt-datatable__row--active').nodes().find('.kt-checkbox--single > [type="checkbox"]').map(function(i, chk) {
-				return $(chk).val();
-			});
-
-			var userText = 'zapytania';
-			if(ids.length == 1) userText = 'zapytanie';
-
-			var data_send = [];
-			$.each(ids, function(i, field) { data_send.push(field) });
-
-			if (ids.length > 0) {
-				swal.fire({
-					text: "Jesteś pewny że chcesz usunąć " + ids.length + " " + userText + "?",
-					type: 'info',
-
-					confirmButtonText: "Usuń",
-					confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-
-					showCancelButton: true,
-					cancelButtonText: "Anuluj",
-					cancelButtonClass: "btn btn-sm btn-bold btn-default"
-				}).then(function(result) {
-					if (result.value) {
-						$.ajax({
-							url: '/rest/user/sdelete',
-							method: 'POST',
-							data: { data: data_send },
-							success: function(res) {
-								if(res.status == 'success') {
-									swal.fire({
-										title: 'Usunięto',
-										text: res.message,
-										type: 'success',
-										confirmButtonText: "Zamknij",
-										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-									});
-									datatable.reload();
-								} else {
-									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
-								}
-							},
-							error: function(err) {
-								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-							}
-						});
-					}
-				});
 			}
 		});
 	}
@@ -579,9 +655,25 @@ var KTOfferListDatatable = function() {
 			btn.attr('disabled', true);
 
 			setTimeout(function() {
-				KTApp.unprogress(btn);
-				btn.attr('disabled', false);
-				console.log('Zmiana statusu nieudana');
+				form_status.ajaxSubmit({
+					url: '/rest/offer/status',
+					method: 'POST',
+					data: form_status.serialize(),
+					success: function(res) {
+						KTApp.unprogress(btn);
+						btn.attr('disabled', false);
+
+						if(res.status == 'success') {
+							KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+							datatable.reload();
+						} else {
+							KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					},
+					error: function(err) {
+						KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+					}
+				});
 			}, 1000);
 		});
 	}
@@ -595,20 +687,17 @@ var KTOfferListDatatable = function() {
 			e.preventDefault();
 
 			if(validator.form()) {
-				console.log('Zweryfikowano formularz i wysłano.');
-			}
-			/* if(validator_personal.form()) {
-				KTApp.progress(btn_pers);
-				btn_pers.attr('disabled', true);
+				KTApp.progress(btn);
+				btn.attr('disabled', true);
 
 				setTimeout(function() {
-					form_personal.ajaxSubmit({
-						url: '/rest/users/modify',
+					formEl.ajaxSubmit({
+						url: '/rest/offer/data',
 						method: 'POST',
-						data: form_personal.serialize(),
+						data: formEl.serialize(),
 						success: function(res) {
-							KTApp.unprogress(btn_pers);
-							btn_pers.attr('disabled', false);
+							KTApp.unprogress(btn);
+							btn.attr('disabled', false);
 
 							if(res.status == 'success') {
 								KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
@@ -622,7 +711,7 @@ var KTOfferListDatatable = function() {
 						}
 					});
 				}, 1000);
-			} */
+			}
 		});
 	}
 
@@ -647,11 +736,123 @@ var KTOfferListDatatable = function() {
     });
 	}
 
+	var initDropzone = function() {
+		$('#kt_dropzone_offer').dropzone({
+			url: '/rest/files/upload',
+			autoProcessQueue: true,
+			paramName: function() { return 'source_file[]' }, // The name that will be used to transfer the file
+			maxFiles: 5,
+			maxFilesize: 10, // MB
+			addRemoveLinks: true,
+			uploadMultiple: true,
+			parallelUploads: 5,
+			acceptedFiles: "application/pdf,.docx,.odt,.xls",
+			init: function() {
+				var dzUpload = this;
+
+				this.on("success", function(file, res) {
+					var extension = file.name.split('.');
+					$('#attached_files').append('\<div class="kt-widget4__item">\
+							<div class="kt-widget4__pic kt-widget4__pic--icon">\
+								<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+							</div>\
+							<a href="javascript:;" class="kt-widget4__title">' + file.name + '</a>\
+							<div class="kt-widget4__tools">\
+								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+									<i class="flaticon2-download"></i>\
+								</a>\
+								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+									<i class="flaticon2-delete"></i>\
+								</a>\
+							</div>\
+						</div>\
+					');
+
+					swal.fire({
+						"title": "",
+						"text": "Pliki zostały pomyślnie przesłane.",
+						"type": "success",
+						"confirmButtonClass": "btn btn-secondary"
+					});
+					dzUpload.removeAllFiles();
+				});
+
+				this.on("sendingmultiple", function(file, xhr, formData) {
+					formData.append('folder_path', f_path);
+				});
+			}
+		});
+	};
+
 	var updateTotal = function() {
 		datatable.on('kt-datatable--on-layout-updated', function () {
 			//$('#kt_subheader_total').html(datatable.getTotalRows() + ' Total');
 		});
 	};
+
+
+		// selected records delete
+		var selectedDelete = function() {
+			$('#kt_subheader_group_actions_delete_all').on('click', function() {
+				// fetch selected IDs
+				var ids = datatable.rows('.kt-datatable__row--active').nodes().find('.kt-checkbox--single > [type="checkbox"]').map(function(i, chk) {
+					return $(chk).val();
+				});
+
+				var rowData = datatable.rows('.kt-datatable__row--active').nodes().find('td[data-field="offer_type"]').map(function(i, chk) {
+					return $(chk).text();
+				});
+
+				var elements = [];
+				for(var i = 0; i <= ids.length-1; i++) {
+					elements.push({ id: ids[i], type: rowData[i] });
+				}
+
+				console.log(elements);
+
+				var userText = 'ofert/y';
+				if(ids.length == 1) userText = 'ofertę';
+
+				if (ids.length > 0) {
+					swal.fire({
+						text: "Jesteś pewny że chcesz usunąć " + ids.length + " " + userText + "?",
+						type: 'info',
+
+						confirmButtonText: "Usuń",
+						confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+						showCancelButton: true,
+						cancelButtonText: "Anuluj",
+						cancelButtonClass: "btn btn-sm btn-bold btn-default"
+					}).then(function(result) {
+						if (result.value) {
+							$.ajax({
+								url: '/rest/offer/sdelete',
+								method: 'POST',
+								data: { data: elements },
+								success: function(res) {
+									if(res.status == 'success') {
+										swal.fire({
+											title: 'Usunięto',
+											text: res.message,
+											type: 'success',
+											confirmButtonText: "Zamknij",
+											confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+										});
+										datatable.reload();
+									} else {
+										return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+									}
+								},
+								error: function(err) {
+									KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+								}
+							});
+						}
+					});
+				}
+			});
+		}
 
 	return {
 		// public functions
@@ -663,9 +864,10 @@ var KTOfferListDatatable = function() {
 			initValidation();
 			initUploadData();
 			initChangeStatus();
+			initFileButtons();
+			initDropzone();
 			selection();
 			selectedDelete();
-			updateTotal();
 		},
 	};
 }();

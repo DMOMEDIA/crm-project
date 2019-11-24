@@ -12,6 +12,8 @@ exports.message = (type, argument) => {
     case 'added_new_user': selected = { status: 'success', message: 'Dodano nowego użytkownika o identyfikatorze ' + argument }; break;
     case 'added_new_client': selected = { status: 'success', message: 'Pomyślnie dodano nowego klienta.' }; break;
     case 'identity_not_selected': selected = { status: 'error', message: 'Identyfikator nie został uwzględniony.' }; break;
+    case 'success_delete_selected_offers': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' ofert/y.' }; break;
+    case 'err_selected_offers': selected = { status: 'error', message: 'Błąd podczas usuwania ofert, spróbuj ponownie.' }; break;
     case 'err_selected_users': selected = { status: 'error', message: 'Błąd podczas usuwania użytkowników, spróbuj ponownie.' }; break;
     case 'success_delete_selected_users': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' użytkowników.' }; break;
     case 'success_user_deleted': selected = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' }; break;
@@ -21,8 +23,14 @@ exports.message = (type, argument) => {
     case 'no_param': selected = { status: 'error', message: 'Niepoprawny lub brak parametru.' }; break;
     case 'not_found_roffer': selected = { status: 'error', message: 'Zapytanie ofertowe nie istnieje.' }; break;
     case 'no_notification': selected = { status: 'error', message: 'Brak nowych powiadomień.' }; break;
-    case 'added_new_offer': selected = { status: 'success', message: 'Nowa oferta została pomyślnie dodana.' }; break;
+    case 'added_new_offer': selected = { status: 'success', message: 'Nowa oferta została pomyślnie dodana.', param: argument }; break;
     case 'company_added': selected = { status: 'success', message: 'Pomyślnie dodano nową firmę.' }; break;
+    case 'offer_status_change': selected = { status: 'success', message: 'Status oferty został pomyślnie zmieniony.' }; break;
+    case 'offer_data_change': selected = { status: 'success', message: 'Dane oferty zostały pomyślnie zmienione.' }; break;
+    case 'file_deleted_success': selected = { status: 'success', message: 'Plik został pomyślnie usunięty.' }; break;
+    case 'file_deleted_fail': selected = { status: 'error', message: 'Wystąpił błąd podczas usuwania pliku.' }; break;
+    case 'not_found_offer': selected = { status: 'error', message: 'Oferta o podanym identyfikatorze nie istnieje.' }; break;
+    case 'success_offer_deleted': selected = { status: 'success', message: 'Oferta została pomyślnie usunięta.' }; break;
   }
 
   return selected;

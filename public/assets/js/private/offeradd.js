@@ -8,6 +8,7 @@ var KTWizardOfferAdd = function () {
 	var validator;
 	var wizard;
 	var slider_min = 0, slider_max = 0;
+	var upload_info;
 
 	// Private functions
 	var initWizard = function () {
@@ -390,6 +391,7 @@ var KTWizardOfferAdd = function () {
 			if (validator.form()) {
 				// See: src\js\framework\base\app.js
 				KTApp.progress(btn);
+				btn.attr('disabled', true);
 				//KTApp.block(formEl);
 
 				$.fn.serializeObject = function(){
@@ -416,16 +418,9 @@ var KTWizardOfferAdd = function () {
 						data: formEl.serialize(),
 						clearForm: true,
 						success: function(res) {
-							KTApp.unprogress(btn);
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
-								swal.fire({
-									"title": "",
-									"text": res.message,
-									"type": "success",
-									"confirmButtonClass": "btn btn-secondary"
-								});
-								wizard.goTo(1, true);
+								upload_info = { path: res.param, message: res.message };
 							} else {
 								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
 								wizard.goTo(1, true);
@@ -526,21 +521,50 @@ var KTWizardOfferAdd = function () {
 
 	var initDropzones = function () {
 			// file type validation
-			$('#kt_dropzone_offer').dropzone({
-					url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
-					paramName: "file", // The name that will be used to transfer the file
-					maxFiles: 10,
-					maxFilesize: 10, // MB
-					addRemoveLinks: true,
-					acceptedFiles: "application/pdf",
-					accept: function(file, done) {
-							if (file.name == "justinbieber.jpg") {
-									done("Naha, you don't.");
-							} else {
-									done();
-							}
-					}
-			});
+		$('#kt_dropzone_offer').dropzone({
+			url: '/rest/files/upload',
+			autoProcessQueue: false,
+			paramName: function() { return 'source_file[]' }, // The name that will be used to transfer the file
+			maxFiles: 5,
+			maxFilesize: 10, // MB
+			addRemoveLinks: true,
+			uploadMultiple: true,
+			parallelUploads: 5,
+			acceptedFiles: "application/pdf,.docx,.odt,.xls",
+			init: function() {
+				var btn = formEl.find('[name="add-submit"]'),
+				dzUpload = this;
+
+				btn.on('click', function(e) {
+					e.preventDefault();
+					e.stopPropagation();
+
+					setTimeout(function() {
+						if(upload_info != null) {
+							dzUpload.processQueue();
+						}
+					}, 1500);
+				});
+
+				this.on("success", function(file, res) {
+					KTApp.unprogress(btn);
+					btn.attr('disabled', false);
+
+					swal.fire({
+						"title": "",
+						"text": res.message,
+						"type": "success",
+						"confirmButtonClass": "btn btn-secondary"
+					});
+					dzUpload.removeAllFiles();
+					wizard.goTo(1, true);
+				});
+
+				this.on("sendingmultiple", function(file, xhr, formData) {
+					formData.append('folder_path', upload_info.path);
+				});
+			}
+		});
 	}
 
 	return {
@@ -551,10 +575,10 @@ var KTWizardOfferAdd = function () {
 
 			initWizard();
 			initValidation();
+			initDropzones();
 			initSubmit();
       initRemoteData();
       initRepeater();
-			initDropzones();
 		}
 	};
 }();

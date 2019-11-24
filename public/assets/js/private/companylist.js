@@ -105,6 +105,12 @@ var KTCompanyListDatatable = function() {
 	}
 
 	var initValid = function() {
+		$('#nipInput').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
 		validator = formEl.validate({
 			ignore: ':hidden',
 
@@ -183,7 +189,7 @@ var KTCompanyListDatatable = function() {
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
-				$.ajax({
+				/* $.ajax({
 					url: '/rest/company/show',
 					method: 'POST',
 					data: { id: id },
@@ -205,48 +211,7 @@ var KTCompanyListDatatable = function() {
 								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
 						}, 1000);
 					}
-				});
-			});
-
-			$('.delete_user').on('click', function() {
-				var id = $(this).attr('data-id');
-
-				swal.fire({
-					html: "Jesteś pewny że chcesz usunąć tego użytkownika?",
-					type: "info",
-
-					confirmButtonText: "Usuń",
-					confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-
-					showCancelButton: true,
-					cancelButtonText: "Anuluj",
-					cancelButtonClass: "btn btn-sm btn-bold btn-default"
-				}).then(function(result) {
-					if (result.value) {
-						$.ajax({
-							url: '/rest/user/delete',
-							method: 'POST',
-							data: { id: id },
-							success: function(res) {
-								if(res.status == 'success') {
-									swal.fire({
-										title: 'Usunięto',
-										text: res.message,
-										type: 'success',
-										confirmButtonText: "Zamknij",
-										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-									});
-									datatable.reload();
-								} else {
-									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
-								}
-							},
-							error: function(err) {
-								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-							}
-						});
-					}
-				});
+				}); */
 			});
 		});
 	}
@@ -262,7 +227,7 @@ var KTCompanyListDatatable = function() {
 				KTApp.progress(btn_pers);
 				btn_pers.attr('disabled', true);
 
-				setTimeout(function() {
+				/* setTimeout(function() {
 					form_personal.ajaxSubmit({
 						url: '/rest/clients/modify',
 						method: 'POST',
@@ -282,7 +247,7 @@ var KTCompanyListDatatable = function() {
 							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
 						}
 					});
-				}, 1000);
+				}, 1000); */
 			}
 		});
 	};
@@ -324,8 +289,8 @@ var KTCompanyListDatatable = function() {
 				return $(chk).val();
 			});
 
-			var userText = 'użytkowników';
-			if(ids.length == 1) userText = 'użytkownika';
+			var userText = 'firmy';
+			if(ids.length == 1) userText = 'firmę';
 
 			var data_send = [];
 			$.each(ids, function(i, field) { data_send.push(field) });
@@ -343,7 +308,7 @@ var KTCompanyListDatatable = function() {
 					cancelButtonClass: "btn btn-sm btn-bold btn-default"
 				}).then(function(result) {
 					if (result.value) {
-						$.ajax({
+						/* $.ajax({
 							url: '/rest/user/sdelete',
 							method: 'POST',
 							data: { data: data_send },
@@ -364,7 +329,7 @@ var KTCompanyListDatatable = function() {
 							error: function(err) {
 								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
 							}
-						});
+						}); */
 					}
 				});
 			}
@@ -380,9 +345,10 @@ var KTCompanyListDatatable = function() {
 	return {
 		// public functions
 		init: function() {
-			// formEl = $('#kt_client_edit_personal');
+			formEl = $('#kt_company_edit');
 
 			init();
+			initClientData();
 			selection();
 			selectedDelete();
 			updateTotal();

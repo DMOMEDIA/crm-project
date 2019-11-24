@@ -8,6 +8,11 @@ const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
 const System = require('../models/system');
 const async = require('async');
+const upload = require('multer')();
+const fs = require('fs');
+const Promise = require('bluebird');
+const path = require('path');
+const sanitize = require('sanitize-filename');
 
 // String truncate
 String.prototype.trunc = String.prototype.trunc ||
@@ -367,6 +372,24 @@ exports.companyRemoteList = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.deleteSelectedOffers = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.delete')) {
+      if(req.body.data) {
+        var deleted = 0;
+        async.each(req.body.data, async function(value, cb) {
+          await Offer.deleteOffer(value, cb => {
+            if(cb.status == 'success') deleted++;
+          });
+        }, function() {
+          if(deleted > 0) res.json(Messages.message('success_delete_selected_offers', deleted));
+          else res.json(Messages.message('err_selected_offers', null));
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+}
+
 exports.getOfferById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.show')) {
@@ -383,10 +406,99 @@ exports.insertOffer = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.add')) {
       if(req.body != null) {
-        Offer.createOffer(req);
-        res.json(Messages.message('added_new_offer'));
+        Offer.createOffer(req, result => {
+          res.json(Messages.message('added_new_offer', result));
+        });
       }
     } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.changeOfferStatus = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.status_change')) {
+      if(req.body != null) {
+        Offer.changeStatus(req.body, function(result) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.changeOfferData = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.offers.data_change')) {
+      if(req.body != null) {
+        Offer.changeData(req.body, function(result) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.uploadOfferFiles = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    if(req.files) {
+      var upload_dir = 'uploads',
+      offer_dir = 'offer',
+      f_path = req.body.folder_path;
+
+      fs.mkdirSync(upload_dir + '/' + offer_dir + '/' + f_path, { recursive: true });
+
+      Promise.resolve(req.files)
+        .each(function(file_incoming, idx) {
+          var sanitized_filename = sanitize(file_incoming.originalname);
+          var file = path.join(upload_dir, offer_dir, f_path, sanitized_filename);
+
+          return fs.writeFileSync(file, file_incoming.buffer);
+        }).then(function() {
+          res.status(200).json(Messages.message('added_new_offer', null));
+        });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getOfferFiles = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body) {
+      try {
+        var output = fs.readdirSync('./uploads/offer/' + req.body.folder_path);
+        res.json({ files: output });
+      }
+      catch {
+        res.json({ error: 'Directory not found' });
+      }
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.downloadFile = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body) {
+      var file = './uploads/' + req.body.path;
+      res.download(file);
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+/** ================================================
+    @Information Moduł usuwający określony plik.
+ =============================================== **/
+
+exports.deleteFile = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body) {
+      try {
+        var file = './uploads/' + req.body.path;
+        fs.unlinkSync(file);
+        res.json(Messages.message('file_deleted_success', null));
+      }
+      catch {
+        res.json(Messages.message('file_deleted_fail', null));
+      }
+    }
   } else res.json(Messages.message('no_authorization', null));
 };
 
