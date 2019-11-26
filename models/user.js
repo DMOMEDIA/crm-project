@@ -1,11 +1,40 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages.js');
+const async = require('async');
 
 const User = bookshelf.Model.extend({
   tableName: 'crm_users',
+  hasTimestamps: true,
+  provision: function() {
+    return this.hasMany(Provision, 'user_id', 'id');
+  }
+});
+
+const Provision = bookshelf.Model.extend({
+  tableName: 'crm_provisions',
   hasTimestamps: true
 });
+
+module.exports.getUserProvision = (id, callback) => {
+  return new User().where({ id: id }).fetch({ withRelated: ['provision'] })
+  .then(function(result) {
+    var data = result.toJSON(),
+    provision_f = parseFloat(0),
+    provision = parseFloat(0);
+
+    async.each(data.provision, function(element, cb) {
+      if(element.forecast == true) {
+        provision_f += parseFloat(element.value);
+      } else {
+        provision += parseFloat(element.value);
+      }
+      cb();
+    }, function() {
+      callback({ prov_forecast: provision_f, prov_normal: provision });
+    });
+  });
+};
 
 module.exports.getUserByIdentity = (user) => {
   const query = { identity: user };

@@ -8,11 +8,6 @@ var KTCompanyListDatatable = function() {
 	var formEl;
 	var validator;
 
-  String.prototype.trunc = String.prototype.trunc ||
-  function(n){
-      return (this.length > n) ? this.substr(0, n-1) + '&hellip;' : this;
-  };
-
 	// init
 	var init = function() {
 		// init the datatables. Learn more: https://keenthemes.com/metronic/?page=docs&section=datatable
@@ -25,7 +20,7 @@ var KTCompanyListDatatable = function() {
 						url: '/rest/company/list'
 					},
 				},
-				pageSize: 10, // display 20 records per page
+				pageSize: 10, // display 20 recordstper page
 				serverPaging: true,
 				serverFiltering: true,
 				serverSorting: true,
@@ -64,7 +59,7 @@ var KTCompanyListDatatable = function() {
 				width: 200,
 				// callback function support for column rendering
 				template: function(row) {
-          return '<a href="javascript:;" class="show_company_data" title="' + row.fullname + '" data-id="' + row.id + '">' + row.fullname.trunc(25) + '</a>';
+          return '<a href="javascript:;" class="show_company_data" title="' + row.fullname + '" data-id="' + row.id + '">' + row.fullname + '</a>';
         }
 			}, {
 				field: 'nip',
@@ -114,58 +109,68 @@ var KTCompanyListDatatable = function() {
 		validator = formEl.validate({
 			ignore: ':hidden',
 
+			// Validation rules
 			rules: {
-				firstname: {
-					required: true
-				},
-				lastname: {
-					required: true
-				},
-				fullname: {
-					required: true
-				},
-				companyname: {
-					required: true
-				},
-				company_type: {
-					required: true
+				// Step 1
+				companyName: {
+  				required: true
 				},
 				nip: {
+          required: true,
+          digits: true,
+          minlength: 10,
+          maxlength: 10
+				},
+        email: {
 					required: true,
-					minlength: 10,
-					maxlength: 10
+          email: true
 				},
-				email: {
-					required: true,
-					email: true
-				}
+				phone: {
+					required: true
+				},
+        address: {
+          required: true
+        },
+        postcode: {
+          required: true
+        },
+        city: {
+          required: true
+        },
+        voivodeship: {
+          required: true
+        }
 			},
-			messages: {
-				firstname: {
-					required: "To pole jest wymagane."
-				},
-				lastname: {
-					required: "To pole jest wymagane."
-				},
-				fullname: {
-					required: "To pole jest wymagane."
-				},
-				companyname: {
-					required: "To pole jest wymagane."
-				},
-				company_type: {
-					required: "To pole jest wymagane."
-				},
-				nip: {
-					required: "To pole jest wymagane.",
-					minlength: "Numer NIP musi składać się z 10 cyfr.",
-					maxlength: "Numer NIP musi składać się z 10 cyfr."
-				},
-				email: {
-					required: "To pole jest wymagane.",
-					email: "Wprowadź poprawny adres e-mail."
-				}
-			},
+      messages: {
+        companyName: {
+          required: 'To pole jest wymagane.'
+        },
+        nip: {
+          required: 'To pole jest wymagane.',
+          digits: 'Numer NIP może zawierać jedynie cyfry.',
+          minlength: 'Numer NIP musi składać się z {0} cyfr.',
+          maxlength: 'Numer NIP musi składać się z {0} cyfr.'
+        },
+        email: {
+          required: 'To pole jest wymagane.',
+          email: 'Wprowadź poprawny adres e-mail.'
+        },
+        phone: {
+          required: 'To pole jest wymagane.'
+        },
+        address: {
+          required: 'To pole jest wymagane.'
+        },
+        postcode: {
+          required: 'To pole jest wymagane.'
+        },
+        city: {
+          required: 'To pole jest wymagane.'
+        },
+        voivodeship: {
+          required: 'To pole jest wymagane.'
+        }
+      },
 			// Display error
 			invalidHandler: function(event, validator) {
 				KTUtil.scrollTop();
@@ -189,8 +194,8 @@ var KTCompanyListDatatable = function() {
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
-				/* $.ajax({
-					url: '/rest/company/show',
+				$.ajax({
+					url: '/rest/company/get',
 					method: 'POST',
 					data: { id: id },
 					success: function(res) {
@@ -198,7 +203,18 @@ var KTCompanyListDatatable = function() {
 								KTApp.unblockPage();
 
 								if(res.status == null) {
-                  //
+                  modalEl.modal('show');
+
+									modalEl.find('#modalTitle').html(res.fullname);
+
+									$(formEl).find('input,select').each(function() {
+										if(this.name == 'voivodeship')
+											modalEl.find('select[name="voivodeship"] option[value="' + res.voivodeship + '"]').prop('selected', true);
+										else {
+											var nextVar = eval('res.' + this.name);
+											modalEl.find('input[name="' + this.name + '"]').val(nextVar);
+										}
+									});
 								} else {
 									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
 								}
@@ -211,30 +227,30 @@ var KTCompanyListDatatable = function() {
 								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
 						}, 1000);
 					}
-				}); */
+				});
 			});
 		});
 	}
 
 	var submitData = function() {
-		var btn_pers = $('button[type="submit"]', form_personal);
+		var btn = $('button[type="submit"]', formEl);
 
 		// Submit personal form
-		btn_pers.on('click', function(e) {
+		btn.on('click', function(e) {
 			e.preventDefault();
 
-			if(validator_personal.form()) {
-				KTApp.progress(btn_pers);
-				btn_pers.attr('disabled', true);
+			if(validator.form()) {
+				KTApp.progress(btn);
+				btn.attr('disabled', true);
 
-				/* setTimeout(function() {
-					form_personal.ajaxSubmit({
-						url: '/rest/clients/modify',
+				setTimeout(function() {
+					formEl.ajaxSubmit({
+						url: '/rest/company/edit',
 						method: 'POST',
-						data: form_personal.serialize(),
+						data: formEl.serialize(),
 						success: function(res) {
-							KTApp.unprogress(btn_pers);
-							btn_pers.attr('disabled', false);
+							KTApp.unprogress(btn);
+							btn.attr('disabled', false);
 
 							if(res.status == 'success') {
 								KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
@@ -247,7 +263,7 @@ var KTCompanyListDatatable = function() {
 							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
 						}
 					});
-				}, 1000); */
+				}, 1000);
 			}
 		});
 	};
@@ -348,9 +364,11 @@ var KTCompanyListDatatable = function() {
 			formEl = $('#kt_company_edit');
 
 			init();
+			initValid();
 			initClientData();
 			selection();
 			selectedDelete();
+			submitData();
 			updateTotal();
 		},
 	};

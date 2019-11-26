@@ -81,3 +81,16 @@ module.exports.saveClientData = (req, callback) => {
     } else callback(Messages.message('not_found_client_identity', null));
   });
 };
+
+module.exports.changeStatus = (value, callback) => {
+  return new Client().where({ id: value.id }).fetch()
+  .then(function(model) {
+    if(model) {
+      model.set('state', value.change_status);
+
+      model.save().then(function(done) {
+        callback(Messages.message('client_status_change', null));
+      });
+    } else callback({ status: 'error', message: 'Klient dla którego chcesz zmienić status, nie istnieje.' });
+  });
+};

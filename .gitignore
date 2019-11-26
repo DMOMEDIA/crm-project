@@ -1,3 +1,4 @@
 # Dont track this files
 node_modules/
 .env
+uploads/

@@ -1,6 +1,8 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages');
+const Notification = require('../models/notifications');
+const moment = require('moment');
 
 const ROffer = bookshelf.Model.extend({
   tableName: 'crm_offer_requests',
@@ -52,11 +54,65 @@ module.exports.getClientOffersAssigned = (id, callback) => {
     });
 };
 
-module.exports.getOfferById = (id,callback) => {
+module.exports.getOfferById = (id, callback) => {
   return new ROffer()
     .where({ id: id })
     .fetch({ withRelated: ['client_info'] })
     .then(function(data) {
       callback(data);
     });
+};
+
+module.exports.addOffer = (value, callback) => {
+  if(value.client_type == 0) {
+    return new ClientRelated({
+      fullname: value.firstname + ' ' + value.lastname,
+      nip: value.nip,
+      phone: value.phone,
+      email: value.email,
+      company: value.client_type
+    }).save().then(function(result) {
+      return new ROffer({
+        client_id: result.get('id'),
+        type: value.offer_type,
+        name: value.nameItem,
+        pyear: value.pyear_l,
+        netto: value.netto_l,
+        instalments: value.leasing_install,
+        contribution: value.wklad_l,
+        red_value: value.wykup_l,
+        attentions: value.attentions,
+        other: value.other
+      }).save().then(function(done) {
+        Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Klient <b>' + result.get('fullname') + '</b> utworzył nowe zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b>');
+        callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
+      });
+    });
+  } else {
+    return new ClientRelated({
+      fullname: value.companyName,
+      nip: value.nip,
+      regon: value.regon,
+      phone: value.phone,
+      email: value.email,
+      company: value.client_type,
+      company_type: value.company_type
+    }).save().then(function(result) {
+      return new ROffer({
+        client_id: result.get('id'),
+        type: value.offer_type,
+        name: value.nameItem,
+        pyear: value.pyear_l,
+        netto: value.netto_l,
+        instalments: value.leasing_install,
+        contribution: value.wklad_l,
+        red_value: value.wykup_l,
+        attentions: value.attentions,
+        other: value.other
+      }).save().then(function(done) {
+        Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Klient <b>' + result.get('fullname') + '</b> utworzył nowe zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b>');
+        callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
+      });
+    });
+  }
 };

@@ -134,7 +134,10 @@ var KTOfferListDatatable = function() {
 					';
 				}
 			}]
-		});
+		}),
+		$("#kt_form_status").on("change", function() {
+      datatable.search($(this).val().toLowerCase(), "Status")
+    });
 	}
 
 	var initOfferData = function() {
@@ -280,7 +283,7 @@ var KTOfferListDatatable = function() {
 									$.ajax({
 										url: '/rest/files/get',
 										method: 'POST',
-										data: { folder_path: f_path },
+										data: { folder_path: 'offer/' + f_path },
 										success: function(res) {
 											if(res.files.length != 0) {
 												res.files.forEach(file => {

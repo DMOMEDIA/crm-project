@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
+const System = require('../models/system');
+const UserModel = require('../models/user');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
@@ -130,6 +132,37 @@ module.exports.getOfferById = (id, type, callback) => {
   }
 };
 
+module.exports.getUserByOfferId = (id, type, callback) => {
+  if(type == 'leasing') {
+    return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['client'] })
+    .then(function(result) {
+      var data = result.toJSON();
+      return new User().where({ id: data.client.user_id }).fetch()
+      .then(function(user) {
+        callback({ user_id: user.get('id'), assigned_to: user.get('assigned_to') });
+      });
+    });
+  } else if(type == 'rent') {
+    return new OfferRent().where({ id: id }).fetch({ withRelated: ['client'] })
+    .then(function(result) {
+      var data = result.toJSON();
+      return new User().where({ id: data.client.user_id }).fetch()
+      .then(function(user) {
+        callback({ user_id: user.get('id'), assigned_to: user.get('assigned_to') });
+      });
+    });
+  } else {
+    return new OfferInsurance().where({ id: id }).fetch({ withRelated: ['client'] })
+    .then(function(result) {
+      var data = result.toJSON();
+      return new User().where({ id: data.client.user_id }).fetch()
+      .then(function(user) {
+        callback({ user_id: user.get('id'), assigned_to: user.get('assigned_to') });
+      });
+    });
+  }
+};
+
 module.exports.createOffer = (req, callback) => {
   var value = req.body;
   if(value.offer_type == 'leasing') {
@@ -217,6 +250,13 @@ module.exports.changeData = (value, callback) => {
         callback(Messages.message('offer_data_change', null));
 
         model.save().then(function(result) {
+          // Prowizje
+          module.exports.getUserByOfferId(result.get('id'), result.get('offer_type'), function(cb) {
+            if(result.get('state') < 2) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), true, true);
+            else if(result.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), true, false);
+          });
+
           return new LeasingVariants().where({ id: value.vid }).fetch()
           .then(function(variant) {
             if(variant) {
@@ -247,6 +287,13 @@ module.exports.changeData = (value, callback) => {
         if(value.km_limit_r) model.set('limit', value.km_limit_r);
         if(value.invoice_r) model.set('invoice', value.invoice_r);
 
+        model.save().then(function(done) {
+          module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
+            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
+            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+          });
+        });
         callback(Messages.message('offer_data_change', null));
 
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
@@ -267,6 +314,13 @@ module.exports.changeData = (value, callback) => {
         if(value.vehicle_val_i) model.set('netto', value.vehicle_val_i);
         if(value.insurance_cost) model.set('insurance_cost', value.insurance_cost);
 
+        model.save().then(function(done) {
+          module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
+            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
+            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+          });
+        });
         callback(Messages.message('offer_data_change', null));
 
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });

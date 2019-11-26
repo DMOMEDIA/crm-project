@@ -270,6 +270,16 @@ exports.modifyClientById = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.changeClientStatus = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body) {
+      Client.changeStatus(req.body, function(result) {
+        res.json(result);
+      });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 // { Zapytania ofertowe }
 exports.getOfferRequests = (req, res) => {
   if(req.isAuthenticated()) {
@@ -306,6 +316,14 @@ exports.getRequestOfferById = (req, res) => {
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.addRequestOffer = (req, res) => {
+  if(req.body) {
+    ROffer.addOffer(req.body, function(result) {
+      res.json(result);
+    });
+  }
 };
 
 // Notifications //
@@ -460,11 +478,33 @@ exports.uploadOfferFiles = (req, res, next) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
-exports.getOfferFiles = (req, res) => {
+exports.uploadClientFiles = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    if(req.files) {
+      var upload_dir = 'uploads',
+      client_dir = 'clients',
+      f_path = req.body.folder_path;
+
+      fs.mkdirSync(upload_dir + '/' + client_dir + '/' + f_path, { recursive: true });
+
+      Promise.resolve(req.files)
+        .each(function(file_incoming, idx) {
+          var sanitized_filename = sanitize(file_incoming.originalname);
+          var file = path.join(upload_dir, client_dir, f_path, sanitized_filename);
+
+          return fs.writeFileSync(file, file_incoming.buffer);
+        }).then(function() {
+          res.status(200).json(Messages.message('added_new_files', null));
+        });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getFiles = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.body) {
       try {
-        var output = fs.readdirSync('./uploads/offer/' + req.body.folder_path);
+        var output = fs.readdirSync('./uploads/' + req.body.folder_path);
         res.json({ files: output });
       }
       catch {
@@ -522,6 +562,30 @@ exports.addCompany = (req, res) => {
     if(res.locals.userPermissions.includes('crm.companies.add')) {
       if(req.body != null) {
         Company.addNewCompany(req.body, result => { res.json(result) });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getCompanyById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.companies.show')) {
+      if(req.body.id) {
+        Company.getCompanyById(req.body.id, function(result) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.editCompany = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.companies.edit')) {
+      if(req.body) {
+        Company.changeData(req.body, function(result) {
+          res.json(result);
+        });
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));

@@ -98,13 +98,13 @@ block content
                                   .row
                                     label.col-xl-3     
                                     .col-lg-9.col-xl-6
-                                      h3.kt-section__title.kt-section__title-sm Dane personalne:
+                                      h3.kt-section__title.kt-section__title-sm Dane podstawowe:
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
                                     |                                         
                                     .col-lg-9.col-xl-6
-                                      input.form-control(type='text', name='companyName')
+                                      input.form-control(type='text', name='fullname')
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label NIP:
@@ -115,7 +115,7 @@ block content
                                           span.input-group-text
                                             i.la.la-check-square       
                                         |                                                 
-                                        input#nipInput.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź numer NIP')
+                                        input.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź numer NIP')
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Adres e-mail

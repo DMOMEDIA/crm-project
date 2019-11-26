@@ -31,6 +31,9 @@ exports.message = (type, argument) => {
     case 'file_deleted_fail': selected = { status: 'error', message: 'Wystąpił błąd podczas usuwania pliku.' }; break;
     case 'not_found_offer': selected = { status: 'error', message: 'Oferta o podanym identyfikatorze nie istnieje.' }; break;
     case 'success_offer_deleted': selected = { status: 'success', message: 'Oferta została pomyślnie usunięta.' }; break;
+    case 'success_company_data_change': selected = { status: 'success', message: 'Pomyślnie zaktualizowano dane o firmie.' }; break;
+    case 'added_new_files': selected = { status: 'success', message: 'Pliki zostały pomyślnie przesłane.' }; break;
+    case 'client_status_change': selected = { status: 'success', message: 'Status klienta został pomyślnie zmieniony.' }; break;
   }
 
   return selected;

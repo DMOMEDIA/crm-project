@@ -17,10 +17,14 @@ var KTUserListDatatable = function() {
 				type: 'remote',
 				source: {
 					read: {
-						url: '/rest/users/list'
+						url: '/rest/users/list',
+						map: function(t) {
+              var e=t;
+              return void 0!==t.data&&(e=t.data), e
+            }
 					},
 				},
-				pageSize: 10, // display 20 records per page
+				pageSize: 10,
 				serverPaging: true,
 				serverFiltering: true,
 				serverSorting: true,

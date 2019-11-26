@@ -165,4 +165,13 @@ exports.companyadd = (req, res) => {
   });
 };
 
+exports.statistics = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+
+  res.render('statistics', {
+    title: 'Statystyki globalne',
+    pageName: 'statistics'
+  });
+};
+
 // {STOP} Strony po zalogowaniu

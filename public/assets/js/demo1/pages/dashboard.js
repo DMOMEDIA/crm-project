@@ -7,6 +7,97 @@ var KTDashboard = function() {
 		unread = 0,
 		audioElement = null;
 
+		// Sparkline Chart helper function
+    var _initSparklineChart = function(src, label, data, color, border) {
+        if (src.length == 0) {
+            return;
+        }
+
+        var config = {
+            type: 'line',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: "",
+                    borderColor: color,
+                    borderWidth: border,
+
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 12,
+                    pointBackgroundColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
+                    pointBorderColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
+                    pointHoverBackgroundColor: KTApp.getStateColor('danger'),
+                    pointHoverBorderColor: Chart.helpers.color('#000000').alpha(0.1).rgbString(),
+                    fill: false,
+                    data: data,
+                }]
+            },
+            options: {
+                title: {
+                    display: false,
+                },
+                tooltips: {
+                    enabled: false,
+                    intersect: false,
+                    mode: 'nearest',
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false,
+                    labels: {
+                        usePointStyle: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: true,
+                hover: {
+                    mode: 'index'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: false,
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Dni tygodnia'
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        gridLines: false,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+
+                elements: {
+                    point: {
+                        radius: 4,
+                        borderWidth: 12
+                    },
+                },
+
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 10,
+                        top: 5,
+                        bottom: 0
+                    }
+                }
+            }
+        };
+
+        return new Chart(src, config);
+    }
+
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
 			var msPerHour = msPerMinute * 60;
@@ -57,6 +148,11 @@ var KTDashboard = function() {
 					else if(elapsed > 1 && elapsed < 5) return elapsed + ' lata temu';
 					else return elapsed + ' lat temu';
 			}
+		}
+
+		var quickStats = function() {
+			_initSparklineChart($('#kt_chart_quick_stats_1'), ["20/11/2019", "21/11/2019", "22/11/2019", "23/11/2019", "24/11/2019", "25/11/2019", "26/11/2019"], [11, 9, 12, 14, 17, 18, 14], KTApp.getStateColor('brand'), 3);
+			_initSparklineChart($('#kt_chart_quick_stats_2'), ["Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad"], [32, 16, 12, 4, 4, 18, 14], KTApp.getStateColor('danger'), 3);
 		}
 
 		var notificationSound = function() {
@@ -225,6 +321,7 @@ var KTDashboard = function() {
 						updateNotifications();
 						setUnreadNotification();
 						sessionTimeout();
+						quickStats();
 
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Ładowanie ...'});

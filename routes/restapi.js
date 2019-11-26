@@ -28,8 +28,10 @@ router.post('/rest/clients/add', REST.addClient);
 router.post('/rest/clients/list', REST.getClientList);
 router.post('/rest/clients/modify', REST.modifyClientById);
 router.post('/rest/client/show', REST.getClientById);
+router.post('/rest/client/status', REST.changeClientStatus);
 router.post('/rest/roffer/list', REST.getOfferRequests);
 router.post('/rest/roffer/get', REST.getRequestOfferById);
+router.post('/rest/roffer/add', REST.addRequestOffer);
 
 // {REST} powiadomienia
 router.post('/rest/notifications', REST.getUserNotifications);
@@ -47,12 +49,15 @@ router.get('/rest/company/remotelist', REST.companyRemoteList);
 
 // {REST} Upload files
 router.post('/rest/files/upload', upload.array('source_file[]'), REST.uploadOfferFiles);
-router.post('/rest/files/get', REST.getOfferFiles);
+router.post('/rest/files/upload/client', upload.array('source_file[]'), REST.uploadClientFiles);
+router.post('/rest/files/get', REST.getFiles);
 router.post('/rest/file/download', REST.downloadFile);
 router.post('/rest/file/delete', REST.deleteFile);
 
 // {REST} Firmy
 router.post('/rest/company/list', REST.loadCompanylist);
 router.post('/rest/company/add', REST.addCompany);
+router.post('/rest/company/get', REST.getCompanyById);
+router.post('/rest/company/edit', REST.editCompany);
 
 module.exports = router;

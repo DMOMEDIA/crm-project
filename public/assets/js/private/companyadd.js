@@ -34,10 +34,7 @@ var KTCompanyAdd = function () {
           email: true
 				},
 				phone: {
-					required: true,
-          digits: true,
-          minlength: 3,
-          maxlength: 9
+					required: true
 				},
         address: {
           required: true
@@ -67,10 +64,7 @@ var KTCompanyAdd = function () {
           email: 'Wprowadź poprawny adres e-mail.'
         },
         phone: {
-          required: 'To pole jest wymagane.',
-          digits: 'Numer telefonu może zawierać tylko cyfry.',
-          minlength: 'Numer telefonu musi składać się z minimalnie {0} cyfr.',
-          maxlength: 'Numer telefonu musi składać się z maksymalnie {0} cyfr.'
+          required: 'To pole jest wymagane.'
         },
         address: {
           required: 'To pole jest wymagane.'

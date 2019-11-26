@@ -28,5 +28,7 @@ router.get('/dashboard/profile', PagesController.userProfile);
 router.get('/dashboard/documentation', PagesController.docs);
 // Zgłaszanie błędów
 router.get('/dashboard/report', PagesController.report);
+// Statystyki
+router.get('/dashboard/statistics', PagesController.statistics);
 
 module.exports = router;

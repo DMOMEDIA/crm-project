@@ -46,6 +46,12 @@ app.use(passport.session());
 
 app.locals.env = process.env;
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.ACCESS_URL);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.use(async function(req, res, next) {
   await LoginController.getPermissions(req, res, next);
   next();
