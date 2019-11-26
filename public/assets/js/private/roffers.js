@@ -20,8 +20,8 @@ var KTROfferListDatatable = function() {
 				},
 				pageSize: 10, // display 20 records per page
 				serverPaging: true,
-				serverFiltering: true,
-				serverSorting: true,
+				serverFiltering: false,
+				serverSorting: false,
 			},
 
 			// layout definition

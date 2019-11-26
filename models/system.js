@@ -27,6 +27,26 @@ module.exports.createLog = (type, log) => {
   }).save();
 };
 
+module.exports.getGlobalProvision = (callback) => {
+  return new Provision().where({ for: 'global' }).fetchAll()
+  .then(function(result) {
+    var data = result.toJSON(),
+    provision_f = parseFloat(0),
+    provision = parseFloat(0);
+    async.each(data, function(element, cb) {
+      if(element.forecast == true) {
+        provision_f += parseFloat(element.value);
+      } else {
+        provision += parseFloat(element.value);
+      }
+      cb();
+    }, function() {
+      callback({ prov_forecast: provision_f, prov_normal: provision });
+    });
+  });
+};
+
+// ZBUGOWANE
 module.exports.archiveStats = (name) => {
   module.exports.getGlobalProvision(function(result) {
     if(name == 'provision_global') {
@@ -48,25 +68,6 @@ module.exports.archiveStats = (name) => {
         return module.exports.createLog('statistics_every_day_log', 'Błąd podczas zapisu danych statystycznych (NAME=' + name + ').');
       });
     }
-  });
-};
-
-module.exports.getGlobalProvision = (callback) => {
-  return new Provision().where({ for: 'global' }).fetchAll()
-  .then(function(result) {
-    var data = result.toJSON(),
-    provision_f = parseFloat(0),
-    provision = parseFloat(0);
-    async.each(data, function(element, cb) {
-      if(element.forecast == true) {
-        provision_f += parseFloat(element.value);
-      } else {
-        provision += parseFloat(element.value);
-      }
-      cb();
-    }, function() {
-      callback({ prov_forecast: provision_f, prov_normal: provision });
-    });
   });
 };
 

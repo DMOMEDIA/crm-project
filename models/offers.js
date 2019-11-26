@@ -365,7 +365,13 @@ module.exports.changeStatus = (value, callback) => {
       if(model) {
         model.set('state', value.change_type);
 
-        model.save();
+        model.save().then(function(done) {
+          module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
+            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
+            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+          });
+        });
 
         callback(Messages.message('offer_status_change', null));
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });
@@ -376,7 +382,13 @@ module.exports.changeStatus = (value, callback) => {
       if(model) {
         model.set('state', value.change_type);
 
-        model.save();
+        model.save().then(function(done) {
+          module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
+            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
+            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+          });
+        });
 
         callback(Messages.message('offer_status_change', null));
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });
@@ -387,7 +399,13 @@ module.exports.changeStatus = (value, callback) => {
       if(model) {
         model.set('state', value.change_type);
 
-        model.save();
+        model.save().then(function(done) {
+          module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
+            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
+            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+          });
+        });
 
         callback(Messages.message('offer_status_change', null));
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić status, nie istnieje.' });

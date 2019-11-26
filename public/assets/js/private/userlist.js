@@ -26,8 +26,8 @@ var KTUserListDatatable = function() {
 				},
 				pageSize: 10,
 				serverPaging: true,
-				serverFiltering: true,
-				serverSorting: true,
+				serverFiltering: false,
+				serverSorting: false,
 			},
 
 			// layout definition
@@ -423,7 +423,7 @@ var KTUserListDatatable = function() {
 	// search
 	var search = function() {
 		$('#kt_form_status').on('change', function() {
-			datatable.search($(this).val().toLowerCase(), 'Status');
+			datatable.search($(this).val().toLowerCase(), 'role');
 		});
 	}
 
@@ -686,6 +686,7 @@ var KTUserListDatatable = function() {
 			togglePassword();
       refreshPassword();
 			updateTotal();
+			search();
 		},
 	};
 }();

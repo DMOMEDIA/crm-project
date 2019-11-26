@@ -79,13 +79,13 @@ exports.getUserlist = (req, res) => {
       var output = {};
       if(req.session.userData.role == 'administrator') {
         User.userList(null, function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
       } else {
         User.userListByAssignedId(null, req.session.userData.id, function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
@@ -231,13 +231,13 @@ exports.getClientList = (req, res) => {
       var output = {};
       if(req.session.userData.role == 'administrator') {
         Client.clientList(function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
       } else {
         Client.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
@@ -288,14 +288,14 @@ exports.getOfferRequests = (req, res) => {
 
       if(req.session.userData.role == 'administrator') {
         ROffer.getClientOffers(function(data, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = data;
           res.json(output);
         });
       } else {
         ROffer.getClientOffersAssigned(req.session.userData.id, function(data, nums) {
           if(data != null) {
-            output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+            output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
             output['data'] = data;
             res.json(output);
           }
@@ -360,7 +360,7 @@ exports.loadOfferlist = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.show')) {
       Offer.getOffers(req, function(result, nums) {
-        output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+        output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
         output['data'] = result;
         res.json(result);
       });
@@ -549,7 +549,7 @@ exports.loadCompanylist = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.companies.show')) {
       Company.getCompanyList(function(result, nums) {
-        output['meta'] = { page: 1, pages: 1, perpage: -1, total: nums, sort: 'asc', field: 'id' };
+        output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
         output['data'] = result;
         res.json(result);
       });
