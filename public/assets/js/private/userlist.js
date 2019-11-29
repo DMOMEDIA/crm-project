@@ -56,7 +56,7 @@ var KTUserListDatatable = function() {
 				},
 				textAlign: 'center',
 			}, {
-				field: "efullname",
+				field: "fullname",
 				title: "Pracownik",
 				sortable: 'asc',
 				width: 200,
@@ -600,10 +600,8 @@ var KTUserListDatatable = function() {
 			$('#kt_subheader_group_selected_rows').html(count);
 
 			if (count > 0) {
-				$('#kt_subheader_search').addClass('kt-hidden');
 				$('#kt_subheader_group_actions').removeClass('kt-hidden');
 			} else {
-				$('#kt_subheader_search').removeClass('kt-hidden');
 				$('#kt_subheader_group_actions').addClass('kt-hidden');
 			}
 		});

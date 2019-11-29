@@ -11,23 +11,6 @@ block content
           span.kt-subheader__separator.kt-subheader__separator--v
           |             
           |             
-          #kt_subheader_search.kt-subheader__group
-            span#kt_subheader_total.kt-subheader__desc
-              | 
-            |                 
-            |                                     
-            form#kt_subheader_search_form.kt-margin-l-20
-              .kt-input-icon.kt-input-icon--right.kt-subheader__search
-                input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
-                |                             
-                span.kt-input-icon__icon.kt-input-icon__icon--right
-                  span
-                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                        rect#bound(x='0', y='0', width='24', height='24')
-                        path#Path-2(d='M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
-                        path#Path(d='M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z', fill='#000000', fill-rule='nonzero')
-          |                             
           #kt_subheader_group_actions.kt-subheader__group.kt-hidden
             .kt-subheader__desc
               span#kt_subheader_group_selected_rows
@@ -57,6 +40,34 @@ block content
     .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
       // begin::Portlet
       .kt-portlet.kt-portlet--mobile
+        .kt-portlet__body
+          // begin: Search Form
+          .kt-form.kt-form--label-right.kt-margin-b-10
+            .row.align-items-center
+              .col-xl-8.order-2.order-xl-1
+                .row.align-items-center
+                  .col-md-4.kt-margin-b-20-tablet-and-mobile
+                    .kt-input-icon.kt-input-icon--left
+                      input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      span.kt-input-icon__icon.kt-input-icon__icon--left
+                        span
+                          i.la.la-search
+                  |                 &#x9;&#x9;&#x9;&#x9;
+                  .col-md-4.kt-margin-b-20-tablet-and-mobile.kt-align-right
+                    .kt-form__group.kt-form__group--inline
+                      .kt-form__label
+                        label Status:
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      .kt-form__control
+                        select#kt_form_status.form-control
+                          option(value='') Wszystkie
+                          option(value='1') Nieprzypisany
+                          option(value='2') Niepełne dane
+                          option(value='3') Niezweryfikowany
+                          option(value='4') Zweryfikowany
+              | &#x9;&#x9;
+          // end: Search Form
         .kt-portlet__body.kt-portlet__body--fit
           // begin: Datatable
           #kt_apps_client_list_datatable.kt-datatable
@@ -257,10 +268,10 @@ block content
                                       .input-group
                                         input#idInput3(type='hidden', name='id')
                                         select.form-control(name='change_status')
-                                          option(value='0') nieprzypisany
-                                          option(value='1') niepełne dane
-                                          option(value='2') niezweryfikowany
-                                          option(value='3') zweryfikowany
+                                          option(value='1') nieprzypisany
+                                          option(value='2') niepełne dane
+                                          option(value='3') niezweryfikowany
+                                          option(value='4') zweryfikowany
                                         .input-group-append
                                           button.btn.btn-brand(type='submit') Zmień
                                       |                                             

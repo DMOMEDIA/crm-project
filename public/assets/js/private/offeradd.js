@@ -8,7 +8,7 @@ var KTWizardOfferAdd = function () {
 	var validator;
 	var wizard;
 	var slider_min = 0, slider_max = 0;
-	var upload_info;
+	var upload_info, dzUpload;
 
 	// Private functions
 	var initWizard = function () {
@@ -19,12 +19,6 @@ var KTWizardOfferAdd = function () {
 
 		// Validation before going to next page
 		wizard.on('beforeNext', function(wizardObj) {
-			if (validator.form() !== true) {
-				wizardObj.stop();  // don't go to the next step
-			}
-		});
-
-		wizard.on('beforePrev', function(wizardObj) {
 			if (validator.form() !== true) {
 				wizardObj.stop();  // don't go to the next step
 			}
@@ -387,6 +381,7 @@ var KTWizardOfferAdd = function () {
 
 		btn.on('click', function(e) {
 			e.preventDefault();
+			e.stopPropagation();
 
 			if (validator.form()) {
 				// See: src\js\framework\base\app.js
@@ -420,7 +415,38 @@ var KTWizardOfferAdd = function () {
 						success: function(res) {
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
-								upload_info = { path: res.param, message: res.message };
+								swal.fire({
+									"title": "",
+									"text": "Przesyłanie załączonych plików do systemu",
+									onBeforeOpen: () => {
+    								swal.showLoading();
+									},
+									closeOnClickOutside: false,
+									allowOutsideClick: false
+								});
+
+								// Send files to system
+								setTimeout(function() {
+									dzUpload.processQueue();
+								}, 500);
+
+								dzUpload.on("success", function(file, res) {
+									KTApp.unprogress(btn);
+									btn.attr('disabled', false);
+
+									swal.fire({
+										"title": "",
+										"text": res.message,
+										"type": "success",
+										"confirmButtonClass": "btn btn-secondary"
+									});
+									dzUpload.removeAllFiles();
+									wizard.goTo(1, true);
+								});
+
+								dzUpload.on("sendingmultiple", function(file, xhr, formData) {
+									formData.append('folder_path', res.param);
+								});
 							} else {
 								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
 								wizard.goTo(1, true);
@@ -532,37 +558,7 @@ var KTWizardOfferAdd = function () {
 			parallelUploads: 5,
 			acceptedFiles: "application/pdf,.docx,.odt,.xls",
 			init: function() {
-				var btn = formEl.find('[name="add-submit"]'),
 				dzUpload = this;
-
-				btn.on('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-
-					setTimeout(function() {
-						if(upload_info != null) {
-							dzUpload.processQueue();
-						}
-					}, 1500);
-				});
-
-				this.on("success", function(file, res) {
-					KTApp.unprogress(btn);
-					btn.attr('disabled', false);
-
-					swal.fire({
-						"title": "",
-						"text": res.message,
-						"type": "success",
-						"confirmButtonClass": "btn btn-secondary"
-					});
-					dzUpload.removeAllFiles();
-					wizard.goTo(1, true);
-				});
-
-				this.on("sendingmultiple", function(file, xhr, formData) {
-					formData.append('folder_path', upload_info.path);
-				});
 			}
 		});
 	}

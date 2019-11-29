@@ -46,13 +46,12 @@ module.exports.getGlobalProvision = (callback) => {
   });
 };
 
-// ZBUGOWANE
 module.exports.archiveStats = (name) => {
   module.exports.getGlobalProvision(function(result) {
     if(name == 'provision_global') {
       return new Archive({
         name: name,
-        value: result.provision
+        value: result.prov_normal
       }).save().then(function(res) {
         return module.exports.createLog('statistics_every_day_log', 'Zapis statystyk został wykonany poprawnie (NAME=' + name + ').');
       }).catch(function(err) {
@@ -61,7 +60,7 @@ module.exports.archiveStats = (name) => {
     } else {
       return new Archive({
         name: name,
-        value: result.provision_f
+        value: result.prov_forecast
       }).save().then(function(res) {
         return module.exports.createLog('statistics_every_day_log', 'Zapis statystyk został wykonany poprawnie (NAME=' + name + ').');
       }).catch(function(err) {

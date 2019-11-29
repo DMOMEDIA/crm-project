@@ -18,6 +18,7 @@ const errorsHandler = require('./middlewares/errors');
 const ExpireSession = require('./controllers/ExpireSession');
 const LoginController = require('./controllers/LoginController');
 const Cron = require('./controllers/Cron');
+const System = require('./models/system');
 
 const app = express();
 
