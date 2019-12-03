@@ -1,6 +1,7 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const async = require('async');
 const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
 const System = require('../models/system');
@@ -106,7 +107,18 @@ module.exports.getOffers = (req, callback) => {
           }, 'company'] })
           .then(function(rent) {
             output = output.concat(rent.toJSON());
-            callback(output, output.length);
+            var index = output.length-1;
+
+            while(index >= 0) {
+              if(output[index].client.user_id == null) {
+                output.splice(index, 1);
+              }
+
+              index -= 1;
+              if(index == 0) {
+                callback(output, output.length);
+              }
+            }
           });
         });
     });

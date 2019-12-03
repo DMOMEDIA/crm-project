@@ -684,8 +684,7 @@ var KTOfferListDatatable = function() {
 	var initUploadData = function() {
 		var modalEl = $('#kt_fetch_user'),
 		btn = $('button[type="submit"]', formEl);
-
-		// Submit personal form
+		
 		btn.on('click', function(e) {
 			e.preventDefault();
 

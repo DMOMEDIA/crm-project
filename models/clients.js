@@ -2,6 +2,8 @@ const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages');
 const System = require('../models/system');
+const User = require('../models/user');
+const async = require('async');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
@@ -30,9 +32,33 @@ module.exports.clientList = (callback) => {
 };
 
 module.exports.clientlistByAssignedId = (id, callback) => {
+  var output = [];
   return new Client().where({ user_id: id }).fetchAll().then(function(response) {
-    Client.where({ user_id: id }).count().then(function(cnt) {
-      callback(response, cnt);
+    output = output.concat(response.toJSON());
+
+    User.userListByAssignedId(null, id, function(done, cnt) {
+      if(done) {
+        var data_json = done.toJSON(), counter = 0;
+
+        async.each(data_json, async function(element, next) {
+          await Client.where({ user_id: element.id }).fetchAll().then(function(result) {
+            if(result) {
+              var data = result.toJSON();
+
+              data.forEach(async function(element) {
+                var modify = element;
+                modify['inferior'] = true;
+
+                await output.push(modify);
+              });
+              counter++;
+            }
+          });
+          if(cnt == counter) next();
+        }, function() {
+          callback(output, output.length);
+        });
+      } else callback(output, output.length);
     });
   });
 };
@@ -59,18 +85,12 @@ module.exports.saveClientData = (req, callback) => {
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
 
-      if(req.session.userData.role == 'administrator') {
-        if(client.param) {
-          model.set('user_id', client.param);
-          if(model.get('nip') != null) {
-            model.set('state', 2);
-          } else model.set('state', 1);
-        }
-      } else if(model.get('user_id') == req.session.userData.id) {
-        if(client.param) {
-          if(model.get('nip') != null) {
-            model.set('state', 2);
-          } else model.set('state', 1);
+      model.set('user_id', client.param);
+      if(client.param) {
+        if(model.get('state') != 4) {
+          if(model.get('nip')) {
+            model.set('state', 3);
+          } else model.set('state', 2);
         }
       }
 

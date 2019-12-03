@@ -34,6 +34,7 @@ exports.message = (type, argument) => {
     case 'success_company_data_change': selected = { status: 'success', message: 'Pomyślnie zaktualizowano dane o firmie.' }; break;
     case 'added_new_files': selected = { status: 'success', message: 'Pliki zostały pomyślnie przesłane.' }; break;
     case 'client_status_change': selected = { status: 'success', message: 'Status klienta został pomyślnie zmieniony.' }; break;
+    case 'request_offer_data_change': selected = { status: 'success', message: 'Dane zapytania ofertowego zostały pomyślnie zmienione.' }; break;
   }
 
   return selected;

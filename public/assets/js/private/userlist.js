@@ -4,32 +4,178 @@
 var KTUserListDatatable = function() {
 
 	// variables
-	var datatable;
+	var datatable, clients_datatable;
 	var form_personal, form_login, form_password;
 	var validator_personal, validator_login, validator_password;
+	var modalEl;
 
-	// init
-	var init = function() {
-		// init the datatables. Learn more: https://keenthemes.com/metronic/?page=docs&section=datatable
-		datatable = $('#kt_apps_user_list_datatable').KTDatatable({
-			// datasource definition
+	var initModalEvent = function() {
+		clients_datatable.hide();
+
+		function reloadTable() {
+			var modalContent = modalEl.find('.datatable-in-modal');
+			clients_datatable.spinnerCallback(true, modalContent);
+
+			clients_datatable.reload();
+
+			clients_datatable.on('kt-datatable--on-layout-updated', function() {
+				clients_datatable.show();
+				clients_datatable.spinnerCallback(false, modalContent);
+				clients_datatable.redraw();
+			});
+		}
+		modalEl.on('click', '#clients_table_show', function() {
+			reloadTable();
+		}).on('shown.bs.modal', function() {
+			if($('#clients_table_show').hasClass('active')) {
+				reloadTable();
+			}
+		}).on('hidden.bs.modal', function() {
+			$('#modal_datatable_clients').KTDatatable('destroy');
+		});
+
+		modalEl.find('#kt_form_status_inTable').on('change', function() {
+			clients_datatable.search($(this).val().toLowerCase(), 'state');
+		});
+		modalEl.find('#kt_form_status_inTable').selectpicker();
+	}
+
+	var subTableInit = function(e) {
+		$('<div/>').attr('id', 'child_data_local_' + e.data.id).appendTo(e.detailCell).KTDatatable({
 			data: {
 				type: 'remote',
 				source: {
 					read: {
 						url: '/rest/users/list',
-						map: function(t) {
-              var e=t;
-              return void 0!==t.data&&(e=t.data), e
-            }
+						params: {
+							id: e.data.id
+						}
 					},
 				},
-				pageSize: 10,
-				serverPaging: true,
-				serverFiltering: false,
-				serverSorting: false,
+			},
+			// layout definition
+			layout: {
+				scroll: true,
+				height: 300,
+				header: false,
+				footer: false,
+				// enable/disable datatable spinner.
+				spinner: {
+					type: 1,
+					theme: 'default',
+				},
 			},
 
+			toolbar: {
+				items: {
+					info: false
+				}
+			},
+
+			sortable: true,
+
+			// columns definition
+			columns: [{
+				field: 'id',
+				title: '',
+				sortable: false,
+				width: 30,
+				textAlign: 'center',
+			}, {
+				field: "fullname",
+				title: "Pracownik",
+				sortable: 'asc',
+				width: 200,
+				// callback function support for column rendering
+				template: function(data, i) {
+					var urole = data.role;
+					if(urole == 'posrednik') urole = 'pośrednik';
+					var output = '\
+							<div class="kt-user-card-v2">\
+								<div class="kt-user-card-v2__pic">\
+									<div class="kt-badge kt-badge--xl kt-badge--warning">' + data.fullname.substring(0, 1) + '</div>\
+								</div>\
+								<div class="kt-user-card-v2__details">\
+									<a href="javascript:;" class="kt-user-card-v2__name show_user_data" data-id="' + data.id + '">' + data.fullname + '</a>\
+									<span class="kt-user-card-v2__desc">' + urole + '</span>\
+								</div>\
+							</div>';
+					return output;
+				}
+			}, {
+				field: 'identity',
+				title: 'Identyfikator',
+				template: function(row) {
+					return row.identity;
+				}
+			}, {
+				field: 'email',
+				title: 'E-mail',
+				template: function(row) {
+          if(row.email == null) return "Nie określono";
+					else return row.email;
+				},
+			}, {
+				field: 'telephone',
+				title: 'Telefon',
+				sortable: false,
+				template: function(row) {
+					if(row.telephone == null) return "Nie określono";
+					else return row.telephone;
+				},
+			}, {
+				field: "Actions",
+				width: 80,
+				title: "Akcje",
+				sortable: false,
+				autoHide: false,
+				overflow: 'visible',
+				template: function(row) {
+				return '\
+						<div id="dropdown" class="dropdown">\
+							<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown">\
+								<i class="flaticon-more-1"></i>\
+							</a>\
+							<div class="dropdown-menu dropdown-menu-right">\
+								<ul class="kt-nav">\
+									<li class="kt-nav__item show_user_data" data-id="' + row.id + '">\
+										<a href="javascript:;" class="kt-nav__link">\
+											<i class="kt-nav__link-icon flaticon2-contract"></i>\
+											<span class="kt-nav__link-text">Edytuj</span>\
+										</a>\
+									</li>\
+									<li class="kt-nav__item delete_user" data-id="' + row.id + '">\
+										<a href="javascript:;" class="kt-nav__link">\
+											<i class="kt-nav__link-icon flaticon2-trash"></i>\
+											<span class="kt-nav__link-text">Usuń</span>\
+										</a>\
+									</li>\
+								</ul>\
+							</div>\
+						</div>\
+					';
+				}
+			}],
+		});
+	};
+
+	// init
+	var init = function() {
+		// init the datatables. Learn more: https://keenthemes.com/metronic/?page=docs&section=datatable
+		datatable = $('.kt-datatable-initialize').KTDatatable({
+			// datasource definition
+			data: {
+				type: 'remote',
+				source: {
+					read: {
+						url: '/rest/users/list'
+					},
+				},
+			},
+			detail: {
+				title: 'Lista pracowników podległych',
+				content: subTableInit,
+			},
 			// layout definition
 			layout: {
 				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
@@ -38,6 +184,8 @@ var KTUserListDatatable = function() {
 
 			// column sorting
 			sortable: true,
+
+			filterable: false,
 
 			pagination: true,
 
@@ -48,12 +196,9 @@ var KTUserListDatatable = function() {
 			// columns definition
 			columns: [{
 				field: 'id',
-				title: '#',
+				title: '',
 				sortable: false,
-				width: 20,
-				selector: {
-					class: 'kt-checkbox--solid'
-				},
+				width: 30,
 				textAlign: 'center',
 			}, {
 				field: "fullname",
@@ -283,7 +428,6 @@ var KTUserListDatatable = function() {
 	}
 
 	var submitData = function() {
-		var modalEl = $('#kt_fetch_user');
 		var btn_pers = $('button[type="submit"]', form_personal),
 		btn_login = $('button[type="submit"]', form_login),
 		btn_pass = $('button[type="submit"]', form_password);
@@ -425,138 +569,247 @@ var KTUserListDatatable = function() {
 		$('#kt_form_status').on('change', function() {
 			datatable.search($(this).val().toLowerCase(), 'role');
 		});
+		$('#kt_form_status').selectpicker();
 	}
 
 	var initUserData = function() {
-		datatable.on('kt-datatable--on-layout-updated', function(e) {
-			var modalEl = $('#kt_fetch_user');
+		$("#postcodeInput").inputmask({
+				"mask": "99-999",
+				placeholder: "" // remove underscores from the input mask
+		});
 
-			$("#postcodeInput").inputmask({
-					"mask": "99-999",
-					placeholder: "" // remove underscores from the input mask
+		$(document).on('click', '.show_user_data', function() {
+			var id = $(this).attr('data-id');
+
+			KTUtil.clearInputInForm(form_personal);
+			modalEl.find('select#remoteUser').html('<option></option>');
+
+			$('#isCompanyInput').on('change',function(e) {
+				if($(this).is(':checked')) modalEl.find('#addressAlert').show();
+				else modalEl.find('#addressAlert').hide();
 			});
 
-			$('.show_user_data').on('click', function() {
-				var id = $(this).attr('data-id');
+			KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
 
-				KTUtil.clearInputInForm(form_personal);
-				modalEl.find('select#remoteUser').html('<option></option>');
+			$.ajax({
+				url: '/rest/user/show',
+				method: 'POST',
+				data: { id: id },
+				success: function(res) {
+					setTimeout(function() {
+							KTApp.unblockPage();
 
-				$('#isCompanyInput').on('change',function(e) {
-					if($(this).is(':checked')) modalEl.find('#addressAlert').show();
-					else modalEl.find('#addressAlert').hide();
-				});
+							if(res.status == null) {
+								modalEl.modal('show');
 
-				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
+								var name = res.fullname.split(' ');
+								modalEl.find('#modalTitle').html(res.fullname);
+								modalEl.find('#idInput1').val(res.id);
+								modalEl.find('#idInput2').val(res.id);
+								modalEl.find('#idInput3').val(res.id);
+								modalEl.find('#firstnameInput').val(name[0]);
+								modalEl.find('#lastnameInput').val(name[1]);
+								modalEl.find('#telephoneInput').val(res.telephone);
+								modalEl.find('#emailInput').val(res.email);
+								modalEl.find('#addressInput').val(res.address);
+								modalEl.find('#postcodeInput').val(res.postcode);
+								modalEl.find('#cityInput').val(res.city);
+								modalEl.find('#voivodeshipInput option[value="' + res.voivodeship + '"]').prop('selected', true);
+								modalEl.find('#current_passwordInput').val('');
+								modalEl.find('#new_passwordInput').val('');
+								modalEl.find('#confirm_passwordInput').val('');
 
-				$.ajax({
-					url: '/rest/user/show',
-					method: 'POST',
-					data: { id: id },
-					success: function(res) {
-						setTimeout(function() {
-								KTApp.unblockPage();
+								modalEl.find('#identityInput').val(res.identity);
+								modalEl.find('#roleInput').val(res.role);
 
-								if(res.status == null) {
-									modalEl.modal('show');
+								if(res.company == 1) {
+									modalEl.find('#isCompanyInput').prop('checked', true);
+									modalEl.find('#addressAlert').show();
+								} else {
+									modalEl.find('#isCompanyInput').prop('checked', false);
+									modalEl.find('#addressAlert').hide();
+								}
 
-									var name = res.fullname.split(' ');
-									modalEl.find('#modalTitle').html(res.fullname);
-									modalEl.find('#idInput1').val(res.id);
-									modalEl.find('#idInput2').val(res.id);
-									modalEl.find('#idInput3').val(res.id);
-									modalEl.find('#firstnameInput').val(name[0]);
-									modalEl.find('#lastnameInput').val(name[1]);
-									modalEl.find('#telephoneInput').val(res.telephone);
-									modalEl.find('#emailInput').val(res.email);
-									modalEl.find('#addressInput').val(res.address);
-									modalEl.find('#postcodeInput').val(res.postcode);
-									modalEl.find('#cityInput').val(res.city);
-									modalEl.find('#voivodeshipInput option[value="' + res.voivodeship + '"]').prop('selected', true);
-									modalEl.find('#current_passwordInput').val('');
-									modalEl.find('#new_passwordInput').val('');
-									modalEl.find('#confirm_passwordInput').val('');
-
-									modalEl.find('#identityInput').val(res.identity);
-									modalEl.find('#roleInput').val(res.role);
-
-									if(res.company == 1) {
-										modalEl.find('#isCompanyInput').prop('checked', true);
-										modalEl.find('#addressAlert').show();
-									} else {
-										modalEl.find('#isCompanyInput').prop('checked', false);
-										modalEl.find('#addressAlert').hide();
-									}
-
-									if(res.assigned_to != null) {
-										$.ajax({
-											url: '/rest/user/showlimited',
-											method: 'POST',
-											data: { id: res.assigned_to },
-											success: function(response) {
-												modalEl.find('select#remoteUser').html('<option value="' + response.id + '">' + response.fullname + ', ' + response.role + '</option>');
+								// Initialize client list
+								clients_datatable = $('#modal_datatable_clients').KTDatatable({
+									// datasource definition
+									data: {
+										type: 'remote',
+										source: {
+											read: {
+												url: '/rest/clients/list',
+												params: {
+													id: res.id
+												}
 											},
-											error: function(err) {}
-										}).done(function(data) {
-											remoteUser(res.role);
-										});
-									} else {
+										},
+									},
+
+									// layout definition
+									layout: {
+										scroll: true, // enable/disable datatable scroll both horizontal and vertical when needed.
+										height: 400, // datatable's body's fixed height
+										minHeight: 400,
+										footer: false, // display/hide footer
+									},
+
+									// column sorting
+									sortable: true,
+
+									pagination: true,
+
+									search: {
+										input: $('#searchInTable'),
+										delay: 400,
+									},
+
+									// columns definition
+									columns: [{
+										field: 'id',
+										title: '#',
+										sortable: false,
+										width: 20,
+										type: 'number',
+										selector: {
+											class: 'kt-checkbox--solid'
+										},
+										textAlign: 'center',
+									}, {
+										field: "fullname",
+										title: "Klient",
+										width: 200,
+										// callback function support for column rendering
+										template: function(data, i) {
+											if(data.inferior) var inf = 'kt-badge--warning';
+											else var inf = 'kt-badge--success';
+
+											var output = '\
+													<div class="kt-user-card-v2">\
+														<div class="kt-user-card-v2__pic">\
+															<div class="kt-badge kt-badge--xl ' + inf + '">' + data.fullname.substring(0, 1) + '</div>\
+														</div>\
+														<div class="kt-user-card-v2__details">\
+															<a href="javascript:;" class="kt-user-card-v2__name show_client_data" data-id="' + data.id + '">' + data.fullname + '</a>\
+														</div>\
+													</div>';
+											return output;
+										}
+									}, {
+										field: 'email',
+										title: 'E-mail',
+										autoHide: true,
+										template: function(row) {
+											if(row.email == null) return "Nie określono";
+											else return row.email;
+										}
+									}, {
+										field: 'phone',
+										title: 'Telefon',
+										autoHide: true,
+										template: function(row) {
+											if(row.phone == null) return "Nie określono";
+											else return row.phone;
+										},
+									}, {
+										field: 'state',
+										title: 'Status',
+										autoHide: false,
+										template: function(row) {
+											var status = {
+												1: {'title': 'Nieprzypisany', 'class': 'kt-badge--dark'},
+												2: {'title': 'Niepełne dane', 'class': ' kt-badge--warning'},
+												3: {'title': 'Niezweryfikowany', 'class': ' kt-badge--danger'},
+												4: {'title': 'Zweryfikowany', 'class': ' kt-badge--success'},
+											};
+											return '<span class="kt-badge ' + status[row.state].class + ' kt-badge--inline kt-badge--pill">' + status[row.state].title + '</span>';
+										},
+									}, {
+										field: "Actions",
+										width: 80,
+										title: "Akcje",
+										sortable: false,
+										autoHide: false,
+										overflow: 'visible',
+										template: function(row) {
+										return '\
+												<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_client_data" data-id="' + row.id + '">\
+													<i class="flaticon2-menu-1"></i>\
+												</a>\
+											';
+										}
+									}]
+								});
+
+								initModalEvent();
+
+								if(res.assigned_to != null) {
+									$.ajax({
+										url: '/rest/user/showlimited',
+										method: 'POST',
+										data: { id: res.assigned_to },
+										success: function(response) {
+											modalEl.find('select#remoteUser').html('<option value="' + response.id + '">' + response.fullname + ', ' + response.role + '</option>');
+										},
+										error: function(err) {}
+									}).done(function(data) {
 										remoteUser(res.role);
-									}
-								} else {
-									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
-								}
-						}, 1000);
-					},
-					error: function(err) {
-						setTimeout(function() {
-								KTApp.unblockPage();
-
-								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-						}, 1000);
-					}
-				});
-			});
-
-			$('.delete_user').on('click', function() {
-				var id = $(this).attr('data-id');
-
-				swal.fire({
-					html: "Jesteś pewny że chcesz usunąć tego użytkownika?",
-					type: "info",
-
-					confirmButtonText: "Usuń",
-					confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-
-					showCancelButton: true,
-					cancelButtonText: "Anuluj",
-					cancelButtonClass: "btn btn-sm btn-bold btn-default"
-				}).then(function(result) {
-					if (result.value) {
-						$.ajax({
-							url: '/rest/user/delete',
-							method: 'POST',
-							data: { id: id },
-							success: function(res) {
-								if(res.status == 'success') {
-									swal.fire({
-										title: 'Usunięto',
-										text: res.message,
-										type: 'success',
-										confirmButtonText: "Zamknij",
-										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
 									});
-									datatable.reload();
 								} else {
-									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+									remoteUser(res.role);
 								}
-							},
-							error: function(err) {
-								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
 							}
-						});
-					}
-				});
+					}, 1000);
+				},
+				error: function(err) {
+					setTimeout(function() {
+							KTApp.unblockPage();
+
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+					}, 1000);
+				}
+			});
+		});
+
+		$('.delete_user').on('click', function() {
+			var id = $(this).attr('data-id');
+
+			swal.fire({
+				html: "Jesteś pewny że chcesz usunąć tego użytkownika?",
+				type: "info",
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if (result.value) {
+					$.ajax({
+						url: '/rest/user/delete',
+						method: 'POST',
+						data: { id: id },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: 'success',
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								datatable.reload();
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
 			});
 		});
 	}
@@ -674,6 +927,7 @@ var KTUserListDatatable = function() {
 			form_personal = $('#kt_user_edit_personal');
 			form_login = $('#kt_user_edit_login');
 			form_password = $('#kt_user_edit_password');
+			modalEl = $('#kt_fetch_user');
 
 			init();
 			initValid();

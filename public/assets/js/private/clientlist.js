@@ -38,10 +38,6 @@ var KTClientListDatatable = function() {
 						url: '/rest/clients/list'
 					},
 				},
-				pageSize: 10, // display 20 records per page
-				serverPaging: true,
-				serverFiltering: false,
-				serverSorting: false,
 			},
 
 			// layout definition
@@ -76,10 +72,13 @@ var KTClientListDatatable = function() {
 				width: 200,
 				// callback function support for column rendering
 				template: function(data, i) {
+					if(data.inferior) var inf = 'kt-badge--warning';
+					else var inf = 'kt-badge--success';
+
 					var output = '\
 							<div class="kt-user-card-v2">\
 								<div class="kt-user-card-v2__pic">\
-									<div class="kt-badge kt-badge--xl kt-badge--success">' + data.fullname.substring(0, 1) + '</div>\
+									<div class="kt-badge kt-badge--xl ' + inf + '">' + data.fullname.substring(0, 1) + '</div>\
 								</div>\
 								<div class="kt-user-card-v2__details">\
 									<a href="javascript:;" class="kt-user-card-v2__name show_client_data" data-id="' + data.id + '">' + data.fullname + '</a>\
@@ -545,6 +544,7 @@ var KTClientListDatatable = function() {
 		$('#kt_form_status').on('change', function() {
 			datatable.search($(this).val().toLowerCase(), 'state');
 		});
+		$('#kt_form_status').selectpicker();
 	}
 
 	// selection

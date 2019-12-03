@@ -7,6 +7,8 @@ const Company = require('../models/companies');
 const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
 const System = require('../models/system');
+const Mails = require('../controllers/Mails');
+const moment = require('moment');
 const async = require('async');
 const upload = require('multer')();
 const fs = require('fs');
@@ -77,18 +79,26 @@ exports.getUserlist = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.show')) {
       var output = {};
-      if(req.session.userData.role == 'administrator') {
-        User.userList(null, function(result, nums) {
+      if(req.body.id) {
+        User.userListByAssignedId(null, req.body.id, function(result, nums) {
           output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
       } else {
-        User.userListByAssignedId(null, req.session.userData.id, function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
-          output['data'] = result;
-          res.json(output);
-        });
+        if(req.session.userData.role == 'administrator') {
+          User.userList(null, function(result, nums) {
+            output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
+            output['data'] = result;
+            res.json(output);
+          });
+        } else {
+          User.userListByAssignedId(null, req.session.userData.id, function(result, nums) {
+            output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
+            output['data'] = result;
+            res.json(output);
+          });
+        }
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
@@ -103,6 +113,7 @@ exports.getUserlistName = (req, res) => {
         });
       } else {
         User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
+          result.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
           res.json(result);
         });
       }
@@ -139,7 +150,7 @@ exports.getUserByIdLimited = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.body.id != null) {
       User.getUserById(['id','fullname','role'], req.body.id).then(function(user) {
-        if(user != null) res.json(user);
+        if(user) res.json(user);
         else res.json(Messages.message('not_found_user_identity', null));
       });
     } else res.json(Messages.message('identity_not_selected', null));
@@ -229,18 +240,26 @@ exports.getClientList = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.clients.show')) {
       var output = {};
-      if(req.session.userData.role == 'administrator') {
-        Client.clientList(function(result, nums) {
+      if(req.body.id) {
+        Client.clientlistByAssignedId(req.body.id, function(result, nums) {
           output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
           output['data'] = result;
           res.json(output);
         });
       } else {
-        Client.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
-          output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
-          output['data'] = result;
-          res.json(output);
-        });
+        if(req.session.userData.role == 'administrator') {
+          Client.clientList(function(result, nums) {
+            output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
+            output['data'] = result;
+            res.json(output);
+          });
+        } else {
+          Client.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
+            output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'asc', field: 'id' };
+            output['data'] = result;
+            res.json(output);
+          });
+        }
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
@@ -432,6 +451,18 @@ exports.insertOffer = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.updateROfferData = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.roffers.data_change')) {
+      if(req.body != null) {
+        ROffer.uploadOffer(req.body, function(result) {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 exports.changeOfferStatus = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.status_change')) {
@@ -500,6 +531,28 @@ exports.uploadClientFiles = (req, res, next) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.uploadRequestOfferFiles = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    if(req.files) {
+      var upload_dir = 'uploads',
+      client_dir = 'roffers',
+      f_path = req.body.folder_path;
+
+      fs.mkdirSync(upload_dir + '/' + client_dir + '/' + f_path, { recursive: true });
+
+      Promise.resolve(req.files)
+        .each(function(file_incoming, idx) {
+          var sanitized_filename = sanitize(file_incoming.originalname);
+          var file = path.join(upload_dir, client_dir, f_path, sanitized_filename);
+
+          return fs.writeFileSync(file, file_incoming.buffer);
+        }).then(function() {
+          res.status(200).json(Messages.message('added_new_files', null));
+        });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 exports.getFiles = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.body) {
@@ -543,6 +596,26 @@ exports.deleteFile = (req, res) => {
 };
 
 // Firmy
+
+exports.requestOfferSendMail = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.session.userData.role == 'administrator') {
+      if(req.body != null) {
+        ROffer.setValueById(req.body.data.id, 'state', 2);
+        Mails.sendMail.send({
+          message: {
+            from: '"CRM System" <oferty@crmsystem.pl>',
+            to: req.body.mails.toString(),
+            subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
+            html: 'Wiadomość z zapytaniem ofertowym, zawartość w załączniku'
+          }
+        }).then(function() {
+          res.json({ status: 'success', message: 'Pomyślnie wysłano zapytanie ofertowe do firm.' });
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
 
 exports.loadCompanylist = (req, res) => {
   var output = {};

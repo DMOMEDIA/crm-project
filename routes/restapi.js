@@ -32,6 +32,8 @@ router.post('/rest/client/status', REST.changeClientStatus);
 router.post('/rest/roffer/list', REST.getOfferRequests);
 router.post('/rest/roffer/get', REST.getRequestOfferById);
 router.post('/rest/roffer/add', REST.addRequestOffer);
+router.post('/rest/roffer/update', REST.updateROfferData);
+router.post('/rest/roffer/sendMail', REST.requestOfferSendMail);
 
 // {REST} powiadomienia
 router.post('/rest/notifications', REST.getUserNotifications);
@@ -50,6 +52,7 @@ router.get('/rest/company/remotelist', REST.companyRemoteList);
 // {REST} Upload files
 router.post('/rest/files/upload', upload.array('source_file[]'), REST.uploadOfferFiles);
 router.post('/rest/files/upload/client', upload.array('source_file[]'), REST.uploadClientFiles);
+router.post('/rest/files/upload/roffer', upload.array('source_file[]'), REST.uploadRequestOfferFiles);
 router.post('/rest/files/get', REST.getFiles);
 router.post('/rest/file/download', REST.downloadFile);
 router.post('/rest/file/delete', REST.deleteFile);

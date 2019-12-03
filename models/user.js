@@ -42,7 +42,7 @@ module.exports.getUserByIdentity = (user) => {
 };
 
 module.exports.getUserById = (args, id) => {
-  if(args != null) {
+  if(args) {
     const query = { id: id };
     return new User().where(query).fetch({ columns: args });
   } else {
@@ -120,15 +120,11 @@ module.exports.userList = (args, callback) => {
 module.exports.userListByAssignedId = (args, id, callback) => {
   if(args != null) {
     return new User().where({ assigned_to: id }).fetchAll({ columns: args }).then(function(response) {
-      User.where({ assigned_to: id }).count().then(function(cnt) {
-        callback(response, cnt);
-      });
+      callback(response, response.toJSON().length);
     });
   } else {
     return new User().where({ assigned_to: id }).fetchAll().then(function(response) {
-      User.where({ assigned_to: id }).count().then(function(cnt) {
-        callback(response, cnt);
-      });
+      callback(response, response.toJSON().length);
     });
   }
 };
