@@ -63,6 +63,31 @@ const OfferRent = bookshelf.Model.extend({
   }
 });
 
+module.exports.getOfferCounts = (callback) => {
+  return new OfferLeasing().count().then(function(cnt_leasing) {
+    return new OfferRent().count().then(function(cnt_rent) {
+      return new OfferInsurance().count().then(function(cnt_insurance) {
+        var elements = [
+          {
+            label: 'leasing',
+            value: cnt_leasing
+          },
+          {
+            label: 'wynajem',
+            value: cnt_rent
+          },
+          {
+            label: 'wypożyczenie',
+            value: cnt_insurance
+          }
+        ];
+
+        callback(elements);
+      });
+    });
+  });
+};
+
 module.exports.getOffers = (req, callback) => {
   var output = [];
   if(req.session.userData.role == 'administrator') {
@@ -129,17 +154,24 @@ module.exports.getOfferById = (id, type, callback) => {
   if(type == 'rent') {
     return new OfferRent().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      callback(result);
+      callback(result.toJSON());
     });
   } else if(type == 'insurance') {
     return new OfferInsurance().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      callback(result);
+      callback(result.toJSON());
     });
   } else {
-    return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['variants', 'client', 'company'] })
+    return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      callback(result);
+      var data = result.toJSON();
+
+      new LeasingVariants().where({ offer_id: data.id }).fetchAll()
+      .then(function(variants) {
+        data['variants'] = variants.toJSON();
+
+        callback(data);
+      });
     });
   }
 };
@@ -186,7 +218,8 @@ module.exports.createOffer = (req, callback) => {
       item_type: value.item_type_l,
       condition: value.condition_l,
       netto: value.netto_l,
-      invoice: value.invoice_l
+      invoice: value.invoice_l,
+      state: value.o_state
     }).save().then(function(result) {
       for(var i = 0; i <= value.variant.length-1; i++) {
         new LeasingVariants({
@@ -198,7 +231,13 @@ module.exports.createOffer = (req, callback) => {
           okres: value.variant[i]['contract']
         }).save();
       }
-      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'));
+      module.exports.getUserByOfferId(result.get('id'), result.get('offer_type'), function(cb) {
+        if(result.get('state') < 3) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), true);
+        else if(result.get('state') == 3) System.removeProvision(result.get('id'), result.get('offer_type'));
+        else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), false);
+      });
+
+      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/L/' + moment().format('YYYY') + '</b>.');
     });
   } else if(value.offer_type == 'insurance') {
@@ -215,9 +254,16 @@ module.exports.createOffer = (req, callback) => {
       vin_number: value.vin_number,
       reg_number: value.reg_number,
       netto: value.vehicle_val_i,
-      insurance_cost: value.insurance_cost
+      insurance_cost: value.insurance_cost,
+      state: value.o_state
     }).save().then(function(result) {
-      callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'));
+      module.exports.getUserByOfferId(result.get('id'), result.get('offer_type'), function(cb) {
+        if(result.get('state') < 3) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), true);
+        else if(result.get('state') == 3) System.removeProvision(result.get('id'), result.get('offer_type'));
+        else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), false);
+      });
+
+      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
     });
   } else {
@@ -233,9 +279,16 @@ module.exports.createOffer = (req, callback) => {
       netto: value.vehicle_val_r,
       wplata: value.self_deposit_r,
       limit: value.km_limit_r,
-      invoice: value.invoice_r
+      invoice: value.invoice_r,
+      state: value.o_state
     }).save().then(function(result) {
-      callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'));
+      module.exports.getUserByOfferId(result.get('id'), result.get('offer_type'), function(cb) {
+        if(result.get('state') < 3) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), true);
+        else if(result.get('state') == 3) System.removeProvision(result.get('id'), result.get('offer_type'));
+        else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), false);
+      });
+
+      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/R/' + moment().format('YYYY') + '</b>.');
     });
   }
@@ -259,29 +312,31 @@ module.exports.changeData = (value, callback) => {
         if(value.netto_l) model.set('netto', value.netto_l);
         if(value.invoice_l) model.set('invoice', value.invoice_l);
 
-        callback(Messages.message('offer_data_change', null));
-
         model.save().then(function(result) {
           // Prowizje
           module.exports.getUserByOfferId(result.get('id'), result.get('offer_type'), function(cb) {
-            if(result.get('state') < 2) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), true, true);
-            else if(result.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), true, false);
+            if(result.get('state') < 3) System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), true);
+            else if(result.get('state') == 3) System.removeProvision(result.get('id'), result.get('offer_type'));
+            else System.changeProvision(cb, result.get('id'), result.get('offer_type'), result.get('netto'), result.get('company_id'), false);
           });
 
-          return new LeasingVariants().where({ id: value.vid }).fetch()
-          .then(function(variant) {
-            if(variant) {
-              if(value.contract) variant.set('okres', value.contract);
-              if(value.inital_fee) variant.set('wklad', value.inital_fee);
-              if(value.leasing_install) variant.set('leasing_install', value.leasing_install);
-              if(value.repurchase) variant.set('wykup', value.repurchase);
-              if(value.sum_fee) variant.set('total_fees', value.sum_fee);
+          value.variant.forEach(function(val) {
+            new LeasingVariants().where({ id: val.id }).fetch()
+            .then(function(variant) {
+              if(variant) {
+                if(val.contract) variant.set('okres', val.contract);
+                if(val.inital) variant.set('wklad', val.inital);
+                if(val.leasing_install) variant.set('leasing_install', val.leasing_install);
+                if(val.repurchase) variant.set('wykup', val.repurchase);
+                if(val.sum_fee) variant.set('total_fees', val.sum_fee);
 
-              variant.save();
-            }
+                variant.save();
+              }
+            });
           });
         });
+        callback(Messages.message('offer_data_change', null));
+
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
     });
   } else if(value.type == 'rent') {
@@ -301,9 +356,9 @@ module.exports.changeData = (value, callback) => {
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
-            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
-            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+            if(done.get('state') < 3) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), true);
+            else if(done.get('state') == 3) System.removeProvision(done.get('id'), done.get('offer_type'));
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), false);
           });
         });
         callback(Messages.message('offer_data_change', null));
@@ -328,9 +383,9 @@ module.exports.changeData = (value, callback) => {
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
-            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
-            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+            if(done.get('state') < 3) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), true);
+            else if(done.get('state') == 3) System.removeProvision(done.get('id'), done.get('offer_type'));
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), false);
           });
         });
         callback(Messages.message('offer_data_change', null));
@@ -379,9 +434,9 @@ module.exports.changeStatus = (value, callback) => {
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
-            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
-            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+            if(done.get('state') < 3) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), true);
+            else if(done.get('state') == 3) System.removeProvision(done.get('id'), done.get('offer_type'));
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), false);
           });
         });
 
@@ -396,9 +451,9 @@ module.exports.changeStatus = (value, callback) => {
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
-            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
-            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+            if(done.get('state') < 3) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), true);
+            else if(done.get('state') == 3) System.removeProvision(done.get('id'), done.get('offer_type'));
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), false);
           });
         });
 
@@ -413,9 +468,9 @@ module.exports.changeStatus = (value, callback) => {
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {
-            if(done.get('state') < 2) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, true);
-            else if(done.get('state') == 2) console.log('Usuwanie prowizji..'); // Usuwanie prowizji
-            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), true, false);
+            if(done.get('state') < 3) System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), true);
+            else if(done.get('state') == 3) System.removeProvision(done.get('id'), done.get('offer_type'));
+            else System.changeProvision(cb, done.get('id'), done.get('offer_type'), done.get('netto'), done.get('company_id'), false);
           });
         });
 

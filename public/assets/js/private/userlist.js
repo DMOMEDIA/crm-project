@@ -5,9 +5,29 @@ var KTUserListDatatable = function() {
 
 	// variables
 	var datatable, clients_datatable;
-	var form_personal, form_login, form_password;
-	var validator_personal, validator_login, validator_password;
-	var modalEl;
+	var form_personal, form_login, form_password, form_client;
+	var validator_personal, validator_login, validator_password, validator_client;
+	var modalEl, modalClient;
+	var f_path;
+
+	var modal_memory;
+
+	var ext = {
+		'odt': 'doc',
+		'docx': 'doc',
+		'doc': 'doc',
+		'pdf': 'pdf',
+		'css': 'css',
+		'csv': 'csv',
+		'html': 'html',
+		'js': 'javascript',
+		'jpg': 'jpg',
+		'jpeg': 'jpg',
+		'mp4': 'mp4',
+		'xml': 'xml',
+		'zip': 'zip',
+		'rar': 'zip'
+	};
 
 	var initModalEvent = function() {
 		clients_datatable.hide();
@@ -31,7 +51,9 @@ var KTUserListDatatable = function() {
 				reloadTable();
 			}
 		}).on('hidden.bs.modal', function() {
-			$('#modal_datatable_clients').KTDatatable('destroy');
+			if(modal_memory == null) {
+				$('#modal_datatable_clients').KTDatatable('destroy');
+			}
 		});
 
 		modalEl.find('#kt_form_status_inTable').on('change', function() {
@@ -921,13 +943,264 @@ var KTUserListDatatable = function() {
 		});
 	};
 
+	var initValidClient = function() {
+		$('#nipClient').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
+		validator_client = form_client.validate({
+			ignore: ':hidden',
+
+			rules: {
+				firstname: {
+					required: true
+				},
+				lastname: {
+					required: true
+				},
+				corpName: {
+					required: true
+				},
+				corp_type: {
+					required: true
+				},
+				corp_regon: {
+					digits: true,
+					maxlength: 15
+				},
+				companyName: {
+					required: true
+				},
+				company_regon: {
+					digits: true,
+					maxlength: 15
+				},
+				nip: {
+					required: true,
+					minlength: 10,
+					maxlength: 10
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				data_processing: {
+					required: true
+				}
+			},
+			messages: {
+				firstname: {
+					required: "To pole jest wymagane."
+				},
+				lastname: {
+					required: "To pole jest wymagane."
+				},
+				corpName: {
+					required: "To pole jest wymagane."
+				},
+				corp_type: {
+					required: "To pole jest wymagane."
+				},
+				corp_regon: {
+					digits: "Numer REGON może składać się tylko z cyfr.",
+					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
+				},
+				companyName: {
+					required: "To pole jest wymagane."
+				},
+				company_regon: {
+					digits: "Numer REGON może składać się tylko z cyfr.",
+					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
+				},
+				nip: {
+					required: "To pole jest wymagane.",
+					minlength: "Numer NIP musi składać się z 10 cyfr.",
+					maxlength: "Numer NIP musi składać się z 10 cyfr."
+				},
+				email: {
+					required: "To pole jest wymagane.",
+					email: "Wprowadź poprawny adres e-mail."
+				},
+				data_processing: {
+					required: "To pole jest wymagane."
+				}
+			},
+			// Display error
+			invalidHandler: function(event, validator_client) {
+				KTUtil.scrollTop();
+
+				KTUtil.showNotifyAlert('danger', "Wypełnij wymagane pola i spróbuj ponownie.", 'Wystąpił błąd', 'flaticon-warning-sign');
+			},
+
+			// Submit valid form
+			submitHandler: function (form) { }
+		});
+	}
+
+	var initClientData = function() {
+		$(document).on('click', '.show_client_data', function() {
+			var id = $(this).attr('data-id');
+
+			modalClient.find('select#company_type option[value=""]').prop('selected', true);
+			modalClient.find('select#remoteEmployeer').html('<option></option>');
+			KTUtil.clearInputInForm(form_client);
+
+			KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
+
+			$.ajax({
+				url: '/rest/client/show',
+				method: 'POST',
+				data: { id: id },
+				success: function(res) {
+					setTimeout(function() {
+							KTApp.unblockPage();
+
+							if(res.status == null) {
+								modal_memory = true;
+								modalEl.modal('hide');
+								modalClient.modal('show');
+								modalClient.css('overflow','scroll');
+								modalClient.find('#modalTitle_client').html(res.fullname);
+								modalClient.find('#idInput1_client').val(res.id);
+								modalClient.find('#idInput3_client').val(res.id);
+								modalClient.find('#attached_files').html('');
+
+								var type = res.company, name = res.fullname.split(' ');
+
+								// 2 - Firma
+								// 1 - Spółka
+								// 0 - Osoba prywatna
+
+								$('input[name="client_type"]').filter('[value="' + res.company + '"]').prop('checked', true);
+
+
+								if(res.company == 0) {
+									modalClient.find('#company_user').hide();
+									modalClient.find('#private_user').show();
+									modalClient.find('#corp_user').hide();
+									modalClient.find('input[name="firstname"]').val(name[0]);
+									modalClient.find('input[name="lastname"]').val(name[1]);
+								} else if(res.company == 1) {
+									modalClient.find('#company_user').hide();
+									modalClient.find('#private_user').hide();
+									modalClient.find('#corp_user').show();
+									modalClient.find('input[name="corpName"]').val(res.fullname);
+									modalClient.find('select[name="corp_type"] option[value="' + res.company_type + '"]').prop('selected', true);
+									modalClient.find('input[name="corp_regon"]').val(res.regon);
+								} else {
+									modalClient.find('#company_user').show();
+									modalClient.find('#private_user').hide();
+									modalClient.find('#corp_user').hide();
+									modalClient.find('input[name="companyName"]').val(res.fullname);
+									modalClient.find('input[name="company_regon"]').val(res.regon);
+								}
+
+								modalClient.find('input[name="nip"]').val(res.nip);
+								modalClient.find('input[name="pNumber"]').val(res.phone);
+								modalClient.find('input[name="email"]').val(res.email);
+								modalClient.find('input[name="data_processing"]').prop('checked', res.data_process);
+								modalClient.find('input[name="data_marketing"]').prop('checked', res.marketing);
+								modalClient.find('select[name="change_status"] option[value="' + res.state + '"]').prop('selected', true);
+
+								f_path = 'client_' + res.id + '_' + moment(res.created_at).local().format('YYYY');
+								$.ajax({
+									url: '/rest/files/get',
+									method: 'POST',
+									data: { folder_path: 'clients/' + f_path },
+									success: function(res) {
+										if(res.files) {
+											if(res.files.length != 0) {
+												res.files.forEach(file => {
+													var extension = file.split('.');
+													modalClient.find('#attached_files').append('\<div class="kt-widget4__item">\
+															<div class="kt-widget4__pic kt-widget4__pic--icon">\
+																<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+															</div>\
+															<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
+															<div class="kt-widget4__tools">\
+																<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+																	<i class="flaticon2-download"></i>\
+																</a>\
+																<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+																	<i class="flaticon2-delete"></i>\
+																</a>\
+															</div>\
+														</div>\
+													');
+												});
+											}
+										}
+									},
+									error: function(err) {
+										throw err;
+									}
+								});
+
+								if(res.user_id != null) {
+									$.ajax({
+										url: '/rest/user/showlimited',
+										method: 'POST',
+										data: { id: res.user_id },
+										success: function(response) {
+											modalClient.find('select#remoteEmployeer').html('<option value="' + response.id + '">' + response.fullname + ', ' + response.role + '</option>');
+										},
+										error: function(err) {}
+									}).done(function(data) {
+										remoteEmploy();
+									});
+								} else {
+									remoteEmploy();
+								}
+
+								// Zmiana typu konta
+								$('input[name="client_type"]').on('change', function(e) {
+									KTUtil.clearInputInForm(form_client);
+									if($('input[name="client_type"]:checked').val() == 0) {
+										modalClient.find('#private_user').show();
+										modalClient.find('#corp_user').hide();
+										modalClient.find('#company_user').hide();
+									} else if($('input[name="client_type"]:checked').val() == 1) {
+										modalClient.find('#private_user').hide();
+										modalClient.find('#corp_user').show();
+										modalClient.find('#company_user').hide();
+									} else {
+										modalClient.find('#private_user').hide();
+										modalClient.find('#corp_user').hide();
+										modalClient.find('#company_user').show();
+									}
+								});
+
+								modalClient.on('hidden.bs.modal', function() {
+									modalEl.modal('show');
+									modal_memory = null;
+								});
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+					}, 1000);
+				},
+				error: function(err) {
+					setTimeout(function() {
+							KTApp.unblockPage();
+
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+					}, 1000);
+				}
+			});
+		});
+	}
+
 	return {
 		// public functions
 		init: function() {
 			form_personal = $('#kt_user_edit_personal');
 			form_login = $('#kt_user_edit_login');
 			form_password = $('#kt_user_edit_password');
+			form_client = $('#kt_client_edit_personal');
 			modalEl = $('#kt_fetch_user');
+			modalClient = $('#kt_fetch_client');
 
 			init();
 			initValid();
@@ -937,6 +1210,8 @@ var KTUserListDatatable = function() {
 			selectedDelete();
 			togglePassword();
       refreshPassword();
+			initValidClient();
+			initClientData();
 			updateTotal();
 			search();
 		},

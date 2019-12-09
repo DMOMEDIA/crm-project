@@ -132,7 +132,7 @@ var KTClientListDatatable = function() {
 	}
 
 	var initValid = function() {
-		$('#nipInput').maxlength({
+		$('#nipClient').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
 				appendToParent: true
@@ -148,14 +148,22 @@ var KTClientListDatatable = function() {
 				lastname: {
 					required: true
 				},
-				fullname: {
+				corpName: {
 					required: true
 				},
-				companyname: {
+				corp_type: {
 					required: true
 				},
-				company_type: {
+				corp_regon: {
+					digits: true,
+					maxlength: 15
+				},
+				companyName: {
 					required: true
+				},
+				company_regon: {
+					digits: true,
+					maxlength: 15
 				},
 				nip: {
 					required: true,
@@ -165,6 +173,9 @@ var KTClientListDatatable = function() {
 				email: {
 					required: true,
 					email: true
+				},
+				data_processing: {
+					required: true
 				}
 			},
 			messages: {
@@ -174,14 +185,22 @@ var KTClientListDatatable = function() {
 				lastname: {
 					required: "To pole jest wymagane."
 				},
-				fullname: {
+				corpName: {
 					required: "To pole jest wymagane."
 				},
-				companyname: {
+				corp_type: {
 					required: "To pole jest wymagane."
 				},
-				company_type: {
+				corp_regon: {
+					digits: "Numer REGON może składać się tylko z cyfr.",
+					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
+				},
+				companyName: {
 					required: "To pole jest wymagane."
+				},
+				company_regon: {
+					digits: "Numer REGON może składać się tylko z cyfr.",
+					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
 				},
 				nip: {
 					required: "To pole jest wymagane.",
@@ -191,6 +210,9 @@ var KTClientListDatatable = function() {
 				email: {
 					required: "To pole jest wymagane.",
 					email: "Wprowadź poprawny adres e-mail."
+				},
+				data_processing: {
+					required: "To pole jest wymagane."
 				}
 			},
 			// Display error
@@ -228,38 +250,47 @@ var KTClientListDatatable = function() {
 
 								if(res.status == null) {
 									modalEl.modal('show');
-									modalEl.find('#modalTitle').html(res.fullname);
-									modalEl.find('#idInput1').val(res.id);
-									modalEl.find('#idInput3').val(res.id);
+									modalEl.find('#modalTitle_client').html(res.fullname);
+									modalEl.find('#idInput1_client').val(res.id);
+									modalEl.find('#idInput3_client').val(res.id);
 									modalEl.find('#attached_files').html('');
 
 									var type = res.company, name = res.fullname.split(' ');
 
-									// 1 - Firma
+									// 2 - Firma
+									// 1 - Spółka
 									// 0 - Osoba prywatna
 
-									var acctype = $('input[type="radio"][name="client_type"]');
-									acctype.filter('[value="' + type + '"]').prop('checked', true);
+									$('input[name="client_type"]').filter('[value="' + res.company + '"]').prop('checked', true);
 
-									if(type == 0) {
+
+									if(res.company == 0) {
 										modalEl.find('#company_user').hide();
 										modalEl.find('#private_user').show();
-										modalEl.find('#firstnameInput').val(name[0]).attr('hidden', false);
-										modalEl.find('#lastnameInput').val(name[1]).attr('hidden', false);
-										modalEl.find('#fullnameInput').attr('hidden', true);
+										modalEl.find('#corp_user').hide();
+										modalEl.find('input[name="firstname"]').val(name[0]);
+										modalEl.find('input[name="lastname"]').val(name[1]);
+									} else if(res.company == 1) {
+										modalEl.find('#company_user').hide();
+										modalEl.find('#private_user').hide();
+										modalEl.find('#corp_user').show();
+										modalEl.find('input[name="corpName"]').val(res.fullname);
+										modalEl.find('select[name="corp_type"] option[value="' + res.company_type + '"]').prop('selected', true);
+										modalEl.find('input[name="corp_regon"]').val(res.regon);
 									} else {
 										modalEl.find('#company_user').show();
 										modalEl.find('#private_user').hide();
-										modalEl.find('#fullnameInput').val(res.fullname).attr('hidden', false);
-										modalEl.find('#firstnameInput').attr('hidden', true);
-										modalEl.find('#lastnameInput').attr('hidden', true);
+										modalEl.find('#corp_user').hide();
+										modalEl.find('input[name="companyName"]').val(res.fullname);
+										modalEl.find('input[name="company_regon"]').val(res.regon);
 									}
 
+									modalEl.find('input[name="nip"]').val(res.nip);
+									modalEl.find('input[name="pNumber"]').val(res.phone);
+									modalEl.find('input[name="email"]').val(res.email);
+									modalEl.find('input[name="data_processing"]').prop('checked', res.data_process);
+									modalEl.find('input[name="data_marketing"]').prop('checked', res.marketing);
 									modalEl.find('select[name="change_status"] option[value="' + res.state + '"]').prop('selected', true);
-									modalEl.find('select#company_type option[value="' + res.company_type + '"]').prop('selected', true);
-									modalEl.find('#nipInput').val(res.nip);
-									modalEl.find('#telephoneInput').val(res.phone);
-									modalEl.find('#emailInput').val(res.email);
 
 									f_path = 'client_' + res.id + '_' + moment(res.created_at).local().format('YYYY');
 									$.ajax({
@@ -312,33 +343,21 @@ var KTClientListDatatable = function() {
 									}
 
 									// Zmiana typu konta
-									acctype.on('change', function(e) {
-										KTApp.block(form_personal, {
-												overlayColor: '#000000',
-												type: 'v2',
-												state: 'primary',
-												message: 'Proszę czekać...'
-										});
-
-										setTimeout(function() {
-												KTUtil.clearInputInForm(form_personal);
-												if(type == 0) {
-													type = 1;
-													modalEl.find('#private_user').hide();
-													modalEl.find('#company_user').show();
-													modalEl.find('#firstnameInput').attr('hidden', true);
-													modalEl.find('#lastnameInput').attr('hidden', true);
-													modalEl.find('#fullnameInput').attr('hidden', false);
-												} else {
-													type = 0;
-													modalEl.find('#private_user').show();
-													modalEl.find('#company_user').hide();
-													modalEl.find('#firstnameInput').attr('hidden', false);
-													modalEl.find('#lastnameInput').attr('hidden', false);
-													modalEl.find('#fullnameInput').attr('hidden', true);
-												}
-												KTApp.unblock(form_personal);
-										}, 500);
+									$('input[name="client_type"]').on('change', function(e) {
+										KTUtil.clearInputInForm(form_personal);
+										if($('input[name="client_type"]:checked').val() == 0) {
+											modalEl.find('#private_user').show();
+											modalEl.find('#corp_user').hide();
+											modalEl.find('#company_user').hide();
+										} else if($('input[name="client_type"]:checked').val() == 1) {
+											modalEl.find('#private_user').hide();
+											modalEl.find('#corp_user').show();
+											modalEl.find('#company_user').hide();
+										} else {
+											modalEl.find('#private_user').hide();
+											modalEl.find('#corp_user').hide();
+											modalEl.find('#company_user').show();
+										}
 									});
 								} else {
 									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');

@@ -34,6 +34,7 @@ router.post('/rest/roffer/get', REST.getRequestOfferById);
 router.post('/rest/roffer/add', REST.addRequestOffer);
 router.post('/rest/roffer/update', REST.updateROfferData);
 router.post('/rest/roffer/sendMail', REST.requestOfferSendMail);
+router.post('/rest/roffer/done', REST.requestOfferDone);
 
 // {REST} powiadomienia
 router.post('/rest/notifications', REST.getUserNotifications);
@@ -46,6 +47,7 @@ router.post('/rest/offer/insert', REST.insertOffer);
 router.post('/rest/offer/sdelete', REST.deleteSelectedOffers);
 router.post('/rest/offer/status', REST.changeOfferStatus);
 router.post('/rest/offer/data', REST.changeOfferData);
+router.post('/rest/offer/sendmail', REST.sendOfferMail);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
 
@@ -56,11 +58,17 @@ router.post('/rest/files/upload/roffer', upload.array('source_file[]'), REST.upl
 router.post('/rest/files/get', REST.getFiles);
 router.post('/rest/file/download', REST.downloadFile);
 router.post('/rest/file/delete', REST.deleteFile);
+router.post('/rest/file/rename', REST.changeFileVerify);
 
 // {REST} Firmy
 router.post('/rest/company/list', REST.loadCompanylist);
 router.post('/rest/company/add', REST.addCompany);
 router.post('/rest/company/get', REST.getCompanyById);
 router.post('/rest/company/edit', REST.editCompany);
+router.post('/rest/company/provision', REST.getCompanyProvision);
+
+// statistics
+router.post('/rest/stats/offers_count', REST.getOfferCount);
+router.post('/rest/stats/prov_forecast', REST.getProvisionStats);
 
 module.exports = router;

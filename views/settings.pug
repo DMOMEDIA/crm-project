@@ -1,0 +1,74 @@
+extends layout
+
+block stylecss
+  
+block content
+  if user
+    #kt_subheader.kt-subheader.kt-grid__item
+      .kt-container.kt-container--fluid
+        .kt-subheader__main
+          h3.kt-subheader__title
+            | Ustawienia ogólne
+          .kt-subheader__breadcrumbs
+            a.kt-subheader__breadcrumbs-home(href='#')
+              i.flaticon2-shelter
+            span.kt-subheader__breadcrumbs-separator
+            a.kt-subheader__breadcrumbs-link.kt-subheader__breadcrumbs-link--active(href='/dashboard/gsettings') Ustawienia ogólne
+    // begin:: Content
+    .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
+      .kt-portlet.kt-portlet--tabs
+        .kt-portlet__head
+          .kt-portlet__head-toolbar
+            ul.nav.nav-tabs.nav-tabs-line.nav-tabs-line-success.nav-tabs-line-2x.nav-tabs-line-right(role='tablist')
+              li.nav-item
+                a.kt-font-bold.nav-link.active(data-toggle='tab', href='#ustawienia_podstawowe', role='tab')
+                  i.fa.fa-tasks(aria-hidden='true')
+                  | Ustawienia podstawowe
+              |                         
+              li.nav-item
+                a.kt-font-bold.nav-link(data-toggle='tab', href='#prowizje', role='tab')
+                  i.fa.fa-percent(aria-hidden='true')
+                  | Prowizje globalne
+              |                         
+        |             
+        .kt-portlet__body
+          .tab-content
+            #ustawienia_podstawowe.tab-pane.active(role='tabpanel')
+              form#form_quick_settings
+                .kt-form.kt-form--label-right
+                  .kt-form__body
+                    .kt-section.kt-section--first
+                      .kt-section__body
+                        .row
+                          label.col-xl-3     
+                          .col-lg-9.col-xl-6
+                            h6.kt-section__title Ustawienia systemowe
+                        |                 
+                        .form-group.row
+                          .col-md-2.col-lg-2.col-xl-2
+                          .col-md-8.col-lg-8.col-xl-8
+                            label.kt-font-bold Adres e-mail z którego będą wysyłane zapytania ofertowe do firm
+                            input.form-control(type='email', name='back_email', placeholder='Adres e-mail')
+                        |                             
+                        .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                        |                             
+                        .kt-form__actions
+                          .row
+                            .col-lg-12.col-xl-12.kt-align-center
+                              button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
+            |                     
+            #prowizje.tab-pane(role='tabpanel')
+              | It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            |                     
+      // end::Portlet
+block scripts
+  script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js', type='text/javascript')
+  script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js', type='text/javascript')
+  script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')
+  script(src='./assets/vendors/general/jquery-validation/dist/additional-methods.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
+  script(src="./assets/js/private/settings.js" type="text/javascript")

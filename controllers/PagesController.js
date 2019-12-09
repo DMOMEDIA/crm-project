@@ -174,4 +174,14 @@ exports.statistics = (req, res) => {
   });
 };
 
+exports.globalSettings = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.global.settings')) return res.redirect('/dashboard');
+
+  res.render('settings', {
+    title: 'Ustawienia ogólne',
+    pageName: 'global_settings'
+  });
+};
+
 // {STOP} Strony po zalogowaniu

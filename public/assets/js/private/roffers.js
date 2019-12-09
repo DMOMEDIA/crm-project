@@ -258,6 +258,8 @@ var KTROfferListDatatable = function() {
 								formCompanyList.hide();
 								$('#send_request_notify').show();
 								$('#dropzone_form_roffer').show();
+								$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
+								$('#summary_element').show();
 
 								swal.fire({
 									"title": "",
@@ -352,203 +354,268 @@ var KTROfferListDatatable = function() {
 						setTimeout(function() {
 								KTApp.unblockPage();
 
-								if(res.status == null) {
-									modalEl.modal('show');
+								if(res.client_info.user_id) {
+									if(res.status == null) {
+										modalEl.modal('show');
 
-									var status = {
-										1: {'title': 'Nowe', 'class': 'kt-font-brand'},
-										2: {'title': 'Oczekujące', 'class': ' kt-font-dark'},
-										3: {'title': 'Zrealizowane', 'class': ' kt-font-success'},
-									};
+										var button = $('#realize_roffer');
+										button.on('click', function() {
+											KTApp.progress(button);
+											button.attr('disabled', true);
+											setTimeout(function() {
+												$.ajax({
+													url: '/rest/roffer/done',
+													method: 'POST',
+													data: res,
+													success: function(realize) {
+														KTApp.unprogress(button);
+														button.attr('disabled', false);
+														//
+														if(realize.status == 'success') {
+															swal.fire({
+																"title": "",
+																"text": realize.message,
+																"type": realize.status,
+																"confirmButtonClass": "btn btn-secondary"
+															});
+														} else {
+															swal.fire({
+																"title": "",
+																"text": realize.message,
+																"type": realize.status,
+																"confirmButtonClass": "btn btn-secondary"
+															});
+														}
 
-									var type_corp = {
-										0: {'title': 'akcyjna'},
-										1: {'title': 'komandytowa'},
-										2: {'title': 'z ograniczoną odpowiedzialnością'}
-									};
-
-									var roffer_type = {
-										'leasing': 'leasing',
-										'rent': 'wynajem',
-										'insurance': 'ubezpieczenie'
-									};
-
-									var date = moment(res.created_at).local().format('YYYY');
-									modalEl.find('#modalTitle').html('00' + res.id + '/' + date);
-									modalEl.find('#idInput').val(res.id);
-									modalEl.find('#typeInput').val(res.type);
-
-									modalEl.find('#roffer_id').html('00' + res.id + '/' + date);
-									modalEl.find('#roffer_status').html(status[res.state].title).addClass(status[res.state].class);
-									modalEl.find('#roffer_type').html(roffer_type[res.type]);
-									modalEl.find('#roffer_date_created').html(moment(res.created_at).local().format('YYYY-MM-DD HH:mm'));
-									if(res.client_info.company == 0) {
-										modalEl.find('#private_user').show();
-										modalEl.find('#corp_user').hide();
-										modalEl.find('#company_user').hide();
-										//
-										modalEl.find('#fullname').html(res.client_info.fullname);
-									} else if(res.client_info.company == 1) {
-										modalEl.find('#private_user').hide();
-										modalEl.find('#corp_user').show();
-										modalEl.find('#company_user').hide();
-										//
-										modalEl.find('#corp_name').html(res.client_info.fullname);
-										modalEl.find('#corp_type').html(type_corp[res.client_info.company_type].title);
-										modalEl.find('#corp_regon').html(res.client_info.regon);
-									} else {
-										modalEl.find('#private_user').hide();
-										modalEl.find('#corp_user').hide();
-										modalEl.find('#company_user').show();
-										//
-										modalEl.find('#company_name').html(res.client_info.fullname);
-										modalEl.find('#company_regon').html(res.client_info.regon);
-									}
-									modalEl.find('#nip_user').html(res.client_info.nip);
-									modalEl.find('#email_user').html(res.client_info.email);
-									modalEl.find('#phone_user').html(res.client_info.phone);
-
-									if(res.type == 'leasing') {
-										modalEl.find('#leasing_offer').show();
-										modalEl.find('#rent_offer').hide();
-										modalEl.find('#insurance_offer').hide();
-										//
-										modalEl.find('input[name="nameItem"]').val(res.name);
-										modalEl.find('select[name="pyear_l"] option[value="' + res.pyear + '"]').prop('selected', true);
-										modalEl.find('select[name="leasing_installment"] option[value="' + res.instalments + '"]').prop('selected', true);
-										modalEl.find('input[name="wklad_l"]').val(res.contribution);
-										modalEl.find('input[name="wykup_l"]').val(res.red_value);
-									} else if(res.type == 'rent') {
-										modalEl.find('#leasing_offer').hide();
-										modalEl.find('#rent_offer').show();
-										modalEl.find('#insurance_offer').hide();
-
-										//
-										modalEl.find('input[name="brand_r"]').val(res.name);
-										var value_installment = res.installment_val.split(';');
-										$('#month_installment').ionRangeSlider({
-											type: "double",
-											grid: true,
-											min: 100,
-											max: 5000,
-											from: value_installment[0],
-											to: value_installment[1],
-											postfix: " PLN"
+														datatable.reload();
+														$('#summary_element').show();
+														$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
+													},
+													error: function(err) {
+														KTApp.unprogress(button);
+														button.attr('disabled', false);
+														KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+													}
+												});
+											}, 1000);
 										});
-										modalEl.find('select[name="body_type_r"] option[value="' + res.body_type + '"]').prop('selected', true);
-										modalEl.find('select[name="fuel_type_r"] option[value="' + res.fuel_type + '"]').prop('selected', true);
-									} else {
-										modalEl.find('#leasing_offer').hide();
-										modalEl.find('#rent_offer').hide();
-										modalEl.find('#insurance_offer').show();
 
-										//
-										modalEl.find('input[name="brand_i"]').val(res.name);
-										modalEl.find('select[name="pyear_i"] option[value="' + res.pyear + '"]').prop('selected', true);
-										modalEl.find('input[name="engine_cap_i"]').val(res.engine_cap);
-										modalEl.find('input[name="power_cap_i"]').val(res.power_cap);
-										modalEl.find('input[name="vin_number"]').val(res.vin);
-										modalEl.find('input[name="reg_number"]').val(res.reg_number);
-										modalEl.find('input[name="km_val_i"]').val(res.km_value);
-									}
-									modalEl.find('input[name="netto"]').val(res.netto);
-									modalEl.find('textarea[name="attentions"]').text(res.attentions);
-									modalEl.find('textarea[name="other"]').text(res.other);
+										var status = {
+											1: {'title': 'Nowe', 'class': 'kt-font-brand'},
+											2: {'title': 'Oczekujące', 'class': ' kt-font-dark'},
+											3: {'title': 'Zrealizowane', 'class': ' kt-font-success'},
+										};
 
-									/* ========================================
-											@Information Podstrona 'Realizacja zapytania'
-									========================================= */
+										var type_corp = {
+											0: {'title': 'akcyjna'},
+											1: {'title': 'komandytowa'},
+											2: {'title': 'z ograniczoną odpowiedzialnością'}
+										};
 
-									modalEl.find('#attached_files').html('');
-									if(res.state == 2) {
-										formCompanyList.hide();
-										$('#send_request_notify').show();
-										$('#dropzone_form_roffer').show();
-									} else {
-										formCompanyList.show();
-										$('#send_request_notify').hide();
-										$('#dropzone_form_roffer').hide();
-									}
+										var roffer_type = {
+											'leasing': 'leasing',
+											'rent': 'wynajem',
+											'insurance': 'ubezpieczenie'
+										};
 
-									if(userDataRole == 'administrator') {
+										var date = moment(res.created_at).local().format('YYYY');
+										modalEl.find('#modalTitle').html('00' + res.id + '/' + date);
+										modalEl.find('#idInput').val(res.id);
+										modalEl.find('#typeInput').val(res.type);
+
+										modalEl.find('#roffer_id').html('00' + res.id + '/' + date);
+										modalEl.find('#roffer_status').html(status[res.state].title).addClass(status[res.state].class);
+										modalEl.find('#roffer_type').html(roffer_type[res.type]);
+										modalEl.find('#roffer_date_created').html(moment(res.created_at).local().format('YYYY-MM-DD HH:mm'));
+										if(res.client_info.company == 0) {
+											modalEl.find('#private_user').show();
+											modalEl.find('#corp_user').hide();
+											modalEl.find('#company_user').hide();
+											//
+											modalEl.find('#fullname').html(res.client_info.fullname);
+										} else if(res.client_info.company == 1) {
+											modalEl.find('#private_user').hide();
+											modalEl.find('#corp_user').show();
+											modalEl.find('#company_user').hide();
+											//
+											modalEl.find('#corp_name').html(res.client_info.fullname);
+											modalEl.find('#corp_type').html(type_corp[res.client_info.company_type].title);
+											modalEl.find('#corp_regon').html(res.client_info.regon);
+										} else {
+											modalEl.find('#private_user').hide();
+											modalEl.find('#corp_user').hide();
+											modalEl.find('#company_user').show();
+											//
+											modalEl.find('#company_name').html(res.client_info.fullname);
+											modalEl.find('#company_regon').html(res.client_info.regon);
+										}
+										modalEl.find('#nip_user').html(res.client_info.nip);
+										modalEl.find('#email_user').html(res.client_info.email);
+										modalEl.find('#phone_user').html(res.client_info.phone);
+
+										if(res.type == 'leasing') {
+											modalEl.find('#leasing_offer').show();
+											modalEl.find('#rent_offer').hide();
+											modalEl.find('#insurance_offer').hide();
+											//
+											modalEl.find('input[name="nameItem"]').val(res.name);
+											modalEl.find('select[name="pyear_l"] option[value="' + res.pyear + '"]').prop('selected', true);
+											modalEl.find('select[name="leasing_installment"] option[value="' + res.instalments + '"]').prop('selected', true);
+											modalEl.find('input[name="wklad_l"]').val(res.contribution);
+											modalEl.find('input[name="wykup_l"]').val(res.red_value);
+										} else if(res.type == 'rent') {
+											modalEl.find('#leasing_offer').hide();
+											modalEl.find('#rent_offer').show();
+											modalEl.find('#insurance_offer').hide();
+
+											//
+											modalEl.find('input[name="brand_r"]').val(res.name);
+											var value_installment = res.installment_val.split(';');
+											$('#month_installment').ionRangeSlider({
+												type: "double",
+												grid: true,
+												min: 100,
+												max: 5000,
+												from: value_installment[0],
+												to: value_installment[1],
+												postfix: " PLN"
+											});
+											modalEl.find('select[name="body_type_r"] option[value="' + res.body_type + '"]').prop('selected', true);
+											modalEl.find('select[name="fuel_type_r"] option[value="' + res.fuel_type + '"]').prop('selected', true);
+										} else {
+											modalEl.find('#leasing_offer').hide();
+											modalEl.find('#rent_offer').hide();
+											modalEl.find('#insurance_offer').show();
+
+											//
+											modalEl.find('input[name="brand_i"]').val(res.name);
+											modalEl.find('select[name="pyear_i"] option[value="' + res.pyear + '"]').prop('selected', true);
+											modalEl.find('input[name="engine_cap_i"]').val(res.engine_cap);
+											modalEl.find('input[name="power_cap_i"]').val(res.power_cap);
+											modalEl.find('input[name="vin_number"]').val(res.vin);
+											modalEl.find('input[name="reg_number"]').val(res.reg_number);
+											modalEl.find('input[name="km_val_i"]').val(res.km_value);
+										}
+										modalEl.find('input[name="netto"]').val(res.netto);
+										modalEl.find('textarea[name="attentions"]').text(res.attentions);
+										modalEl.find('textarea[name="other"]').text(res.other);
+
+										/* ========================================
+												@Information Podstrona 'Realizacja zapytania'
+										========================================= */
+
+										modalEl.find('#attached_files').html('');
+										if(res.state == 3) {
+											formCompanyList.hide();
+											$('#send_request_notify').show();
+											$('#dropzone_form_roffer').show();
+											$('#summary_element').show();
+											$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
+											//
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', true);
+										} else if(res.state == 2) {
+											formCompanyList.hide();
+											$('#send_request_notify').show();
+											$('#dropzone_form_roffer').show();
+											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
+											$('#summary_element').show();
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', true);
+										} else {
+											formCompanyList.show();
+											$('#send_request_notify').hide();
+											$('#dropzone_form_roffer').hide();
+											$('#summary_element').hide();
+											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', false);
+										}
+
+										if(userDataRole == 'administrator') {
+											$.ajax({
+												url: '/rest/company/list',
+												method: 'POST',
+												success: function(response) {
+													if(response.success == null) {
+														response.forEach(function(element) {
+															modalEl.find('#company_list').append('<option value="' + element.email + '">' + element.fullname + '</option>');
+														});
+
+														$('#company_list').selectpicker('refresh');
+													}
+												},
+												error: function(err) { }
+											});
+										}
+
+										/* ========================================
+												@Information Załadowanie plików
+										========================================= */
+										f_path = 'roffer_' + res.id + '_' + moment(res.created_at).local().format('YYYY');
 										$.ajax({
-											url: '/rest/company/list',
+											url: '/rest/files/get',
 											method: 'POST',
-											success: function(response) {
-												if(response.success == null) {
-													response.forEach(function(element) {
-														modalEl.find('#company_list').append('<option value="' + element.email + '">' + element.fullname + '</option>');
-													});
-
-													$('#company_list').selectpicker('refresh');
+											data: { folder_path: 'roffers/' + f_path },
+											success: function(res) {
+												if(res.files) {
+													if(res.files.length != 0) {
+														res.files.forEach(file => {
+															var extension = file.split('.');
+															if(userDataRole == 'administrator') {
+																if(file.indexOf('-verified') !== -1) {
+																	var green_class = 'kt-font-success';
+																} else var green_class = '';
+																modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
+																		<div class="kt-widget4__pic kt-widget4__pic--icon">\
+																			<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+																		</div>\
+																		<a href="javascript:;" class="kt-widget4__title ' + green_class + '">' + file + '</a>\
+																		<div class="kt-widget4__tools">\
+																			<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm show_file">\
+																				<i class="flaticon2-accept"></i>\
+																			</a>\
+																			<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+																				<i class="flaticon2-download"></i>\
+																			</a>\
+																			<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+																				<i class="flaticon2-delete"></i>\
+																			</a>\
+																		</div>\
+																	</div>\
+																');
+															} else {
+																if(file.indexOf('-verified') !== -1) {
+																	modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
+																			<div class="kt-widget4__pic kt-widget4__pic--icon">\
+																				<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+																			</div>\
+																			<a href="javascript:;" class="kt-widget4__title kt-font-success">' + file + '</a>\
+																			<div class="kt-widget4__tools">\
+																				<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+																					<i class="flaticon2-download"></i>\
+																				</a>\
+																			</div>\
+																		</div>\
+																	');
+																}
+															}
+														});
+													}
 												}
 											},
-											error: function(err) { }
-										});
-									}
-
-									/* ========================================
-											@Information Załadowanie plików
-									========================================= */
-									f_path = 'roffer_' + res.id + '_' + moment(res.created_at).local().format('YYYY');
-									$.ajax({
-										url: '/rest/files/get',
-										method: 'POST',
-										data: { folder_path: 'roffers/' + f_path },
-										success: function(res) {
-											if(res.files) {
-												if(res.files.length != 0) {
-													res.files.forEach(file => {
-														var extension = file.split('.');
-														if(userDataRole == 'administrator') {
-															modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
-																	<div class="kt-widget4__pic kt-widget4__pic--icon">\
-																		<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
-																	</div>\
-																	<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
-																	<div class="kt-widget4__tools">\
-																		<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm show_file">\
-																			<i class="flaticon2-accept"></i>\
-																		</a>\
-																		<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
-																			<i class="flaticon2-download"></i>\
-																		</a>\
-																		<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
-																			<i class="flaticon2-delete"></i>\
-																		</a>\
-																	</div>\
-																</div>\
-															');
-														} else {
-															modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
-																	<div class="kt-widget4__pic kt-widget4__pic--icon">\
-																		<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
-																	</div>\
-																	<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
-																	<div class="kt-widget4__tools">\
-																		<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
-																			<i class="flaticon2-download"></i>\
-																		</a>\
-																	</div>\
-																</div>\
-															');
-														}
-													});
-												}
+											error: function(err) {
+												throw err;
 											}
-										},
-										error: function(err) {
-											throw err;
-										}
-									});
+										});
 
-									modalEl.on('hidden.bs.modal', function() {
-										modalEl.find('#roffer_status').removeClass(status[res.state].class);
-										modalEl.find('#company_list').html('');
-									});
+										modalEl.on('hidden.bs.modal', function() {
+											modalEl.find('#roffer_status').removeClass(status[res.state].class);
+											modalEl.find('#company_list').html('');
+										});
 								} else {
 									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
 								}
+							} else {
+								return KTUtil.showNotifyAlert('danger', 'Konto klienta nie zostało przypisane do pracownika.', 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
 						}, 1000);
 					},
 					error: function(err) {
@@ -734,33 +801,35 @@ var KTROfferListDatatable = function() {
 		});
 
 		$(document).on('click', '.show_file', function() {
-			var path = 'roffers/' + $(this).attr('data-path');
+			var element = $(this);
+			var splited_path = element.attr('data-path').split('/');
+			var path = 'roffers/' + element.attr('data-path');
 
-
-			console.log('Path file: ' + path);
-			$(this).parent().prev().addClass('kt-font-success');
-			/* $.ajax({
-				url: '/rest/file/download',
+			$.ajax({
+				url: '/rest/file/rename',
 				method: 'POST',
 				data: { path: path },
-				xhrFields: {
-					responseType: 'blob'
+				success: function(res) {
+					if(res.status == 'success') {
+						if(res.verified) {
+							element.parent().prev().addClass('kt-font-success').html(res.fname);
+							element.attr('data-path', splited_path[0] + '/' + res.fname);
+						} else {
+							element.parent().prev().removeClass('kt-font-success').html(res.fname);
+							element.attr('data-path', splited_path[0] + '/' + res.fname);
+						}
+					} else {
+						swal.fire({
+							title: 'Błąd',
+							text: res.message,
+							type: res.status,
+							confirmButtonText: "Zamknij",
+							confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+						});
+					}
 				},
-				success: function(res, status, xhr) {
-					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
-					fileName = fileName.replace(/\"/g, '');
-
-					var a = document.createElement('a');
-			    var url = window.URL.createObjectURL(res);
-			    a.href = url;
-			    a.download = fileName;
-			    a.click();
-			    window.URL.revokeObjectURL(url);
-				},
-				error: function(err) {
-					KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-				}
-			}); */
+				error: function(err) { }
+			});
 		});
 	}
 
@@ -786,7 +855,7 @@ var KTROfferListDatatable = function() {
 							</div>\
 							<a href="javascript:;" class="kt-widget4__title">' + file.name + '</a>\
 							<div class="kt-widget4__tools">\
-								<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm show_file">\
+								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '"  class="btn btn-clean btn-icon btn-sm show_file">\
 									<i class="flaticon2-accept"></i>\
 								</a>\
 								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '"  class="btn btn-clean btn-icon btn-sm download_file">\
@@ -835,6 +904,7 @@ var KTROfferListDatatable = function() {
 			selection();
 			selectedDelete();
 			updateTotal();
+			search();
 		},
 	};
 }();

@@ -11,23 +11,6 @@ block content
           span.kt-subheader__separator.kt-subheader__separator--v
           |             
           |             
-          #kt_subheader_search.kt-subheader__group
-            span#kt_subheader_total.kt-subheader__desc
-              | 
-            |                 
-            |                                     
-            form#kt_subheader_search_form.kt-margin-l-20
-              .kt-input-icon.kt-input-icon--right.kt-subheader__search
-                input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
-                |                             
-                span.kt-input-icon__icon.kt-input-icon__icon--right
-                  span
-                    svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
-                      g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                        rect#bound(x='0', y='0', width='24', height='24')
-                        path#Path-2(d='M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
-                        path#Path(d='M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z', fill='#000000', fill-rule='nonzero')
-          |                             
           #kt_subheader_group_actions.kt-subheader__group.kt-hidden
             .kt-subheader__desc
               span#kt_subheader_group_selected_rows
@@ -49,6 +32,33 @@ block content
     .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
       // begin::Portlet
       .kt-portlet.kt-portlet--mobile
+        .kt-portlet__body
+          // begin: Search Form
+          .kt-form.kt-form--label-right.kt-margin-b-10
+            .row.align-items-center
+              .col-xl-8.order-2.order-xl-1
+                .row.align-items-center
+                  .col-md-4.kt-margin-b-20-tablet-and-mobile
+                    .kt-input-icon.kt-input-icon--left
+                      input#generalSearch.form-control(type='text', placeholder='Wyszukaj..')
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      span.kt-input-icon__icon.kt-input-icon__icon--left
+                        span
+                          i.la.la-search
+                  |                 &#x9;&#x9;&#x9;&#x9;
+                  .col-md-4.kt-margin-b-20-tablet-and-mobile.kt-align-right
+                    .kt-form__group.kt-form__group--inline
+                      .kt-form__label
+                        label Status:
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      .kt-form__control
+                        select#kt_form_status.form-control
+                          option(value='') Wszystkie
+                          option(value='1') Nowe
+                          option(value='2') Oczekujące
+                          option(value='3') Zrealizowane
+              | &#x9;&#x9;
+          // end: Search Form
         .kt-portlet__body.kt-portlet__body--fit
           // begin: Datatable
           #kt_apps_offer_list_datatable.kt-datatable
@@ -550,30 +560,6 @@ block content
                                     .col-lg-9.col-xl-6
                                       textarea.form-control(name='other', rows='3', placeholder='Inne informacje dot. oferty')
                                   |                   
-                                  .kt-hidden                  
-                                    .row
-                                      .col-lg-9.col-xl-6
-                                        i.fa.fa-question.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
-                                        h5.kt-section__title.kt-section__title-sm.d-inline-block Zgody:
-                                    |                      
-                                    .form-group.row
-                                      .col-xl-3.col-lg-3.col-form-label
-                                      .col-lg-9.col-xl-6
-                                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                          input(type='checkbox' name='data_processing' value='1')
-                                          |  Zgoda na przetwarzanie danych w celu realizacji zgłoszenia.
-                                          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                          span
-                                    |                      
-                                    .form-group.row(style='margin-top:-10px;')
-                                      .col-xl-3.col-lg-3.col-form-label
-                                      .col-lg-9.col-xl-6
-                                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                          input(type='checkbox', name='data_marketing' value='1')
-                                          |  Zgoda na otrzymywanie korespondencji marketingowych drogą e-mailową.
-                                          | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                          span
-                                    |
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                   |                             
                                   .kt-form__actions
@@ -598,7 +584,7 @@ block content
                                       label.col-xl-4.col-lg-4.col-form-label Wybierz firmy:
                                       |                                         
                                       .col-lg-8.col-xl-8
-                                        select#company_list.form-control.kt-selectpicker(name='company_list[]', multiple='')     
+                                        select#company_list.form-control.kt-selectpicker(name='company_list', multiple='')     
                                     .kt-form__actions
                                       .row
                                         .col-lg-12.col-xl-12.kt-align-center
@@ -626,18 +612,20 @@ block content
                                               .dropzone-msg.dz-message.needsclick
                                                 h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
                                                 span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
-                                .row.kt-margin-t-20
-                                  .col-lg-9.col-xl-6
-                                    i.fa.fa-dot-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
-                                    h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
-                                .form-group.form-group-last.row
-                                  label.col-xl-4.col-lg-4.col-form-label Realizacja zapytania
-                                  |                                         
-                                  .col-lg-8.col-xl-8
-                                    button.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj zapytanie
-                                    |                                             
-                                    span.form-text.text-muted.kt-font-brand.kt-font-bold
-                                      | Po zrealizowaniu zapytania ofertowego, pracownik przypisany do tego zapytania otrzyma powiadomienie o możliwości wprowadzenia nowej oferty.
+                                #summary_element
+                                  .row.kt-margin-t-20
+                                    .col-lg-9.col-xl-6
+                                      i.fa.fa-dot-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
+                                      h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
+                                  .form-group.form-group-last.row
+                                    label.col-xl-4.col-lg-4.col-form-label Realizacja zapytania
+                                    |                                         
+                                    .col-lg-8.col-xl-8
+                                      button#realize_roffer.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj zapytanie
+                                      |  
+                                      if userData.role == 'administrator'                                           
+                                        span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                          | Po zrealizowaniu zapytania ofertowego, pracownik przypisany do tego zapytania otrzyma powiadomienie o możliwości wprowadzenia nowej oferty.
 block scripts
   script(src='./assets/vendors/general/inputmask/dist/inputmask2/inputmask.min.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask2/jquery.inputmask.min.js', type='text/javascript')

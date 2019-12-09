@@ -27,10 +27,10 @@ Cron.ScheduleEveryDay();
 //
 
 /* Mails.sendMail.send({
-  template: 'roffer_send',
+  template: 'client_offer',
   message: {
     from: '"CRM System" <kontakt@crmsystem.pl>',
-    to: 'damian@dmomedia.pl,arroweeek@gmail.com',
+    to: 'damian@dmomedia.pl',
     subject: 'Zapytanie ofertowe zostało złożone'
   },
   locals: {

@@ -37,7 +37,7 @@ var KTDashboard = function() {
                     display: false,
                 },
                 tooltips: {
-                    enabled: false,
+                    enabled: true,
                     intersect: false,
                     mode: 'nearest',
                     xPadding: 10,
@@ -57,11 +57,11 @@ var KTDashboard = function() {
                 },
                 scales: {
                     xAxes: [{
-                        display: true,
+                        display: false,
                         gridLines: false,
                         scaleLabel: {
                             display: false,
-                            labelString: 'Dni tygodnia'
+                            labelString: 'Desc'
                         }
                     }],
                     yAxes: [{
@@ -97,6 +97,55 @@ var KTDashboard = function() {
 
         return new Chart(src, config);
     }
+
+		var activeCharts = function() {
+				// PIE CHART
+				$.ajax({
+					url: '/rest/stats/offers_count',
+					method: 'POST',
+					success: function(res) {
+						new Morris.Donut({
+								element: 'kt_donut_offers',
+								data: res,
+								colors: ['#593ae1', '#6e4ff5', '#9077fb'],
+								resize: true
+						});
+					},
+					error: function() {
+						console.log('Wystąpił błąd podczas pobierania statystyk ofertowych.');
+					}
+				});
+
+				$.ajax({
+					url: '/rest/stats/prov_forecast',
+					method: 'POST',
+					success: function(res) {
+						var label = [], values = [];
+
+						var reverse = res.values.reverse();
+
+						var last_day = parseFloat(reverse[reverse.length-1].value),
+						today = parseFloat(res.today_prov);
+
+						if(last_day > today) {
+							var percentage = ((today/last_day)*100).toFixed();
+						} else {
+							var percentage = ((today/last_day)*100).toFixed() - 100;
+							$('#kt_chart_1_value').html(res.today_prov + ' PLN &nbsp;&nbsp; <i class="kt-font-success flaticon2-arrow-up">12%</i>');
+						}
+
+						reverse.forEach(function(element) {
+							label.push(moment(element.created_at).local().format('DD-MM-YYYY'));
+							values.push(element.value);
+						});
+
+						console.log(label);
+						console.log(values);
+						_initSparklineChart($('#kt_chart_quick_stats_1'), label, values, KTApp.getStateColor('brand'), 3);
+					},
+					error: function() { }
+				});
+		}
 
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
@@ -151,7 +200,6 @@ var KTDashboard = function() {
 		}
 
 		var quickStats = function() {
-			_initSparklineChart($('#kt_chart_quick_stats_1'), ["20/11/2019", "21/11/2019", "22/11/2019", "23/11/2019", "24/11/2019", "25/11/2019", "26/11/2019"], [11, 9, 12, 14, 17, 18, 14], KTApp.getStateColor('brand'), 3);
 			_initSparklineChart($('#kt_chart_quick_stats_2'), ["Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad"], [32, 16, 12, 4, 4, 18, 14], KTApp.getStateColor('danger'), 3);
 		}
 
@@ -322,6 +370,7 @@ var KTDashboard = function() {
 						setUnreadNotification();
 						sessionTimeout();
 						quickStats();
+						activeCharts();
 
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Ładowanie ...'});

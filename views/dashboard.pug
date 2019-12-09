@@ -1,5 +1,8 @@
 extends layout
 
+block stylecss
+  link(href='./assets/vendors/general/morris.js/morris.css', rel='stylesheet', type='text/css')
+
 block content
   if user
     // begin:: Content Head
@@ -18,19 +21,19 @@ block content
       // BEGIN:: Dashboard 1
       // BEGIN:: Row
       .row.row-full-height
-        .col-sm-12.col-md-12.col-lg-6
+        .col-sm-12.col-md-12.col-lg-4
           // widget 
           .kt-portlet.kt-portlet--border-bottom-brand
             .kt-portlet__body.kt-portlet__body--fluid
               .kt-widget26
                 .kt-widget26__content
-                  span.kt-widget26__number 230,35 PLN&nbsp;&nbsp;
+                  span#kt_chart_1_value.kt-widget26__number
                     i.kt-font-success.flaticon2-arrow-up 12% 
                   span.kt-widget26__desc Prowizja prognozowana spółki
                 | &#x9;&#x9;&#x9;&#x9;&#x9;
-                .kt-widget26__chart(style='height:100px; width: 230px;')
+                .kt-widget26__chart(style='height:150px; width: 300px;')
                   canvas#kt_chart_quick_stats_1
-        .col-sm-12.col-md-12.col-lg-6
+        .col-sm-12.col-md-12.col-lg-4
           // widget 
           .kt-portlet.kt-portlet--border-bottom-brand
             .kt-portlet__body.kt-portlet__body--fluid
@@ -40,8 +43,13 @@ block content
                     i.kt-font-danger.flaticon2-arrow-down 32% 
                   span.kt-widget26__desc Miesięczny przychód spółki
                 | &#x9;&#x9;&#x9;&#x9;&#x9;
-                .kt-widget26__chart(style='height:100px; width: 230px;')
+                .kt-widget26__chart(style='height:150px; width: 300px;')
                   canvas#kt_chart_quick_stats_2
+        .col-sm-12.col-md-12.col-lg-4
+          .kt-portlet.kt-portlet--border-bottom-brand
+            .kt-portlet__body
+              #kt_donut_offers(style='height:226px;')
+          // end::Portlet
       .col-lg-12.col-xl-12.order-lg-1.order-xl-1
         // begin:: Widgets/Activity
         .kt-portlet.kt-portlet--fit.kt-portlet--head-lg.kt-portlet--head-overlay.kt-portlet--skin-solid.kt-portlet--height-fluid
@@ -111,3 +119,5 @@ block content
                       | 0,00 PLN
         // end:: Widgets/Activity
             
+block scripts
+  script(src='./assets/vendors/general/morris.js/morris.js', type='text/javascript')

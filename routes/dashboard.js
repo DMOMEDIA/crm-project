@@ -30,5 +30,6 @@ router.get('/dashboard/documentation', PagesController.docs);
 router.get('/dashboard/report', PagesController.report);
 // Statystyki
 router.get('/dashboard/statistics', PagesController.statistics);
+router.get('/dashboard/gsettings', PagesController.globalSettings);
 
 module.exports = router;

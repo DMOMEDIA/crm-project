@@ -1,4 +1,4 @@
-const Roles = require('../models/roles');
+ const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
@@ -223,7 +223,7 @@ exports.addClient = (req, res) => {
             email: req.body.email,
             company: req.body.client_type,
             company_type: req.body.company_type,
-            state: 2,
+            state: 3,
             user_id: req.body.param
           }).then(function() {
             Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
@@ -443,8 +443,9 @@ exports.insertOffer = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.add')) {
       if(req.body != null) {
-        Offer.createOffer(req, result => {
-          res.json(Messages.message('added_new_offer', result));
+        Offer.createOffer(req, function(param, id) {
+          var params = { offer_path: param, offer_id: id };
+          res.json(Messages.message('added_new_offer', params ));
         });
       }
     } else res.json(Messages.message('no_permission', null));
@@ -485,6 +486,95 @@ exports.changeOfferData = (req, res) => {
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.sendOfferMail = async (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body.o_state == 2) {
+      Offer.getOfferById(req.body.o_id, req.body.offer_type, offer => {
+        if(offer) {
+          var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
+          var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
+
+          try {
+            var attachments = [];
+            var files = fs.readdirSync('./uploads/offer/' + req.body.o_path);
+            async.each(files, function(name, cb) {
+              attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
+              cb();
+            }, function() {
+              Mails.sendMail.send({
+                template: 'client_offer',
+                message: {
+                  from: '"CRM System" <oferty@crmsystem.pl>',
+                  to: offer.client.email,
+                  subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
+                  attachments: attachments
+                },
+                locals: {
+                  data: offer,
+                  date_format: date_format,
+                  identity: o_identity
+                }
+              }).then(function() {
+                res.json({ status: 'success' });
+              });
+            });
+          }
+          catch {
+            res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
+          }
+
+          /* Mails.sendMail.send({
+            template: 'client_offer',
+            message: {
+              from: '"CRM System" <oferty@crmsystem.pl>',
+              to: offer.client.email,
+              subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.'
+            },
+            locals: {
+              data: offer,
+              date_format: date_format,
+              identity: o_identity
+            },
+            attachments: {
+
+            }
+          }).then(function() {
+            res.json({ status: 'success' });
+          }); */
+        } else res.json(Messages.message('not_found_offer', null));
+      });
+    }
+  }
+  /* if(req.isAuthenticated()) {
+    if(req.body.o_state == 2) {
+      await Client.getClientById(req.body.client_id).then(async function(user) {
+        if(user != null) {
+          var company = await Company.getCompanyById(req.body.company_id),
+          company = company.toJSON(),
+          user = user.toJSON();
+
+          Mails.sendMail.send({
+            template: 'client_offer',
+            message: {
+              from: '"CRM System" <oferty@crmsystem.pl>',
+              to: user.email,
+              subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.'
+            },
+            locals: {
+              data: req.body,
+              user: user,
+              company: company
+            }
+          }).then(function() {
+            res.json({ status: 'success' });
+          });
+        }
+        else res.json(Messages.message('not_found_client_identity', null));
+      });
+    }
+  } else res.json(Messages.message('no_authorization', null)); */
 };
 
 exports.uploadOfferFiles = (req, res, next) => {
@@ -533,22 +623,24 @@ exports.uploadClientFiles = (req, res, next) => {
 
 exports.uploadRequestOfferFiles = (req, res, next) => {
   if(req.isAuthenticated()) {
-    if(req.files) {
-      var upload_dir = 'uploads',
-      client_dir = 'roffers',
-      f_path = req.body.folder_path;
+    if(req.session.userData.role == 'administrator') {
+      if(req.files) {
+        var upload_dir = 'uploads',
+        client_dir = 'roffers',
+        f_path = req.body.folder_path;
 
-      fs.mkdirSync(upload_dir + '/' + client_dir + '/' + f_path, { recursive: true });
+        fs.mkdirSync(upload_dir + '/' + client_dir + '/' + f_path, { recursive: true });
 
-      Promise.resolve(req.files)
-        .each(function(file_incoming, idx) {
-          var sanitized_filename = sanitize(file_incoming.originalname);
-          var file = path.join(upload_dir, client_dir, f_path, sanitized_filename);
+        Promise.resolve(req.files)
+          .each(function(file_incoming, idx) {
+            var sanitized_filename = sanitize(file_incoming.originalname);
+            var file = path.join(upload_dir, client_dir, f_path, sanitized_filename);
 
-          return fs.writeFileSync(file, file_incoming.buffer);
-        }).then(function() {
-          res.status(200).json(Messages.message('added_new_files', null));
-        });
+            return fs.writeFileSync(file, file_incoming.buffer);
+          }).then(function() {
+            res.status(200).json(Messages.message('added_new_files', null));
+          });
+      }
     }
   } else res.json(Messages.message('no_authorization', null));
 };
@@ -595,6 +687,46 @@ exports.deleteFile = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+/** ================================================
+    @Information Moduł zmieniający weryfikację pliku (zapytania ofertowe)
+ =============================================== **/
+
+exports.changeFileVerify = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body) {
+      var file_path = req.body.path.split('/'),
+      filename = file_path[2],
+      folder = path.join('uploads', file_path[0], file_path[1]),
+      old_path = path.join(folder, filename);
+
+      if(filename.indexOf('-verified') !== -1) {
+        var n_filename = filename.replace('-verified', ''),
+        n_path = path.join(folder, n_filename);
+
+        try {
+          fs.renameSync(old_path, n_path);
+          res.json({ status: 'success', verified: false, fname: n_filename });
+        }
+        catch {
+          res.json(Messages.message('error_global', null));
+        }
+      } else {
+        var split_name = filename.split('.');
+        var n_filename = split_name[0] + '-verified.' + split_name[1],
+        n_path = path.join(folder, n_filename);
+
+        try {
+          fs.renameSync(old_path, n_path);
+          res.json({ status: 'success', verified: true, fname: n_filename });
+        }
+        catch {
+          res.json(Messages.message('error_global', null));
+        }
+      }
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 // Firmy
 
 exports.requestOfferSendMail = (req, res) => {
@@ -610,9 +742,24 @@ exports.requestOfferSendMail = (req, res) => {
             html: 'Wiadomość z zapytaniem ofertowym, zawartość w załączniku'
           }
         }).then(function() {
-          res.json({ status: 'success', message: 'Pomyślnie wysłano zapytanie ofertowe do firm.' });
+          res.json(Messages.message('success_send_mail_to_company', null));
         });
       }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.requestOfferDone = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.session.userData.role == 'administrator') {
+      if(req.body.state == 2) {
+        ROffer.setValueById(req.body.id, 'state', 3);
+        console.log(req.body.client_info.id);
+        Notification.sendNotificationToUser(req.body.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + req.body.id + '/' + moment(req.body.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+        .then(function(done) {
+          res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
+        });
+      } else res.json({ status: 'error', message: 'Zapytanie ofertowe musi zostać wysłane do odpowiednich firm przed jego realizacją.' });
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
@@ -644,7 +791,7 @@ exports.getCompanyById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.companies.show')) {
       if(req.body.id) {
-        Company.getCompanyById(req.body.id, function(result) {
+        Company.getCompanyById(req.body.id).then(function(result) {
           res.json(result);
         });
       }
@@ -662,4 +809,28 @@ exports.editCompany = (req, res) => {
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getCompanyProvision = (req, res) => {
+  Company.getCompanyProvision(req.body.id).then(function(result) {
+    res.json(result);
+  });
+};
+
+// stats
+
+exports.getOfferCount = (req, res) => {
+  if(req.isAuthenticated()) {
+    Offer.getOfferCounts(function(cb) {
+      res.json(cb);
+    });
+  }
+};
+
+exports.getProvisionStats = (req, res) => {
+  if(req.isAuthenticated()) {
+    System.provisionStatistics(7, true, function(values, today_prov) {
+      res.json({ values: values, today_prov: today_prov });
+    });
+  }
 };

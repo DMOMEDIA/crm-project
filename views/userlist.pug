@@ -426,9 +426,266 @@ block content
                               // end: Search Form
                               #modal_datatable_clients.kt-datatable
           // end::Modal
+          // begin::Modal
+          if userPermissions.includes('crm.clients.edit')
+            #kt_fetch_client.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+              .modal-dialog.modal-lg.modal-dialog-centered(role='document')
+                .modal-content
+                  .modal-header
+                    h5.modal-title Podgląd&nbsp;-&nbsp;
+                    h5.modal-title#modalTitle_client 
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                      span(aria-hidden='true')
+                  .modal-body
+                    .kt-portlet.kt-portlet--tabs
+                      .kt-portlet__head
+                        .kt-portlet__head-toolbar
+                          ul.nav.nav-tabs.nav-tabs-space-xl.nav-tabs-line.nav-tabs-bold.nav-tabs-line-3x.nav-tabs-line-brand(role='tablist')
+                            li.nav-item
+                              a.nav-link.active(data-toggle='tab', href='#dane_personalne', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    polygon#Bound(points='0 0 24 0 24 24 0 24')
+                                    path#Combined-Shape(d='M10.5857864,12 L5.46446609,6.87867966 C5.0739418,6.48815536 5.0739418,5.85499039 5.46446609,5.46446609 C5.85499039,5.0739418 6.48815536,5.0739418 6.87867966,5.46446609 L12,10.5857864 L18.1923882,4.39339828 C18.5829124,4.00287399 19.2160774,4.00287399 19.6066017,4.39339828 C19.997126,4.78392257 19.997126,5.41708755 19.6066017,5.80761184 L13.4142136,12 L19.6066017,18.1923882 C19.997126,18.5829124 19.997126,19.2160774 19.6066017,19.6066017 C19.2160774,19.997126 18.5829124,19.997126 18.1923882,19.6066017 L12,13.4142136 L6.87867966,18.5355339 C6.48815536,18.9260582 5.85499039,18.9260582 5.46446609,18.5355339 C5.0739418,18.1450096 5.0739418,17.5118446 5.46446609,17.1213203 L10.5857864,12 Z', fill='#000000', opacity='0.3', transform='translate(12.535534, 12.000000) rotate(-360.000000) translate(-12.535534, -12.000000) ')
+                                    path#Combined-Shape(d='M6,18 L9,18 C9.66666667,18.1143819 10,18.4477153 10,19 C10,19.5522847 9.66666667,19.8856181 9,20 L4,20 L4,15 C4,14.3333333 4.33333333,14 5,14 C5.66666667,14 6,14.3333333 6,15 L6,18 Z M18,18 L18,15 C18.1143819,14.3333333 18.4477153,14 19,14 C19.5522847,14 19.8856181,14.3333333 20,15 L20,20 L15,20 C14.3333333,20 14,19.6666667 14,19 C14,18.3333333 14.3333333,18 15,18 L18,18 Z M18,6 L15,6 C14.3333333,5.88561808 14,5.55228475 14,5 C14,4.44771525 14.3333333,4.11438192 15,4 L20,4 L20,9 C20,9.66666667 19.6666667,10 19,10 C18.3333333,10 18,9.66666667 18,9 L18,6 Z M6,6 L6,9 C5.88561808,9.66666667 5.55228475,10 5,10 C4.44771525,10 4.11438192,9.66666667 4,9 L4,4 L9,4 C9.66666667,4 10,4.33333333 10,5 C10,5.66666667 9.66666667,6 9,6 L6,6 Z', fill='#000000', fill-rule='nonzero')
+                                | Dane personalne i przypisy
+                            |                 
+                            li.nav-item
+                              a.nav-link(data-toggle='tab', href='#pliki', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    polygon(points='0 0 24 0 24 24 0 24')
+                                    path(d='M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z', fill='#000000', fill-rule='nonzero', opacity='0.3')
+                                    path(d='M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z', fill='#000000', fill-rule='nonzero')
+                                | Przypięte pliki
+                            |                 
+                            li.nav-item
+                              a.nav-link(data-toggle='tab', href='#status', role='tab')
+                                svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewBox='0 0 24 24', version='1.1')
+                                  g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
+                                    rect(x='0', y='0', width='24', height='24')
+                                    rect(fill='#000000', opacity='0.3', x='5', y='8', width='2', height='8', rx='1')
+                                    path(d='M6,21 C7.1045695,21 8,20.1045695 8,19 C8,17.8954305 7.1045695,17 6,17 C4.8954305,17 4,17.8954305 4,19 C4,20.1045695 4.8954305,21 6,21 Z M6,23 C3.790861,23 2,21.209139 2,19 C2,16.790861 3.790861,15 6,15 C8.209139,15 10,16.790861 10,19 C10,21.209139 8.209139,23 6,23 Z', fill='#000000', fill-rule='nonzero')
+                                    rect(fill='#000000', opacity='0.3', x='17', y='8', width='2', height='8', rx='1')
+                                    path(d='M18,21 C19.1045695,21 20,20.1045695 20,19 C20,17.8954305 19.1045695,17 18,17 C16.8954305,17 16,17.8954305 16,19 C16,20.1045695 16.8954305,21 18,21 Z M18,23 C15.790861,23 14,21.209139 14,19 C14,16.790861 15.790861,15 18,15 C20.209139,15 22,16.790861 22,19 C22,21.209139 20.209139,23 18,23 Z', fill='#000000', fill-rule='nonzero')
+                                    path(d='M6,7 C7.1045695,7 8,6.1045695 8,5 C8,3.8954305 7.1045695,3 6,3 C4.8954305,3 4,3.8954305 4,5 C4,6.1045695 4.8954305,7 6,7 Z M6,9 C3.790861,9 2,7.209139 2,5 C2,2.790861 3.790861,1 6,1 C8.209139,1 10,2.790861 10,5 C10,7.209139 8.209139,9 6,9 Z', fill='#000000', fill-rule='nonzero')
+                                    path(d='M18,7 C19.1045695,7 20,6.1045695 20,5 C20,3.8954305 19.1045695,3 18,3 C16.8954305,3 16,3.8954305 16,5 C16,6.1045695 16.8954305,7 18,7 Z M18,9 C15.790861,9 14,7.209139 14,5 C14,2.790861 15.790861,1 18,1 C20.209139,1 22,2.790861 22,5 C22,7.209139 20.209139,9 18,9 Z', fill='#000000', fill-rule='nonzero')
+                                | Status klienta
+                      |     
+                      .kt-portlet__body
+                        .tab-content
+                          #dane_personalne.tab-pane.active(role='tabpanel')
+                            form#kt_client_edit_personal
+                              input#idInput1_client(type='hidden', name='id')
+                              .kt-form.kt-form--label-right
+                                .kt-form__body
+                                  .kt-section.kt-section--first
+                                    .kt-section__body
+                                      .row
+                                        label.col-xl-3     
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Dane personalne:
+                                      |                                                               
+                                      .form-group.row.kt-margin-t-10
+                                        label.col-xl-3.col-lg-3.col-form-label Typ konta
+                                        |                                         
+                                        .col-9
+                                          .kt-radio-inline
+                                            label.kt-radio.kt-radio--bold.kt-radio--brand
+                                              input(type='radio', name='client_type', value='0')
+                                              |  Osoba fizyczna
+                                              |              
+                                              span
+                                            |            
+                                            label.kt-radio.kt-radio--bold.kt-radio--brand
+                                              input(type='radio', name='client_type', value='1')
+                                              |  Spółka
+                                              |                      
+                                              span
+                                            |                       
+                                            label.kt-radio.kt-radio--bold.kt-radio--brand
+                                              input(type='radio', name='client_type', value='2')
+                                              |  Firma
+                                              |              
+                                              span
+                                            |                
+                                      #private_user
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Imię
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='firstname', placeholder='Imię')
+                                        |                                     
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Nazwisko
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='lastname', placeholder='Nazwisko')
+                                        |                       
+                                      #corp_user(style='display:none;')
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='corpName', placeholder='Nazwa spółki')
+                                        |              
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Typ spółki
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            select.form-control(name='corp_type')
+                                              option(selected='', disabled='', value='') Wybierz typ spółki
+                                              option(value='0') akcyjna
+                                              option(value='1') komandytowa
+                                              option(value='2') z ograniczoną odpowiedzialnością
+                                        |              
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label REGON
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
+                                        |              
+                                      #company_user(style='display:none;')
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='companyName', placeholder='Nazwa firmy')
+                                        |              
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label REGON
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
+                                        |              
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label NIP
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input#nipClient.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
+                                      |                                                            
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Numer telefonu
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .input-group
+                                            .input-group-prepend
+                                              span.input-group-text
+                                                i.la.la-phone
+                                            |                                                 
+                                            input.form-control(type='text', name='pNumber', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                                      |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Adres e-mail
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          .input-group
+                                            .input-group-prepend
+                                              span.input-group-text
+                                                i.la.la-at
+                                            |                                                 
+                                            input.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                      .row
+                                        label.col-xl-3     
+                                        .col-lg-9.col-xl-6
+                                          h3.kt-section__title.kt-section__title-sm Zgody:
+                                      |                                              
+                                      .form-group.row
+                                        .col-xl-3.col-lg-3
+                                        .col-lg-9.col-xl-6
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox' name='data_processing' value='1')
+                                            |  Zgoda na przetwarzanie danych w celu realizacji zgłoszenia.
+                                            span
+                                      |                      
+                                      .form-group.row(style='margin-top:-10px;')
+                                        .col-xl-3.col-lg-3
+                                        .col-lg-9.col-xl-6
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', name='data_marketing' value='1')
+                                            |  Zgoda na otrzymywanie korespondencji marketingowych drogą e-mailową.
+                                            span
+                                      |
+                                      if userPermissions.includes('crm.client.assign_edit') 
+                                        |                             
+                                        .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                        |                            
+                                        .row
+                                          label.col-xl-3     
+                                          .col-lg-9.col-xl-6
+                                            h3.kt-section__title.kt-section__title-sm Przypisz konto do pracownika:
+                                        |                                                   
+                                        .form-group.row
+                                          label.col-form-label.col-lg-3.col-sm-12 Pracownik
+                                          .col-lg-9.col-xl-6
+                                            select#remoteEmployeer.form-control.kt-select2(name='param')
+                                              option
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-success.btn-bold(type='submit') Zapisz zmiany
+                                        |                             
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
+                          #pliki.tab-pane(role='tabpanel')
+                            .kt-section.kt-section--first
+                              .kt-section__body
+                                .row
+                                  label.col-xl-3     
+                                  .col-lg-9.col-xl-6
+                                    h3.kt-section__title.kt-section__title-sm Załączone pliki:
+                                |                                                          
+                                #attached_files.kt-widget4
+                                |                        
+                                .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                |                             
+                                form.kt-form
+                                  .kt-form__section.kt-form__section--first
+                                    .kt-wizard-v1__form
+                                      .form-group
+                                        .col-lg-12.col-md-12.col-sm-12
+                                          #kt_dropzone_client_files.dropzone.dropzone-default.dropzone-success.dz-clickable
+                                            .dropzone-msg.dz-message.needsclick
+                                              h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
+                                              span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
+                          #status.tab-pane(role='tabpanel')
+                            .kt-form.kt-form--label-right
+                              .kt-form__body
+                                .kt-section.kt-section--first
+                                  .kt-section__body
+                                    .row
+                                      label.col-xl-3     
+                                      .col-lg-9.col-xl-6
+                                        h3.kt-section__title Zmiana statusu klienta:
+                                    |                 
+                                    form#form_change_status
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label Status
+                                        |                                         
+                                        .col-lg-6.col-xl-6
+                                          .input-group
+                                            input#idInput3_client(type='hidden', name='id')
+                                            select.form-control(name='change_status')
+                                              option(value='1') nieprzypisany
+                                              option(value='2') niepełne dane
+                                              option(value='3') niezweryfikowany
+                                              option(value='4') zweryfikowany
+                                            .input-group-append
+                                              button.btn.btn-brand(type='submit') Zmień
+                                          |                                             
+                                  |                             
+                                  .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
+                                  |                             
+                                  .kt-form__actions
+                                    .row
+                                      .col-lg-12.col-xl-12.kt-align-right
+                                        button.btn.btn-label-brand.btn-bold(data-dismiss='modal') Anuluj
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js', type='text/javascript')
   script(src='./assets/vendors/general/select2/dist/js/select2.full.js', type='text/javascript')
@@ -437,4 +694,6 @@ block scripts
   script(src='./assets/vendors/custom/js/vendors/jquery-validation.init.js', type='text/javascript')
   script(src='./assets/js/demo1/pages/pGenerator.js', type='text/javascript')
   script(src='./assets/vendors/general/bootstrap-select/dist/js/bootstrap-select.js', type='text/javascript')
+  script(src='./assets/vendors/general/dropzone/dist/dropzone.js', type='text/javascript')
+  script(src='./assets/vendors/custom/js/vendors/dropzone.init.js', type='text/javascript')
   script(src="./assets/js/private/userlist.js" type="text/javascript")

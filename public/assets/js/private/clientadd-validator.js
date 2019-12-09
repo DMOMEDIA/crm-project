@@ -17,12 +17,6 @@ var KTClientAdd = function () {
 				appendToParent: true
     });
 
-    $('#peselI').maxlength({
-        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
-        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
-				appendToParent: true
-    });
-
 		// Initialize form wizard
 		wizard = new KTWizard('kt_client_add_client', {
 			startStep: 1,
@@ -35,47 +29,62 @@ var KTClientAdd = function () {
 			}
 		})
 
-    var acctype = $('input[type="radio"][name="client_type"]');
-
-    $('#company_client').hide();
-    acctype.on('change', function(e) {
-      var val = $('input[type="radio"][name="client_type"]:checked');
-
+    $('input[name="client_type"]').on('change', function(e) {
+      var val = $('input[name="client_type"]:checked');
       if(val.val() == 0) {
         $('#private_client').show();
+				$('#corp_client').hide();
+        $('#company_client').hide();
+      } else if(val.val() == 1) {
+				$('#private_client').hide();
+				$('#corp_client').show();
         $('#company_client').hide();
       } else {
-        $('#private_client').hide();
+				$('#private_client').hide();
+				$('#corp_client').hide();
         $('#company_client').show();
-      }
+			}
     });
 
 		// Change event
 		wizard.on('change', function(wizard) {
       if(wizard.getStep() == 3) {
-        if($('input[type="radio"][name="client_type"]:checked').val() == 0) {
-          var fullname = $("#firstnameI").val() + ' ' + $("#lastnameI").val();
-          $("#client_typeP").html($('input[type="radio"][name="client_type"]:checked').data('name'));
-					$("#p_client").show();
-					$("#c_client").hide();
-          $("#fullnameP").html(fullname);
-          $("#nipP").html($("#nipI").val());
-          $("#emailP").html($("#emailI").val());
-          $("#phoneP").html($("#phoneI").val());
+        $("#client_typeP").html($('input[name="client_type"]:checked').data('name'));
 
-          $("#employeeP").html($("#remoteEmployeer option:selected").text());
+        if($('input[name="client_type"]:checked').val() == 0) {
+					$('#p_client').show();
+					$('#c_client').hide();
+					$('#co_client').hide();
+					//
+          var fullname = $('input[name="firstname"]').val() + ' ' + $('input[name="lastname"]').val();
+          $("#fullnameP").html(fullname);
+        } else if($('input[name="client_type"]:checked').val() == 1) {
+					$('#p_client').hide();
+					$('#cp_client').show();
+					$('#co_client').hide();
+					//
+          $('#corpNameP').html($('input[name="corpName"]').val());
+					$('#corp_typeP').html($('select[name="corp_type"] option:selected').text());
+					$('#corp_regonP').html($('input[name="corp_regon"]').val());
         } else {
 					$("#p_client").hide();
-					$("#c_client").show();
-          $("#companyNameP").html($("#companyNameI").val());
-					$("#company_typeP").html($("#company_typeI option:selected").text());
-          $("#client_typeP").html($('input[type="radio"][name="client_type"]:checked').data('name'));
-          $("#nipP").html($("#nipI").val());
-          $("#emailP").html($("#emailI").val());
-          $("#phoneP").html($("#phoneI").val());
+					$("#cp_client").hide();
+					$("#co_client").show();
+					//
+          $('#companyNameP').html($('input[name="companyName"]').val());
+					$('#company_regonP').html($('input[name="company_regon"]').val());
+				}
+				$('#nipP').html($('input[name="nip"]').val());
+				$('#emailP').html($('input[name="email"]').val());
+				$('#phoneP').html($('input[name="phone"]').val());
+				if($('input[name="data_processing"]:checked').val() == 1)
+					$('#data_processP').html('TAK');
+				else $('#data_processP').html('NIE');
+				if($('input[name="data_marketing"]:checked').val() == 1)
+					$('#marketingP').html('TAK');
+				else $('#marketingP').html('NIE');
 
-          $("#employeeP").html($("#remoteEmployeer option:selected").text());
-        }
+				$("#employeeP").html($("#remoteEmployeer option:selected").text());
       }
 		});
 	}
@@ -94,11 +103,22 @@ var KTClientAdd = function () {
 				lastname: {
 					required: true
 				},
-        companyName: {
+        corpName: {
           required: true
         },
-				company_type: {
+				corp_type: {
 					required: true
+				},
+				corp_regon: {
+					digits: true,
+					maxlength: 15
+				},
+				companyName: {
+					required: true
+				},
+				company_regon: {
+					digits: true,
+					maxlength: 15
 				},
         nip: {
           required: true,
@@ -116,6 +136,9 @@ var KTClientAdd = function () {
           minlength: 3,
           maxlength: 9
 				},
+				data_processing: {
+					required: true
+				},
         // Step 2
         param: {
           required: true
@@ -128,11 +151,22 @@ var KTClientAdd = function () {
         lastname: {
           required: 'To pole jest wymagane.'
         },
-        companyName: {
+				corpName: {
           required: 'To pole jest wymagane.'
         },
-				company_type: {
-          required: 'To pole jest wymagane.'
+				corp_type: {
+					required: 'To pole jest wymagane.'
+				},
+				corp_regon: {
+					digits: 'Numer REGON może zawierać jedynie cyfry.',
+					maxlength: 'Numer REGON może składać się jedynie z {0} cyfr.'
+				},
+				companyName: {
+					required: 'To pole jest wymagane.'
+				},
+				company_regon: {
+					digits: 'Numer REGON może zawierać jedynie cyfry.',
+					maxlength: 'Numer REGON może składać się jedynie z {0} cyfr.'
 				},
         nip: {
           required: 'To pole jest wymagane.',
@@ -150,6 +184,9 @@ var KTClientAdd = function () {
           minlength: 'Numer telefonu musi składać się z minimalnie {0} cyfr.',
           maxlength: 'Numer telefonu musi składać się z maksymalnie {0} cyfr.'
         },
+				data_processing: {
+					required: 'To pole jest wymagane.'
+				},
         param: {
           required: 'To pole jest wymagane.'
         }

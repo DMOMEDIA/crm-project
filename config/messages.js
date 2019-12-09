@@ -35,6 +35,8 @@ exports.message = (type, argument) => {
     case 'added_new_files': selected = { status: 'success', message: 'Pliki zostały pomyślnie przesłane.' }; break;
     case 'client_status_change': selected = { status: 'success', message: 'Status klienta został pomyślnie zmieniony.' }; break;
     case 'request_offer_data_change': selected = { status: 'success', message: 'Dane zapytania ofertowego zostały pomyślnie zmienione.' }; break;
+    case 'error_global': selected = { status: 'error', message: 'Wystąpił nieoczekiwany błąd, spróbuj ponownie później.' }; break;
+    case 'success_send_mail_to_company': selected = { status: 'success', message: 'Pomyślnie wysłano zapytanie ofertowe do firm.' }; break;
   }
 
   return selected;

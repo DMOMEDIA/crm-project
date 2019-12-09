@@ -73,20 +73,28 @@ module.exports.saveClientData = (req, callback) => {
   return new Client().where({ id: client.id }).fetch().then(function(model) {
     if(model) {
       if(client.client_type == 0) {
-        model.set('company', client.client_type);
         if(client.firstname && client.lastname) model.set('fullname', client.firstname + ' ' + client.lastname);
+        model.set('company', client.client_type);
+      }
+      else if(client.client_type == 1) {
+        if(client.corpName) model.set('fullname', client.corpName);
+        if(client.corp_type) model.set('company_type', client.corp_type);
+        if(client.corp_regon) model.set('regon', client.corp_regon);
+        model.set('company', client.client_type);
       } else {
         model.set('company', client.client_type);
-        model.set('company_type', client.company_type);
-        if(client.companyname) model.set('fullname', client.companyname);
+        if(client.companyName) model.set('fullname', client.companyName);
+        if(client.company_regon) model.set('regon', client.company_regon);
       }
 
       if(client.nip) model.set('nip', client.nip);
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
+      if(client.data_processing) model.set('data_process', client.data_processing);
+      if(client.data_marketing) model.set('marketing', client.data_marketing);
 
-      model.set('user_id', client.param);
       if(client.param) {
+        model.set('user_id', client.param);
         if(model.get('state') != 4) {
           if(model.get('nip')) {
             model.set('state', 3);
@@ -94,10 +102,10 @@ module.exports.saveClientData = (req, callback) => {
         }
       }
 
-      model.save();
-
-      System.createLog('modify_client_log', 'Modyfikacja klienta ' + model.get('fullname') + ' przez (USER=' + req.session.userData.id + ')');
-      callback(Messages.message('success_updated_client', null));
+      model.save().then(function(done) {
+        System.createLog('modify_client_log', 'Modyfikacja klienta ' + done.get('fullname') + ' przez (USER=' + req.session.userData.id + ')');
+        callback(Messages.message('success_updated_client', null));
+      });
     } else callback(Messages.message('not_found_client_identity', null));
   });
 };

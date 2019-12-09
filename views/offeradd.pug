@@ -61,6 +61,9 @@ block content
             .kt-grid__item.kt-grid__item--fluid.kt-wizard-v1__wrapper
               // begin: Form Wizard Form
               form#kt_offer_form.kt-form(novalidate='novalidate')
+                input(name='o_state', type='hidden', value='1')
+                input(name='o_path', type='hidden')
+                input(name='o_id', type='hidden')
                 // begin: Form Wizard Step 1
                 .kt-wizard-v1__content(data-ktwizard-type='step-content', data-ktwizard-state='current')
                   .kt-heading.kt-heading--md Wybierz typ oferty
@@ -439,32 +442,7 @@ block content
                         .kt-wizard-v1__review-title.kt-margin-b-10
                           | Załączone pliki
                         .kt-wizard-v1__review-content
-                          .kt-widget4
-                            .kt-widget4__item
-                              .kt-widget4__pic.kt-widget4__pic--icon
-                                img(src='./assets/media/files/doc.svg', alt='')
-                              a.kt-widget4__title(href='#')
-                                | instrukcja_dzialania.docx
-                              .kt-widget4__tools
-                                a.btn.btn-clean.btn-icon.btn-sm(href='#')
-                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
-                            .kt-widget4__item
-                              .kt-widget4__pic.kt-widget4__pic--icon
-                                img(src='./assets/media/files/pdf.svg', alt='')
-                              a.kt-widget4__title(href='#')
-                                | oferta_494_BNP_5032P.pdf
-                              .kt-widget4__tools
-                                a.btn.btn-clean.btn-icon.btn-sm(href='#')
-                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
-                            .kt-widget4__item
-                              .kt-widget4__pic.kt-widget4__pic--icon
-                                img(src='./assets/media/files/pdf.svg', alt='')
-                              | &#x9;&#x9;&#x9;&#x9;
-                              a.kt-widget4__title(href='#')
-                                | umowa_nr93203.pdf
-                              .kt-widget4__tools
-                                a.btn.btn-clean.btn-icon.btn-sm(href='javascript:;')
-                                  i.flaticon2-download-symbol-of-down-arrow-in-a-rectangle
+                          #attached_files.kt-widget4
                       .kt-heading.kt-heading--md Prowizje
                       .kt-form__section.kt-form__section--first
                         .kt-wizard-v1__review
@@ -480,7 +458,7 @@ block content
                   button.btn.btn-warning.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='add-submit', data-ktwizard-type='action-submit') 
                     | Dodaj ofertę
                   | &nbsp;
-                  button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='addendsend-submit', data-ktwizard-type='action-submit', data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="Opcja chwilowo niedostępna")
+                  button.btn.btn-success.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(name='addendsend-submit', data-ktwizard-type='action-submit')
                     | Dodaj i wyślij ofertę
                   button.btn.btn-brand.btn-md.btn-tall.btn-wide.kt-font-bold.kt-font-transform-u(data-ktwizard-type='action-next')
                     | Dalej

@@ -1,5 +1,7 @@
 const bookshelf = require('../config/bookshelf');
 const async = require('async');
+const moment = require('moment');
+const Company = require('../models/companies');
 
 const Statistics = bookshelf.Model.extend({
   tableName: 'crm_global_statistics',
@@ -27,27 +29,45 @@ module.exports.createLog = (type, log) => {
   }).save();
 };
 
-module.exports.getGlobalProvision = (callback) => {
-  return new Provision().where({ for: 'global' }).fetchAll()
-  .then(function(result) {
-    var data = result.toJSON(),
-    provision_f = parseFloat(0),
-    provision = parseFloat(0);
-    async.each(data, function(element, cb) {
-      if(element.forecast == true) {
-        provision_f += parseFloat(element.value);
-      } else {
-        provision += parseFloat(element.value);
-      }
-      cb();
-    }, function() {
-      callback({ prov_forecast: provision_f, prov_normal: provision });
+module.exports.provisionStatistics = (days, forecast, callback) => {
+  if(forecast) var query = { name: 'provision_forecast' };
+  else var query = { name: 'provision_global' };
+  return new Archive().where(query).query(function(qb) {
+    qb.orderBy('created_at','DESC').limit(days);
+  })
+  .fetchAll().then(function(result) {
+    module.exports.getGlobalProvision(true, function(prov) {
+      callback(result, prov.prov_forecast);
     });
   });
 };
 
+module.exports.getGlobalProvision = (fromDay, callback) => {
+  if(fromDay) var query = { for: 'global', updated_at: moment().local().format('YYYY-MM-DD') };
+  else var query = { for: 'global' };
+
+  return new Provision().where(query).fetchAll()
+  .then(function(result) {
+    if(result) {
+      var data = result.toJSON(),
+      provision_f = parseFloat(0),
+      provision = parseFloat(0);
+      async.each(data, function(element, cb) {
+        if(element.forecast == true) {
+          provision_f += parseFloat(element.value);
+        } else {
+          provision += parseFloat(element.value);
+        }
+        cb();
+      }, function() {
+        callback({ prov_forecast: provision_f, prov_normal: provision });
+      });
+    } else callback({ prov_forecast: 0, prov_normal: 0 });
+  });
+};
+
 module.exports.archiveStats = (name) => {
-  module.exports.getGlobalProvision(function(result) {
+  module.exports.getGlobalProvision(true, function(result) {
     if(name == 'provision_global') {
       return new Archive({
         name: name,
@@ -70,79 +90,90 @@ module.exports.archiveStats = (name) => {
   });
 };
 
+module.exports.removeProvision = (offer_id, offer_type) => {
+  return new Provision().where({ offer_id: offer_id + '/' + offer_type }).destroy();
+};
+
 /** ================================================
     @Information Moduł zmiany prowizji dla określonej oferty.
  =============================================== **/
 
-module.exports.changeProvision = (user, offer_id, offer_type, value, isUpdate, forecast) => {
+module.exports.changeProvision = (user, offer_id, offer_type, value, company_id, forecast) => {
 
-  var provision = (parseFloat(value)*0.015); // globalna prowizja 1.5%
-  provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
+  Company.getCompanyProvision(company_id).then(function(prov) {
+    prov = prov.toJSON();
 
-  if(offer_type == 'leasing' || offer_type == 'rent') {
-    var p_posrednik = Math.round((provision*0.45)*100)/100, // 45% dla pośrednika
-    p_szef = Math.round((provision*0.05)*100)/100, // 5% dla szefa
-    p_spolka = Math.round((provision*0.5)*100)/100; // 50% dla spółki
-  } else {
-		var p_posrednik = Math.round((parseFloat(value)*0.06)*100)/100, // 6% dla pośrednika
-    p_szef = Math.round((parseFloat(value)*0.01)*100)/100, // 1% dla szefa
-    p_spolka = Math.round((parseFloat(value)*0.05)*100)/100; // 5% dla spółki
-  }
+    // Ustalenie globalnej prowizji
+    if(offer_type == 'leasing') var provision = (parseFloat(value)*(prov.provision_leasing/100));
+    else if(offer_type == 'rent') var provision = (parseFloat(value)*(prov.provision_rent/100));
 
-  new Provision().where({ for: 'posrednik', offer_id: offer_id + '/' + offer_type }).fetch()
-  .then(function(model) {
-    if(model) {
-      model.set('forecast', forecast);
-      model.set('value', p_posrednik);
-      if(user.user_id) model.set('user_id', user.user_id);
+    provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
 
-      model.save();
+    if(offer_type == 'leasing' || offer_type == 'rent') {
+      var p_posrednik = Math.round((provision*0.45)*100)/100, // 45% dla pośrednika
+      p_szef = Math.round((provision*0.05)*100)/100, // 5% dla szefa
+      p_spolka = Math.round((provision*0.5)*100)/100; // 50% dla spółki
     } else {
-      new Provision({
-        for: 'posrednik',
-        value: p_posrednik,
-        user_id: user.user_id,
-        offer_id: offer_id + '/' + offer_type,
-        forecast: forecast
-      }).save();
+  		var p_posrednik = Math.round((parseFloat(value)*0.06)*100)/100, // 6% dla pośrednika
+      p_szef = Math.round((parseFloat(value)*0.01)*100)/100, // 1% dla szefa
+      p_spolka = Math.round((parseFloat(value)*0.05)*100)/100; // 5% dla spółki
     }
-  });
 
-  new Provision().where({ for: 'szef', offer_id: offer_id + '/' + offer_type }).fetch()
-  .then(function(model) {
-    if(model) {
-      model.set('forecast', forecast);
-      model.set('value', p_szef);
-      if(user.assigned_to) model.set('user_id', user.assigned_to);
+    new Provision().where({ for: 'posrednik', offer_id: offer_id + '/' + offer_type }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('forecast', forecast);
+        model.set('value', p_posrednik);
+        if(user.user_id) model.set('user_id', user.user_id);
 
-      model.save();
-    } else {
-      if(user.assigned_to != null) {
+        model.save();
+      } else {
         new Provision({
-          for: 'szef',
-          value: p_szef,
-          user_id: user.assigned_to,
+          for: 'posrednik',
+          value: p_posrednik,
+          user_id: user.user_id,
           offer_id: offer_id + '/' + offer_type,
           forecast: forecast
         }).save();
       }
-    }
-  });
+    });
 
-  new Provision().where({ for: 'global', offer_id: offer_id + '/' + offer_type }).fetch()
-  .then(function(model) {
-    if(model) {
-      model.set('forecast', forecast);
-      model.set('value', p_spolka);
+    new Provision().where({ for: 'szef', offer_id: offer_id + '/' + offer_type }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('forecast', forecast);
+        model.set('value', p_szef);
+        if(user.assigned_to) model.set('user_id', user.assigned_to);
 
-      model.save();
-    } else {
-      new Provision({
-        for: 'global',
-        value: p_spolka,
-        offer_id: offer_id + '/' + offer_type,
-        forecast: forecast
-      }).save();
-    }
+        model.save();
+      } else {
+        if(user.assigned_to != null) {
+          new Provision({
+            for: 'szef',
+            value: p_szef,
+            user_id: user.assigned_to,
+            offer_id: offer_id + '/' + offer_type,
+            forecast: forecast
+          }).save();
+        }
+      }
+    });
+
+    new Provision().where({ for: 'global', offer_id: offer_id + '/' + offer_type }).fetch()
+    .then(function(model) {
+      if(model) {
+        model.set('forecast', forecast);
+        model.set('value', p_spolka);
+
+        model.save();
+      } else {
+        new Provision({
+          for: 'global',
+          value: p_spolka,
+          offer_id: offer_id + '/' + offer_type,
+          forecast: forecast
+        }).save();
+      }
+    });
   });
 };

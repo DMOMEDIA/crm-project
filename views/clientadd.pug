@@ -60,34 +60,50 @@ block content
                         .col-9
                           .kt-radio-inline
                             label.kt-radio.kt-radio--bold.kt-radio--brand
+                              input(type='radio', data-name='Osoba fizyczna', name='client_type', checked='', value='0')
+                              |  Osoba fizyczna
+                              |              
+                              span
+                            label.kt-radio.kt-radio--bold.kt-radio--brand
                               input(type='radio', data-name='Spółka', name='client_type', value='1')
                               |  Spółka
                               |                      
                               span
                             |                       
                             label.kt-radio.kt-radio--bold.kt-radio--brand
-                              input(type='radio', data-name='Osoba fizyczna', name='client_type', checked='', value='0')
-                              |  Osoba fizyczna
-                              |              
+                              input(type='radio', data-name='Firma', name='client_type', value='2')
+                              |  Firma
+                              |                      
                               span
+                            |                   
                       #private_client
                         .form-group
                           label Imię
-                          input#firstnameI.form-control(type='text', name='firstname', placeholder='Wprowadź imię klienta')
+                          input.form-control(type='text', name='firstname', placeholder='Imię klienta')
                         .form-group
                           label Nazwisko
-                          input#lastnameI.form-control(type='text', name='lastname', placeholder='Wprowadź nazwisko klienta')
-                      #company_client
+                          input.form-control(type='text', name='lastname', placeholder='Nazwisko klienta')
+                      #corp_client(style='display:none;')
                         .form-group
                           label Nazwa spółki
-                          input#companyNameI.form-control(type='text', name='companyName', placeholder='Wprowadź nazwę spółki')
+                          input.form-control(type='text', name='corpName', placeholder='Nazwa spółki')
                         .form-group
                           label Typ spółki
-                          select#company_typeI.form-control(name='company_type')
+                          select.form-control(name='corp_type')
                             option(selected='', disabled='', value='') Wybierz typ spółki
                             option(value='0') akcyjna
                             option(value='1') komandytowa
                             option(value='2') z ograniczoną odpowiedzialnością
+                        .form-group
+                          label REGON
+                          input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
+                      #company_client(style='display:none;')
+                        .form-group
+                          label Nazwa firmy
+                          input.form-control(type='text', name='companyName', placeholder='Nazwa firmy')
+                        .form-group
+                          label REGON
+                          input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
                       .row
                         .col-xl-6
                           .form-group
@@ -96,7 +112,7 @@ block content
                               .input-group-prepend
                                 span.input-group-text
                                   i.la.la-check-square        
-                              input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Wprowadź numer NIP', aria-describedby='basic-addon1')
+                              input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP', aria-describedby='basic-addon1')
                       .row
                         .col-xl-6
                           .form-group
@@ -105,7 +121,7 @@ block content
                               .input-group-prepend
                                 span.input-group-text
                                   i.la.la-at                
-                              input#emailI.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                              input.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
                       .row
                         .col-xl-6
                           .form-group
@@ -114,7 +130,21 @@ block content
                               .input-group-prepend
                                 span.input-group-text
                                   i.la.la-phone            
-                              input#phoneI.form-control(type='text', name='phone', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                              input.form-control(type='text', name='phone', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                      .kt-heading.kt-heading--md Zgody
+                      |                      
+                      .form-group.row
+                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                          input(type='checkbox' name='data_processing' value='1')
+                          |  Zgoda na przetwarzanie danych w celu realizacji zgłoszenia.
+                          span
+                      |                      
+                      .form-group.row(style='margin-top:-10px;')
+                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                          input(type='checkbox', name='data_marketing' value='1')
+                          |  Zgoda na otrzymywanie korespondencji marketingowych drogą e-mailową.
+                          span
+                      |
                 // end: Form Wizard Step 1
                 // begin: Form Wizard Step 2
                 .kt-wizard-v3__content(data-ktwizard-type='step-content')
@@ -141,22 +171,34 @@ block content
                           br
                           #p_client
                             p#fullnameP.kt-margin-0
-                          #c_client
+                          #cp_client(style='display:none;')
+                            p.kt-margin-0 Nazwa spółki: 
+                              span#corpNameP
+                            p.kt-margin-0 Typ spółki: 
+                              span#corp_typeP
+                            p.kt-margin-0 REGON: 
+                              span#corp_regonP
+                          #co_client(style='display:none;')
                             p.kt-margin-0 Nazwa spółki: 
                               span#companyNameP
-                            p.kt-margin-0 Typ spółki: 
-                              span#company_typeP
+                            p.kt-margin-0 REGON: 
+                              span#company_regonP
                           p.kt-margin-0 NIP: 
                             span#nipP
                           p.kt-margin-0 Adres e-mail: 
                             span#emailP
                           p.kt-margin-0 Numer telefonu: 
                             span#phoneP
+                          br
+                          p.kt-margin-0 Zgoda na przetwarzanie danych: 
+                            span#data_processP
+                          p.kt-margin-0 Zgoda marketingowa: 
+                            span#marketingP
                       .kt-wizard-v3__review-item
                         .kt-wizard-v3__review-title
                           | Przypisany pracownik
                         .kt-wizard-v3__review-content
-                          p#employeeP.kt-margin-0 Daniel Ostałowski, administrator
+                          p#employeeP.kt-margin-0
                 // end: Form Wizard Step 5
                 // begin: Form Actions
                 .kt-form__actions

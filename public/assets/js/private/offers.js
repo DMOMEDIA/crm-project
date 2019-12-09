@@ -35,10 +35,6 @@ var KTOfferListDatatable = function() {
 						url: '/rest/offerlist'
 					},
 				},
-				pageSize: 10, // display 20 records per page
-				serverPaging: true,
-				serverFiltering: false,
-				serverSorting: false,
 			},
 
 			// layout definition
@@ -112,10 +108,10 @@ var KTOfferListDatatable = function() {
 				autoHide: false,
 				template: function(row) {
 					var status = {
-						0: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
-						1: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
-						2: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
-						3: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
+						1: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
+						2: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
+						3: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
+						4: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
 					};
 					return '<span class="kt-badge ' + status[row.state].class + ' kt-badge--inline kt-badge--pill">' + status[row.state].title + '</span>';
 				},
@@ -136,7 +132,11 @@ var KTOfferListDatatable = function() {
 			}]
 		}),
 		$("#kt_form_status").on("change", function() {
-      datatable.search($(this).val().toLowerCase(), "Status")
+      datatable.search($(this).val().toLowerCase(), "state");
+    });
+
+		$("#kt_form_type").on("change", function() {
+      datatable.search($(this).val().toLowerCase(), "offer_type");
     });
 	}
 
@@ -164,13 +164,14 @@ var KTOfferListDatatable = function() {
 								if(res.status == null) {
 									modalEl.modal('show');
 									modalEl.find('#attached_files').html('');
+									modalEl.find('#leasing_variants').html('');
 
 									var date = moment(res.created_at).local().format('YYYY');
 									var status = {
-										0: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
-										1: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
-										2: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
-										3: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
+										1: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
+										2: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
+										3: {'title': 'Anulowana', 'class': ' kt-badge--danger'},
+										4: {'title': 'Zrealizowana', 'class': ' kt-badge--success'}
 									};
 									var offer_type = {
 										'rent': 'wynajem',
@@ -223,12 +224,56 @@ var KTOfferListDatatable = function() {
 										modalEl.find('input[name="netto_l"]').val(res.netto);
 										modalEl.find('select[name="invoice_l"] option[value="' + res.invoice + '"]').prop('selected', true);
 
-										modalEl.find('input[name="vid"]').val(res.variants.id);
+										console.log(res.variants);
+
+										res.variants.forEach(function(item, index) {
+											modalEl.find('#leasing_variants').append('\
+												<div class="form-group row">\
+													<input type="hidden" name="variant[' + index + '][id]" value="' + item.id + '" />\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Okres umowy (w miesiącach):</label>\
+												  <div class="col-lg-9 col-xl-6">\
+												    <input class="form-control" type="number" name="variant[' + index + '][contract]" placeholder="Okres umowy" value="' + item.okres + '" />\
+												  </div>\
+												</div>\
+												<div class="form-group row">\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Opłata wstępna:</label>\
+												  <div class="col-lg-9 col-xl-6">\
+												    <input class="form-control" type="number" name="variant[' + index + '][inital]" placeholder="Opłata wstępna" value="' + item.wklad + '" />\
+												  </div>\
+												</div>\
+												<div class="form-group row">\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Rata miesięczna:</label>\
+												  <div class="col-lg-9 col-xl-6">\
+												    <input class="form-control" type="number" name="variant[' + index + '][leasing_install]" placeholder="Rata miesięczna" value="' + item.leasing_install + '" />\
+												  </div>\
+												</div>\
+												<div class="form-group row">\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Wykup (%):</label>\
+												  <div class="col-lg-9 col-xl-6">\
+												    <input class="form-control" type="number" name="variant[' + index + '][repurchase]" placeholder="Wykup" value="' + item.wykup + '" />\
+												  </div>\
+												</div>\
+												<div class="form-group row">\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Suma opłat:</label>\
+												  <div class="col-lg-9 col-xl-6">\
+												    <input class="form-control" type="number" name="variant[' + index + '][sum_fee]" placeholder="Suma opłat" value="' + item.total_fees + '" />\
+												  </div>\
+												</div><div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">\</div>\
+											');
+										});
+
+										$('[name*="contract"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+										$('[name*="inital"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+										$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+										$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+										$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
+
+										/* modalEl.find('input[name="vid"]').val(res.variants.id);
 										modalEl.find('input[name="contract"]').val(res.variants.okres);
 										modalEl.find('input[name="inital_fee"]').val(res.variants.wklad);
 										modalEl.find('input[name="leasing_install"]').val(res.variants.leasing_install);
 										modalEl.find('input[name="repurchase"]').val(res.variants.wykup);
-										modalEl.find('input[name="sum_fee"]').val(res.variants.total_fees);
+										modalEl.find('input[name="sum_fee"]').val(res.variants.total_fees); */
 									} else if(res.offer_type == 'rent') {
 										$('#leasing_type_box').hide();
 										$('#rent_type_box').show();
@@ -684,7 +729,7 @@ var KTOfferListDatatable = function() {
 	var initUploadData = function() {
 		var modalEl = $('#kt_fetch_user'),
 		btn = $('button[type="submit"]', formEl);
-		
+
 		btn.on('click', function(e) {
 			e.preventDefault();
 

@@ -79,7 +79,7 @@ block content
             .modal-content
               .modal-header
                 h5.modal-title Podgląd&nbsp;-&nbsp;
-                h5.modal-title#modalTitle 
+                h5.modal-title#modalTitle_client 
                 button.close(type='button', data-dismiss='modal', aria-label='Close')
                   span(aria-hidden='true')
               .modal-body
@@ -122,7 +122,7 @@ block content
                     .tab-content
                       #dane_personalne.tab-pane.active(role='tabpanel')
                         form#kt_client_edit_personal
-                          input#idInput1(type='hidden', name='id')
+                          input#idInput1_client(type='hidden', name='id')
                           .kt-form.kt-form--label-right
                             .kt-form__body
                               .kt-section.kt-section--first
@@ -138,52 +138,77 @@ block content
                                     .col-9
                                       .kt-radio-inline
                                         label.kt-radio.kt-radio--bold.kt-radio--brand
+                                          input(type='radio', name='client_type', value='0')
+                                          |  Osoba fizyczna
+                                          |              
+                                          span
+                                        |            
+                                        label.kt-radio.kt-radio--bold.kt-radio--brand
                                           input(type='radio', name='client_type', value='1')
                                           |  Spółka
                                           |                      
                                           span
                                         |                       
                                         label.kt-radio.kt-radio--bold.kt-radio--brand
-                                          input(type='radio', name='client_type', value='0')
-                                          |  Osoba fizyczna
+                                          input(type='radio', name='client_type', value='2')
+                                          |  Firma
                                           |              
                                           span
-                                        |              
+                                        |                
                                   #private_user
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Imię
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        input#firstnameInput.form-control(type='text', name='firstname')
+                                        input.form-control(type='text', name='firstname', placeholder='Imię')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwisko
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        input#lastnameInput.form-control(type='text', name='lastname')
+                                        input.form-control(type='text', name='lastname', placeholder='Nazwisko')
                                     |                       
-                                  #company_user
+                                  #corp_user(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        input#fullnameInput.form-control(type='text', name='companyname')
+                                        input.form-control(type='text', name='corpName', placeholder='Nazwa spółki')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ spółki
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        select#company_type.form-control(name='company_type')
+                                        select.form-control(name='corp_type')
                                           option(selected='', disabled='', value='') Wybierz typ spółki
                                           option(value='0') akcyjna
                                           option(value='1') komandytowa
                                           option(value='2') z ograniczoną odpowiedzialnością
                                     |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label REGON
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
+                                    |              
+                                  #company_user(style='display:none;')
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='companyName', placeholder='Nazwa firmy')
+                                    |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label REGON
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
+                                    |              
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label NIP
                                     |                                         
                                     .col-lg-9.col-xl-6
-                                      input#nipInput.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
+                                      input#nipClient.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
                                   |                                                            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Numer telefonu
@@ -194,7 +219,7 @@ block content
                                           span.input-group-text
                                             i.la.la-phone
                                         |                                                 
-                                        input#telephoneInput.form-control(type='text', name='pNumber', placeholder='Numer telefonu', aria-describedby='basic-addon1')
+                                        input.form-control(type='text', name='pNumber', placeholder='Numer telefonu', aria-describedby='basic-addon1')
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Adres e-mail
@@ -205,7 +230,28 @@ block content
                                           span.input-group-text
                                             i.la.la-at
                                         |                                                 
-                                        input#emailInput.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                        input.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
+                                  .row
+                                    label.col-xl-3     
+                                    .col-lg-9.col-xl-6
+                                      h3.kt-section__title.kt-section__title-sm Zgody:
+                                  |                                              
+                                  .form-group.row
+                                    .col-xl-3.col-lg-3
+                                    .col-lg-9.col-xl-6
+                                      label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                        input(type='checkbox' name='data_processing' value='1')
+                                        |  Zgoda na przetwarzanie danych w celu realizacji zgłoszenia.
+                                        span
+                                  |                      
+                                  .form-group.row(style='margin-top:-10px;')
+                                    .col-xl-3.col-lg-3
+                                    .col-lg-9.col-xl-6
+                                      label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                        input(type='checkbox', name='data_marketing' value='1')
+                                        |  Zgoda na otrzymywanie korespondencji marketingowych drogą e-mailową.
+                                        span
+                                  |
                                   if userPermissions.includes('crm.client.assign_edit') 
                                     |                             
                                     .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
@@ -266,7 +312,7 @@ block content
                                     |                                         
                                     .col-lg-6.col-xl-6
                                       .input-group
-                                        input#idInput3(type='hidden', name='id')
+                                        input#idInput3_client(type='hidden', name='id')
                                         select.form-control(name='change_status')
                                           option(value='1') nieprzypisany
                                           option(value='2') niepełne dane

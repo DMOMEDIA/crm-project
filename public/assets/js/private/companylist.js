@@ -100,6 +100,9 @@ var KTCompanyListDatatable = function() {
 	}
 
 	var initValid = function() {
+		$('#p_leasing').inputmask('9[9].9[9]', { placeholder: '0' });
+	  $('#p_rent').inputmask('9[9].9[9]', { placeholder: '0' });
+
 		$('#nipInput').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
@@ -126,7 +129,8 @@ var KTCompanyListDatatable = function() {
           email: true
 				},
 				phone: {
-					required: true
+					required: true,
+					maxlength: 13
 				},
         address: {
           required: true
@@ -139,7 +143,28 @@ var KTCompanyListDatatable = function() {
         },
         voivodeship: {
           required: true
-        }
+        },
+				firstname_k: {
+					required: true
+				},
+				lastname_k: {
+					required: true
+				},
+				email_k: {
+					required: true,
+					email: true
+				},
+				phone_k: {
+					required: true,
+					digits: true,
+					maxlength: 13
+				},
+				provision_leasing: {
+					required: true
+				},
+				provision_rent: {
+					required: true
+				}
 			},
       messages: {
         companyName: {
@@ -156,7 +181,8 @@ var KTCompanyListDatatable = function() {
           email: 'Wprowadź poprawny adres e-mail.'
         },
         phone: {
-          required: 'To pole jest wymagane.'
+          required: 'To pole jest wymagane.',
+					maxlength: 'Numer telefonu może składać się z maksymalnie {0} cyfr.'
         },
         address: {
           required: 'To pole jest wymagane.'
@@ -169,7 +195,28 @@ var KTCompanyListDatatable = function() {
         },
         voivodeship: {
           required: 'To pole jest wymagane.'
-        }
+        },
+				firstname_k: {
+					required: 'To pole jest wymagane.'
+				},
+				lastname_k: {
+					required: 'To pole jest wymagane.'
+				},
+				email_k: {
+					required: 'To pole jest wymagane.',
+					email: 'Wprowadź poprawny adres e-mail.'
+				},
+				phone_k: {
+					required: 'To pole jest wymagane.',
+					digits: 'Numer telefonu może zawierać tylko cyfry.',
+					maxlength: 'Numer telefonu może składać się z maksymalnie {0} cyfr.'
+				},
+				provision_leasing: {
+					required: 'To pole jest wymagane.'
+				},
+				provision_rent: {
+					required: 'To pole jest wymagane.'
+				}
       },
 			// Display error
 			invalidHandler: function(event, validator) {
