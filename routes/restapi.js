@@ -70,5 +70,6 @@ router.post('/rest/company/provision', REST.getCompanyProvision);
 // statistics
 router.post('/rest/stats/offers_count', REST.getOfferCount);
 router.post('/rest/stats/prov_forecast', REST.getProvisionStats);
+router.post('/rest/stats/counts', REST.getStatsCount);
 
 module.exports = router;

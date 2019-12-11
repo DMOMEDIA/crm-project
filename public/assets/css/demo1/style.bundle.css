@@ -27866,6 +27866,9 @@ body.swal2-height-auto {
       .kt-iconbox .kt-iconbox__body .kt-iconbox__icon svg {
         height: 50px;
         width: 50px; }
+      .kt-iconbox .kt-iconbox__body .kt-iconbox__icon svg.dashboard-stats {
+        height: 65px;
+        width: 65px; }
     .kt-iconbox .kt-iconbox__body .kt-iconbox__desc {
       display: -webkit-box;
       display: -ms-flexbox;

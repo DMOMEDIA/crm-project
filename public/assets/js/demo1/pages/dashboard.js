@@ -7,146 +7,6 @@ var KTDashboard = function() {
 		unread = 0,
 		audioElement = null;
 
-		// Sparkline Chart helper function
-    var _initSparklineChart = function(src, label, data, color, border) {
-        if (src.length == 0) {
-            return;
-        }
-
-        var config = {
-            type: 'line',
-            data: {
-                labels: label,
-                datasets: [{
-                    label: "",
-                    borderColor: color,
-                    borderWidth: border,
-
-                    pointHoverRadius: 4,
-                    pointHoverBorderWidth: 12,
-                    pointBackgroundColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
-                    pointBorderColor: Chart.helpers.color('#000000').alpha(0).rgbString(),
-                    pointHoverBackgroundColor: KTApp.getStateColor('danger'),
-                    pointHoverBorderColor: Chart.helpers.color('#000000').alpha(0.1).rgbString(),
-                    fill: false,
-                    data: data,
-                }]
-            },
-            options: {
-                title: {
-                    display: false,
-                },
-                tooltips: {
-                    enabled: true,
-                    intersect: false,
-                    mode: 'nearest',
-                    xPadding: 10,
-                    yPadding: 10,
-                    caretPadding: 10
-                },
-                legend: {
-                    display: false,
-                    labels: {
-                        usePointStyle: true
-                    }
-                },
-                responsive: true,
-                maintainAspectRatio: true,
-                hover: {
-                    mode: 'index'
-                },
-                scales: {
-                    xAxes: [{
-                        display: false,
-                        gridLines: false,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Desc'
-                        }
-                    }],
-                    yAxes: [{
-                        display: false,
-                        gridLines: false,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Value'
-                        },
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-
-                elements: {
-                    point: {
-                        radius: 4,
-                        borderWidth: 12
-                    },
-                },
-
-                layout: {
-                    padding: {
-                        left: 0,
-                        right: 10,
-                        top: 5,
-                        bottom: 0
-                    }
-                }
-            }
-        };
-
-        return new Chart(src, config);
-    }
-
-		var activeCharts = function() {
-				// PIE CHART
-				$.ajax({
-					url: '/rest/stats/offers_count',
-					method: 'POST',
-					success: function(res) {
-						new Morris.Donut({
-								element: 'kt_donut_offers',
-								data: res,
-								colors: ['#593ae1', '#6e4ff5', '#9077fb'],
-								resize: true
-						});
-					},
-					error: function() {
-						console.log('Wystąpił błąd podczas pobierania statystyk ofertowych.');
-					}
-				});
-
-				$.ajax({
-					url: '/rest/stats/prov_forecast',
-					method: 'POST',
-					success: function(res) {
-						var label = [], values = [];
-
-						var reverse = res.values.reverse();
-
-						var last_day = parseFloat(reverse[reverse.length-1].value),
-						today = parseFloat(res.today_prov);
-
-						if(last_day > today) {
-							var percentage = ((today/last_day)*100).toFixed();
-						} else {
-							var percentage = ((today/last_day)*100).toFixed() - 100;
-							$('#kt_chart_1_value').html(res.today_prov + ' PLN &nbsp;&nbsp; <i class="kt-font-success flaticon2-arrow-up">12%</i>');
-						}
-
-						reverse.forEach(function(element) {
-							label.push(moment(element.created_at).local().format('DD-MM-YYYY'));
-							values.push(element.value);
-						});
-
-						console.log(label);
-						console.log(values);
-						_initSparklineChart($('#kt_chart_quick_stats_1'), label, values, KTApp.getStateColor('brand'), 3);
-					},
-					error: function() { }
-				});
-		}
-
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
 			var msPerHour = msPerMinute * 60;
@@ -197,10 +57,6 @@ var KTDashboard = function() {
 					else if(elapsed > 1 && elapsed < 5) return elapsed + ' lata temu';
 					else return elapsed + ' lat temu';
 			}
-		}
-
-		var quickStats = function() {
-			_initSparklineChart($('#kt_chart_quick_stats_2'), ["Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad"], [32, 16, 12, 4, 4, 18, 14], KTApp.getStateColor('danger'), 3);
 		}
 
 		var notificationSound = function() {
@@ -369,8 +225,6 @@ var KTDashboard = function() {
 						updateNotifications();
 						setUnreadNotification();
 						sessionTimeout();
-						quickStats();
-						activeCharts();
 
             // demo loading
             var loading = new KTDialog({'type': 'loader', 'placement': 'top center', 'message': 'Ładowanie ...'});

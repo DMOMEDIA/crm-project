@@ -1192,6 +1192,227 @@ var KTUserListDatatable = function() {
 		});
 	}
 
+	var initFileButtons = function() {
+		$(document).on('click', '.download_file', function() {
+			var path = 'clients/' + $(this).attr('data-path');
+
+			$.ajax({
+				url: '/rest/file/download',
+				method: 'POST',
+				data: { path: path },
+				xhrFields: {
+					responseType: 'blob'
+				},
+				success: function(res, status, xhr) {
+					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
+					fileName = fileName.replace(/\"/g, '');
+
+					var a = document.createElement('a');
+			    var url = window.URL.createObjectURL(res);
+			    a.href = url;
+			    a.download = fileName;
+			    a.click();
+			    window.URL.revokeObjectURL(url);
+				},
+				error: function(err) {
+					KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+				}
+			});
+		});
+
+		/**
+			@Information Wydarzenie usuwające wybrany plik z systemu
+		**/
+
+		$(document).on('click', '.remove_file', function() {
+			var path = 'clients/' + $(this).attr('data-path'),
+			element = $(this);
+
+			swal.fire({
+				text: "Jesteś pewny że chcesz usunąć ten plik?",
+				type: 'info',
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if(result.value) {
+					$.ajax({
+						url: '/rest/file/delete',
+						method: 'POST',
+						data: { path: path },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: res.status,
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								element.parents('.kt-widget4__item').remove();
+							} else {
+								swal.fire({
+									title: 'Błąd',
+									text: res.message,
+									type: res.status,
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
+			});
+		});
+	}
+
+	var remoteEmploy = function() {
+		var data = [];
+
+		$.ajax({
+			url: '/rest/users/name',
+			method: 'GET',
+			data: {},
+			success: function(res) {
+				if(res.status == null) {
+					for(var i = 0; i < res.length; i++) data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
+
+					$('#remoteEmployeer').select2({
+						placeholder: "Wybierz pracownika",
+						width: '100%',
+						data: data
+					});
+				}
+			},
+			error: function(err) {
+				console.log('Błąd wczytywania');
+			}
+		});
+	}
+
+	var submitClientData = function() {
+		var btn_pers = $('button[type="submit"]', form_client);
+
+		// Submit personal form
+		btn_pers.on('click', function(e) {
+			e.preventDefault();
+
+			if(validator_client.form()) {
+				KTApp.progress(btn_pers);
+				btn_pers.attr('disabled', true);
+
+				setTimeout(function() {
+					form_client.ajaxSubmit({
+						url: '/rest/clients/modify',
+						method: 'POST',
+						data: form_client.serialize(),
+						success: function(res) {
+							KTApp.unprogress(btn_pers);
+							btn_pers.attr('disabled', false);
+
+							if(res.status == 'success') {
+								KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+						}
+					});
+				}, 1000);
+			}
+		});
+	};
+
+	var initDropzone = function() {
+		$('#kt_dropzone_client_files').dropzone({
+			url: '/rest/files/upload/client',
+			autoProcessQueue: true,
+			paramName: function() { return 'source_file[]' }, // The name that will be used to transfer the file
+			maxFiles: 5,
+			maxFilesize: 10, // MB
+			addRemoveLinks: true,
+			uploadMultiple: true,
+			parallelUploads: 5,
+			acceptedFiles: "application/pdf,.docx,.odt,.xls",
+			init: function() {
+				var dzUpload = this;
+
+				this.on("success", function(file, res) {
+					var extension = file.name.split('.');
+					$('#attached_files').append('\<div class="kt-widget4__item">\
+							<div class="kt-widget4__pic kt-widget4__pic--icon">\
+								<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+							</div>\
+							<a href="javascript:;" class="kt-widget4__title">' + file.name + '</a>\
+							<div class="kt-widget4__tools">\
+								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+									<i class="flaticon2-download"></i>\
+								</a>\
+								<a href="javascript:;" data-path="' + f_path + '/' + file.name + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+									<i class="flaticon2-delete"></i>\
+								</a>\
+							</div>\
+						</div>\
+					');
+
+					swal.fire({
+						"title": "",
+						"text": res.message,
+						"type": "success",
+						"confirmButtonClass": "btn btn-secondary"
+					});
+					dzUpload.removeAllFiles();
+				});
+
+				this.on("sendingmultiple", function(file, xhr, formData) {
+					formData.append('folder_path', f_path);
+				});
+			}
+		});
+	};
+
+	var initChangeStatus = function() {
+		var form_status = $('#form_change_status'),
+		btn = $('button[type="submit"]', form_status);
+
+		btn.on('click', function(e) {
+			e.preventDefault();
+
+			KTApp.progress(btn);
+			btn.attr('disabled', true);
+
+			setTimeout(function() {
+				form_status.ajaxSubmit({
+					url: '/rest/client/status',
+					method: 'POST',
+					data: form_status.serialize(),
+					success: function(res) {
+						KTApp.unprogress(btn);
+						btn.attr('disabled', false);
+
+						if(res.status == 'success') {
+							KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+						} else {
+							KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					},
+					error: function(err) {
+						KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+					}
+				});
+			}, 1000);
+		});
+	}
+
 	return {
 		// public functions
 		init: function() {
@@ -1212,6 +1433,11 @@ var KTUserListDatatable = function() {
       refreshPassword();
 			initValidClient();
 			initClientData();
+			initDropzone();
+			initFileButtons();
+			remoteEmploy();
+			submitClientData();
+			initChangeStatus();
 			updateTotal();
 			search();
 		},

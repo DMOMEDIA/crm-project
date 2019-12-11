@@ -37,7 +37,7 @@ var KTClientListDatatable = function() {
 					read: {
 						url: '/rest/clients/list'
 					},
-				},
+				}
 			},
 
 			// layout definition

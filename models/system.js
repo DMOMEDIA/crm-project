@@ -22,6 +22,16 @@ const Provision = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+const Client = bookshelf.Model.extend({
+  tableName: 'crm_clients',
+  hasTimestamps: true
+});
+
+const ROffer = bookshelf.Model.extend({
+  tableName: 'crm_offer_requests',
+  hasTimestamps: true
+})
+
 module.exports.createLog = (type, log) => {
   return new Log({
     type: type,
@@ -36,15 +46,15 @@ module.exports.provisionStatistics = (days, forecast, callback) => {
     qb.orderBy('created_at','DESC').limit(days);
   })
   .fetchAll().then(function(result) {
-    module.exports.getGlobalProvision(true, function(prov) {
+    module.exports.getGlobalProvision(false, true, function(prov) {
       callback(result, prov.prov_forecast);
     });
   });
 };
 
-module.exports.getGlobalProvision = (fromDay, callback) => {
-  if(fromDay) var query = { for: 'global', updated_at: moment().local().format('YYYY-MM-DD') };
-  else var query = { for: 'global' };
+module.exports.getGlobalProvision = (canceled, fromDay, callback) => {
+  if(fromDay) var query = { canceled: canceled, for: 'global', updated_at: moment().local().format('YYYY-MM-DD') };
+  else var query = { canceled: canceled, for: 'global' };
 
   return new Provision().where(query).fetchAll()
   .then(function(result) {
@@ -67,7 +77,7 @@ module.exports.getGlobalProvision = (fromDay, callback) => {
 };
 
 module.exports.archiveStats = (name) => {
-  module.exports.getGlobalProvision(true, function(result) {
+  module.exports.getGlobalProvision(false, true, function(result) {
     if(name == 'provision_global') {
       return new Archive({
         name: name,
@@ -90,15 +100,24 @@ module.exports.archiveStats = (name) => {
   });
 };
 
-module.exports.removeProvision = (offer_id, offer_type) => {
-  return new Provision().where({ offer_id: offer_id + '/' + offer_type }).destroy();
+/** ================================================
+    @Information Pobieranie liczby klientów oraz zrealizowanych zapytań ofertowych.
+ =============================================== **/
+
+module.exports.getStatsCounts = (callback) => {
+  return new Client().count().then(function(client_cnt) {
+    return new ROffer().where({ state: 3 }).count().then(function(roffer_cnt) {
+      callback(client_cnt, roffer_cnt);
+    });
+  });
 };
+
 
 /** ================================================
     @Information Moduł zmiany prowizji dla określonej oferty.
  =============================================== **/
 
-module.exports.changeProvision = (user, offer_id, offer_type, value, company_id, forecast) => {
+module.exports.changeProvision = (user, offer_id, offer_type, value, company_id, forecast, cancel) => {
 
   Company.getCompanyProvision(company_id).then(function(prov) {
     prov = prov.toJSON();
@@ -122,6 +141,7 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
     new Provision().where({ for: 'posrednik', offer_id: offer_id + '/' + offer_type }).fetch()
     .then(function(model) {
       if(model) {
+        model.set('canceled', cancel);
         model.set('forecast', forecast);
         model.set('value', p_posrednik);
         if(user.user_id) model.set('user_id', user.user_id);
@@ -129,6 +149,7 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
         model.save();
       } else {
         new Provision({
+          canceled: cancel,
           for: 'posrednik',
           value: p_posrednik,
           user_id: user.user_id,
@@ -141,6 +162,7 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
     new Provision().where({ for: 'szef', offer_id: offer_id + '/' + offer_type }).fetch()
     .then(function(model) {
       if(model) {
+        model.set('canceled', cancel);
         model.set('forecast', forecast);
         model.set('value', p_szef);
         if(user.assigned_to) model.set('user_id', user.assigned_to);
@@ -149,6 +171,7 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
       } else {
         if(user.assigned_to != null) {
           new Provision({
+            canceled: cancel,
             for: 'szef',
             value: p_szef,
             user_id: user.assigned_to,
@@ -162,12 +185,14 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
     new Provision().where({ for: 'global', offer_id: offer_id + '/' + offer_type }).fetch()
     .then(function(model) {
       if(model) {
+        model.set('canceled', cancel);
         model.set('forecast', forecast);
         model.set('value', p_spolka);
 
         model.save();
       } else {
         new Provision({
+          canceled: cancel,
           for: 'global',
           value: p_spolka,
           offer_id: offer_id + '/' + offer_type,
