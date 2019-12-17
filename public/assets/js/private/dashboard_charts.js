@@ -132,10 +132,14 @@ var KTDashboardCharts = function() {
 					if(last_day > today) {
 						var percentage = 100 - ((today/last_day)*100).toFixed();
 						$('#kt_chart_1_value').html(res.today_prov + ' PLN&nbsp;&nbsp;<i class="kt-font-danger flaticon2-arrow-down">' + percentage + '%</i>');
-					} else {
+					} else if(last_day != 0 && last_day < today) {
 						var percentage = ((today/last_day)*100).toFixed() - 100;
 						$('#kt_chart_1_value').html(res.today_prov + ' PLN&nbsp;&nbsp;<i class="kt-font-success flaticon2-arrow-up">' + percentage + '%</i>');
-					}
+          } else if(last_day == today) {
+            $('#kt_chart_1_value').html(res.today_prov + ' PLN&nbsp;&nbsp;<i class="kt-font-brand flaticon2-line">0%</i>');
+          } else if(last_day == 0) {
+						$('#kt_chart_1_value').html(res.today_prov + ' PLN&nbsp;&nbsp;<i class="kt-font-success flaticon2-arrow-up">--%</i>');
+          }
 
 					reverse.forEach(function(element) {
 						label.push(moment(element.created_at).local().format('DD-MM-YYYY'));

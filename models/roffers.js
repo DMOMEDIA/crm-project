@@ -230,7 +230,7 @@ module.exports.addOffer = (value, callback) => {
       Mails.sendMail.send({
         template: 'roffer_send',
         message: {
-          from: '"CRM System" <oferty@crmsystem.pl>',
+          from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
           to: result.get('email'),
           subject: 'Zapytanie ofertowe zostało złożone'
         },

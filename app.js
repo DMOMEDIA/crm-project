@@ -24,19 +24,6 @@ const app = express();
 
 // CronTab events
 Cron.ScheduleEveryDay();
-//
-
-/* Mails.sendMail.send({
-  template: 'client_offer',
-  message: {
-    from: '"CRM System" <kontakt@crmsystem.pl>',
-    to: 'damian@dmomedia.pl',
-    subject: 'Zapytanie ofertowe zostało złożone'
-  },
-  locals: {
-    identity: '001/2019',
-  }
-}); */
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

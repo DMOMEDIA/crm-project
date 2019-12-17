@@ -46,15 +46,24 @@ module.exports.provisionStatistics = (days, forecast, callback) => {
     qb.orderBy('created_at','DESC').limit(days);
   })
   .fetchAll().then(function(result) {
-    module.exports.getGlobalProvision(false, true, function(prov) {
+    module.exports.getGlobalProvision(false, 'today', function(prov) {
       callback(result, prov.prov_forecast);
     });
   });
 };
 
-module.exports.getGlobalProvision = (canceled, fromDay, callback) => {
-  if(fromDay) var query = { canceled: canceled, for: 'global', updated_at: moment().local().format('YYYY-MM-DD') };
-  else var query = { canceled: canceled, for: 'global' };
+/** ================================================
+    @Information Pobieranie prowizji globalnej/posrednika
+    / Usage: getGlobalProvision(anulowana/nieanulowana, today/lastday/all, dane zwrotne);
+ =============================================== **/
+
+module.exports.getGlobalProvision = (isCanceled, fromDay, callback) => {
+  if(fromDay == 'today') {
+    var query = { canceled: isCanceled, for: 'global', updated_at: moment().local().format('YYYY-MM-DD') };
+  } else if(fromDay == 'lastday') {
+    var query = { canceled: isCanceled, for: 'global', updated_at: moment().subtract(1, 'days').local().format('YYYY-MM-DD') };
+  }
+  else var query = { canceled: isCanceled, for: 'global' };
 
   return new Provision().where(query).fetchAll()
   .then(function(result) {
@@ -77,7 +86,7 @@ module.exports.getGlobalProvision = (canceled, fromDay, callback) => {
 };
 
 module.exports.archiveStats = (name) => {
-  module.exports.getGlobalProvision(false, true, function(result) {
+  module.exports.getGlobalProvision(false, 'lastday', function(result) {
     if(name == 'provision_global') {
       return new Archive({
         name: name,

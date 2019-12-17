@@ -366,7 +366,7 @@ var KTROfferListDatatable = function() {
 												$.ajax({
 													url: '/rest/roffer/done',
 													method: 'POST',
-													data: res,
+													data: { id: res.id },
 													success: function(realize) {
 														KTApp.unprogress(button);
 														button.attr('disabled', false);
@@ -389,7 +389,7 @@ var KTROfferListDatatable = function() {
 
 														datatable.reload();
 														$('#summary_element').show();
-														$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
+														button.prop('disabled', true).text('Zapytanie zrealizowane');
 													},
 													error: function(err) {
 														KTApp.unprogress(button);

@@ -115,11 +115,23 @@ block content
                                 rect#bound(x='0', y='0', width='24', height='24')
                                 path#Path-107(d='M10.9630156,7.5 L11.0475062,7.5 C11.3043819,7.5 11.5194647,7.69464724 11.5450248,7.95024814 L12,12.5 L15.2480695,14.3560397 C15.403857,14.4450611 15.5,14.6107328 15.5,14.7901613 L15.5,15 C15.5,15.2109164 15.3290185,15.3818979 15.1181021,15.3818979 C15.0841582,15.3818979 15.0503659,15.3773725 15.0176181,15.3684413 L10.3986612,14.1087258 C10.1672824,14.0456225 10.0132986,13.8271186 10.0316926,13.5879956 L10.4644883,7.96165175 C10.4845267,7.70115317 10.7017474,7.5 10.9630156,7.5 Z', fill='#000000')
                                 path#Combined-Shape(d='M7.38979581,2.8349582 C8.65216735,2.29743306 10.0413491,2 11.5,2 C17.2989899,2 22,6.70101013 22,12.5 C22,18.2989899 17.2989899,23 11.5,23 C5.70101013,23 1,18.2989899 1,12.5 C1,11.5151324 1.13559454,10.5619345 1.38913364,9.65805651 L3.31481075,10.1982117 C3.10672013,10.940064 3,11.7119264 3,12.5 C3,17.1944204 6.80557963,21 11.5,21 C16.1944204,21 20,17.1944204 20,12.5 C20,7.80557963 16.1944204,4 11.5,4 C10.54876,4 9.62236069,4.15592757 8.74872191,4.45446326 L9.93948308,5.87355717 C10.0088058,5.95617272 10.0495583,6.05898805 10.05566,6.16666224 C10.0712834,6.4423623 9.86044965,6.67852665 9.5847496,6.69415008 L4.71777931,6.96995273 C4.66931162,6.97269931 4.62070229,6.96837279 4.57348157,6.95710938 C4.30487471,6.89303938 4.13906482,6.62335149 4.20313482,6.35474463 L5.33163823,1.62361064 C5.35654118,1.51920756 5.41437908,1.4255891 5.49660017,1.35659741 C5.7081375,1.17909652 6.0235153,1.2066885 6.2010162,1.41822583 L7.38979581,2.8349582 Z', fill='#000000', opacity='0.3')
-                            | Dokumenty i status
+                            | Dokumenty i realizacja
                   |     
                   .kt-portlet__body
                     .tab-content
                       #podglad.tab-pane.active(role='tabpanel')
+                        #send_offer_alert(style='display:none;')
+                          .alert.alert-dark(role='alert')
+                            .alert-icon
+                              i.flaticon-warning
+                            |                             
+                            .alert-text Oferta nie została jeszcze wysłana. Zanim wyślesz ją do klienta pamiętaj o załączeniu dokumentu z ofertą w systemie. Dokumenty możesz umieścić przechodząc do podstrony 'Dokumenty i realizacja'.
+                        #realize_offer_alert(style='display:none;')
+                          .alert.alert-brand(role='alert')
+                            .alert-icon
+                              i.flaticon-warning
+                            |                             
+                            .alert-text Oferta została wysłana do klienta i czeka na Twoją realizację lub anulowanie. Przed realizacją oferty pamiętaj o umieszczeniu stosownych dokumentów jako załącznika. Dokumenty możesz umieścić przechodząc do podstrony 'Dokumenty i realizacja'.
                         form#kt_offer_edit
                           input#idInput1(type='hidden', name='id')
                           input#typeInput1(type='hidden', name='type')
@@ -494,35 +506,41 @@ block content
                                       #kt_dropzone_offer.dropzone.dropzone-default.dropzone-success.dz-clickable
                                         .dropzone-msg.dz-message.needsclick
                                           h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
-                                          span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
-                            //.row
+                                          span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls) 
+                            .row
                               label.col-xl-3     
                               .col-lg-9.col-xl-6
-                                h3.kt-section__title Oś czasu:
-                            //|                 
-                            //.kt-timeline-v2.kt-margin-l-60.kt-margin-b-20
-                              .kt-timeline-v2__items.kt-padding-t-25.kt-padding-b-30
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 10-11-19 09:04
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-danger
-                                  .kt-timeline-v2__item-text
-                                    | Oferta nr. 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='javascript:;') 001/L/2019
-                                    |  została utworzona.
-                                .kt-timeline-v2__item
-                                  span.kt-timeline-v2__item-time 10-11-19 09:04
-                                  | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
-                                  .kt-timeline-v2__item-cricle
-                                    i.fa.fa-genderless.kt-font-success
-                                  .kt-timeline-v2__item-text
-                                    | Przedstawiono ofertę klientowi 
-                                    a.kt-link.kt-link--brand.kt-font-bolder(href='javascript:;') Stefan Grzeszowiak
-                                    |  oraz nadano jej status 
-                                    span.kt-badge.kt-badge--brand.kt-badge--inline.kt-badge--pill Oczekująca
+                                h3.kt-section__title Realizacja:
+                            |                 
+                            #isRealized_alert
+                              .alert.alert-success(role='alert')
+                                .alert-text Ta oferta została zrealizowana.
+                            #isCanceled_alert
+                              .alert.alert-danger(role='alert')
+                                .alert-text Ta oferta została anulowana.
+                            #send_offer_element(style='display:none;')
+                              .form-group.form-group-last.row
+                                label.col-xl-4.col-lg-4.col-form-label Wysłanie oferty
+                                |                                         
+                                .col-lg-8.col-xl-8
+                                  button#send_offer_btn.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Wyślij ofertę
+                                  |                                                        
+                                  span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                    | Przed wysłaniem oferty pamiętaj aby umieścić dokument zawierający ofertę.
+                            #realize_offer_element(style='display:none;')
+                              .form-group.form-group-last.row
+                                label.col-xl-4.col-lg-4.col-form-label Realizacja/anulowanie oferty
+                                |                                         
+                                .col-lg-8.col-xl-8
+                                  button#realize_offer_btn.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj ofertę
+                                  |                                         
+                                  button#cancel_offer_btn.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Anuluj ofertę
+                                  |                                         
+                                  span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                    | Przed realizacją oferty należy umieścić w systemie wszystkie wymagane dokumenty klienta (podpisane umowy itp.).
                             |                        
                             .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
-                            |                     
+                            |                    
                             if userPermissions.includes('crm.offers.status_change')  
                               .row
                                 label.col-xl-3     
@@ -546,7 +564,7 @@ block content
                                             option(value='4') zrealizowana
                                           .input-group-append
                                             button.btn.btn-brand(type='submit') Zmień
-                                        |                                             
+                                        |                               
                             |                             
                             .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                             |                             

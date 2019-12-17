@@ -48,6 +48,9 @@ router.post('/rest/offer/sdelete', REST.deleteSelectedOffers);
 router.post('/rest/offer/status', REST.changeOfferStatus);
 router.post('/rest/offer/data', REST.changeOfferData);
 router.post('/rest/offer/sendmail', REST.sendOfferMail);
+router.post('/rest/offer/sendmail_onList', REST.sendOfferMail_onList);
+router.post('/rest/offer/realize', REST.realizeOffer);
+router.post('/rest/offer/cancel', REST.cancelOffer);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
 

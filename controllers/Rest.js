@@ -488,6 +488,78 @@ exports.changeOfferData = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.realizeOffer = (req, res) => {
+  if(req.isAuthenticated()) {
+    Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
+      if(offer) {
+        if(offer.state == 2) {
+          Offer.setValueById(offer.id, offer.offer_type, 'state', 4, true).then(function() {
+            res.json({ status: 'success', message: 'Oferta została pomyślnie zrealizowana.' });
+          });
+        } else res.json({ status: 'error', message: 'Oferta została zrealizowana/anulowana, wprowadzenie nowych zmian jest niemożliwe.' });
+      } else res.json(Messages.message('not_found_offer', null));
+    });
+  }
+};
+
+exports.cancelOffer = (req, res) => {
+  if(req.isAuthenticated()) {
+    Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
+      if(offer) {
+        if(offer.state == 2) {
+          Offer.setValueById(offer.id, offer.offer_type, 'state', 3, false).then(function() {
+            res.json({ status: 'success', message: 'Oferta została pomyślnie anulowana.' });
+          });
+        } else res.json({ status: 'error', message: 'Oferta została zrealizowana/anulowana, wprowadzenie nowych zmian jest niemożliwe.' });
+      } else res.json(Messages.message('not_found_offer', null));
+    });
+  }
+};
+
+exports.sendOfferMail_onList = async (req, res) => {
+  if(req.isAuthenticated()) {
+    Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
+      if(offer) {
+        if(offer.state == 1) {
+          var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
+          var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
+
+          try {
+            var attachments = [];
+            var files = fs.readdirSync('./uploads/offer/' + req.body.o_path);
+            async.each(files, function(name, cb) {
+              attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
+              cb();
+            }, function() {
+              Mails.sendMail.send({
+                template: 'client_offer',
+                message: {
+                  from: '"CRM System" <oferty@crmsystem.pl>',
+                  to: offer.client.email,
+                  subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
+                  attachments: attachments
+                },
+                locals: {
+                  data: offer,
+                  date_format: date_format,
+                  identity: o_identity
+                }
+              }).then(function() {
+                Offer.setValueById(offer.id, offer.offer_type, 'state', 2, false).then(function() {
+                  res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+                });
+              });
+            });
+          }
+          catch {
+            res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
+          }
+        } else res.json({ status: 'error', message: 'Oferta została już wysłana, ponowne wysłanie oferty jest niemożliwe.' });
+      } else res.json(Messages.message('not_found_offer', null));
+    });
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 exports.sendOfferMail = async (req, res) => {
   if(req.isAuthenticated()) {
     if(req.body.o_state == 2) {
@@ -524,57 +596,10 @@ exports.sendOfferMail = async (req, res) => {
           catch {
             res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
           }
-
-          /* Mails.sendMail.send({
-            template: 'client_offer',
-            message: {
-              from: '"CRM System" <oferty@crmsystem.pl>',
-              to: offer.client.email,
-              subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.'
-            },
-            locals: {
-              data: offer,
-              date_format: date_format,
-              identity: o_identity
-            },
-            attachments: {
-
-            }
-          }).then(function() {
-            res.json({ status: 'success' });
-          }); */
         } else res.json(Messages.message('not_found_offer', null));
       });
     }
-  }
-  /* if(req.isAuthenticated()) {
-    if(req.body.o_state == 2) {
-      await Client.getClientById(req.body.client_id).then(async function(user) {
-        if(user != null) {
-          var company = await Company.getCompanyById(req.body.company_id),
-          company = company.toJSON(),
-          user = user.toJSON();
-
-          Mails.sendMail.send({
-            template: 'client_offer',
-            message: {
-              from: '"CRM System" <oferty@crmsystem.pl>',
-              to: user.email,
-              subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.'
-            },
-            locals: {
-              data: req.body,
-              user: user,
-              company: company
-            }
-          }).then(function() {
-            res.json({ status: 'success' });
-          });
-        }
-        else res.json(Messages.message('not_found_client_identity', null));
-      });
-    }
-  } else res.json(Messages.message('no_authorization', null)); */
+  }  else res.json(Messages.message('no_authorization', null));
 };
 
 exports.uploadOfferFiles = (req, res, next) => {
@@ -752,14 +777,15 @@ exports.requestOfferSendMail = (req, res) => {
 exports.requestOfferDone = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role == 'administrator') {
-      if(req.body.state == 2) {
-        ROffer.setValueById(req.body.id, 'state', 3);
-        console.log(req.body.client_info.id);
-        Notification.sendNotificationToUser(req.body.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + req.body.id + '/' + moment(req.body.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
-        .then(function(done) {
-          res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
-        });
-      } else res.json({ status: 'error', message: 'Zapytanie ofertowe musi zostać wysłane do odpowiednich firm przed jego realizacją.' });
+      ROffer.getOfferById(req.body.id, function(result) {
+        if(result.state == 2) {
+          ROffer.setValueById(result.id, 'state', 3);
+          Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+          .then(function(done) {
+            res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
+          });
+        } else res.json({ status: 'error', message: 'Zapytanie ofertowe musi zostać wysłane do odpowiednich firm przed jego realizacją.' });
+      });
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };

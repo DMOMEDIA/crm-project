@@ -167,6 +167,7 @@ var KTOfferListDatatable = function() {
 									modalEl.find('#leasing_variants').html('');
 
 									var date = moment(res.created_at).local().format('YYYY');
+
 									var status = {
 										1: {'title': 'Niewysłana', 'class': 'kt-badge--dark'},
 										2: {'title': 'Oczekująca', 'class': 'kt-badge--brand'},
@@ -223,8 +224,6 @@ var KTOfferListDatatable = function() {
 										modalEl.find('input[name="pyear_l"]').val(res.production_year);
 										modalEl.find('input[name="netto_l"]').val(res.netto);
 										modalEl.find('select[name="invoice_l"] option[value="' + res.invoice + '"]').prop('selected', true);
-
-										console.log(res.variants);
 
 										res.variants.forEach(function(item, index) {
 											modalEl.find('#leasing_variants').append('\
@@ -355,6 +354,41 @@ var KTOfferListDatatable = function() {
 											throw err;
 										}
 									});
+
+									if(res.state == 1) {
+										$('#send_offer_element').show();
+										$('#send_offer_alert').show();
+										$('#realize_offer_element').hide();
+										$('#realize_offer_alert').hide();
+										$('#isRealized_alert').hide();
+										$('#isCanceled_alert').hide();
+										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', false);
+									} else if(res.state == 2) {
+										$('#send_offer_element').hide();
+										$('#send_offer_alert').hide();
+										$('#realize_offer_element').show();
+										$('#realize_offer_alert').show();
+										$('#isRealized_alert').hide();
+										$('#isCanceled_alert').hide();
+										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+										//
+									} else if(res.state == 3) {
+										$('#send_offer_element').hide();
+										$('#send_offer_alert').hide();
+										$('#realize_offer_element').show();
+										$('#realize_offer_alert').hide();
+										$('#isRealized_alert').hide();
+										$('#isCanceled_alert').show();
+										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+									} else {
+										$('#send_offer_element').hide();
+										$('#send_offer_alert').hide();
+										$('#realize_offer_element').show();
+										$('#realize_offer_alert').hide();
+										$('#isRealized_alert').show();
+										$('#isCanceled_alert').hide();
+										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+									}
 
 									// Hide modal event
 									$('#kt_fetch_offer').on('hidden.bs.modal', function (e) {
@@ -838,68 +872,243 @@ var KTOfferListDatatable = function() {
 	};
 
 
-		// selected records delete
-		var selectedDelete = function() {
-			$('#kt_subheader_group_actions_delete_all').on('click', function() {
-				// fetch selected IDs
-				var ids = datatable.rows('.kt-datatable__row--active').nodes().find('.kt-checkbox--single > [type="checkbox"]').map(function(i, chk) {
-					return $(chk).val();
-				});
+	// selected records delete
+	var selectedDelete = function() {
+		$('#kt_subheader_group_actions_delete_all').on('click', function() {
+			// fetch selected IDs
+			var ids = datatable.rows('.kt-datatable__row--active').nodes().find('.kt-checkbox--single > [type="checkbox"]').map(function(i, chk) {
+				return $(chk).val();
+			});
 
-				var rowData = datatable.rows('.kt-datatable__row--active').nodes().find('td[data-field="offer_type"]').map(function(i, chk) {
-					return $(chk).text();
-				});
+			var rowData = datatable.rows('.kt-datatable__row--active').nodes().find('td[data-field="offer_type"]').map(function(i, chk) {
+				return $(chk).text();
+			});
 
-				var elements = [];
-				for(var i = 0; i <= ids.length-1; i++) {
-					elements.push({ id: ids[i], type: rowData[i] });
-				}
+			var elements = [];
+			for(var i = 0; i <= ids.length-1; i++) {
+				elements.push({ id: ids[i], type: rowData[i] });
+			}
 
-				console.log(elements);
+			console.log(elements);
 
-				var userText = 'ofert/y';
-				if(ids.length == 1) userText = 'ofertę';
+			var userText = 'ofert/y';
+			if(ids.length == 1) userText = 'ofertę';
 
-				if (ids.length > 0) {
-					swal.fire({
-						text: "Jesteś pewny że chcesz usunąć " + ids.length + " " + userText + "?",
-						type: 'info',
+			if (ids.length > 0) {
+				swal.fire({
+					text: "Jesteś pewny że chcesz usunąć " + ids.length + " " + userText + "?",
+					type: 'info',
 
-						confirmButtonText: "Usuń",
-						confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+					confirmButtonText: "Usuń",
+					confirmButtonClass: "btn btn-sm btn-bold btn-brand",
 
-						showCancelButton: true,
-						cancelButtonText: "Anuluj",
-						cancelButtonClass: "btn btn-sm btn-bold btn-default"
-					}).then(function(result) {
-						if (result.value) {
-							$.ajax({
-								url: '/rest/offer/sdelete',
-								method: 'POST',
-								data: { data: elements },
-								success: function(res) {
-									if(res.status == 'success') {
-										swal.fire({
-											title: 'Usunięto',
-											text: res.message,
-											type: 'success',
-											confirmButtonText: "Zamknij",
-											confirmButtonClass: "btn btn-sm btn-bold btn-brand",
-										});
-										datatable.reload();
-									} else {
-										return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
-									}
-								},
-								error: function(err) {
-									KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+					showCancelButton: true,
+					cancelButtonText: "Anuluj",
+					cancelButtonClass: "btn btn-sm btn-bold btn-default"
+				}).then(function(result) {
+					if (result.value) {
+						$.ajax({
+							url: '/rest/offer/sdelete',
+							method: 'POST',
+							data: { data: elements },
+							success: function(res) {
+								if(res.status == 'success') {
+									swal.fire({
+										title: 'Usunięto',
+										text: res.message,
+										type: 'success',
+										confirmButtonText: "Zamknij",
+										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+									});
+									datatable.reload();
+								} else {
+									return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
 								}
+							},
+							error: function(err) {
+								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+
+	var initRealizeButtons = function() {
+		var btn_send = $('#send_offer_btn'),
+		btn_realize = $('#realize_offer_btn'),
+		btn_cancel = $('#cancel_offer_btn');
+		
+		btn_send.on('click', function() {
+			KTApp.progress(btn_send);
+			btn_send.attr('disabled', true);
+
+			setTimeout(function() {
+				swal.fire({
+					"title": "",
+					"text": "Wysyłanie oferty do klienta",
+					onBeforeOpen: () => {
+						swal.showLoading();
+					},
+					allowOutsideClick: false
+				});
+				$.ajax({
+					url: '/rest/offer/sendmail_onList',
+					method: 'POST',
+					data: {
+						id: $('#idInput3').val(),
+						offer_type: $('#typeInput3').val(),
+						o_path: f_path
+					},
+					success: function(realize) {
+						if(realize.status == 'success') {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+
+							$('#send_offer_element').hide();
+							$('#send_offer_alert').hide();
+							$('#realize_offer_element').show();
+							$('#realize_offer_alert').show();
+							$('#isRealized_alert').hide();
+							$('#isCanceled_alert').hide();
+							formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+							datatable.reload();
+						} else {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
 							});
 						}
-					});
-				}
-			});
-		}
+
+						KTApp.unprogress(btn_send);
+						btn_send.attr('disabled', false);
+					},
+					error: function() {
+						swal.fire({
+							"title": "",
+							"text": "Wystąpił błąd podczas połączenia z serwerem.",
+							"type": "error",
+							"confirmButtonClass": "btn btn-secondary"
+						});
+					}
+				});
+			}, 1000);
+		});
+		//
+
+		btn_realize.on('click', function() {
+			KTApp.progress(btn_realize);
+			btn_realize.attr('disabled', true);
+
+			setTimeout(function() {
+				$.ajax({
+					url: '/rest/offer/realize',
+					method: 'POST',
+					data: {
+						id: $('#idInput3').val(),
+						offer_type: $('#typeInput3').val()
+					},
+					success: function(realize) {
+						if(realize.status == 'success') {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+
+							$('#send_offer_element').hide();
+							$('#send_offer_alert').hide();
+							$('#realize_offer_element').show();
+							$('#realize_offer_alert').hide();
+							$('#isRealized_alert').show();
+							$('#isCanceled_alert').hide();
+							formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+							datatable.reload();
+						} else {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+						}
+
+						KTApp.unprogress(btn_realize);
+						btn_realize.attr('disabled', false);
+					},
+					error: function() {
+						swal.fire({
+							"title": "",
+							"text": "Wystąpił błąd podczas połączenia z serwerem.",
+							"type": "error",
+							"confirmButtonClass": "btn btn-secondary"
+						});
+					}
+				});
+			}, 1000);
+		});
+
+		btn_cancel.on('click', function() {
+			KTApp.progress(btn_cancel);
+			btn_cancel.attr('disabled', true);
+
+			setTimeout(function() {
+				$.ajax({
+					url: '/rest/offer/cancel',
+					method: 'POST',
+					data: {
+						id: $('#idInput3').val(),
+						offer_type: $('#typeInput3').val()
+					},
+					success: function(realize) {
+						if(realize.status == 'success') {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+
+							$('#send_offer_element').hide();
+							$('#send_offer_alert').hide();
+							$('#realize_offer_element').show();
+							$('#realize_offer_alert').hide();
+							$('#isRealized_alert').hide();
+							$('#isCanceled_alert').show();
+							formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"]').prop('disabled', true);
+							datatable.reload();
+						} else {
+							swal.fire({
+								"title": "",
+								"text": realize.message,
+								"type": realize.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+						}
+
+						KTApp.unprogress(btn_cancel);
+						btn_cancel.attr('disabled', false);
+					},
+					error: function() {
+						swal.fire({
+							"title": "",
+							"text": "Wystąpił błąd podczas połączenia z serwerem.",
+							"type": "error",
+							"confirmButtonClass": "btn btn-secondary"
+						});
+					}
+				});
+			}, 1000);
+		});
+	};
 
 	return {
 		// public functions
@@ -915,6 +1124,7 @@ var KTOfferListDatatable = function() {
 			initDropzone();
 			selection();
 			selectedDelete();
+			initRealizeButtons();
 		},
 	};
 }();

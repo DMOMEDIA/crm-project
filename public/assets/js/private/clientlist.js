@@ -70,6 +70,7 @@ var KTClientListDatatable = function() {
 				field: "fullname",
 				title: "Klient",
 				width: 200,
+				autoHide: false,
 				// callback function support for column rendering
 				template: function(data, i) {
 					if(data.inferior) var inf = 'kt-badge--warning';
@@ -103,7 +104,6 @@ var KTClientListDatatable = function() {
 			}, {
 				field: 'state',
 				title: 'Status',
-				autoHide: false,
 				template: function(row) {
 					var status = {
 						1: {'title': 'Nieprzypisany', 'class': 'kt-badge--dark'},

@@ -108,6 +108,7 @@ var KTUserListDatatable = function() {
 				title: "Pracownik",
 				sortable: 'asc',
 				width: 200,
+				autoHide: false,
 				// callback function support for column rendering
 				template: function(data, i) {
 					var urole = data.role;
@@ -127,6 +128,7 @@ var KTUserListDatatable = function() {
 			}, {
 				field: 'identity',
 				title: 'Identyfikator',
+				autoHide: true,
 				template: function(row) {
 					return row.identity;
 				}
@@ -227,6 +229,7 @@ var KTUserListDatatable = function() {
 				title: "Pracownik",
 				sortable: 'asc',
 				width: 200,
+				autoHide: false,
 				// callback function support for column rendering
 				template: function(data, i) {
 					var urole = data.role;
@@ -246,6 +249,7 @@ var KTUserListDatatable = function() {
 			}, {
 				field: 'identity',
 				title: 'Identyfikator',
+				autoHide: true,
 				template: function(row) {
 					return row.identity;
 				}
@@ -700,6 +704,7 @@ var KTUserListDatatable = function() {
 										field: "fullname",
 										title: "Klient",
 										width: 200,
+										autoHide: false,
 										// callback function support for column rendering
 										template: function(data, i) {
 											if(data.inferior) var inf = 'kt-badge--warning';
@@ -735,7 +740,7 @@ var KTUserListDatatable = function() {
 									}, {
 										field: 'state',
 										title: 'Status',
-										autoHide: false,
+										autoHide: true,
 										template: function(row) {
 											var status = {
 												1: {'title': 'Nieprzypisany', 'class': 'kt-badge--dark'},
