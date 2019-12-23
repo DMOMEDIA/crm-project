@@ -86,7 +86,11 @@ block content
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Nazwisko:                  
                                     .col-lg-9.col-xl-9
-                                      input#lastname.form-control(type='text', name='lastname', placeholder='Nazwisko')                  
+                                      input#lastname.form-control(type='text', name='lastname', placeholder='Nazwisko')      
+                                  .form-group.row
+                                    label.col-xl-3.col-lg-3.col-form-label PESEL:                  
+                                    .col-lg-9.col-xl-9
+                                      input.form-control(type='text', name='pesel', placeholder='Numer PESEL', maxlength='11')                  
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Adres e-mail:       
                                     .col-lg-9.col-xl-9
@@ -107,7 +111,7 @@ block content
                                   .row
                                     label.col-xl-3     
                                     .col-lg-9.col-xl-6
-                                      h3.kt-section__title.kt-section__title-sm Adres siedziby/zamieszkania pracownika:
+                                      h3.kt-section__title.kt-section__title-sm Dane firmy i/lub adres zamieszkania pracownika:
                                   |                               
                                   .form-group.row
                                     label.col-3.col-form-label
@@ -118,7 +122,25 @@ block content
                                           input(type='hidden', name='isCompany', value='0')
                                           |  Pracownik posiada własną działalność gospodarczą.
                                           span
-                                  #addressAlert
+                                  #company_data
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='cname', placeholder='Nazwa firmy')
+                                    |       
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label NIP:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='cnip', placeholder='Numer NIP', maxlength='10')
+                                    |       
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label REGON:
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input.form-control(type='text', name='cregon', placeholder='Numer REGON', maxlength='14')
+                                    |       
                                     .alert.alert-outline-brand.fade.show(role='alert')
                                       .alert-icon
                                         i.flaticon-questions-circular-button
@@ -265,6 +287,7 @@ block content
 block scripts
   script(src='./assets/vendors/general/jquery-form/dist/jquery.form.min.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/jquery.inputmask.bundle.js', type='text/javascript')
+  script(src='./assets/vendors/general/bootstrap-maxlength/src/bootstrap-maxlength.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.numeric.extensions.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask/inputmask.date.extensions.js', type='text/javascript')
   script(src='./assets/vendors/general/jquery-validation/dist/jquery.validate.js', type='text/javascript')

@@ -108,7 +108,7 @@ var KTClientListDatatable = function() {
 					var status = {
 						1: {'title': 'Nieprzypisany', 'class': 'kt-badge--dark'},
 						2: {'title': 'Niepełne dane', 'class': ' kt-badge--warning'},
-						3: {'title': 'Niezweryfikowany', 'class': ' kt-badge--danger'},
+						3: {'title': 'Przypisany', 'class': ' kt-badge--danger'},
 						4: {'title': 'Zweryfikowany', 'class': ' kt-badge--success'},
 					};
 					return '<span class="kt-badge ' + status[row.state].class + ' kt-badge--inline kt-badge--pill">' + status[row.state].title + '</span>';
@@ -132,7 +132,7 @@ var KTClientListDatatable = function() {
 	}
 
 	var initValid = function() {
-		$('#nipClient').maxlength({
+		$('#nipI,#nipI1,#nipI2').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
 				appendToParent: true
@@ -165,7 +165,12 @@ var KTClientListDatatable = function() {
 					digits: true,
 					maxlength: 15
 				},
-				nip: {
+				corp_nip: {
+					required: true,
+					minlength: 10,
+					maxlength: 10
+				},
+				company_nip: {
 					required: true,
 					minlength: 10,
 					maxlength: 10
@@ -202,7 +207,12 @@ var KTClientListDatatable = function() {
 					digits: "Numer REGON może składać się tylko z cyfr.",
 					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
 				},
-				nip: {
+				corp_nip: {
+					required: "To pole jest wymagane.",
+					minlength: "Numer NIP musi składać się z 10 cyfr.",
+					maxlength: "Numer NIP musi składać się z 10 cyfr."
+				},
+				company_nip: {
 					required: "To pole jest wymagane.",
 					minlength: "Numer NIP musi składać się z 10 cyfr.",
 					maxlength: "Numer NIP musi składać się z 10 cyfr."
@@ -270,6 +280,7 @@ var KTClientListDatatable = function() {
 										modalEl.find('#corp_user').hide();
 										modalEl.find('input[name="firstname"]').val(name[0]);
 										modalEl.find('input[name="lastname"]').val(name[1]);
+										modalEl.find('input[name="priv_nip"]').val(res.nip);
 									} else if(res.company == 1) {
 										modalEl.find('#company_user').hide();
 										modalEl.find('#private_user').hide();
@@ -277,15 +288,16 @@ var KTClientListDatatable = function() {
 										modalEl.find('input[name="corpName"]').val(res.fullname);
 										modalEl.find('select[name="corp_type"] option[value="' + res.company_type + '"]').prop('selected', true);
 										modalEl.find('input[name="corp_regon"]').val(res.regon);
+										modalEl.find('input[name="corp_nip"]').val(res.nip);
 									} else {
 										modalEl.find('#company_user').show();
 										modalEl.find('#private_user').hide();
 										modalEl.find('#corp_user').hide();
 										modalEl.find('input[name="companyName"]').val(res.fullname);
 										modalEl.find('input[name="company_regon"]').val(res.regon);
+										modalEl.find('input[name="company_nip"]').val(res.nip);
 									}
 
-									modalEl.find('input[name="nip"]').val(res.nip);
 									modalEl.find('input[name="pNumber"]').val(res.phone);
 									modalEl.find('input[name="email"]').val(res.email);
 									modalEl.find('input[name="data_processing"]').prop('checked', res.data_process);

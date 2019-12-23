@@ -141,7 +141,7 @@ module.exports.addOffer = (value, callback) => {
   if(value.client_type == 0) {
     var c_type = {
       fullname: value.firstname + ' ' + value.lastname,
-      nip: value.nip,
+      nip: value.priv_nip,
       phone: value.phone,
       email: value.email,
       company: value.client_type,
@@ -152,7 +152,7 @@ module.exports.addOffer = (value, callback) => {
   } else if(value.client_type == 1) {
     var c_type = {
       fullname: value.corpName,
-      nip: value.nip,
+      nip: value.corp_nip,
       regon: value.corp_regon,
       phone: value.phone,
       email: value.email,
@@ -165,7 +165,7 @@ module.exports.addOffer = (value, callback) => {
   } else {
     var c_type = {
       fullname: value.companyName,
-      nip: value.nip,
+      nip: value.company_nip,
       regon: value.company_regon,
       phone: value.phone,
       email: value.email,

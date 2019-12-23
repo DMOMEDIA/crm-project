@@ -153,7 +153,7 @@ block content
                                         label.col-xl-3.col-lg-3.col-form-label Avatar
                                         |                                         
                                         .col-lg-9.col-xl-6
-                                          #kt_user_edit_avatar.kt-avatar.kt-avatar--outline.kt-avatar--circle-
+                                          #kt_user_edit_avatar.kt-avatar.kt-avatar--outline.kt-avatar--circle
                                             .kt-avatar__holder(style='background-image: url("http://keenthemes.com/metronic/preview/default/custom/user/assets/media/users/300_20.jpg");')
                                             |                                                 
                                             label.kt-avatar__upload(data-toggle='kt-tooltip', title='', data-original-title='Change avatar')
@@ -176,6 +176,12 @@ block content
                                         .col-lg-9.col-xl-6
                                           input#lastnameInput.form-control(type='text', name='lastname')
                                       |                                     
+                                      .form-group.row
+                                        label.col-xl-3.col-lg-3.col-form-label PESEL
+                                        |                                         
+                                        .col-lg-9.col-xl-6
+                                          input.form-control(type='text', name='pesel', maxlength='11', placeholder='Numer PESEL')
+                                      |                            
                                       .form-group.row
                                         label.col-xl-3.col-lg-3.col-form-label Numer telefonu
                                         |                                         
@@ -201,7 +207,7 @@ block content
                                       .row
                                         label.col-xl-3     
                                         .col-lg-9.col-xl-6
-                                          h3.kt-section__title.kt-section__title-sm Adres siedziby/zamieszkania pracownika:
+                                          h3.kt-section__title.kt-section__title-sm Dane firmy i/lub adres zamieszkania pracownika:
                                       |                               
                                       .form-group.row
                                         label.col-3.col-form-label
@@ -212,7 +218,25 @@ block content
                                               input(type='hidden', name='isCompany', value='0')
                                               |  Pracownik posiada własną działalność gospodarczą.
                                               span
-                                      #addressAlert
+                                      #company_data
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='cname', maxlength='64', placeholder='Nazwa firmy')
+                                        |                            
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label NIP
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='cnip', maxlength='10', placeholder='Numer NIP')
+                                        |                            
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label REGON
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input.form-control(type='text', name='cregon', maxlength='14', placeholder='Numer REGON')
+                                        |                            
                                         .alert.alert-outline-brand.fade.show(role='alert')
                                           .alert-icon
                                             i.flaticon-questions-circular-button
@@ -521,7 +545,13 @@ block content
                                           |                                         
                                           .col-lg-9.col-xl-6
                                             input.form-control(type='text', name='lastname', placeholder='Nazwisko')
-                                        |                       
+                                        |                 
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label NIP
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input#nipI.form-control(type='text', name='priv_nip', maxlength='10', placeholder='Numer NIP')
+                                        |                                                      
                                       #corp_user(style='display:none;')
                                         .form-group.row
                                           label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
@@ -545,6 +575,12 @@ block content
                                           .col-lg-9.col-xl-6
                                             input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
                                         |              
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label NIP
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input#nipI1.form-control(type='text', name='corp_nip', maxlength='10', placeholder='Numer NIP')
+                                        |                                                      
                                       #company_user(style='display:none;')
                                         .form-group.row
                                           label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
@@ -558,12 +594,12 @@ block content
                                           .col-lg-9.col-xl-6
                                             input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
                                         |              
-                                      .form-group.row
-                                        label.col-xl-3.col-lg-3.col-form-label NIP
-                                        |                                         
-                                        .col-lg-9.col-xl-6
-                                          input#nipClient.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
-                                      |                                                            
+                                        .form-group.row
+                                          label.col-xl-3.col-lg-3.col-form-label NIP
+                                          |                                         
+                                          .col-lg-9.col-xl-6
+                                            input#nipI2.form-control(type='text', name='company_nip', maxlength='10', placeholder='Numer NIP')
+                                        |                                                            
                                       .form-group.row
                                         label.col-xl-3.col-lg-3.col-form-label Numer telefonu
                                         |                                         

@@ -59,6 +59,7 @@ exports.addUser = (req, res) => {
         identity: req.body.gen_identity,
         password: req.body.password,
         fullname: req.body.firstname + ' ' + req.body.lastname,
+        pesel: req.body.pesel,
         address: req.body.address,
         postcode: req.body.postcode,
         city: req.body.city,
@@ -67,7 +68,10 @@ exports.addUser = (req, res) => {
         email: req.body.email,
         telephone: req.body.pNumber,
         role: req.body.urole,
-        isCompany: req.body.isCompany
+        isCompany: req.body.isCompany,
+        cname: req.body.cname,
+        cnip: req.body.cnip,
+        cregon: req.body.cregon
       });
 
       res.json(Messages.message('added_new_user', req.body.gen_identity));

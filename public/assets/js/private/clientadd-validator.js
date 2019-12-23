@@ -11,7 +11,7 @@ var KTClientAdd = function () {
 
 	// Private functions
 	var initWizard = function () {
-    $('#nipI').maxlength({
+    $('#nipI,#nipI1,#nipI2').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
 				appendToParent: true
@@ -120,7 +120,13 @@ var KTClientAdd = function () {
 					digits: true,
 					maxlength: 15
 				},
-        nip: {
+        corp_nip: {
+          required: true,
+          digits: true,
+          minlength: 10,
+          maxlength: 10
+        },
+				company_nip: {
           required: true,
           digits: true,
           minlength: 10,
@@ -168,7 +174,13 @@ var KTClientAdd = function () {
 					digits: 'Numer REGON może zawierać jedynie cyfry.',
 					maxlength: 'Numer REGON może składać się jedynie z {0} cyfr.'
 				},
-        nip: {
+        corp_nip: {
+          required: 'To pole jest wymagane.',
+          digits: 'Numer NIP może zawierać jedynie cyfry.',
+          minlength: 'Numer NIP musi składać się z {0} cyfr.',
+          maxlength: 'Numer NIP musi składać się z {0} cyfr.'
+        },
+				company_nip: {
           required: 'To pole jest wymagane.',
           digits: 'Numer NIP może zawierać jedynie cyfry.',
           minlength: 'Numer NIP musi składać się z {0} cyfr.',

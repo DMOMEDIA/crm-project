@@ -83,6 +83,15 @@ block content
                         .form-group
                           label Nazwisko
                           input.form-control(type='text', name='lastname', placeholder='Nazwisko klienta')
+                        .row
+                          .col-xl-6
+                            .form-group
+                              label NIP
+                              .input-group
+                                .input-group-prepend
+                                  span.input-group-text
+                                    i.la.la-check-square        
+                                input#nipI.form-control(type='text', name='priv_nip', maxlength='10', placeholder='Numer NIP', aria-describedby='basic-addon1')
                       #corp_client(style='display:none;')
                         .form-group
                           label Nazwa spółki
@@ -97,6 +106,15 @@ block content
                         .form-group
                           label REGON
                           input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
+                        .row
+                          .col-xl-6
+                            .form-group
+                              label NIP
+                              .input-group
+                                .input-group-prepend
+                                  span.input-group-text
+                                    i.la.la-check-square        
+                                input#nipI1.form-control(type='text', name='corp_nip', maxlength='10', placeholder='Numer NIP', aria-describedby='basic-addon1')
                       #company_client(style='display:none;')
                         .form-group
                           label Nazwa firmy
@@ -104,15 +122,15 @@ block content
                         .form-group
                           label REGON
                           input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
-                      .row
-                        .col-xl-6
-                          .form-group
-                            label NIP
-                            .input-group
-                              .input-group-prepend
-                                span.input-group-text
-                                  i.la.la-check-square        
-                              input#nipI.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP', aria-describedby='basic-addon1')
+                        .row
+                          .col-xl-6
+                            .form-group
+                              label NIP
+                              .input-group
+                                .input-group-prepend
+                                  span.input-group-text
+                                    i.la.la-check-square        
+                                input#nipI2.form-control(type='text', name='company_nip', maxlength='10', placeholder='Numer NIP', aria-describedby='basic-addon1')
                       .row
                         .col-xl-6
                           .form-group

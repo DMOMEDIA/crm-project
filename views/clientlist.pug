@@ -64,7 +64,7 @@ block content
                           option(value='') Wszystkie
                           option(value='1') Nieprzypisany
                           option(value='2') Niepełne dane
-                          option(value='3') Niezweryfikowany
+                          option(value='3') Przypisany
                           option(value='4') Zweryfikowany
               | &#x9;&#x9;
           // end: Search Form
@@ -167,7 +167,13 @@ block content
                                       |                                         
                                       .col-lg-9.col-xl-6
                                         input.form-control(type='text', name='lastname', placeholder='Nazwisko')
-                                    |                       
+                                    |          
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label NIP
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#nipI.form-control(type='text', name='priv_nip', maxlength='10', placeholder='Numer NIP')
+                                    |                      
                                   #corp_user(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
@@ -191,6 +197,12 @@ block content
                                       .col-lg-9.col-xl-6
                                         input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
                                     |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label NIP
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#nipI1.form-control(type='text', name='corp_nip', maxlength='10', placeholder='Numer NIP')
+                                    |           
                                   #company_user(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
@@ -204,12 +216,12 @@ block content
                                       .col-lg-9.col-xl-6
                                         input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
                                     |              
-                                  .form-group.row
-                                    label.col-xl-3.col-lg-3.col-form-label NIP
-                                    |                                         
-                                    .col-lg-9.col-xl-6
-                                      input#nipClient.form-control(type='text', name='nip', maxlength='10', placeholder='Numer NIP')
-                                  |                                                            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label NIP
+                                      |                                         
+                                      .col-lg-9.col-xl-6
+                                        input#nipI2.form-control(type='text', name='company_nip', maxlength='10', placeholder='Numer NIP')
+                                    |                                                            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Numer telefonu
                                     |                                         
@@ -316,7 +328,7 @@ block content
                                         select.form-control(name='change_status')
                                           option(value='1') nieprzypisany
                                           option(value='2') niepełne dane
-                                          option(value='3') niezweryfikowany
+                                          option(value='3') przypisany
                                           option(value='4') zweryfikowany
                                         .input-group-append
                                           button.btn.btn-brand(type='submit') Zmień

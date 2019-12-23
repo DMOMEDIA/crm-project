@@ -46,7 +46,8 @@ var KTLogin = function () {
 				return;
 			}
 
-			btn.addClass('kt-spinner kt-spinner--right kt-spinner--sm kt-spinner--light').attr('disabled', true);
+			KTApp.progress(btn);
+			btn.attr('disabled', true);
 
 			form.submit();
 			/* form.ajaxSubmit({

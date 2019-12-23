@@ -100,16 +100,27 @@ var KTUserAdd = function () {
   }
 
 	var initValidation = function() {
+		$('[name="pesel"],[name="cregon"],[name="cnip"]').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
 		$("#postcode").inputmask({
 				"mask": "99-999",
 				placeholder: "" // remove underscores from the input mask
 		});
 
-		$("#addressAlert").hide();
+		$("#company_data").hide();
 
 		$('#isCompany').on('change',function(e) {
-			if($(this).is(':checked')) $('#addressAlert').show();
-			else $('#addressAlert').hide();
+			if($(this).is(':checked')) {
+ 				$('#company_data').show();
+				modalEl.find('[name="cname"]').val('');
+				modalEl.find('[name="cnip"]').val('');
+				modalEl.find('[name="cregon"]').val('');
+			}
+			else $('#company_data').hide();
 		});
 
 		validator = formEl.validate({
@@ -124,6 +135,26 @@ var KTUserAdd = function () {
 				},
 				lastname: {
 					required: true
+				},
+				pesel: {
+					required: true,
+					digits: true,
+					minlength: 11,
+					maxlength: 11
+				},
+				cname: {
+					required: true
+				},
+				cnip: {
+					required: true,
+					digits: true,
+					minlength: 10,
+					maxlength: 10
+				},
+				cregon: {
+					digits: true,
+					minlength: 10,
+					maxlength: 14
 				},
 				email: {
 					required: true,
@@ -174,6 +205,26 @@ var KTUserAdd = function () {
           required: 'To pole jest wymagane.',
           email: 'Wprowadź poprawny adres e-mail.'
         },
+				pesel: {
+					required: "To pole jest wymagane.",
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer PESEL musi składać się z {0} cyfr.",
+					maxlength: "Numer PESEL musi składać się z {0} cyfr."
+				},
+				cname: {
+					required: "To pole jest wymagane."
+				},
+				cnip: {
+					required: "To pole jest wymagane.",
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer NIP musi składać się z {0} cyfr.",
+					maxlength: "Numer NIP musi składać się z {0} cyfr."
+				},
+				cregon: {
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer REGON musi składać się z {0} cyfr.",
+					maxlength: "Numer REGON musi składać się z {0} cyfr."
+				},
         pNumber: {
           required: 'To pole jest wymagane.',
           digits: 'Numer telefonu może zawierać tylko cyfry.',

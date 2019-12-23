@@ -52,6 +52,19 @@ app.use(function(req, res, next) {
   next();
 });
 
+var pdfFiller = require('pdffiller');
+
+var sourcePDF = "./build/pdf_files/test.pdf";
+var destinationPDF =  "./build/pdf_files/test_complete.pdf";
+var data = {
+    "name" : "DMO Trans Daniel Ostałowski"
+};
+
+pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
+    if (err) throw err;
+    console.log("In callback (we're done).");
+});
+
 app.use(async function(req, res, next) {
   await LoginController.getPermissions(req, res, next);
   next();

@@ -306,6 +306,12 @@ var KTUserListDatatable = function() {
 
 	// validator
 	var initValid = function() {
+		$('[name="pesel"],[name="cregon"],[name="cnip"]').maxlength({
+        warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
+        limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
+				appendToParent: true
+    });
+
 		validator_personal = form_personal.validate({
 			ignore: ':hidden',
 
@@ -315,6 +321,26 @@ var KTUserListDatatable = function() {
 				},
 				lastname: {
 					required: true
+				},
+				pesel: {
+					required: true,
+					digits: true,
+					minlength: 11,
+					maxlength: 11
+				},
+				cname: {
+					required: true
+				},
+				cnip: {
+					required: true,
+					digits: true,
+					minlength: 10,
+					maxlength: 10
+				},
+				cregon: {
+					digits: true,
+					minlength: 10,
+					maxlength: 14
 				},
 				email: {
 					required: true,
@@ -342,6 +368,26 @@ var KTUserListDatatable = function() {
 				},
 				lastname: {
 					required: "To pole jest wymagane."
+				},
+				pesel: {
+					required: "To pole jest wymagane.",
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer PESEL musi składać się z {0} cyfr.",
+					maxlength: "Numer PESEL musi składać się z {0} cyfr."
+				},
+				cname: {
+					required: "To pole jest wymagane."
+				},
+				cnip: {
+					required: "To pole jest wymagane.",
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer NIP musi składać się z {0} cyfr.",
+					maxlength: "Numer NIP musi składać się z {0} cyfr."
+				},
+				cregon: {
+					digits: "To pole może składać się jedynie z cyfr.",
+					minlength: "Numer REGON musi składać się z {0} cyfr.",
+					maxlength: "Numer REGON musi składać się z {0} cyfr."
 				},
 				email: {
 					required: "To pole jest wymagane.",
@@ -611,8 +657,13 @@ var KTUserListDatatable = function() {
 			modalEl.find('select#remoteUser').html('<option></option>');
 
 			$('#isCompanyInput').on('change',function(e) {
-				if($(this).is(':checked')) modalEl.find('#addressAlert').show();
-				else modalEl.find('#addressAlert').hide();
+				if($(this).is(':checked')) {
+					modalEl.find('#company_data').show();
+					modalEl.find('[name="cname"]').val('');
+					modalEl.find('[name="cnip"]').val('');
+					modalEl.find('[name="cregon"]').val('');
+				}
+				else modalEl.find('#company_data').hide();
 			});
 
 			KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
@@ -630,6 +681,7 @@ var KTUserListDatatable = function() {
 
 								var name = res.fullname.split(' ');
 								modalEl.find('#modalTitle').html(res.fullname);
+								modalEl.find('[name="pesel"]').val(res.pesel);
 								modalEl.find('#idInput1').val(res.id);
 								modalEl.find('#idInput2').val(res.id);
 								modalEl.find('#idInput3').val(res.id);
@@ -641,6 +693,7 @@ var KTUserListDatatable = function() {
 								modalEl.find('#postcodeInput').val(res.postcode);
 								modalEl.find('#cityInput').val(res.city);
 								modalEl.find('#voivodeshipInput option[value="' + res.voivodeship + '"]').prop('selected', true);
+								modalEl.find('[name="country"]').val(res.country);
 								modalEl.find('#current_passwordInput').val('');
 								modalEl.find('#new_passwordInput').val('');
 								modalEl.find('#confirm_passwordInput').val('');
@@ -650,10 +703,13 @@ var KTUserListDatatable = function() {
 
 								if(res.company == 1) {
 									modalEl.find('#isCompanyInput').prop('checked', true);
-									modalEl.find('#addressAlert').show();
+									modalEl.find('[name="cname"]').val(res.cname);
+									modalEl.find('[name="cnip"]').val(res.cnip);
+									if(res.cregon) modalEl.find('[name="cregon"]').val(res.cregon);
+									modalEl.find('#company_data').show();
 								} else {
 									modalEl.find('#isCompanyInput').prop('checked', false);
-									modalEl.find('#addressAlert').hide();
+									modalEl.find('#company_data').hide();
 								}
 
 								// Initialize client list
@@ -799,7 +855,7 @@ var KTUserListDatatable = function() {
 			});
 		});
 
-		$('.delete_user').on('click', function() {
+		$(document).on('click', '.delete_user', function() {
 			var id = $(this).attr('data-id');
 
 			swal.fire({
@@ -949,7 +1005,7 @@ var KTUserListDatatable = function() {
 	};
 
 	var initValidClient = function() {
-		$('#nipClient').maxlength({
+		$('#nipI,#nipI1,#nipI2').maxlength({
         warningClass: "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline",
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
 				appendToParent: true
@@ -982,7 +1038,12 @@ var KTUserListDatatable = function() {
 					digits: true,
 					maxlength: 15
 				},
-				nip: {
+				corp_nip: {
+					required: true,
+					minlength: 10,
+					maxlength: 10
+				},
+				company_nip: {
 					required: true,
 					minlength: 10,
 					maxlength: 10
@@ -1019,7 +1080,12 @@ var KTUserListDatatable = function() {
 					digits: "Numer REGON może składać się tylko z cyfr.",
 					maxlength: "Numer REGON może posiadać jedynie {0} cyfr."
 				},
-				nip: {
+				corp_nip: {
+					required: "To pole jest wymagane.",
+					minlength: "Numer NIP musi składać się z 10 cyfr.",
+					maxlength: "Numer NIP musi składać się z 10 cyfr."
+				},
+				company_nip: {
 					required: "To pole jest wymagane.",
 					minlength: "Numer NIP musi składać się z 10 cyfr.",
 					maxlength: "Numer NIP musi składać się z 10 cyfr."
@@ -1087,6 +1153,7 @@ var KTUserListDatatable = function() {
 									modalClient.find('#corp_user').hide();
 									modalClient.find('input[name="firstname"]').val(name[0]);
 									modalClient.find('input[name="lastname"]').val(name[1]);
+									modalClient.find('input[name="priv_nip"]').val(res.nip);
 								} else if(res.company == 1) {
 									modalClient.find('#company_user').hide();
 									modalClient.find('#private_user').hide();
@@ -1094,15 +1161,16 @@ var KTUserListDatatable = function() {
 									modalClient.find('input[name="corpName"]').val(res.fullname);
 									modalClient.find('select[name="corp_type"] option[value="' + res.company_type + '"]').prop('selected', true);
 									modalClient.find('input[name="corp_regon"]').val(res.regon);
+									modalClient.find('input[name="corp_nip"]').val(res.nip);
 								} else {
 									modalClient.find('#company_user').show();
 									modalClient.find('#private_user').hide();
 									modalClient.find('#corp_user').hide();
 									modalClient.find('input[name="companyName"]').val(res.fullname);
 									modalClient.find('input[name="company_regon"]').val(res.regon);
+									modalClient.find('input[name="company_nip"]').val(res.nip);
 								}
 
-								modalClient.find('input[name="nip"]').val(res.nip);
 								modalClient.find('input[name="pNumber"]').val(res.phone);
 								modalClient.find('input[name="email"]').val(res.email);
 								modalClient.find('input[name="data_processing"]').prop('checked', res.data_process);

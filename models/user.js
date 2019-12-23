@@ -87,6 +87,7 @@ module.exports.createUser = (user) => {
         identity: user.identity,
         password: hash,
         fullname: user.fullname,
+        pesel: user.pesel,
         address: user.address,
         postcode: user.postcode,
         city: user.city,
@@ -95,7 +96,10 @@ module.exports.createUser = (user) => {
         email: user.email,
         telephone: user.telephone,
         role: user.role,
-        company: parseInt(user.isCompany)
+        company: parseInt(user.isCompany),
+        cname: user.cname,
+        cnip: user.cnip,
+        cregon: user.cregon
       }).save();
     });
   });
@@ -153,18 +157,25 @@ module.exports.userlistByRole = (args, role, callback) => {
 module.exports.userModify = (user, callback) => {
   return new User().where({ id: user.id }).fetch().then(function(model) {
     if(model) {
+
       if(user.firstname && user.lastname) model.set('fullname', user.firstname + ' ' + user.lastname);
       if(user.identity) model.set('identity', user.identity);
+      if(user.pesel) model.set('pesel', user.pesel);
       if(user.role) model.set('role', user.role);
       if(user.email) model.set('email', user.email);
       if(user.address) model.set('address', user.address);
       if(user.postcode) model.set('postcode', user.postcode);
       if(user.voivodeship) model.set('voivodeship', user.voivodeship);
-      if(user.country) model.set('country', user.country);
       if(user.city) model.set('city', user.city);
       if(user.pNumber) model.set('telephone', user.pNumber);
       if(user.param) model.set('assigned_to', user.param);
       if(user.isCompany) model.set('company', parseInt(user.isCompany));
+      if(user.cname) model.set('cname', user.cname);
+      else model.set('cname', null);
+      if(user.cnip) model.set('cnip', user.cnip);
+      else model.set('cnip', null);
+      if(user.cregon) model.set('cregon', user.cregon);
+      else model.set('cregon', null);
 
       model.save();
 

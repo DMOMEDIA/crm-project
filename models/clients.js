@@ -11,9 +11,14 @@ const Client = bookshelf.Model.extend({
 });
 
 module.exports.createClient = (client) => {
+  if(client.company_type == 0) {
+    if(client.priv_nip) var nip = client.priv_nip;
+  } else if(client.company_type == 1) var nip = client.corp_nip;
+    else var nip = client.company_nip;
+
   return new Client({
     fullname: client.fullname,
-    nip: client.nip,
+    nip: nip,
     phone: client.phone,
     email: client.email,
     company: client.company,
@@ -74,20 +79,22 @@ module.exports.saveClientData = (req, callback) => {
     if(model) {
       if(client.client_type == 0) {
         if(client.firstname && client.lastname) model.set('fullname', client.firstname + ' ' + client.lastname);
+        if(client.priv_nip) model.set('nip', client.priv_nip);
         model.set('company', client.client_type);
       }
       else if(client.client_type == 1) {
         if(client.corpName) model.set('fullname', client.corpName);
         if(client.corp_type) model.set('company_type', client.corp_type);
         if(client.corp_regon) model.set('regon', client.corp_regon);
+        if(client.corp_nip) model.set('nip', client.corp_nip);
         model.set('company', client.client_type);
       } else {
         model.set('company', client.client_type);
         if(client.companyName) model.set('fullname', client.companyName);
         if(client.company_regon) model.set('regon', client.company_regon);
+        if(client.company_nip) model.set('nip', client.company_nip);
       }
 
-      if(client.nip) model.set('nip', client.nip);
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
       if(client.data_processing) model.set('data_process', client.data_processing);
