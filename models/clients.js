@@ -1,5 +1,6 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
+const randomstring = require("randomstring");
 const Messages = require('../config/messages');
 const System = require('../models/system');
 const User = require('../models/user');
@@ -24,7 +25,10 @@ module.exports.createClient = (client) => {
     company: client.company,
     company_type: client.company_type,
     state: client.state,
-    user_id: client.user_id
+    user_id: client.user_id,
+    data_process: value.data_processing,
+    marketing: value.data_marketing,
+    hashlink: randomstring.generate(128)
   }).save();
 };
 
@@ -70,6 +74,25 @@ module.exports.clientlistByAssignedId = (id, callback) => {
 
 module.exports.getClientById = (id) => {
   const query = { id: id };
+  return new Client().where(query).fetch();
+};
+
+module.exports.activateAccount = (hash, callback) => {
+  return new Client().where({ hashlink: hash }).fetch()
+  .then(function(model) {
+    if(model) {
+      if(model.get('state') != 4) {
+        model.set('state', 4);
+        model.save().then(function(result) {
+          callback({ status: 'success', message: 'Konto klienta zostało pomyślnie aktywowane.' });
+        });
+      } else callback({ status: 'error', message: 'To konto zostało już aktywowane.' });
+    } else callback({ status: 'error', message: 'Konto klienta nie zostało odnalezione.' });
+  });
+};
+
+module.exports.getClientByEmail = (email) => {
+  const query = { email: email };
   return new Client().where(query).fetch();
 };
 

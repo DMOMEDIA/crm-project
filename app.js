@@ -17,6 +17,7 @@ const restapi = require('./routes/restapi');
 const errorsHandler = require('./middlewares/errors');
 const ExpireSession = require('./controllers/ExpireSession');
 const LoginController = require('./controllers/LoginController');
+const PDFController = require('./controllers/PDFController');
 const Cron = require('./controllers/Cron');
 const System = require('./models/system');
 

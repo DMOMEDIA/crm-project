@@ -1,4 +1,4 @@
- const Roles = require('../models/roles');
+const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
@@ -8,6 +8,7 @@ const Notification = require('../models/notifications');
 const Messages = require('../config/messages.js');
 const System = require('../models/system');
 const Mails = require('../controllers/Mails');
+const PDF = require('../controllers/PDFController');
 const moment = require('moment');
 const async = require('async');
 const upload = require('multer')();
@@ -538,7 +539,7 @@ exports.sendOfferMail_onList = async (req, res) => {
               Mails.sendMail.send({
                 template: 'client_offer',
                 message: {
-                  from: '"CRM System" <oferty@crmsystem.pl>',
+                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
                   to: offer.client.email,
                   subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
                   attachments: attachments
@@ -582,7 +583,7 @@ exports.sendOfferMail = async (req, res) => {
               Mails.sendMail.send({
                 template: 'client_offer',
                 message: {
-                  from: '"CRM System" <oferty@crmsystem.pl>',
+                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
                   to: offer.client.email,
                   subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
                   attachments: attachments
@@ -763,15 +764,56 @@ exports.requestOfferSendMail = (req, res) => {
     if(req.session.userData.role == 'administrator') {
       if(req.body != null) {
         ROffer.setValueById(req.body.data.id, 'state', 2);
-        Mails.sendMail.send({
-          message: {
-            from: '"CRM System" <oferty@crmsystem.pl>',
-            to: req.body.mails.toString(),
-            subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
-            html: 'Wiadomość z zapytaniem ofertowym, zawartość w załączniku'
+        ROffer.getOfferById(req.body.data.id, function(cb) {
+          cb = cb.toJSON();
+          if(cb.type == 'leasing' && cb.client_info.company == 2) {
+            var nameGenerated = '00' + req.body.data.id + '-' + moment(req.body.data.created_at).local().format('YYYY'),
+            savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
+            var data = {
+              "nazwafirmy": cb.client_info.fullname,
+              "REGON": cb.client_info.regon,
+              "NIP": cb.client_info.nip,
+              "email": cb.client_info.email,
+              "uwagi": cb.attentions,
+              "numertelefonu": cb.client_info.phone,
+              "nazwaprzedmiotu": cb.name,
+              "rokprodukcji": cb.pyear,
+              "okresfinansowania": cb.instalments + ' miesięcy',
+              "wkladwlasny": cb.contribution,
+              "wartoscwykupu": cb.red_value,
+              "wartoscnetto": cb.netto,
+              "nr_zapytania": nameGenerated
+            };
+            PDF.fillPDF('./build/pdf_files/leasing-firma.pdf', savePath, data).then(function() {
+              Mails.sendMail.send({
+                message: {
+                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                  to: req.body.mails.toString(),
+                  subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
+                  html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.',
+                  attachments: [
+                    {
+                      filename: nameGenerated + '.pdf',
+                      path: savePath
+                    }
+                  ]
+                }
+              }).then(function() {
+                res.json(Messages.message('success_send_mail_to_company', null));
+              });
+            });
+          } else {
+            Mails.sendMail.send({
+              message: {
+                from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                to: req.body.mails.toString(),
+                subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
+                html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.'
+              }
+            }).then(function() {
+              res.json(Messages.message('success_send_mail_to_company', null));
+            });
           }
-        }).then(function() {
-          res.json(Messages.message('success_send_mail_to_company', null));
         });
       }
     } else res.json(Messages.message('no_permission', null));
@@ -845,6 +887,16 @@ exports.getCompanyProvision = (req, res) => {
   Company.getCompanyProvision(req.body.id).then(function(result) {
     res.json(result);
   });
+};
+
+exports.activateClientAccount = (req, res) => {
+  if(req.query.p) {
+    Client.activateAccount(req.query.p, function(result) {
+      res.send('<pre>' + JSON.stringify(result, false, 2) + '</pre>');
+    });
+  } else {
+    res.send('<pre>' + JSON.stringify({ status: 'error', message: 'Brak parametru' }, false, 2) + '</pre>');
+  }
 };
 
 // stats

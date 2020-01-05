@@ -35,6 +35,7 @@ router.post('/rest/roffer/add', REST.addRequestOffer);
 router.post('/rest/roffer/update', REST.updateROfferData);
 router.post('/rest/roffer/sendMail', REST.requestOfferSendMail);
 router.post('/rest/roffer/done', REST.requestOfferDone);
+router.get('/rest/client/activate', REST.activateClientAccount);
 
 // {REST} powiadomienia
 router.post('/rest/notifications', REST.getUserNotifications);

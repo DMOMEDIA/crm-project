@@ -1,9 +1,11 @@
 const bookshelf = require('../config/bookshelf');
+const randomstring = require("randomstring");
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const crypto = require('crypto');
 const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
+const ClientsModel = require('../models/clients');
 const Mails = require('../controllers/Mails');
 
 const ROffer = bookshelf.Model.extend({
@@ -147,7 +149,8 @@ module.exports.addOffer = (value, callback) => {
       company: value.client_type,
       ip_address: value.ip_address,
       data_process: value.data_processing,
-      marketing: value.marketing_agree
+      marketing: value.marketing_agree,
+      hashlink: randomstring.generate(128)
     }
   } else if(value.client_type == 1) {
     var c_type = {
@@ -160,7 +163,8 @@ module.exports.addOffer = (value, callback) => {
       company_type: value.corp_type,
       ip_address: value.ip_address,
       data_process: value.data_processing,
-      marketing: value.marketing_agree
+      marketing: value.marketing_agree,
+      hashlink: randomstring.generate(128)
     }
   } else {
     var c_type = {
@@ -170,9 +174,11 @@ module.exports.addOffer = (value, callback) => {
       phone: value.phone,
       email: value.email,
       company: value.client_type,
+      company_type: value.company_type,
       ip_address: value.ip_address,
       data_process: value.data_processing,
-      marketing: value.marketing_agree
+      marketing: value.marketing_agree,
+      hashlink: randomstring.generate(128)
     }
   }
 
@@ -224,21 +230,45 @@ module.exports.addOffer = (value, callback) => {
     }
   }
 
-  return new ClientRelated(c_type).save().then(function(result) {
-    return new ROffer(get_req(result.get('id'))).save().then(function(done) {
-      Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Klient <b>' + result.get('fullname') + '</b> utworzył nowe zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b>');
-      Mails.sendMail.send({
-        template: 'roffer_send',
-        message: {
-          from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-          to: result.get('email'),
-          subject: 'Zapytanie ofertowe zostało złożone'
-        },
-        locals: {
-          identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
-        }
+  var link = 'http://crm.wsparciedlabiznesu.eu/rest/client/activate?p=';
+  ClientsModel.getClientByEmail(c_type.email).then(function(client) {
+    if(client) {
+      client = client.toJSON();
+      return new ROffer(get_req(client.id)).save().then(function(done) {
+        Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Klient <b>' + client.fullname + '</b> utworzył nowe zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b>');
+        Mails.sendMail.send({
+          template: 'roffer_send',
+          message: {
+            from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+            to: client.email,
+            subject: 'Zapytanie ofertowe zostało złożone'
+          },
+          locals: {
+            identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
+            hashlink: link + client.hashlink
+          }
+        });
+        callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
       });
-      callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
-    });
+    } else {
+      return new ClientRelated(c_type).save().then(function(result) {
+        return new ROffer(get_req(result.get('id'))).save().then(function(done) {
+          Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Klient <b>' + result.get('fullname') + '</b> utworzył nowe zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b>');
+          Mails.sendMail.send({
+            template: 'roffer_send',
+            message: {
+              from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+              to: result.get('email'),
+              subject: 'Zapytanie ofertowe zostało złożone'
+            },
+            locals: {
+              identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
+              hashlink: link + result.get('hashlink')
+            }
+          });
+          callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
+        });
+      });
+    }
   });
 };
