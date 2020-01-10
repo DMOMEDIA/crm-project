@@ -19,152 +19,56 @@ block content
       .kt-portlet
         .kt-portlet__body
           .kt-infobox
+            .kt-infobox__header
+              h2.kt-infobox__title Ostatnie aktualizacje
             .kt-infobox__body
-              .row(style='flex-wrap:nowrap;')
-                .col-lg-3
-                  ul.kt-nav.nav.nav-tabs.kt-nav--bold.kt-nav--md-space.kt-nav--v4(role='tablist')
-                    li.kt-nav__item
-                      a.kt-nav__link.active(data-toggle='tab', href='#start', role='tab')
-                        span.kt-nav__link-text Buying
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#obsluga', role='tab')
-                        span.kt-nav__link-text Product Support
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Account Management
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Product Licenses
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Base Installation
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Project Management
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Member Roles
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Report Generation
-                    li.kt-nav__item
-                      a.kt-nav__link(data-toggle='tab', href='#kt_profile_tab_personal_information', role='tab')
-                        span.kt-nav__link-text Downloads
-                .tab-content.col-lg-9
-                  #start.tab-pane.active(role='tabpanel')
-                    // begin::Accordion
-                    #faq.accordion.accordion-light.accordion-svg-icon
-                      .card
-                        #faqHeading1.card-header
-                          .card-title(data-toggle='collapse', data-target='#faq1', aria-expanded='true', aria-controls='faq1')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  How does it work?
-                        #faq1.collapse.show(aria-labelledby='faqHeading1', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading2.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq2', aria-expanded='false', aria-controls='faq2')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  Do I need a designer to use Metronic?
-                        #faq2.collapse(aria-labelledby='faqHeading2', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading3.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq3', aria-expanded='false', aria-controls='faq3')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  What do I need to do to start selling?
-                        #faq3.collapse(aria-labelledby='faqHeading3', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading4.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq4', aria-expanded='false', aria-controls='faq4')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  What happens when I receive an order?
-                        #faq4.collapse(aria-labelledby='faqHeading4', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading5.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq5', aria-expanded='false', aria-controls='faq5')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  What are the supported third-party payments?
-                        #faq5.collapse(aria-labelledby='faqHeading5', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading6.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq6', aria-expanded='false', aria-controls='faq6')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  What currencies are available?
-                        #faq6.collapse(aria-labelledby='faqHeading6', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading7.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq7', aria-expanded='false', aria-controls='faq7')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  How does shipping work?
-                        #faq7.collapse(aria-labelledby='faqHeading7', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading8.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq8', aria-expanded='false', aria-controls='faq8')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  What is a merchant agreement?
-                        #faq8.collapse(aria-labelledby='faqHeading8', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                      .card
-                        #faqHeading9.card-header
-                          .card-title.collapsed(data-toggle='collapse', data-target='#faq9', aria-expanded='false', aria-controls='faq9')
-                            svg.kt-svg-icon(xmlns='http://www.w3.org/2000/svg', xmlns:xlink='http://www.w3.org/1999/xlink', width='24px', height='24px', viewbox='0 0 24 24', version='1.1')
-                              g(stroke='none', stroke-width='1', fill='none', fill-rule='evenodd')
-                                polygon#Shape(points='0 0 24 0 24 24 0 24')
-                                path#Path-94(d='M12.2928955,6.70710318 C11.9023712,6.31657888 11.9023712,5.68341391 12.2928955,5.29288961 C12.6834198,4.90236532 13.3165848,4.90236532 13.7071091,5.29288961 L19.7071091,11.2928896 C20.085688,11.6714686 20.0989336,12.281055 19.7371564,12.675721 L14.2371564,18.675721 C13.863964,19.08284 13.2313966,19.1103429 12.8242777,18.7371505 C12.4171587,18.3639581 12.3896557,17.7313908 12.7628481,17.3242718 L17.6158645,12.0300721 L12.2928955,6.70710318 Z', fill='#000000', fill-rule='nonzero')
-                                path#Path-94(d='M3.70710678,15.7071068 C3.31658249,16.0976311 2.68341751,16.0976311 2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 L8.29289322,8.29289322 C8.67147216,7.91431428 9.28105859,7.90106866 9.67572463,8.26284586 L15.6757246,13.7628459 C16.0828436,14.1360383 16.1103465,14.7686056 15.7371541,15.1757246 C15.3639617,15.5828436 14.7313944,15.6103465 14.3242754,15.2371541 L9.03007575,10.3841378 L3.70710678,15.7071068 Z', fill='#000000', fill-rule='nonzero', opacity='0.3', transform='translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) ')
-                            |  Where can I find my sales reports?
-                        #faq9.collapse(aria-labelledby='faqHeading9', data-parent='#faq')
-                          .card-body
-                            | Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven&apos;t heard of them accusamus labore sustainable VHS.
-                    // end::Accordion
-                  #obsluga.tab-pane.col-lg-9(role='tabpanel')
-                    h1 What is this?
+              .kt-infobox__section
+                h3.kt-infobox__subtitle Bugfix do wersji 1.6.0.2 beta
+                h6(style="margin-top:-10px;") Data dodania: 22:09 10.01.2020
+                .kt-infobox__content.kt-margin-t-20.kt-margin-l-20
+                  .kt-list-timeline
+                    .kt-list-timeline__items
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text 
+                          | Naprawiono błąd związany z dodawaniem klientów 
+                          code.kt-font-md (value not defined)
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text
+                          | Poprawiono czyszczenie pól w formularzu.
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text
+                          | Zmieniono regułę dodawania klientów - nie ma możliwości dodania nowego klienta z adresem e-mail, który już istnieje w systemie.
+              .kt-infobox__section
+                h3.kt-infobox__subtitle Aktualizacja do wersji 1.6.0.2 beta
+                h6(style="margin-top:-10px;") Data dodania: 10:43 10.01.2020
+                .kt-infobox__content.kt-margin-t-20.kt-margin-l-20
+                  .kt-list-timeline
+                    .kt-list-timeline__items
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text 
+                          | Usunięto z głównego menu zakładkę 
+                          b Dokumentacja
+                          | , w jej miejsce dodano 
+                          b System i aktualizacje
+                          | .
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text
+                          | Naprawiono podsumowanie dodawania ofert, od teraz wszystkie dane poprawnie się wyświetlają.
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text
+                          | Zmniejszono wielkość generowanego pliku PDF dla zapytania 
+                          b leasing 
+                          | z 10 MB do 1.4 MB.
+                      .kt-list-timeline__item
+                        span.kt-list-timeline__badge.kt-list-timeline__badge--dark
+                        span.kt-list-timeline__text
+                          | Dodano komunikat z postępem wysyłania wiadomości (wysyłka wiadomości e-mail do firm).
     // end:: Section
     // begin:: Section
     .kt-container

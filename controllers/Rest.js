@@ -853,6 +853,7 @@ exports.requestOfferDone = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role == 'administrator') {
       ROffer.getOfferById(req.body.id, function(result) {
+        result = result.toJSON();
         if(result.state == 2) {
           ROffer.setValueById(result.id, 'state', 3);
           Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
