@@ -12,25 +12,50 @@ const Client = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
-module.exports.createClient = (client) => {
-  if(client.company_type == 0) {
-    if(client.priv_nip) var nip = client.priv_nip;
-  } else if(client.company_type == 1) var nip = client.corp_nip;
-    else var nip = client.company_nip;
+module.exports.getClientByEmail = (email) => {
+  const query = { email: email };
+  return new Client().where(query).fetch();
+};
 
-  return new Client({
-    fullname: client.fullname,
-    nip: nip,
-    phone: client.phone,
-    email: client.email,
-    company: client.company,
-    company_type: client.company_type,
-    state: client.state,
-    user_id: client.user_id,
-    data_process: client.data_processing,
-    marketing: client.data_marketing,
-    hashlink: randomstring.generate(128)
-  }).save();
+module.exports.createClient = (client, callback) => {
+  // Checking if client is exists
+  module.exports.getClientByEmail(client.email).then(function(email) {
+    if(!email) {
+      if(client.client_type == 0) {
+        var clientname = client.firstname + ' ' + client.lastname;
+        if(client.priv_nip) var nip = client.priv_nip;
+        var regon = null;
+      } else if(client.client_type == 1) {
+        var clientname = client.corpName,
+        nip = client.corp_nip;
+        if(client.corp_regon) var regon = client.corp_regon;
+        ;
+      } else {
+        var clientname = client.companyName,
+        nip = client.company_nip;
+        if(client.company_regon) var regon = client.company_regon;
+      }
+
+      return new Client({
+        fullname: clientname,
+        regon: regon,
+        nip: nip,
+        phone: client.phone,
+        email: client.email,
+        company: client.client_type,
+        company_type: client.corp_type,
+        state: 3,
+        user_id: client.param,
+        data_process: client.data_processing,
+        marketing: client.data_marketing,
+        hashlink: randomstring.generate(128)
+      }).save().then(function(done) {
+        callback(true);
+      });
+    } else {
+      callback(false);
+    }
+  });
 };
 
 module.exports.clientList = (callback) => {
@@ -90,11 +115,6 @@ module.exports.activateAccount = (hash, callback) => {
       } else callback({ status: 'error', message: 'To konto zostało już aktywowane.' });
     } else callback({ status: 'error', message: 'Konto klienta nie zostało odnalezione.' });
   });
-};
-
-module.exports.getClientByEmail = (email) => {
-  const query = { email: email };
-  return new Client().where(query).fetch();
 };
 
 module.exports.saveClientData = (req, callback) => {

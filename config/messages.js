@@ -37,6 +37,7 @@ exports.message = (type, argument) => {
     case 'request_offer_data_change': selected = { status: 'success', message: 'Dane zapytania ofertowego zostały pomyślnie zmienione.' }; break;
     case 'error_global': selected = { status: 'error', message: 'Wystąpił nieoczekiwany błąd, spróbuj ponownie później.' }; break;
     case 'success_send_mail_to_company': selected = { status: 'success', message: 'Pomyślnie wysłano zapytanie ofertowe do firm.' }; break;
+    case 'client_add_fail': selected = { status: 'error', message: 'Klient o podanym adresie e-mail już istnieje.' }; break;
   }
 
   return selected;

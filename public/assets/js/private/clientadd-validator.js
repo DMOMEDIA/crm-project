@@ -259,23 +259,21 @@ var KTClientAdd = function () {
 				KTApp.progress(btn);
 				//KTApp.block(formEl);
 
-				console.log(formEl.serialize());
-
         setTimeout(function() {
           formEl.ajaxSubmit({
             url: '/rest/clients/add',
             method: 'POST',
             data: formEl.serialize(),
-            clearForm: true,
+            clearForm: false,
   					success: function(res) {
   						KTApp.unprogress(btn);
   						//KTApp.unblock(formEl);
               if(res.status == 'success') {
                 KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+								KTUtil.clearInputInForm(formEl);
                 wizard.goTo(1, true);
               } else {
                 KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
-								wizard.goTo(1, true);
               }
             },
             error: function(err) {

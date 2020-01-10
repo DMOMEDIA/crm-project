@@ -217,26 +217,19 @@ exports.addClient = (req, res) => {
 
       // Zapis do bazy danych
       if(req.body != null) {
+        if(req.body.client_type == 0) var clientname = req.body.firstname + ' ' + req.body.lastname;
+        else var clientname = req.body.companyName;
 
-          if(req.body.client_type == 0) var clientname = req.body.firstname + ' ' + req.body.lastname;
-          else var clientname = req.body.companyName;
-
-          Client.createClient({
-            fullname: clientname,
-            nip: req.body.nip,
-            phone: req.body.phone,
-            email: req.body.email,
-            company: req.body.client_type,
-            company_type: req.body.company_type,
-            state: 3,
-            user_id: req.body.param
-          }).then(function() {
+        Client.createClient(req.body, function(result) {
+          if(result == true) {
             Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
             System.createLog('create_client_log', 'Klient ' + clientname.trunc(25) + ' został utworzony (USER=' + req.session.userData.id + ').');
-          });
-        }
-
-        res.json(Messages.message('added_new_client', null));
+            res.json(Messages.message('added_new_client', null));
+          } else {
+            res.json(Messages.message('client_add_fail', null));
+          }
+        });
+      }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
