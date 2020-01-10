@@ -74,7 +74,15 @@ var KTClientAdd = function () {
           $('#companyNameP').html($('input[name="companyName"]').val());
 					$('#company_regonP').html($('input[name="company_regon"]').val());
 				}
-				$('#nipP').html($('input[name="nip"]').val());
+				if($('input[name="company_nip"]').val() != null)
+					var nip_val = $('input[name="company_nip"]').val();
+				else if($('input[name="corp_nip"]').val() != null) {
+					var nip_val = $('input[name="corp_nip"]').val();
+				} else {
+					var nip_val = $('input[name="priv_nip"]').val();
+				}
+
+				$('#nipP').html(nip_val);
 				$('#emailP').html($('input[name="email"]').val());
 				$('#phoneP').html($('input[name="phone"]').val());
 				if($('input[name="data_processing"]:checked').val() == 1)

@@ -4,6 +4,7 @@ const randomstring = require("randomstring");
 const Messages = require('../config/messages');
 const System = require('../models/system');
 const User = require('../models/user');
+const Notification = require('../models/notifications');
 const async = require('async');
 
 const Client = bookshelf.Model.extend({
@@ -97,7 +98,7 @@ module.exports.getClientByEmail = (email) => {
 };
 
 module.exports.saveClientData = (req, callback) => {
-  var client = req.body;
+  var client = req.body, user_defined = false;
   return new Client().where({ id: client.id }).fetch().then(function(model) {
     if(model) {
       if(client.client_type == 0) {
@@ -124,6 +125,8 @@ module.exports.saveClientData = (req, callback) => {
       if(client.data_marketing) model.set('marketing', client.data_marketing);
 
       if(client.param) {
+        if(model.get('user_id') != client.param) user_defined = true;
+
         model.set('user_id', client.param);
         if(model.get('state') != 4) {
           if(model.get('nip')) {
@@ -133,6 +136,7 @@ module.exports.saveClientData = (req, callback) => {
       }
 
       model.save().then(function(done) {
+        if(user_defined == true) Notification.sendNotificationToUser(done.get('user_id'), 'flaticon-users-1 kt-font-success', 'Klient <b>' + done.get('fullname').trunc(25) + '</b> został przypisany do Twojej obsługi.');
         System.createLog('modify_client_log', 'Modyfikacja klienta ' + done.get('fullname') + ' przez (USER=' + req.session.userData.id + ')');
         callback(Messages.message('success_updated_client', null));
       });
