@@ -259,6 +259,8 @@ var KTClientAdd = function () {
 				KTApp.progress(btn);
 				//KTApp.block(formEl);
 
+				console.log(formEl.serialize());
+
         setTimeout(function() {
           formEl.ajaxSubmit({
             url: '/rest/clients/add',
