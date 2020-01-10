@@ -94,13 +94,13 @@ var KTUserListDatatable = function() {
 				}
 			},
 
-			sortable: true,
+			sortable: false,
 
 			// columns definition
 			columns: [{
 				field: 'id',
 				title: '',
-				sortable: false,
+				sortable: 'false',
 				width: 30,
 				textAlign: 'center',
 			}, {
@@ -207,7 +207,7 @@ var KTUserListDatatable = function() {
 			},
 
 			// column sorting
-			sortable: true,
+			sortable: false,
 
 			filterable: false,
 
@@ -221,13 +221,12 @@ var KTUserListDatatable = function() {
 			columns: [{
 				field: 'id',
 				title: '',
-				sortable: false,
+				sortable: 'desc',
 				width: 30,
 				textAlign: 'center',
 			}, {
 				field: "fullname",
 				title: "Pracownik",
-				sortable: 'asc',
 				width: 200,
 				autoHide: false,
 				// callback function support for column rendering
@@ -736,7 +735,7 @@ var KTUserListDatatable = function() {
 									},
 
 									// column sorting
-									sortable: true,
+									sortable: false,
 
 									pagination: true,
 
@@ -749,7 +748,7 @@ var KTUserListDatatable = function() {
 									columns: [{
 										field: 'id',
 										title: '#',
-										sortable: false,
+										sortable: 'desc',
 										width: 20,
 										type: 'number',
 										selector: {

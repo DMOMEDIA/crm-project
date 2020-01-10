@@ -37,20 +37,23 @@ var KTROfferListDatatable = function() {
 						url: '/rest/roffer/list'
 					},
 				},
-				pageSize: 10, // display 20 records per page
-				serverPaging: true,
-				serverFiltering: false,
-				serverSorting: false,
+				pageSize: 10 // display 20 records per page
 			},
 
 			// layout definition
 			layout: {
 				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
 				footer: false, // display/hide footer
+				icons: {
+					sort: {
+						asc: '',
+						desc: ''
+					}
+				}
 			},
 
 			// column sorting
-			sortable: true,
+			sortable: false,
 
 			pagination: true,
 
@@ -63,7 +66,7 @@ var KTROfferListDatatable = function() {
 			columns: [{
 				field: 'id',
 				title: '#',
-				sortable: false,
+				sortable: 'desc',
 				width: 20,
 				selector: {
 					class: 'kt-checkbox--solid'
@@ -243,6 +246,15 @@ var KTROfferListDatatable = function() {
 				});
 
 				setTimeout(function() {
+					swal.fire({
+						"title": "",
+						"text": "Wysyłanie wiadomości..",
+						onBeforeOpen: () => {
+							swal.showLoading();
+						},
+						allowOutsideClick: false
+					});
+
 					formCompanyList.ajaxSubmit({
 						url: '/rest/roffer/sendMail',
 						method: 'POST',

@@ -315,9 +315,9 @@ module.exports.createOffer = (req, callback) => {
       state: value.o_state
     }).save().then(function(result) {
       module.exports.getUserByOfferId(result.get('id'), value.offer_type, function(cb) {
-        if(value.o_state < 3) System.changeProvision(cb, result.get('id'), value.offer_type, value.vehicle_val_i, value.company_id, true, false);
-        else if(value.o_state == 3) System.changeProvision(cb, result.get('id'), value.offer_type, value.vehicle_val_i, value.company_id, true, true);
-        else System.changeProvision(cb, result.get('id'), value.offer_type, value.vehicle_val_i, value.company_id, true, false);
+        if(value.o_state < 3) System.changeProvision(cb, result.get('id'), value.offer_type, value.insurance_cost, value.company_id, true, false);
+        else if(value.o_state == 3) System.changeProvision(cb, result.get('id'), value.offer_type, value.insurance_cost, value.company_id, true, true);
+        else System.changeProvision(cb, result.get('id'), value.offer_type, value.insurance_cost, value.company_id, true, false);
       });
 
       callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));

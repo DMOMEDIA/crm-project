@@ -44,10 +44,16 @@ var KTClientListDatatable = function() {
 			layout: {
 				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
 				footer: false, // display/hide footer
+				icons: {
+					sort: {
+						asc: '',
+						desc: ''
+					}
+				}
 			},
 
 			// column sorting
-			sortable: true,
+			sortable: false,
 
 			pagination: true,
 
@@ -60,7 +66,7 @@ var KTClientListDatatable = function() {
 			columns: [{
 				field: 'id',
 				title: '#',
-				sortable: false,
+				sortable: 'desc',
 				width: 20,
 				selector: {
 					class: 'kt-checkbox--solid'

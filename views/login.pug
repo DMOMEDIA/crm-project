@@ -7,7 +7,8 @@ head
   title Logowanie do systemu CRM
   meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
   // BEGIN:: Fonts
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700|Roboto:300,400,500,600,700')
+  link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700')
+  link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700')
   // BEGIN:: Page Custom Styles (used by this page)
   link(href='./assets/css/demo1/pages/login/login-1.css' rel='stylesheet' type='text/css')
   link(href='./assets/css/demo1/pages/support-center/faq-3.css', rel='stylesheet', type='text/css')
@@ -48,7 +49,7 @@ head
         .kt-grid__item
           .kt-login__info
             .kt-login__copyright
-              | 2019 &copy CRM System, wersja aplikacji: #{env.VERSION_APP}
+              | 2019 &copy CRM System, wersja aplikacji: #{version_app}
       // BEGIN:: Aside
       // BEGIN:: Content
       .kt-grid__item.kt-grid__item--fluid.kt-grid__item--order-tablet-and-mobile-1.kt-login__wrapper

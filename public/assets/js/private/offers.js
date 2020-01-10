@@ -44,7 +44,7 @@ var KTOfferListDatatable = function() {
 			},
 
 			// column sorting
-			sortable: true,
+			sortable: false,
 
 			pagination: true,
 
@@ -76,19 +76,21 @@ var KTOfferListDatatable = function() {
 			}, {
 				field: "created_at",
 				title: "Data utworzenia",
-				sortable: false,
+				sortable: 'desc',
 				template: function(row) {
 					return moment(row.created_at).local().format('YYYY-MM-DD HH:mm');
 				}
 			}, {
 				field: "client",
 				title: "Klient",
+				sortable: false,
 				template: function(row) {
 					return row.client.fullname;
 				}
 			}, {
 				field: "company",
 				title: "Firma",
+				sortable: false,
 				template: function(row) {
 					return '<span data-skin="dark" data-toggle="kt-tooltip" data-placement="bottom" title="' + row.company.fullname + '">' + row.company.fullname + '</span>';
 				}
@@ -138,6 +140,8 @@ var KTOfferListDatatable = function() {
 		$("#kt_form_type").on("change", function() {
       datatable.search($(this).val().toLowerCase(), "offer_type");
     });
+
+		console.log(datatable.getDefaultSortColumn());
 	}
 
 	var initOfferData = function() {
@@ -939,7 +943,7 @@ var KTOfferListDatatable = function() {
 		var btn_send = $('#send_offer_btn'),
 		btn_realize = $('#realize_offer_btn'),
 		btn_cancel = $('#cancel_offer_btn');
-		
+
 		btn_send.on('click', function() {
 			KTApp.progress(btn_send);
 			btn_send.attr('disabled', true);

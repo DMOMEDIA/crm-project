@@ -1,4 +1,4 @@
-const Roles = require('../models/roles');
+ const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
@@ -764,14 +764,20 @@ exports.requestOfferSendMail = (req, res) => {
     if(req.session.userData.role == 'administrator') {
       if(req.body != null) {
         ROffer.setValueById(req.body.data.id, 'state', 2);
-        ROffer.getOfferById(req.body.data.id, function(cb) {
+        ROffer.getOfferById(req.body.data.id, async function(cb) {
           cb = cb.toJSON();
+
+          var nameGenerated = '00' + req.body.data.id + '-' + req.body.data.type.charAt(0).toUpperCase() + '-' + moment(req.body.data.created_at).local().format('YYYY'),
+          savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
+
+          var client_type = { 0: "private", 1: "corp", 2: "company" };
+          var cregon = cb.client_info.regon;
+          if(cregon == null) cregon = '-';
+
           if(cb.type == 'leasing' && cb.client_info.company == 2) {
-            var nameGenerated = '00' + req.body.data.id + '-' + moment(req.body.data.created_at).local().format('YYYY'),
-            savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
             var data = {
               "nazwafirmy": cb.client_info.fullname,
-              "REGON": cb.client_info.regon,
+              "REGON": cregon,
               "NIP": cb.client_info.nip,
               "email": cb.client_info.email,
               "uwagi": cb.attentions,
@@ -784,34 +790,64 @@ exports.requestOfferSendMail = (req, res) => {
               "wartoscnetto": cb.netto,
               "nr_zapytania": nameGenerated
             };
-            PDF.fillPDF('./build/pdf_files/leasing-firma.pdf', savePath, data).then(function() {
-              Mails.sendMail.send({
-                message: {
-                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                  to: req.body.mails.toString(),
-                  subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
-                  html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.',
-                  attachments: [
-                    {
-                      filename: nameGenerated + '.pdf',
-                      path: savePath
-                    }
-                  ]
-                }
-              }).then(function() {
+          } else if(cb.type == 'rent' && cb.client_info.company == 2) {
+            var rent_installment = cb.installment_val.split(';'),
+            rent_installment = rent_installment[0] + ',00 - ' + rent_installment[1] + ',00';
+            var data = {
+              "nazwa": cb.client_info.fullname,
+              "regon": cregon,
+              "nip": cb.client_info.nip,
+              "email": cb.client_info.email,
+              "numertel": cb.client_info.phone,
+              "uwagi": cb.attentions,
+              "marka": cb.name,
+              "rata": rent_installment,
+              "nadwozie": cb.body_type,
+              "rodzajpaliwa": cb.fuel_type,
+              "wartoscnetto": cb.netto,
+              "nr_zapytania": nameGenerated
+            };
+          } else if(cb.type == 'insurance' && cb.client_info.company == 2) {
+            var data = {
+              "nazwafirmy": cb.client_info.fullname,
+              "regon": cregon,
+              "nip": cb.client_info.nip,
+              "email": cb.client_info.email,
+              "numertelefonu": cb.client_info.phone,
+              "marka": cb.name,
+              "rokprodukcji": cb.pyear,
+              "pojemnosc": cb.engine_cap,
+              "moc": cb.power_cap,
+              "vin": cb.vin,
+              "numerrej": cb.reg_number,
+              "przebieg": cb.km_value,
+              "wartoscnetto": cb.netto,
+              "uwagi": cb.attentions,
+              "nr_zapytania": nameGenerated
+            };
+          }
+
+          if(data) {
+            await PDF.fillPDF('./build/pdf_files/' + cb.type + '-' + client_type[cb.client_info.company] + '.pdf', savePath, data).then(function() {
+              async.each(req.body.mails, async function(email, end) {
+                await Mails.sendMail.send({
+                  message: {
+                    from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                    to: email,
+                    subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
+                    html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.',
+                    attachments: [
+                      {
+                        filename: nameGenerated + '.pdf',
+                        path: savePath
+                      }
+                    ]
+                  }
+                });
+                end();
+              }, function() {
                 res.json(Messages.message('success_send_mail_to_company', null));
               });
-            });
-          } else {
-            Mails.sendMail.send({
-              message: {
-                from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                to: req.body.mails.toString(),
-                subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
-                html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.'
-              }
-            }).then(function() {
-              res.json(Messages.message('success_send_mail_to_company', null));
             });
           }
         });

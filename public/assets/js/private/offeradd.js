@@ -29,7 +29,6 @@ var KTWizardOfferAdd = function () {
 
 	// Private functions
 	var initWizard = function () {
-		var offerType = $('input[name="offer_type"]:checked').val();
 		// Initialize form wizard
 		wizard = new KTWizard('kt_offer_add', {
 			startStep: 1
@@ -45,6 +44,9 @@ var KTWizardOfferAdd = function () {
 		// Change event
 		wizard.on('change', function(wizard) {
 			KTUtil.scrollTop();
+
+			var offerType = $('input[name="offer_type"]:checked').val();
+
 			if(wizard.getStep() == 3) {
 				$('[name*="contract"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 				$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });

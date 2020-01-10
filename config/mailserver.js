@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = {
   host: process.env.MAIL_HOST,
   port: process.env.MAIL_PORT,
@@ -9,7 +11,9 @@ module.exports = {
   dcim: {
     domainName: 'wsparciedlabiznesu.eu',
     keySelector: 'default',
-    privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA7yxOG8H1aAhkgJRSL75YeNagSXoH/yVvyHDcPphs9tjDlLkmgOoO1VpekeqghejmFpiHKox1qjBFwhUo1FhYM9hO9lGOXuyA7D0DIO6PmG1ppGfG9bOQ7Cf/M0XMyfxT1JQYUqKT0m7FJcHViI75gN5jWgYXoM07vZNU1hJ92JMtxsX/87oCxjXraWMmBdQel7VyxLsK7/UhwZtX3ti0hYy5j2v3p/tVK/0Ga/Qutas+7VaPN4pKxkpInYthVuJtWtBH0fEgjOdqH0kzouFCfLdjo0CScmmtYTkozxJHRy+Df4YcmkxqRuMamoSYebAqYJAcXUQjDtPlaPbZJZFhkwIDAQABAoIBADZQhnBxTKzScxhsFnn3LRpMC1yEVPqRYuBPGQUyElTAhzHoFiFihfnXqvBSKyAd8tqgytlTyojaq4zWx03pviYP8manwMA3z1NWy7YX1w5TkpEebCVyIPAwaRkYudgI8HSvKRLjDtTUCPt5GGgJqAmm90MDbSw8T1vO8I4o5uFeoraRBHIBoBjMMpCQUGgevORuyjXav3tClgKWGyXT+E+Uf9rVJfUCHQDCn5BYw+ouyduYDHhqGs/g7SdfMLkm9kby0oYekn5pOTTD1qPZq1X7aunv4qdUEcvl+8w3/lZyX8XDwhw8/hdjf5mMHQWuDC0reEJWWHKbzzCcRUlGsTkCgYEA/IpSSIbD/prTvveDyBSXZEll1pOz+uWMyjftkeRnPH3U08nhhRVaCOh85bzLfBy3yhHA4o1Q6T1R0Ws69c4/8QYOI1VoL4JS1W84cs42dBs5ICe/qFQGElwJhCZfBB2akXw4jxDwxQahRRNgb93STsTrP1kS4wg61BkS+hbgCB8CgYEA8nMajBRBTXR2+vq1Daz/wCa4WiV8jkcFrF6N55/PXabdHNfO29+jEcQMexwI2rpXycn0lmqSOCrVvI/3fXfi8m786N6Pkg8BgMld+l90lgCjupMs5T9IJp9uBMYVNiapolp8HiB3LaoModJHh+wXEf5Hl9IcQGeszOoSCkYQCA0CgYEA2UoWtGqoVvhWuthzHgOBo3t30WHzGSzLr+7hTYdNwIGwTq5EieKuPj3zwSRpnReEl6wg342iEZ1+OYdfCsJ0x+hi38oLw90JcrWoxzdhKROHWoB46tepBcEFOxxc4siqBwXwEEEOOSiUOEAM2RPucXIDy9TTaF7bZ0VPy7lE+BcCgYEAst/5ViAbjem/XqxZqB1bE4l9ugSuQMplhSa9y4Y8l/vkZsNR+yakSRc7nhiw769L1bUKn29BMe9oghY1onwxFGyOa8DIbBpmIX5vt6l1erY+Fgk/tmNZ+CToJt1+CNW9kerwZ8nMJASyDTH3VHD7FGtmprx924aiFw0bAjlu2oECgYAuzWuGoPhNmBeheItnICQeH2GTlUJJANuTuB1skTPBG230UXG+nnYsK0CgK14SC04FcCFtdKehPWqv5UiG/6SYjTmUzdM3GJMGNawk255FHJQ04rBNt3IsQi+KjrB2HgzIKvlkYUzUnHeHECbDGoEoo3roMWsnU0ZO+GS49pMYpA==\n-----END RSA PRIVATE KEY-----'
+    privateKey: fs.readFileSync('./config/certs/private.pem'),
+    cacheDir: "/tmp",
+    cacheTreshold: 100 * 1024
   },
   transport: {
     jsonTransport: true

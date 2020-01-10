@@ -3,7 +3,6 @@ const router = express.Router();
 
 // Kontrolery
 const PagesController = require('../controllers/PagesController');
-const DashboardController = require('../controllers/DashboardController');
 
 // Dashboard
 router.get('/dashboard', PagesController.dashboard);
@@ -25,7 +24,7 @@ router.get('/dashboard/permissions', PagesController.permissionPage);
 // Profil
 router.get('/dashboard/profile', PagesController.userProfile);
 // Dokumentacja
-router.get('/dashboard/documentation', PagesController.docs);
+router.get('/dashboard/system', PagesController.system);
 // Zgłaszanie błędów
 router.get('/dashboard/report', PagesController.report);
 // Statystyki

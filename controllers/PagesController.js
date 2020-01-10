@@ -99,11 +99,11 @@ exports.userProfile = (req, res) => {
   });
 };
 
-exports.docs = (req, res) => {
+exports.system = (req, res) => {
   if(!req.isAuthenticated()) return res.redirect('/dashboard');
-  res.render('documentation', {
-    title: 'Pełna dokumentacja systemu CRM',
-    pageName: 'documentation'
+  res.render('system', {
+    title: 'System i aktualizacje',
+    pageName: 'system_page'
   });
 };
 

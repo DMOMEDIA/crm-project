@@ -26,9 +26,9 @@ exports.fillPDF = (sourcePDF, destPDF, data) => {
     pdfFiller.fillFormWithFlatten(sourcePDF, destPDF, data, false, function(err) {
       if (err) reject(err);
       resolve();
-    })
+    });
   });
 };
 
-//exports.parseFields('./test.pdf');
+//exports.parseFields('./build/pdf_files/rent-company.pdf');
 //exports.fillPDF('./build/pdf_files/leasing-firma.pdf', './test.pdf', data);
