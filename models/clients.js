@@ -26,8 +26,8 @@ module.exports.createClient = (client) => {
     company_type: client.company_type,
     state: client.state,
     user_id: client.user_id,
-    data_process: value.data_processing,
-    marketing: value.data_marketing,
+    data_process: client.data_processing,
+    marketing: client.data_marketing,
     hashlink: randomstring.generate(128)
   }).save();
 };

@@ -31,4 +31,4 @@ exports.fillPDF = (sourcePDF, destPDF, data) => {
 };
 
 //exports.parseFields('./build/pdf_files/rent-company.pdf');
-//exports.fillPDF('./build/pdf_files/leasing-firma.pdf', './test.pdf', data);
+//exports.fillPDF('./build/pdf_files/leasing-company.pdf', './test.pdf', data);
