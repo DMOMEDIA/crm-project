@@ -52,7 +52,7 @@ var KTDashboardCharts = function() {
                     usePointStyle: true
                 }
             },
-            responsive: true,
+            responsive: false,
             maintainAspectRatio: true,
             hover: {
                 mode: 'index'
