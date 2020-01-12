@@ -230,7 +230,7 @@ module.exports.addOffer = (value, callback) => {
     }
   }
 
-  var link = 'http://crm.wsparciedlabiznesu.eu/rest/client/activate?p=';
+  var link = 'https://crm.wsparciedlabiznesu.eu/rest/client/activate?p=';
   ClientsModel.getClientByEmail(c_type.email).then(function(client) {
     if(client) {
       client = client.toJSON();
