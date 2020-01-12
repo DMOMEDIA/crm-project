@@ -169,22 +169,23 @@ block content
                                   |                                            
                                   #leasing_type_box
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Rodzaj/typ pojazdu:
+                                      label.col-xl-3.col-lg-3.col-form-label Typ przedmiotu:
                                       |                                         
                                       .col-lg-9.col-xl-6
                                         select.form-control(name='item_type_l')
-                                          option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
-                                          option(value='samochód osobowy') samochód osobowy
-                                          option(value='samochód ciężarowy') samochód ciężarowy
+                                          option(value='', selected='', disabled='') Wybierz typ przedmiotu
+                                          option(value='pojazd') pojazd
+                                          option(value='maszyna') maszyna
+                                          option(value='inny') inny
                                     |                                     
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa przedmiotu:
                                       |                                         
                                       .col-lg-9.col-xl-6
-                                        input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
+                                        input.form-control(type='text', name='brand_l', placeholder='Nazwa przedmiotu')
                                     |                                     
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Pojazd:
+                                      label.col-xl-3.col-lg-3.col-form-label Stan przedmiotu:
                                       |                                         
                                       .col-lg-9.col-xl-6
                                         select.form-control(name='condition_l')

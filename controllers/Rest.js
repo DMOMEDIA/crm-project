@@ -849,10 +849,10 @@ exports.requestOfferSendMail = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
-exports.requestOfferDone = (req, res) => {
+exports.requestOfferDone = async (req, res) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role == 'administrator') {
-      ROffer.getOfferById(req.body.id, function(result) {
+      await ROffer.getOfferById(req.body.id, function(result) {
         result = result.toJSON();
         if(result.state == 2) {
           ROffer.setValueById(result.id, 'state', 3);

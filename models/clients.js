@@ -130,12 +130,14 @@ module.exports.saveClientData = (req, callback) => {
         if(client.corpName) model.set('fullname', client.corpName);
         if(client.corp_type) model.set('company_type', client.corp_type);
         if(client.corp_regon) model.set('regon', client.corp_regon);
+        else model.set('regon', null);
         if(client.corp_nip) model.set('nip', client.corp_nip);
         model.set('company', client.client_type);
       } else {
         model.set('company', client.client_type);
         if(client.companyName) model.set('fullname', client.companyName);
         if(client.company_regon) model.set('regon', client.company_regon);
+        else model.set('regon', null);
         if(client.company_nip) model.set('nip', client.company_nip);
       }
 

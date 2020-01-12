@@ -131,16 +131,17 @@ block content
                     .kt-form__section.kt-form__section--first
                       .kt-wizard-v1__form
                         .form-group
-                          label Rodzaj/typ pojazdu: 
+                          label Typ przedmiotu: 
                           select.form-control(name='item_type_l')
-                            option(value='', selected='', disabled='') Wybierz rodzaj przedmiotu
-                            option(value='samochód osobowy') samochód osobowy
-                            option(value='samochód ciężarowy') samochód ciężarowy
+                            option(value='', selected='', disabled='') Wybierz typ przedmiotu
+                            option(value='pojazd') pojazd
+                            option(value='maszyna') maszyna
+                            option(value='inny') inny
                         .form-group
-                          label Marka/model pojazdu: 
-                          input.form-control(type='text', name='brand_l', placeholder='Marka/model pojazdu')
+                          label Nazwa przedmiotu: 
+                          input.form-control(type='text', name='brand_l', placeholder='Nazwa przedmiotu')
                         .form-group
-                          label Pojazd: 
+                          label Stan przedmiotu: 
                           select.form-control(name='condition_l')
                             option(value='nowy', selected='') nowy
                             option(value='używany') używany
