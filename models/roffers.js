@@ -331,7 +331,8 @@ module.exports.addOffer = (value, callback) => {
             },
             locals: {
               identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
-              hashlink: link + result.get('hashlink')
+              hashlink: link + result.get('hashlink'),
+              isActivated: false
             }
           });
           callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });
