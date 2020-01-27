@@ -1262,6 +1262,47 @@ var KTUserListDatatable = function() {
 				}
 			});
 		});
+
+		$(document).on('click', '.delete_client', function() {
+			var id = $(this).attr('data-id');
+
+			swal.fire({
+				html: "Jesteś pewny że chcesz usunąć tego klienta i wszystkie jego oferty?",
+				type: "info",
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if (result.value) {
+					$.ajax({
+						url: '/rest/client/delete',
+						method: 'POST',
+						data: { id: id },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: 'success',
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								clients_datatable.reload();
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
+			});
+		});
 	}
 
 	var initFileButtons = function() {

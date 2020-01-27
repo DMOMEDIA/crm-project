@@ -211,6 +211,34 @@ exports.deleteSelectedUsers = (req, res) => {
 
 // == Client page REST
 
+exports.deleteClientById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.delete')) {
+      if(req.body.id) {
+        Client.deleteClient(req.body.id, result => { res.send(result) });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.deleteSelectedClients = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.clients.delete')) {
+      if(req.body.data) {
+        var deleted = 0;
+        async.each(req.body.data, async function(value, cb) {
+          await Client.deleteClient(value, cb => {
+            if(cb.status == 'success') deleted++;
+          });
+        }, function() {
+          if(deleted > 0) res.json(Messages.message('success_delete_selected_clients', deleted));
+          else res.json(Messages.message('err_selected_clients', null));
+        });
+      }
+    }
+  }
+};
+
 exports.addClient = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.clients.add')) {
@@ -322,6 +350,34 @@ exports.getOfferRequests = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.deleteRequestOfferById = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.roffers.delete')) {
+      if(req.body.id) {
+        ROffer.deleteROffer(req.body.id, result => { res.send(result) });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.deleteSelectedROffers = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.roffers.delete')) {
+      if(req.body.data) {
+        var deleted = 0;
+        async.each(req.body.data, async function(value, cb) {
+          await ROffer.deleteROffer(value, cb => {
+            if(cb.status == 'success') deleted++;
+          });
+        }, function() {
+          if(deleted > 0) res.json(Messages.message('success_roffer_selected_delete', deleted));
+          else res.json(Messages.message('err_selected_roffers', null));
+        });
+      }
+    }
+  }
+};
+
 exports.getRequestOfferById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.roffers.show')) {
@@ -341,6 +397,16 @@ exports.addRequestOffer = (req, res) => {
       res.json(result);
     });
   }
+};
+
+exports.addRequestOfferBySystem = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.roffers.add')) {
+      ROffer.addOfferBySystem(req.body, function(result) {
+        res.json(result);
+      });
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
 };
 
 // Notifications //
@@ -922,10 +988,10 @@ exports.getCompanyProvision = (req, res) => {
 exports.activateClientAccount = (req, res) => {
   if(req.query.p) {
     Client.activateAccount(req.query.p, function(result) {
-      res.send('<pre>' + JSON.stringify(result, false, 2) + '</pre>');
+      res.json(result);
     });
   } else {
-    res.send('<pre>' + JSON.stringify({ status: 'error', message: 'Brak parametru' }, false, 2) + '</pre>');
+    res.json({ status: 'error', message: 'Brak parametru' });
   }
 };
 

@@ -26,7 +26,14 @@ block content
               .btn-toolbar.kt-margin-l-20
                 button(disabled='')#kt_subheader_group_actions_delete_all.btn.btn-label-danger.btn-bold.btn-sm.btn-icon-h
                   | Usuń zaznaczone
-        |         
+        |     
+        .kt-subheader__toolbar
+          a(href='#')
+          |             
+          |                                                 
+          if userPermissions.includes('crm.roffers.add')
+            a.btn.btn-label-brand.btn-bold(href='/dashboard/rofferadd')
+              | Dodaj zapytanie ofertowe  
     // end:: Content Head
     // begin:: Content
     .kt-container.kt-container--fluid.kt-grid__item.kt-grid__item--fluid
@@ -52,11 +59,21 @@ block content
                         label Status:
                       | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
                       .kt-form__control
-                        select#kt_form_status.form-control
+                        select#kt_form_status.kt-selectpicker.form-control
                           option(value='') Wszystkie
                           option(value='1') Nowe
                           option(value='2') Oczekujące
                           option(value='3') Zrealizowane
+                  .col-md-4.kt-margin-b-20-tablet-and-mobile.kt-align-right
+                    .kt-form__group.kt-form__group--inline
+                      .kt-form__label
+                        label Sortuj:
+                      | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;
+                      .kt-form__control
+                        select#kt_form_sort.kt-selectpicker.form-control
+                          option(value='') od najnowszych
+                          option(value='1') od najstarszych
+                          option(value='2') alfabetycznie
               | &#x9;&#x9;
           // end: Search Form
         .kt-portlet__body.kt-portlet__body--fit
@@ -317,6 +334,7 @@ block content
                                           option(value='', selected='', disabled='') Wybierz okres finansowania
                                           option(value='12') 12 miesięcy
                                           option(value='24') 24 miesiące
+                                          option(value='36') 36 miesięcy
                                           option(value='48') 48 miesięcy
                                           option(value='60') 60 miesięcy
                                           option(value='72') 72 miesiące
@@ -574,6 +592,18 @@ block content
                             .kt-section.kt-section--first
                               .kt-section__body
                                 if userData.role == 'administrator'
+                                  #send_request_notify(style='display:none;')
+                                    .alert.alert-brand(role='alert')
+                                      .alert-icon
+                                        i.flaticon2-send
+                                      |                             
+                                      .alert-text Zapytanie ofertowe zostało wysłane, po otrzymaniu zwrotnych ofert umieść je poniżej i wybierz jedną najkorzystniejszą, która będzie widoczna dla pracowników.
+                                  #is_realized_notify(style='display:none;')
+                                    .alert.alert-success(role='alert')
+                                      .alert-icon
+                                        i.flaticon2-send
+                                      |                             
+                                      .alert-text Zapytanie ofertowe zostało zrealizowane, nadal możesz dodawać nowe oferty i wyświetlać je dla pracowników.
                                   .row
                                     .col-lg-9.col-xl-6
                                       i.fa.fa-mail-bulk.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
@@ -589,12 +619,6 @@ block content
                                       .row
                                         .col-lg-12.col-xl-12.kt-align-center
                                           button.btn.btn-sm.btn-success.btn-bold(type='submit') Wyślij zapytanie
-                                  #send_request_notify(style='display:none;')
-                                    .alert.alert-success(role='alert')
-                                      .alert-icon
-                                        i.flaticon2-send
-                                      |                             
-                                      .alert-text Zapytanie ofertowe zostało wysłane, po otrzymaniu zwrotnych ofert umieść je poniżej i wybierz jedną najkorzystniejszą, która będzie widoczna dla pracowników.
                                 .row.kt-margin-t-20
                                   .col-lg-9.col-xl-6
                                     i.fa.fa-file-upload.d-inline-block.kt-font-xl.align-top.kt-padding-r-10

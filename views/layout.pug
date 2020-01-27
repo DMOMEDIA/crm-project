@@ -167,6 +167,12 @@ html(lang='en')
                               i.kt-menu__link-bullet.kt-menu__link-bullet--dot
                                 span
                               span.kt-menu__link-text Lista zapytań
+                        if userPermissions.includes('crm.roffers.add')
+                          li.kt-menu__item.kt-menu__item--submenu(class=(pageName === "rofferadd" ? "kt-menu__item--active" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
+                            a.kt-menu__link.kt-menu__toggle(href='/dashboard/rofferadd')
+                              i.kt-menu__link-bullet.kt-menu__link-bullet--dot
+                                span
+                              span.kt-menu__link-text Dodaj zapytanie ofertowe
                 if userPermissions.includes('crm.offers.show') || userPermissions.includes('crm.offers.add')
                   li.kt-menu__item.kt-menu__item--submenu(class=(pageName == "offerlist" || pageName == "offeradd" ? "kt-menu__item--here kt-menu__item--open" : undefined), aria-haspopup='true', data-ktmenu-submenu-toggle='hover')
                     a.kt-menu__link.kt-menu__toggle(href='javascript:;')
@@ -542,7 +548,7 @@ html(lang='en')
                 a.kt-link(href='#') CRM System
               .kt-footer__menu
                 | Wersja aplikacji:
-                a.kt-font-primary(href='javascript:;') &nbsp; #{version_app}
+                a.kt-font-primary(href='/dashboard/system') &nbsp; #{version_app}
           // BEGIN:: Footer
     // END:: Page
     // BEGIN:: Quick Panel

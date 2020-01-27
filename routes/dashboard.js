@@ -16,6 +16,7 @@ router.get('/dashboard/companyadd', PagesController.companyadd);
 router.get('/dashboard/clientlist', PagesController.clientlist);
 router.get('/dashboard/clientadd', PagesController.clientadd);
 router.get('/dashboard/roffers', PagesController.roffers);
+router.get('/dashboard/rofferadd', PagesController.addRequestOffer);
 // Oferty
 router.get('/dashboard/offerlist', PagesController.offers);
 router.get('/dashboard/offeradd', PagesController.offerAdd);

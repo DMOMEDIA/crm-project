@@ -15,8 +15,11 @@ exports.message = (type, argument) => {
     case 'success_delete_selected_offers': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' ofert/y.' }; break;
     case 'err_selected_offers': selected = { status: 'error', message: 'Błąd podczas usuwania ofert, spróbuj ponownie.' }; break;
     case 'err_selected_users': selected = { status: 'error', message: 'Błąd podczas usuwania użytkowników, spróbuj ponownie.' }; break;
+    case 'err_selected_clients': selected = { status: 'error', message: 'Błąd podczas usuwania klientów, spróbuj ponownie.' }; break;
     case 'success_delete_selected_users': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' użytkowników.' }; break;
+    case 'success_delete_selected_clients': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' klientów.' }; break;
     case 'success_user_deleted': selected = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' }; break;
+    case 'success_client_deleted': selected = { status: 'success', message: 'Klient został pomyślnie usunięty.' }; break;
     case 'success_change_password': selected = { status: 'success', message: 'Pomyślnie zmieniono hasło użytkownika.' }; break;
     case 'success_updated_user': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane użytkownika.' }; break;
     case 'success_updated_client': selected = { status: 'success', message: 'Poprawnie zaktualizowano dane klienta.' }; break;
@@ -38,6 +41,10 @@ exports.message = (type, argument) => {
     case 'error_global': selected = { status: 'error', message: 'Wystąpił nieoczekiwany błąd, spróbuj ponownie później.' }; break;
     case 'success_send_mail_to_company': selected = { status: 'success', message: 'Pomyślnie wysłano zapytanie ofertowe do firm.' }; break;
     case 'client_add_fail': selected = { status: 'error', message: 'Klient o podanym adresie e-mail już istnieje.' }; break;
+    case 'success_roffer_delete': selected = { status: 'success', message: 'Zapytanie ofertowe zostało pomyślnie usunięte.' }; break;
+    case 'err_selected_roffers': selected = { status: 'error', message: 'Błąd podczas usuwania zapytań ofertowych, spróbuj ponownie.' }; break;
+    case 'success_roffer_selected_delete': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' zapytań.'  }; break;
+    case 'success_roffer_add': selected = { status: 'success', message: 'Pomyślnie dodano nowe zapytanie ofertowe.' }; break;
   }
 
   return selected;

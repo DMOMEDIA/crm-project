@@ -518,6 +518,7 @@ var KTUtil = function() {
 
         clearInputInForm: function(form) {
           $('input',form).not('[type="button"], [type="submit"], [type="reset"], [type="hidden"], [type="radio"], [type="checkbox"], [name="client_type"]').val('').prop('checked', false);
+          $('textarea',form).val('');
           $('select option[value=""]',form).prop('selected', true);
         },
 

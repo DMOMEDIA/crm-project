@@ -17,6 +17,7 @@ const restapi = require('./routes/restapi');
 const errorsHandler = require('./middlewares/errors');
 const ExpireSession = require('./controllers/ExpireSession');
 const LoginController = require('./controllers/LoginController');
+const ClientController = require('./controllers/ClientController');
 const PDFController = require('./controllers/PDFController');
 const Cron = require('./controllers/Cron');
 const System = require('./models/system');
@@ -49,7 +50,7 @@ app.locals.env = process.env;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.ACCESS_URL);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
   next();
 });
 
@@ -64,7 +65,7 @@ app.use(function(req, res, next) {
  res.locals.userPermissions = req.session.userPermissions || null;
 
  // Wersja aplikacji
- res.locals.version_app = '1.6.0.2 beta';
+ res.locals.version_app = '1.6.1.2 beta';
 
  ExpireSession.sessionStatus(req, res, next);
  next();

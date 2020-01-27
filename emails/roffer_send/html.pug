@@ -208,24 +208,45 @@ table.nl-container(bgcolor='#F6F5FF' cellpadding='0' cellspacing='0' role='prese
                           strong #{identity}&nbsp;
                           | zostało złożone, w ciągu 24 godzin zostaniesz obsłużony przez naszego pracownika.
                         br
-                        p(style='font-size: 14px; line-height: 1.5; text-align: center; mso-line-height-alt: 21px; margin: 0;')
-                          | Skuteczne przygotowanie oferty wymaga również potwierdzenia utworzenia konta, po tej czynności będziesz mógł w przyszłości korzystać ze swoich danych.
+                        if isActivated == false
+                          p(style='font-size: 14px; line-height: 1.5; text-align: center; mso-line-height-alt: 21px; margin: 0;')
+                            | Skuteczne przygotowanie oferty wymaga również potwierdzenia utworzenia konta, po tej czynności będziesz mógł w przyszłości korzystać ze swoich danych.
+                        if isActivated == true
+                          p(style='font-size: 14px; line-height: 1.5; text-align: center; mso-line-height-alt: 21px; margin: 0;')
+                            | Twoje konto istnieje już w naszym systemie, przejdź do panelu - tam pojawią się Twoje oferty.
                     //if mso
-                    .button-container(align='center' style='padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;')
-                      //if mso
-                        table(width='100%' cellpadding='0' cellspacing='0' border='0' style='border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;')
-                          tr
-                            td(style='padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px' align='center')
-                              v:roundrect(xmlns:v='urn:schemas-microsoft-com:vml' xmlns:w='urn:schemas-microsoft-com:office:word' href='#' style='height:31.5pt; width:159pt; v-text-anchor:middle;' arcsize='120%' stroke='false' fillcolor='#C059FF')
-                                w:anchorlock
-                                  v:textbox(inset='0,0,0,0')
-                                    center(style='color:#ffffff; font-family:Arial, sans-serif; font-size:16px')
-                      a(href=`${hashlink}` style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #C059FF; border-radius: 50px; -webkit-border-radius: 50px; -moz-border-radius: 50px; width: auto; width: auto; border-top: 1px solid #C059FF; border-right: 1px solid #C059FF; border-bottom: 1px solid #C059FF; border-left: 1px solid #C059FF; padding-top: 5px; padding-bottom: 5px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target='_blank')
-                        span(style='padding-left:50px;padding-right:50px;font-size:16px;display:inline-block;')
-                          span(style='font-size: 16px; line-height: 2; mso-line-height-alt: 32px;')
-                            strong Aktywuj konto
-                      //if mso
-                    // [if (!mso)&(!IE)] <!
+                    if isActivated == false
+                      .button-container(align='center' style='padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;')
+                        //if mso
+                          table(width='100%' cellpadding='0' cellspacing='0' border='0' style='border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;')
+                            tr
+                              td(style='padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px' align='center')
+                                v:roundrect(xmlns:v='urn:schemas-microsoft-com:vml' xmlns:w='urn:schemas-microsoft-com:office:word' href='#' style='height:31.5pt; width:159pt; v-text-anchor:middle;' arcsize='120%' stroke='false' fillcolor='#C059FF')
+                                  w:anchorlock
+                                    v:textbox(inset='0,0,0,0')
+                                      center(style='color:#ffffff; font-family:Arial, sans-serif; font-size:16px')
+                        a(href=`${hashlink}` style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #C059FF; border-radius: 50px; -webkit-border-radius: 50px; -moz-border-radius: 50px; width: auto; width: auto; border-top: 1px solid #C059FF; border-right: 1px solid #C059FF; border-bottom: 1px solid #C059FF; border-left: 1px solid #C059FF; padding-top: 5px; padding-bottom: 5px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target='_blank')
+                          span(style='padding-left:50px;padding-right:50px;font-size:16px;display:inline-block;')
+                            span(style='font-size: 16px; line-height: 2; mso-line-height-alt: 32px;')
+                              strong Aktywuj konto
+                        //if mso
+                      // [if (!mso)&(!IE)] <!
+                    if isActivated == true
+                      .button-container(align='center' style='padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;')
+                        //if mso
+                          table(width='100%' cellpadding='0' cellspacing='0' border='0' style='border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;')
+                            tr
+                              td(style='padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px' align='center')
+                                v:roundrect(xmlns:v='urn:schemas-microsoft-com:vml' xmlns:w='urn:schemas-microsoft-com:office:word' href='#' style='height:31.5pt; width:159pt; v-text-anchor:middle;' arcsize='120%' stroke='false' fillcolor='#C059FF')
+                                  w:anchorlock
+                                    v:textbox(inset='0,0,0,0')
+                                      center(style='color:#ffffff; font-family:Arial, sans-serif; font-size:16px')
+                        a(href="https://wsparciedlabiznesu.eu/panel" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #00526A; border-radius: 50px; -webkit-border-radius: 50px; -moz-border-radius: 50px; width: auto; width: auto; border-top: 1px solid #C059FF; border-right: 1px solid #C059FF; border-bottom: 1px solid #C059FF; border-left: 1px solid #C059FF; padding-top: 5px; padding-bottom: 5px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target='_blank')
+                          span(style='padding-left:50px;padding-right:50px;font-size:16px;display:inline-block;')
+                            span(style='font-size: 16px; line-height: 2; mso-line-height-alt: 32px;')
+                              strong Przejdź do panelu
+                        //if mso
+                      // [if (!mso)&(!IE)] <!
                   // <![endif]
               //if (mso)|(IE)
               //if (mso)|(IE)

@@ -127,11 +127,29 @@ var KTClientListDatatable = function() {
 				autoHide: false,
 				overflow: 'visible',
 				template: function(row) {
-				return '\
-						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_client_data" data-id="' + row.id + '">\
-							<i class="flaticon2-menu-1"></i>\
-						</a>\
-					';
+					return '\
+							<div id="dropdown" class="dropdown">\
+								<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown">\
+									<i class="flaticon2-menu-1"></i>\
+								</a>\
+								<div class="dropdown-menu dropdown-menu-right">\
+									<ul class="kt-nav">\
+										<li class="kt-nav__item show_client_data" data-id="' + row.id + '">\
+											<a href="javascript:;" class="kt-nav__link">\
+												<i class="kt-nav__link-icon flaticon2-contract"></i>\
+												<span class="kt-nav__link-text">Edytuj</span>\
+											</a>\
+										</li>\
+										<li class="kt-nav__item delete_client" data-id="' + row.id + '">\
+											<a href="javascript:;" class="kt-nav__link">\
+												<i class="kt-nav__link-icon flaticon2-trash"></i>\
+												<span class="kt-nav__link-text">Usuń</span>\
+											</a>\
+										</li>\
+									</ul>\
+								</div>\
+							</div>\
+						';
 				}
 			}]
 		});
@@ -392,11 +410,11 @@ var KTClientListDatatable = function() {
 				});
 			});
 
-			$('.delete_user').on('click', function() {
+			$(document).on('click', '.delete_client', function() {
 				var id = $(this).attr('data-id');
 
 				swal.fire({
-					html: "Jesteś pewny że chcesz usunąć tego użytkownika?",
+					html: "Jesteś pewny że chcesz usunąć tego klienta i wszystkie jego oferty?",
 					type: "info",
 
 					confirmButtonText: "Usuń",
@@ -408,7 +426,7 @@ var KTClientListDatatable = function() {
 				}).then(function(result) {
 					if (result.value) {
 						$.ajax({
-							url: '/rest/user/delete',
+							url: '/rest/client/delete',
 							method: 'POST',
 							data: { id: id },
 							success: function(res) {
@@ -581,7 +599,6 @@ var KTClientListDatatable = function() {
 		$('#kt_form_status').on('change', function() {
 			datatable.search($(this).val().toLowerCase(), 'state');
 		});
-		$('#kt_form_status').selectpicker();
 	}
 
 	// selection
@@ -612,8 +629,8 @@ var KTClientListDatatable = function() {
 				return $(chk).val();
 			});
 
-			var userText = 'użytkowników';
-			if(ids.length == 1) userText = 'użytkownika';
+			var userText = 'klientów';
+			if(ids.length == 1) userText = 'klienta';
 
 			var data_send = [];
 			$.each(ids, function(i, field) { data_send.push(field) });
@@ -632,7 +649,7 @@ var KTClientListDatatable = function() {
 				}).then(function(result) {
 					if (result.value) {
 						$.ajax({
-							url: '/rest/user/sdelete',
+							url: '/rest/client/sdelete',
 							method: 'POST',
 							data: { data: data_send },
 							success: function(res) {
@@ -751,6 +768,9 @@ var KTClientListDatatable = function() {
 		// public functions
 		init: function() {
 			form_personal = $('#kt_client_edit_personal');
+			$('.kt-selectpicker').selectpicker({
+				noneSelectedText : 'Nie wybrano'
+			});
 
 			init();
 			initValid();
@@ -761,8 +781,8 @@ var KTClientListDatatable = function() {
 			initDropzone();
 			initFileButtons();
 			initChangeStatus();
-			search();
 			updateTotal();
+			search();
 		},
 	};
 }();

@@ -2,6 +2,8 @@ const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const async = require('async');
+const path = require('path');
+const fs = require('fs');
 const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
 const System = require('../models/system');
@@ -19,6 +21,11 @@ const Company = bookshelf.Model.extend({
 
 const User = bookshelf.Model.extend({
   tableName: 'crm_users',
+  hasTimestamps: true
+});
+
+const ROffer = bookshelf.Model.extend({
+  tableName: 'crm_offer_requests',
   hasTimestamps: true
 });
 
@@ -206,6 +213,72 @@ module.exports.getOffers = (req, callback) => {
   }
 };
 
+function getFilesFromDir(path, callback) {
+  var files = fs.readdirSync(path), output = [];
+
+  async.each(files, function(name, cb) {
+    output.push({ filename: name, path: path });
+    cb();
+  }, function() {
+    callback(output);
+  });
+}
+
+module.exports.getOffersByClientId = (client_id, callback) => {
+  var output = [];
+  return new OfferLeasing()
+    .where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+    .then(async function(leasing) {
+      leasing = leasing.toJSON();
+
+      async.eachOf(leasing, function(item, key, cb) {
+        var buildPath = './uploads/offer/offer_' + leasing[key].id + '_' + leasing[key].offer_type.charAt(0).toUpperCase() + '_' + moment(leasing[key].created_at).local().format('YYYY');
+
+        getFilesFromDir(buildPath, result => {
+          leasing[key].files = result;
+        });
+
+        cb();
+      }, function() {
+        output = output.concat(leasing);
+        OfferInsurance.where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+        .then(async function(insurance) {
+          insurance = insurance.toJSON();
+
+          async.eachOf(insurance, function(item, key, cb) {
+            var buildPath = './uploads/offer/offer_' + insurance[key].id + '_' + insurance[key].offer_type.charAt(0).toUpperCase() + '_' + moment(insurance[key].created_at).local().format('YYYY');
+
+            getFilesFromDir(buildPath, result => {
+              insurance[key].files = result;
+            });
+
+            cb();
+          }, function() {
+            output = output.concat(insurance);
+            OfferRent.where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+            .then(async function(rent) {
+              rent = rent.toJSON();
+
+              async.eachOf(rent, function(item, key, cb) {
+                var buildPath = './uploads/offer/offer_' + rent[key].id + '_' + rent[key].offer_type.charAt(0).toUpperCase() + '_' + moment(rent[key].created_at).local().format('YYYY');
+
+                getFilesFromDir(buildPath, result => {
+                  rent[key].files = result;
+                });
+
+                cb();
+              }, function() {
+                output = output.concat(rent);
+
+                callback(output);
+              });
+            });
+          });
+        });
+      });
+    });
+};
+
 module.exports.getOfferById = (id, type, callback) => {
   if(type == 'rent') {
     return new OfferRent().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
@@ -320,7 +393,7 @@ module.exports.createOffer = (req, callback) => {
         else System.changeProvision(cb, result.get('id'), value.offer_type, value.insurance_cost, value.company_id, true, false);
       });
 
-      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
+      callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
     });
   } else {
@@ -345,7 +418,7 @@ module.exports.createOffer = (req, callback) => {
         else System.changeProvision(cb, result.get('id'), value.offer_type, value.vehicle_val_r, value.company_id, true, false);
       });
 
-      callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
+      callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/R/' + moment().format('YYYY') + '</b>.');
     });
   }

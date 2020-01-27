@@ -893,8 +893,6 @@ var KTOfferListDatatable = function() {
 				elements.push({ id: ids[i], type: rowData[i] });
 			}
 
-			console.log(elements);
-
 			var userText = 'ofert/y';
 			if(ids.length == 1) userText = 'ofertę';
 
@@ -1118,6 +1116,9 @@ var KTOfferListDatatable = function() {
 		// public functions
 		init: function() {
 			formEl = $('#kt_offer_edit');
+			$('.kt-selectpicker').selectpicker({
+				noneSelectedText : 'Nie wybrano'
+			});
 
 			init();
 			initOfferData();

@@ -184,4 +184,14 @@ exports.globalSettings = (req, res) => {
   });
 };
 
+exports.addRequestOffer = (req, res) => {
+  if(!req.isAuthenticated()) return res.redirect('/dashboard');
+  if(!res.locals.userPermissions.includes('crm.roffers.add')) return res.redirect('/dashboard');
+
+  res.render('rofferadd', {
+    title: 'Dodawanie nowe zapytanie ofertowe',
+    pageName: 'rofferadd'
+  });
+};
+
 // {STOP} Strony po zalogowaniu

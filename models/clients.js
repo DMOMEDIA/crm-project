@@ -4,8 +4,13 @@ const randomstring = require("randomstring");
 const Messages = require('../config/messages');
 const System = require('../models/system');
 const User = require('../models/user');
+const Offer = require('../models/offers');
+const ROffer = require('../models/roffers');
 const Notification = require('../models/notifications');
+const Mails = require('../controllers/Mails');
+const Promise = require('bluebird');
 const async = require('async');
+const generatePassword = require('password-generator');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
@@ -15,6 +20,12 @@ const Client = bookshelf.Model.extend({
 module.exports.getClientByEmail = (email) => {
   const query = { email: email };
   return new Client().where(query).fetch();
+};
+
+module.exports.comparePassword = (candidatePassword, password, callback) => {
+  bcrypt.compare(candidatePassword, password, function(err, isMatch) {
+    callback(null, isMatch);
+  });
 };
 
 module.exports.createClient = (client, callback) => {
@@ -55,6 +66,15 @@ module.exports.createClient = (client, callback) => {
     } else {
       callback(false);
     }
+  });
+};
+
+module.exports.deleteClient = (id, callback) => {
+  return new Client().where({ id: id }).fetch({ require: true }).then(function(model) {
+    if(model) {
+      callback(Messages.message('success_client_deleted', null));
+      return model.destroy();
+    } else callback(Messages.message('not_found_client_identity', null));
   });
 };
 
@@ -104,16 +124,38 @@ module.exports.getClientById = (id) => {
 };
 
 module.exports.activateAccount = (hash, callback) => {
-  return new Client().where({ hashlink: hash }).fetch()
-  .then(function(model) {
-    if(model) {
-      if(model.get('state') != 4) {
-        model.set('state', 4);
-        model.save().then(function(result) {
-          callback({ status: 'success', message: 'Konto klienta zostało pomyślnie aktywowane.' });
-        });
-      } else callback({ status: 'error', message: 'To konto zostało już aktywowane.' });
-    } else callback({ status: 'error', message: 'Konto klienta nie zostało odnalezione.' });
+  var gpass = generatePassword(10, false);
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(gpass, salt, function(err, genpassword) {
+      return new Client().where({ hashlink: hash }).fetch()
+      .then(function(model) {
+        if(model) {
+          if(model.get('state') != 4) {
+            model.set('state', 4);
+
+            var passwordIsset = false;
+            if(model.get('password') == null) {
+              passwordIsset = true;
+              model.set('password', genpassword);
+            }
+
+            model.save().then(function(result) {
+              if(passwordIsset) {
+                Mails.sendMail.send({
+                  message: {
+                    from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                    to: result.get('email'),
+                    subject: 'Dane logowania do panelu klienta',
+                    html: 'Twoje dane do panelu klienta:<br/>Adres e-mail: ' + result.get('email') + '<br/>Hasło: ' + gpass
+                  },
+                });
+                callback({ status: 'success', val: 'activated', message: 'Konto klienta zostało pomyślnie aktywowane.' });
+              }
+            });
+          } else callback({ status: 'error', val: 'is_activated', message: 'To konto zostało już aktywowane.' });
+        } else callback({ status: 'error', val: 'not_found', message: 'Konto klienta nie zostało odnalezione.' });
+      });
+    });
   });
 };
 
@@ -144,7 +186,9 @@ module.exports.saveClientData = (req, callback) => {
       if(client.pNumber) model.set('phone', client.pNumber);
       if(client.email) model.set('email', client.email);
       if(client.data_processing) model.set('data_process', client.data_processing);
+      else model.set('data_process', 0);
       if(client.data_marketing) model.set('marketing', client.data_marketing);
+      else model.set('marketing', 0);
 
       if(client.param) {
         if(model.get('user_id') != client.param) user_defined = true;

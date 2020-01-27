@@ -67,6 +67,15 @@ module.exports.getOfferById = (id, callback) => {
     });
 };
 
+module.exports.deleteROffer = (id, callback) => {
+  return new ROffer().where({ id: id }).fetch().then(function(model) {
+    if(model) {
+      callback(Messages.message('success_roffer_delete', null));
+      return model.destroy();
+    } else callback(Messages.message('not_found_roffer', null));
+  });
+};
+
 module.exports.setValueById = (id, name, data) => {
   return new ROffer().where({ id: id }).fetch()
   .then(function(model) {
@@ -134,6 +143,64 @@ module.exports.uploadOffer = (value, callback) => {
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz zmienić dane, nie istnieje.' });
     });
   }
+};
+
+module.exports.addOfferBySystem = (value, callback) => {
+  if(value.offer_type == 'leasing') {
+    function get_req() {
+      return {
+        client_id: value.client_id,
+        type: value.offer_type,
+        name: value.nameItem,
+        pyear: value.pyear_l,
+        netto: value.netto,
+        instalments: value.leasing_installment,
+        contribution: value.wklad_l,
+        red_value: value.wykup_l,
+        attentions: value.attentions,
+        other: value.other
+      }
+    }
+  } else if(value.offer_type == 'rent') {
+    function get_req() {
+      return {
+        client_id: value.client_id,
+        type: value.offer_type,
+        name: value.brand_r,
+        installment_val: value.installment_val,
+        body_type: value.body_type_r,
+        fuel_type: value.fuel_type_r,
+        netto: value.netto,
+        attentions: value.attentions,
+        other: value.other
+      }
+    }
+  } else {
+    function get_req() {
+      return {
+        client_id: value.client_id,
+        type: value.offer_type,
+        name: value.brand_i,
+        pyear: value.pyear_i,
+        engine_cap: value.engine_cap_i,
+        power_cap: value.power_cap_i,
+        vin: value.vin_number,
+        reg_number: value.reg_number,
+        km_value: value.km_val_i,
+        netto: value.netto,
+        attentions: value.attentions,
+        other: value.other
+      }
+    }
+  }
+
+  return new ROffer(get_req()).save().then(function(done) {
+    ClientsModel.getClientById(value.client_id).then(function(result) {
+
+      Notification.sendNotificationByRole('administrator', 'flaticon2-user kt-font-success', 'Zapytanie ofertowe <b>00' + done.get('id') + '/' + moment().format('YYYY') + '</b> zostało dodane do klienta <b>' + result.get('fullname') + '</b>');
+      callback(Messages.message('success_roffer_add', null));
+    });
+  });
 };
 
 module.exports.addOffer = (value, callback) => {
@@ -230,7 +297,7 @@ module.exports.addOffer = (value, callback) => {
     }
   }
 
-  var link = 'https://crm.wsparciedlabiznesu.eu/rest/client/activate?p=';
+  var link = 'https://wsparciedlabiznesu.eu/activation/?p=';
   ClientsModel.getClientByEmail(c_type.email).then(function(client) {
     if(client) {
       client = client.toJSON();
@@ -245,7 +312,8 @@ module.exports.addOffer = (value, callback) => {
           },
           locals: {
             identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
-            hashlink: link + client.hashlink
+            hashlink: link + client.hashlink,
+            isActivated: (client.state == 4) ? true : false
           }
         });
         callback({ status: 'success', message: 'Twoje zapytanie ofertowe zostało złożone' });

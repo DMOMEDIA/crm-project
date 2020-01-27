@@ -46,19 +46,19 @@ exports.getPermissions = async (req, res, next) => {
 };
 
 // {START} Funkcje autoryzacji, uwierzytelniania.
-exports.passportAuthenticate = passport.authenticate('local', { failureRedirect: '/', failureFlash: 'Autoryzacja nieudana' });
+exports.passportAuthenticate = passport.authenticate('user', { failureRedirect: '/', failureFlash: 'Autoryzacja nieudana' });
 
 exports.passportSerializeUser = passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 exports.passportDeserializeUser = passport.deserializeUser(function(id, done) {
-  User.getUserById(null,id).then(function(user) {
+  User.getUserById(null, id).then(function(user) {
     done(null, user);
   });
 });
 
-exports.passportUse = passport.use(new localStrategy({ usernameField: 'identity', passReqToCallback: true }, async function(req, username, password, done) {
+exports.passportUse = passport.use('user', new localStrategy({ usernameField: 'identity', passReqToCallback: true }, async function(req, username, password, done) {
   await User.getUserByIdentity(username).then(function(userData) {
     if(!userData) {
       return done(null, false, req.flash('message','Użytkownik o podanym identyfikatorze nie istnieje.'));

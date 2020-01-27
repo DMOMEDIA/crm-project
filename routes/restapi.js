@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('multer')();
+const clientAuth = require('../middlewares/clientAuth');
 
 // Kontrolery
 const REST = require('../controllers/Rest');
+const ClientController = require('../controllers/ClientController');
 
 // {REST} Pobieranie uprawnień
 router.get('/rest/permissions', REST.permissions);
@@ -25,6 +27,8 @@ router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
 
 // {REST} dot. klientów
 router.post('/rest/clients/add', REST.addClient);
+router.post('/rest/client/delete', REST.deleteClientById);
+router.post('/rest/client/sdelete', REST.deleteSelectedClients);
 router.post('/rest/clients/list', REST.getClientList);
 router.post('/rest/clients/modify', REST.modifyClientById);
 router.post('/rest/client/show', REST.getClientById);
@@ -35,6 +39,9 @@ router.post('/rest/roffer/add', REST.addRequestOffer);
 router.post('/rest/roffer/update', REST.updateROfferData);
 router.post('/rest/roffer/sendMail', REST.requestOfferSendMail);
 router.post('/rest/roffer/done', REST.requestOfferDone);
+router.post('/rest/roffer/delete', REST.deleteRequestOfferById);
+router.post('/rest/roffer/sdelete', REST.deleteSelectedROffers);
+router.post('/rest/roffer/add_system', REST.addRequestOfferBySystem);
 router.get('/rest/client/activate', REST.activateClientAccount);
 
 // {REST} powiadomienia
@@ -75,5 +82,10 @@ router.post('/rest/company/provision', REST.getCompanyProvision);
 router.post('/rest/stats/offers_count', REST.getOfferCount);
 router.post('/rest/stats/prov_forecast', REST.getProvisionStats);
 router.post('/rest/stats/counts', REST.getStatsCount);
+
+// Client controllers
+router.post('/api/client/data', clientAuth.authenticate, ClientController.getClientData);
+router.post('/api/client/offers', clientAuth.authenticate, ClientController.getClientOffers);
+router.post('/api/client/offer', clientAuth.authenticate, ClientController.getClientOfferById);
 
 module.exports = router;

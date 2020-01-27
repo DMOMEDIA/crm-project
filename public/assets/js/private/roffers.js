@@ -122,11 +122,29 @@ var KTROfferListDatatable = function() {
 				autoHide: false,
 				overflow: 'visible',
 				template: function(row) {
-				return '\
-						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_offer_data" data-id="' + row.id + '">\
-							<i class="flaticon2-menu-1"></i>\
-						</a>\
-					';
+					return '\
+							<div id="dropdown" class="dropdown">\
+								<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown">\
+									<i class="flaticon2-menu-1"></i>\
+								</a>\
+								<div class="dropdown-menu dropdown-menu-right">\
+									<ul class="kt-nav">\
+										<li class="kt-nav__item show_offer_data" data-id="' + row.id + '">\
+											<a href="javascript:;" class="kt-nav__link">\
+												<i class="kt-nav__link-icon flaticon2-contract"></i>\
+												<span class="kt-nav__link-text">Edytuj</span>\
+											</a>\
+										</li>\
+										<li class="kt-nav__item delete_roffer" data-id="' + row.id + '">\
+											<a href="javascript:;" class="kt-nav__link">\
+												<i class="kt-nav__link-icon flaticon2-trash"></i>\
+												<span class="kt-nav__link-text">Usuń</span>\
+											</a>\
+										</li>\
+									</ul>\
+								</div>\
+							</div>\
+						';
 				}
 			}]
 		});
@@ -245,6 +263,8 @@ var KTROfferListDatatable = function() {
 				  dataObj[field.name] = field.value;
 				});
 
+				console.log(dataObj);
+
 				setTimeout(function() {
 					swal.fire({
 						"title": "",
@@ -267,7 +287,6 @@ var KTROfferListDatatable = function() {
 							btn.attr('disabled', false);
 
 							if(res.status == 'success') {
-								formCompanyList.hide();
 								$('#send_request_notify').show();
 								$('#dropzone_form_roffer').show();
 								$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
@@ -384,6 +403,8 @@ var KTROfferListDatatable = function() {
 														button.attr('disabled', false);
 														//
 														if(realize.status == 'success') {
+															$('#is_realized_notify').show();
+															$('#send_request_notify').hide();
 															swal.fire({
 																"title": "",
 																"text": realize.message,
@@ -509,8 +530,8 @@ var KTROfferListDatatable = function() {
 											modalEl.find('input[name="km_val_i"]').val(res.km_value);
 										}
 										modalEl.find('input[name="netto"]').val(res.netto);
-										modalEl.find('textarea[name="attentions"]').text(res.attentions);
-										modalEl.find('textarea[name="other"]').text(res.other);
+										modalEl.find('textarea[name="attentions"]').val(res.attentions);
+										modalEl.find('textarea[name="other"]').val(res.other);
 
 										/* ========================================
 												@Information Podstrona 'Realizacja zapytania'
@@ -518,27 +539,26 @@ var KTROfferListDatatable = function() {
 
 										modalEl.find('#attached_files').html('');
 										if(res.state == 3) {
-											formCompanyList.hide();
-											$('#send_request_notify').show();
+											$('#send_request_notify').hide();
+											$('#is_realized_notify').show();
 											$('#dropzone_form_roffer').show();
 											$('#summary_element').show();
 											$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
 											//
-											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', true);
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
 										} else if(res.state == 2) {
-											formCompanyList.hide();
 											$('#send_request_notify').show();
 											$('#dropzone_form_roffer').show();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											$('#summary_element').show();
-											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', true);
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
 										} else {
-											formCompanyList.show();
 											$('#send_request_notify').hide();
+											$('#is_realized_notify').hide();
 											$('#dropzone_form_roffer').hide();
 											$('#summary_element').hide();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
-											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer').prop('disabled', false);
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
 										}
 
 										if(userDataRole == 'administrator') {
@@ -640,12 +660,68 @@ var KTROfferListDatatable = function() {
 				});
 			});
 		});
+
+		$(document).on('click', '.delete_roffer', function() {
+			var id = $(this).attr('data-id');
+
+			swal.fire({
+				html: "Jesteś pewny że chcesz usunąć to zapytanie ofertowe?",
+				type: "info",
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if (result.value) {
+					$.ajax({
+						url: '/rest/roffer/delete',
+						method: 'POST',
+						data: { id: id },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: 'success',
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								datatable.reload();
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
+			});
+		});
 	}
 
 	// search
 	var search = function() {
+		var local_storage = JSON.parse(localStorage.getItem('kt_apps_offer_list_datatable-1-meta'));
+		if(local_storage.sort.field == 'created_at' && local_storage.sort.sort == 'desc')
+			$('#kt_form_sort option[value=""]').prop('selected', true);
+		else if(local_storage.sort.field == 'created_at' && local_storage.sort.sort == 'asc')
+			$('#kt_form_sort option[value="1"]').prop('selected', true);
+		else $('#kt_form_sort option[value="2"]').prop('selected', true);
+
+		$('.kt-selectpicker').selectpicker('refresh');
+
 		$('#kt_form_status').on('change', function() {
 			datatable.search($(this).val().toLowerCase(), 'state');
+		});
+
+		$('#kt_form_sort').on('change', function() {
+			if($(this).val() == '') datatable.sort('created_at', 'desc');
+			else if($(this).val() == '1') datatable.sort('created_at', 'asc');
+			else datatable.sort('fullname', 'desc');
 		});
 	}
 
@@ -699,7 +775,7 @@ var KTROfferListDatatable = function() {
 				}).then(function(result) {
 					if (result.value) {
 						$.ajax({
-							url: '/rest/user/sdelete',
+							url: '/rest/roffer/sdelete',
 							method: 'POST',
 							data: { data: data_send },
 							success: function(res) {
