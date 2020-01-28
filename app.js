@@ -50,7 +50,7 @@ app.locals.env = process.env;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.ACCESS_URL);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Authorization, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Content-Disposition, Access-Control-Expose-Headers, Authorization, Accept");
   next();
 });
 

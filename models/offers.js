@@ -213,18 +213,26 @@ module.exports.getOffers = (req, callback) => {
   }
 };
 
-function getFilesFromDir(path, callback) {
-  var files = fs.readdirSync(path), output = [];
-
-  async.each(files, function(name, cb) {
-    output.push({ filename: name, path: path });
-    cb();
-  }, function() {
-    callback(output);
-  });
-}
-
 module.exports.getOffersByClientId = (client_id, callback) => {
+  var output = [];
+  return new OfferLeasing()
+    .where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+    .then(async function(leasing) {
+      output = output.concat(leasing.toJSON());
+      OfferInsurance.where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+      .then(async function(insurance) {
+        output = output.concat(insurance.toJSON());
+        OfferRent.where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
+        .then(async function(rent) {
+          output = output.concat(rent.toJSON());
+
+          callback(output);
+        });
+      });
+    });
+};
+
+/* module.exports.getOffersByClientId = (client_id, callback) => {
   var output = [];
   return new OfferLeasing()
     .where({ client_id: client_id }).fetchAll({ withRelated: ['company'] })
@@ -277,30 +285,95 @@ module.exports.getOffersByClientId = (client_id, callback) => {
         });
       });
     });
-};
+}; */
 
 module.exports.getOfferById = (id, type, callback) => {
   if(type == 'rent') {
     return new OfferRent().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      callback(result.toJSON());
+      if(result) callback(result.toJSON());
     });
   } else if(type == 'insurance') {
     return new OfferInsurance().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      callback(result.toJSON());
+      if(result) callback(result.toJSON());
     });
   } else {
     return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['client', 'company'] })
     .then(function(result) {
-      var data = result.toJSON();
+      if(result) {
+        var data = result.toJSON();
 
-      new LeasingVariants().where({ offer_id: data.id }).fetchAll()
-      .then(function(variants) {
-        data['variants'] = variants.toJSON();
+        new LeasingVariants().where({ offer_id: data.id }).fetchAll()
+        .then(function(variants) {
+          if(variants) data['variants'] = variants.toJSON();
 
-        callback(data);
-      });
+          callback(data);
+        });
+      }
+    });
+  }
+};
+
+function getFilesFromDir(dirpath, callback) {
+  var files = fs.readdirSync('./uploads/' + dirpath), output = [];
+
+  async.each(files, function(name, cb) {
+    var stats = fs.statSync('./uploads/' + dirpath + '/' + name);
+    output.push({ filename: name, filesize: stats['size'], path: dirpath });
+    cb();
+  }, function() {
+    callback(output);
+  });
+}
+
+module.exports.getOfferWithFilesById = (id, type, callback) => {
+  if(type == 'rent') {
+    return new OfferRent().where({ id: id }).fetch({ withRelated: ['company'] })
+    .then(function(result) {
+      if(result) {
+        result = result.toJSON();
+        var buildPath = 'offer/offer_' + result.id + '_' + result.offer_type.charAt(0).toUpperCase() + '_' + moment(result.created_at).local().format('YYYY');
+
+        getFilesFromDir(buildPath, cb => {
+          result.files = cb;
+
+          callback(result);
+        });
+      }
+    });
+  } else if(type == 'insurance') {
+    return new OfferInsurance().where({ id: id }).fetch({ withRelated: ['company'] })
+    .then(function(result) {
+      if(result) {
+        result = result.toJSON();
+        var buildPath = 'offer/offer_' + result.id + '_' + result.offer_type.charAt(0).toUpperCase() + '_' + moment(result.created_at).local().format('YYYY');
+
+        getFilesFromDir(buildPath, cb => {
+          result.files = cb;
+
+          callback(result);
+        });
+      }
+    });
+  } else {
+    return new OfferLeasing().where({ id: id }).fetch({ withRelated: ['company'] })
+    .then(function(result) {
+      if(result) {
+        var data = result.toJSON();
+        var buildPath = 'offer/offer_' + data.id + '_' + data.offer_type.charAt(0).toUpperCase() + '_' + moment(data.created_at).local().format('YYYY');
+
+        LeasingVariants.where({ offer_id: data.id }).fetchAll()
+        .then(function(variants) {
+          data['variants'] = variants.toJSON();
+
+          getFilesFromDir(buildPath, cb => {
+            data.files = cb;
+
+            callback(data);
+          });
+        });
+      }
     });
   }
 };

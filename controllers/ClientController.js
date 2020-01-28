@@ -3,6 +3,8 @@ const Offer = require('../models/offers');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const mime = require('mime');
 
 Offer.getOffersByClientId(45, function() { });
 
@@ -70,7 +72,19 @@ exports.getClientOffers = (req, res) => {
 };
 
 exports.getClientOfferById = (req, res) => {
-  Offer.getOfferById(req.body.id, req.body.type, function(result) {
+  Offer.getOfferWithFilesById(req.body.id, req.body.type, function(result) {
     res.json(result);
   });
 };
+
+exports.downloadFileWithoutAuthentication = (req, res) => {
+  if(req.body) {
+    console.log('work');
+    var file = './uploads/' + req.body.path,
+    mimetype = mime.getType(file);
+
+    res.setHeader('Content-Type', mimetype);
+
+    res.download(file);
+  }
+}
