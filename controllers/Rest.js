@@ -17,6 +17,18 @@ const Promise = require('bluebird');
 const path = require('path');
 const sanitize = require('sanitize-filename');
 
+// Get files from directory
+function getFilesFromDir(dirpath, callback) {
+  var files = fs.readdirSync('./uploads/' + dirpath), output = [];
+
+  async.each(files, function(name, cb) {
+    output.push({ filename: name, path: './uploads/' + dirpath + '/' + name });
+    cb();
+  }, function() {
+    callback(output);
+  });
+}
+
 // String truncate
 String.prototype.trunc = String.prototype.trunc ||
 function(n){
@@ -734,6 +746,30 @@ exports.uploadRequestOfferFiles = (req, res, next) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.uploadROfferMoreFiles = (req, res, next) => {
+  if(req.isAuthenticated()) {
+    if(req.session.userData.role == 'administrator') {
+      if(req.files) {
+        var upload_dir = 'uploads',
+        cache_dir = 'cache_files',
+        f_path = req.body.folder_path;
+
+        fs.mkdirSync(upload_dir + '/' + cache_dir + '/' + f_path, { recursive: true });
+
+        Promise.resolve(req.files)
+          .each(function(file_incoming, idx) {
+            var sanitized_filename = sanitize(file_incoming.originalname);
+            var file = path.join(upload_dir, cache_dir, f_path, sanitized_filename);
+
+            return fs.writeFileSync(file, file_incoming.buffer);
+          }).then(function() {
+            res.status(200).json({ status: 'success', message: 'Files successfully uploaded.' });
+          });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+}
+
 exports.getFiles = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.body) {
@@ -888,6 +924,17 @@ exports.requestOfferSendMail = (req, res) => {
 
           if(data) {
             await PDF.fillPDF('./build/pdf_files/' + cb.type + '-' + client_type[cb.client_info.company] + '.pdf', savePath, data).then(function() {
+              var attachments;
+
+              if(req.body.path.length == 0) {
+                attachments = [{ filename: nameGenerated + '.pdf', path: savePath }];
+              } else {
+                getFilesFromDir('cache_files/' + req.body.path, attr => {
+                  attr.push({ filename: nameGenerated + '.pdf', path: savePath });
+                  attachments = attr;
+                });
+              }
+
               async.each(req.body.mails, async function(email, end) {
                 await Mails.sendMail.send({
                   message: {
@@ -895,12 +942,7 @@ exports.requestOfferSendMail = (req, res) => {
                     to: email,
                     subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
                     html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.',
-                    attachments: [
-                      {
-                        filename: nameGenerated + '.pdf',
-                        path: savePath
-                      }
-                    ]
+                    attachments: attachments
                   }
                 });
                 end();

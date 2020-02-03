@@ -615,6 +615,26 @@ block content
                                       |                                         
                                       .col-lg-8.col-xl-8
                                         select#company_list.form-control.kt-selectpicker(name='company_list', multiple='')     
+                                    .form-group.row
+                                      label.col-xl-4.col-lg-4.col-form-label Załącz dodatkowe dokumenty:
+                                      .col-lg-8.col-xl-8
+                                        #kt_dropzone_more_files.dropzone.dropzone-multi
+                                          .dropzone-panel
+                                            a.dropzone-select.btn.btn-label-brand.btn-bold.btn-sm Załącz dokumenty
+                                          .dropzone-items
+                                            .dropzone-item(style='display:none')
+                                              .dropzone-file
+                                                .dropzone-filename
+                                                  span(data-dz-name='')
+                                                  strong
+                                                    | &nbsp;(
+                                                    span(data-dz-size='')
+                                                    | )
+                                                .dropzone-error(data-dz-errormessage='')
+                                              .dropzone-toolbar
+                                                span.dropzone-delete(data-dz-remove='')
+                                                  i.flaticon2-cross
+                                        span.form-text.text-muted Maksymalna liczba plików: 5. Maksymalny rozmiar pliku: 5 MB. Obsługiwane formaty plików: .xls, .doc, .pdf, .docx, .odt, .jpg, .png
                                     .kt-form__actions
                                       .row
                                         .col-lg-12.col-xl-12.kt-align-center

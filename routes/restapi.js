@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('multer')();
+
+// Middlewares
 const clientAuth = require('../middlewares/clientAuth');
 
 // Kontrolery
@@ -66,6 +68,7 @@ router.get('/rest/company/remotelist', REST.companyRemoteList);
 router.post('/rest/files/upload', upload.array('source_file[]'), REST.uploadOfferFiles);
 router.post('/rest/files/upload/client', upload.array('source_file[]'), REST.uploadClientFiles);
 router.post('/rest/files/upload/roffer', upload.array('source_file[]'), REST.uploadRequestOfferFiles);
+router.post('/rest/files/upload/mfiles', upload.array('source_file[]'), REST.uploadROfferMoreFiles);
 router.post('/rest/files/get', REST.getFiles);
 router.post('/rest/file/download', REST.downloadFile);
 router.post('/rest/file/delete', REST.deleteFile);

@@ -4,7 +4,7 @@
 var KTROfferListDatatable = function() {
 
 	// variables
-	var datatable, validator, formEl, f_path;
+	var datatable, validator, formEl, f_path, dz_upload;
 	var formCompanyList, formCompany_valid;
 
 	var ext = {
@@ -247,7 +247,7 @@ var KTROfferListDatatable = function() {
 		});
 	}
 
-	var initSendOfferCompanies = function() {
+	/* var initSendOfferCompanies = function() {
 		var btn = $('button[type="submit"]', formCompanyList);
 
 		btn.on('click', function(e) {
@@ -262,8 +262,6 @@ var KTROfferListDatatable = function() {
 				$(dataArray).each(function(i, field)	{
 				  dataObj[field.name] = field.value;
 				});
-
-				console.log(dataObj);
 
 				setTimeout(function() {
 					swal.fire({
@@ -308,6 +306,140 @@ var KTROfferListDatatable = function() {
 						}
 					});
 				},1000);
+			}
+		});
+	}; */
+
+	var initSendOfferCompanies = function() {
+		var btn = $('button[type="submit"]', formCompanyList);
+
+		btn.on('click', function(e) {
+			e.preventDefault();
+
+			if(formCompany_valid.form()) {
+				KTApp.progress(btn);
+				btn.attr('disabled', true);
+
+				// Serialize data array
+				var dataArray = formEl.serializeArray(), dataObj = {};
+				$(dataArray).each(function(i, field)	{
+				  dataObj[field.name] = field.value;
+				});
+
+				if(dz_upload.files.length != 0) {
+					swal.fire({
+						"title": "",
+						"text": "Przesyłanie załączonych plików..",
+						onBeforeOpen: () => {
+							swal.showLoading();
+						},
+						allowOutsideClick: false
+					});
+
+					// Send files to system
+					setTimeout(function() {
+						dz_upload.processQueue();
+					}, 500);
+
+					dz_upload.on("successmultiple", function(file, resp) {
+						dz_upload.removeAllFiles();
+
+						setTimeout(function() {
+							swal.fire({
+								"title": "",
+								"text": "Wysyłanie wiadomości..",
+								onBeforeOpen: () => {
+									swal.showLoading();
+								},
+								allowOutsideClick: false
+							});
+
+							formCompanyList.ajaxSubmit({
+								url: '/rest/roffer/sendMail',
+								method: 'POST',
+								data: {
+									mails: $('#company_list').val(),
+									data: dataObj,
+									path: f_path
+								},
+								success: function(res) {
+									KTApp.unprogress(btn);
+									btn.attr('disabled', false);
+
+									if(res.status == 'success') {
+										$('#send_request_notify').show();
+										$('#dropzone_form_roffer').show();
+										$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
+										$('#summary_element').show();
+
+										swal.fire({
+											"title": "",
+											"text": res.message,
+											"type": res.status,
+											"confirmButtonClass": "btn btn-secondary"
+										});
+										datatable.reload();
+									} else {
+										KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+									}
+								},
+								error: function(err) {
+									KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+								}
+							});
+						}, 1000);
+					});
+
+					dz_upload.on("sendingmultiple", function(file, xhr, formData) {
+						formData.append('folder_path', f_path);
+					});
+
+				} else {
+					setTimeout(function() {
+						swal.fire({
+							"title": "",
+							"text": "Wysyłanie wiadomości..",
+							onBeforeOpen: () => {
+								swal.showLoading();
+							},
+							allowOutsideClick: false
+						});
+
+						formCompanyList.ajaxSubmit({
+							url: '/rest/roffer/sendMail',
+							method: 'POST',
+							data: {
+								mails: $('#company_list').val(),
+								data: dataObj,
+								path: null
+							},
+							success: function(res) {
+								KTApp.unprogress(btn);
+								btn.attr('disabled', false);
+
+								if(res.status == 'success') {
+									$('#send_request_notify').show();
+									$('#dropzone_form_roffer').show();
+									$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
+									$('#summary_element').show();
+
+									swal.fire({
+										"title": "",
+										"text": res.message,
+										"type": res.status,
+										"confirmButtonClass": "btn btn-secondary"
+									});
+									datatable.reload();
+								} else {
+									KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+								}
+							},
+							error: function(err) {
+								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+							}
+						});
+					},1000);
+				}
 			}
 		});
 	};
@@ -551,14 +683,14 @@ var KTROfferListDatatable = function() {
 											$('#dropzone_form_roffer').show();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											$('#summary_element').show();
-											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
+											// formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
 										} else {
 											$('#send_request_notify').hide();
 											$('#is_realized_notify').hide();
 											$('#dropzone_form_roffer').hide();
 											$('#summary_element').hide();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
-											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
+											// formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
 										}
 
 										if(userDataRole == 'administrator') {
@@ -922,6 +1054,39 @@ var KTROfferListDatatable = function() {
 	}
 
 	var initDropzone = function() {
+		var id = '#kt_dropzone_more_files';
+		var previewNode = $(id + ' .dropzone-item');
+		previewNode.id = "";
+		var previewTemplate = previewNode.parent('.dropzone-items').html();
+		previewNode.remove();
+
+		$('#kt_dropzone_more_files').dropzone({
+			url: '/rest/files/upload/mfiles',
+			autoProcessQueue: false,
+			paramName: function() { return 'source_file[]' }, // The name that will be used to transfer the file
+			previewTemplate: previewTemplate,
+			maxFiles: 5,
+			maxFilesize: 5, // MB
+			uploadMultiple: true,
+			parallelUploads: 5,
+			previewsContainer: id + ' .dropzone-items',
+			clickable: id + ' .dropzone-select',
+			acceptedFiles: "application/pdf,.docx,.odt,.xls,.jpg,.png,.jpeg",
+			init: function() {
+				dz_upload = this;
+
+				this.on("addedfile", function(file) {
+					$(document).find(id + ' .dropzone-item').css('display', '');
+				});
+
+				this.on("removedfile", function(file) {
+					if(dz_upload.files.length < 1) {
+						$(document).find(id + ' .dropzone-item').css('display', 'none');
+					}
+				});
+			}
+		});
+
 		$('#kt_dropzone_request_offer').dropzone({
 			url: '/rest/files/upload/roffer',
 			autoProcessQueue: true,
