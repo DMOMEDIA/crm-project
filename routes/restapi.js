@@ -90,6 +90,7 @@ router.post('/rest/stats/counts', REST.getStatsCount);
 router.post('/api/client/data', clientAuth.authenticate, ClientController.getClientData);
 router.post('/api/client/offers', clientAuth.authenticate, ClientController.getClientOffers);
 router.post('/api/client/offer', clientAuth.authenticate, ClientController.getClientOfferById);
+router.post('/api/client/filelist', clientAuth.authenticate, ClientController.getClientFilelist);
 router.post('/api/client/file/download', clientAuth.authenticate, ClientController.downloadFileWithoutAuthentication);
 
 module.exports = router;

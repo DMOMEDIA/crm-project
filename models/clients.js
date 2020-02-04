@@ -1,5 +1,7 @@
 const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
+const moment = require('moment');
+const fs = require('fs');
 const randomstring = require("randomstring");
 const Messages = require('../config/messages');
 const System = require('../models/system');
@@ -86,6 +88,18 @@ module.exports.clientList = (callback) => {
   });
 };
 
+function getFilesFromDir(dirpath, callback) {
+  var files = fs.readdirSync('./uploads/' + dirpath), output = [];
+
+  async.each(files, function(name, cb) {
+    var stats = fs.statSync('./uploads/' + dirpath + '/' + name);
+    output.push({ filename: name, filesize: stats['size'], path: dirpath });
+    cb();
+  }, function() {
+    callback(output);
+  });
+}
+
 module.exports.clientlistByAssignedId = (id, callback) => {
   var output = [];
   return new Client().where({ user_id: id }).fetchAll().then(function(response) {
@@ -121,6 +135,16 @@ module.exports.clientlistByAssignedId = (id, callback) => {
 module.exports.getClientById = (id) => {
   const query = { id: id };
   return new Client().where(query).fetch();
+};
+
+module.exports.getClientFiles = (id, callback) => {
+  module.exports.getClientById(id).then(function(client) {
+    var path_to = 'clients/client_' + id + '_' + moment(client.get('created_at')).local().format('YYYY');
+
+    getFilesFromDir(path_to, filelist => {
+      callback(filelist);
+    });
+  });
 };
 
 module.exports.activateAccount = (hash, callback) => {

@@ -77,6 +77,12 @@ exports.getClientOfferById = (req, res) => {
   });
 };
 
+exports.getClientFilelist = (req, res) => {
+  Client.getClientFiles(req.body.id, function(result) {
+    res.json(result);
+  });
+};
+
 exports.downloadFileWithoutAuthentication = (req, res) => {
   if(req.body) {
     console.log('work');
