@@ -311,6 +311,7 @@ module.exports.addOffer = (value, callback) => {
             subject: 'Zapytanie ofertowe zostało złożone'
           },
           locals: {
+            client_name: client.fullname,
             identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
             hashlink: link + client.hashlink,
             isActivated: (client.state == 4) ? true : false
@@ -330,6 +331,7 @@ module.exports.addOffer = (value, callback) => {
               subject: 'Zapytanie ofertowe zostało złożone'
             },
             locals: {
+              client_name: result.get('fullname'),
               identity: '00' + done.get('id') + '/' + moment().format('YYYY'),
               hashlink: link + result.get('hashlink'),
               isActivated: false
