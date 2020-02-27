@@ -85,7 +85,6 @@ exports.getClientFilelist = (req, res) => {
 
 exports.downloadFileWithoutAuthentication = (req, res) => {
   if(req.body) {
-    console.log('work');
     var file = './uploads/' + req.body.path,
     mimetype = mime.getType(file);
 

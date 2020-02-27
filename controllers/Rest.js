@@ -195,6 +195,39 @@ exports.changeUserPassword = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.resetUserPassword = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.employees.edit')) {
+      if(req.body.id) {
+        User.resetPassword(req.body, result => {
+          if(result.status == 'success') {
+            User.getUserById(null, req.body.id).then(function(data) {
+              Mails.sendMail.send({
+                // template: 'client_offer',
+                message: {
+                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                  to: data.get('email'),
+                  subject: 'Twoje hasło zostało zresetowane przez administratora',
+                  html: 'Witaj, ' + data.get('fullname') + '. Twoje nowe hasło zostało wygenerowane.<br/><br/><span style="font-size:18px;font-weight:bold;">' + result.newpassword + '</span><br/><br/>Od teraz możesz posługiwać się nowym hasłem w systemie CRM.'
+                },
+                /* locals: {
+                  data: offer,
+                  date_format: date_format,
+                  identity: o_identity
+                } */
+              }).then(function() {
+                res.json({ status: result.status, message: result.message });
+              });
+            });
+          } else {
+            res.json(result);
+          }
+        });
+      } else res.json(Messages.message('identity_not_selected', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 exports.deleteUserById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.delete')) {

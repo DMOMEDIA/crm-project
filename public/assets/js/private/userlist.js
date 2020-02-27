@@ -338,8 +338,7 @@ var KTUserListDatatable = function() {
 				},
 				cregon: {
 					digits: true,
-					minlength: 10,
-					maxlength: 14
+					maxlength: 15
 				},
 				email: {
 					required: true,
@@ -385,7 +384,6 @@ var KTUserListDatatable = function() {
 				},
 				cregon: {
 					digits: "To pole może składać się jedynie z cyfr.",
-					minlength: "Numer REGON musi składać się z {0} cyfr.",
 					maxlength: "Numer REGON musi składać się z {0} cyfr."
 				},
 				email: {
@@ -1526,6 +1524,42 @@ var KTUserListDatatable = function() {
 		});
 	}
 
+	var passwordReset = function() {
+		$('#btnPasswordReset').on('click', function(e) {
+			swal.fire({
+				html: "Jesteś pewny że chcesz zresetować hasło tego użytkownika?",
+				type: "info",
+
+				confirmButtonText: "Resetuj",
+				confirmButtonClass: "btn btn-sm btn-bold btn-danger",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if (result.value) {
+					$.ajax({
+						url: '/rest/user/resetpwd',
+						method: 'POST',
+						data: form_password.serialize(),
+						success: function(res) {
+
+							swal.fire({
+								"title": "",
+								"text": res.message,
+								"type": res.status,
+								"confirmButtonClass": "btn btn-secondary"
+							});
+						},
+						error: function(err) {
+								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+						}
+					});
+				}
+			});
+		});
+	};
+
 	return {
 		// public functions
 		init: function() {
@@ -1552,6 +1586,7 @@ var KTUserListDatatable = function() {
 			submitClientData();
 			initChangeStatus();
 			updateTotal();
+			passwordReset();
 			search();
 		},
 	};

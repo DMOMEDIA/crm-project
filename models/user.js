@@ -2,6 +2,7 @@ const bookshelf = require('../config/bookshelf');
 const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages.js');
 const async = require('async');
+const generatePassword = require('password-generator');
 
 const User = bookshelf.Model.extend({
   tableName: 'crm_users',
@@ -207,6 +208,23 @@ module.exports.userChangePassword = (user, callback) => {
   });
 };
 
+module.exports.resetPassword = (user, callback) => {
+  return new User().where({ id: user.id }).fetch().then(function(model) {
+    if(model) {
+      var gpass = generatePassword(10, false);
+
+      bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(gpass, salt, function(err, npassword) {
+          model.set('password', npassword);
+          model.save();
+
+          callback({ status: 'success', message: 'Hasło użytkownika zostało poprawnie zmienione i wysłane na adres e-mail', newpassword: gpass });
+        });
+      });
+    } else callback(Messages.message('not_found_user_identity', null));
+  });
+};
+ 
 module.exports.deleteUser = (id, callback) => {
   return new User().where({ id: id }).fetch().then(function(model) {
     if(model) {

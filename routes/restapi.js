@@ -26,6 +26,7 @@ router.get('/rest/users/name', REST.getUserlistName);
 router.get('/rest/users/namebyrole', REST.getUserlistByRole);
 router.post('/rest/user/delete', REST.deleteUserById);
 router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
+router.post('/rest/user/resetpwd', REST.resetUserPassword);
 
 // {REST} dot. klientów
 router.post('/rest/clients/add', REST.addClient);

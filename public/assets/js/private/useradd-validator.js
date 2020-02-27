@@ -153,8 +153,7 @@ var KTUserAdd = function () {
 				},
 				cregon: {
 					digits: true,
-					minlength: 10,
-					maxlength: 14
+					maxlength: 15
 				},
 				email: {
 					required: true,
@@ -222,7 +221,6 @@ var KTUserAdd = function () {
 				},
 				cregon: {
 					digits: "To pole może składać się jedynie z cyfr.",
-					minlength: "Numer REGON musi składać się z {0} cyfr.",
 					maxlength: "Numer REGON musi składać się z {0} cyfr."
 				},
         pNumber: {
