@@ -153,6 +153,8 @@ var KTROfferListDatatable = function() {
 	var initValidation = function() {
 		$('#wklad_l').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
 		$('#wykup_l').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
+		$('#wklad_r').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
+		$('#wykup_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$('#netto_val').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, clearMaskOnLostFocus: true, min: 1, prefix: '' });
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
@@ -189,6 +191,15 @@ var KTROfferListDatatable = function() {
 					required: true
 				},
 				fuel_type_r: {
+					required: true
+				},
+				rent_installment: {
+					required: true
+				},
+				wklad_r: {
+					required: true
+				},
+				wykup_r: {
 					required: true
 				},
 				brand_i: {
@@ -647,6 +658,12 @@ var KTROfferListDatatable = function() {
 											});
 											modalEl.find('select[name="body_type_r"] option[value="' + res.body_type + '"]').prop('selected', true);
 											modalEl.find('select[name="fuel_type_r"] option[value="' + res.fuel_type + '"]').prop('selected', true);
+											modalEl.find('select[name="rent_installment"] option[value="' + res.instalments + '"]').prop('selected', true);
+											modalEl.find('input[name="wklad_r"]').val(res.contribution);
+											modalEl.find('input[name="wykup_r"]').val(res.red_value);
+											modalEl.find('input[name="service_pack"]').prop('checked', res.service);
+											modalEl.find('input[name="tire_pack"]').prop('checked', res.tire);
+											modalEl.find('input[name="insurance_pack"]').prop('checked', res.insurance);
 										} else {
 											modalEl.find('#leasing_offer').hide();
 											modalEl.find('#rent_offer').hide();

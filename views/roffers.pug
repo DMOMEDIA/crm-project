@@ -124,7 +124,7 @@ block content
                               .kt-section.kt-section--first
                                 .kt-section__body
                                   .row
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       i.fa.fa-user-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                       h5.kt-section__title.kt-section__title-sm.d-inline-block Dane klienta:
                                   |                                                               
@@ -169,7 +169,7 @@ block content
                                         | Telefon:
                                       span#phone_user.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
                                   .row
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       i.fa.fa-question-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                       h5.kt-section__title.kt-section__title-sm.d-inline-block Zapytanie ofertowe:
                                   |                      
@@ -191,8 +191,7 @@ block content
                                         | Typ zapytania:
                                       span#roffer_type.kt-widget13__text.kt-widget13__text--bold
                                   .row
-                                    label.col-xl-3     
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       i.fa.fa-code-branch.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                       h5.kt-section__title.kt-section__title-sm.d-inline-block Dane przedmiotu zapytania:
                                   |       
@@ -200,13 +199,13 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa przedmiotu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='nameItem', placeholder='Nazwa przedmiotu finansowania')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='pyear_l')
                                           option(value='' selected='' disabled='') Wybierz rok produkcji
                                           option(value='2020') 2020
@@ -329,7 +328,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Okres finansowania:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='leasing_installment')
                                           option(value='', selected='', disabled='') Wybierz okres finansowania
                                           option(value='12') 12 miesięcy
@@ -343,26 +342,26 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wkład własny:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#wklad_l.form-control(type='text', name='wklad_l', maxlength="15", placeholder='Wkład własny')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wartość wykupu (%):
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#wykup_l.form-control(type='text', name='wykup_l', maxlength="5", placeholder='Wartość wykupu')
                                     |                                     
                                   #rent_offer(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Marka i model pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='brand_r', placeholder='Marka i model pojazdu')
                                     |                 
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wysokość raty miesięcznej:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         .kt-ion-range-slider
                                           input#month_installment(type='hidden', name='installment_val')
                                         .form-text.text-muted.kt-font-bold.kt-font-brand
@@ -371,7 +370,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ nadwozia pojazdu: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='body_type_r')
                                           option(value='', selected='', disabled='') Wybierz typ nadwozia
                                           option(value='SUV') SUV
@@ -391,7 +390,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rodzaj paliwa:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='fuel_type_r')
                                           option(value='', selected='', disabled='') Wybierz rodzaj paliwa
                                           option(value='diesel') diesel
@@ -399,18 +398,60 @@ block content
                                           option(value='benzyna/gaz') benzyna/gaz
                                           option(value='hybryda') hybryda
                                           option(value='elektryczny') elektryczny 
-                                    |                        
+                                    |           
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Okres najmu:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        select.form-control(name='rent_installment')
+                                          option(value='', selected='', disabled='') Wybierz okres najmu
+                                          option(value='12') 12 miesięcy
+                                          option(value='24') 24 miesiące
+                                          option(value='36') 36 miesięcy
+                                          option(value='48') 48 miesięcy
+                                          option(value='60') 60 miesięcy
+                                          option(value='72') 72 miesiące
+                                          option(value='84') 84 miesiące
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wkład własny:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#wklad_r.form-control(type='text', name='wklad_r', maxlength="15", placeholder='Wkład własny')
+                                    |                                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość wykupu (%):
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#wykup_r.form-control(type='text', name='wykup_r', maxlength="5", placeholder='Wartość wykupu')
+                                    |            
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Pakiety w ofercie: 
+                                      .col-lg-9.col-xl-9
+                                        .kt-checkbox-inline
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='1', name='service_pack')
+                                            |  Serwis
+                                            span
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='1', name='tire_pack')
+                                            |  Wymiana opon
+                                            span
+                                          label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                                            input(type='checkbox', value='1', name='insurance_pack')
+                                            |  Ubezpieczenie
+                                            span
                                   #insurance_offer(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Marka i model pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='brand_i', placeholder='Marka i model pojazdu')
                                     |                 
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='pyear_i')
                                           option(value='' selected='' disabled='') Wybierz rok produkcji
                                           option(value='2020') 2020
@@ -533,49 +574,49 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Pojemność silnika (w cm³): 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Moc silnika (w km): 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#power_cap_i.form-control(type='text', name='power_cap_i', placeholder='Moc silnika')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Numer VIN: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
                                     |         
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Numer rejestracyjny: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
                                     |         
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Przebieg pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
                                     |            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Wartość netto:
                                     |                                         
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       input#netto_val.form-control(type='text', name='netto', maxlength="15", placeholder='Wartość netto')
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Uwagi:
                                     |                                         
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       textarea.form-control(name='attentions', rows='3', placeholder='Uwagi dot. oferty')
                                   |                                     
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Inne:
                                     |                                         
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       textarea.form-control(name='other', rows='3', placeholder='Inne informacje dot. oferty')
                                   |                   
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
@@ -605,7 +646,7 @@ block content
                                       |                             
                                       .alert-text Zapytanie ofertowe zostało zrealizowane, nadal możesz dodawać nowe oferty i wyświetlać je dla pracowników.
                                   .row
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       i.fa.fa-mail-bulk.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                       h5.kt-section__title.kt-section__title-sm.d-inline-block Wysyłanie zapytania do określonych firm:
                                   |                
@@ -640,7 +681,7 @@ block content
                                         .col-lg-12.col-xl-12.kt-align-center
                                           button.btn.btn-sm.btn-success.btn-bold(type='submit') Wyślij zapytanie
                                 .row.kt-margin-t-20
-                                  .col-lg-9.col-xl-6
+                                  .col-lg-9.col-xl-9
                                     i.fa.fa-file-upload.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                     h5.kt-section__title.kt-section__title-sm.d-inline-block Załączone oferty:
                                 |                
@@ -658,7 +699,7 @@ block content
                                                 span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
                                 #summary_element
                                   .row.kt-margin-t-20
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       i.fa.fa-dot-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
                                       h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
                                   .form-group.form-group-last.row

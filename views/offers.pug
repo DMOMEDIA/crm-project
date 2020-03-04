@@ -140,8 +140,7 @@ block content
                               .kt-section.kt-section--first
                                 .kt-section__body
                                   .row
-                                    label.col-xl-3     
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       h3.kt-section__title.kt-section__title-sm Dane oferty:
                                   |     
                                   .row
@@ -163,15 +162,14 @@ block content
                                   .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                   |                             
                                   .row
-                                    label.col-xl-3     
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       h3.kt-section__title.kt-section__title-sm Dane przedmiotu:
                                   |                                            
                                   #leasing_type_box
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ przedmiotu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='item_type_l')
                                           option(value='', selected='', disabled='') Wybierz typ przedmiotu
                                           option(value='pojazd') pojazd
@@ -181,13 +179,13 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa przedmiotu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='brand_l', placeholder='Nazwa przedmiotu')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Stan przedmiotu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='condition_l')
                                           option(value='nowy') nowy
                                           option(value='używany') używany
@@ -195,19 +193,19 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#pyear_l.form-control(type='text', name='pyear_l', placeholder='Rok produkcji')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wartość netto:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#price_netto_l.form-control(type='number', name='netto_l', placeholder='Wartość netto')
                                     |                      
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Faktura:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='invoice_l')
                                           option(value='', selected='', disabled='') Wybierz rodzaj faktury
                                           option(value='VAT') VAT
@@ -215,22 +213,68 @@ block content
                                     |                     
                                     .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                                     .row
-                                      label.col-xl-3     
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         h3.kt-section__title.kt-section__title-sm Warianty przedmiotu:
                                     |                        
                                     #leasing_variants
+                                    .row
+                                      .col-lg-9.col-xl-9
+                                        h3.kt-section__title.kt-section__title-sm Warunki dodatkowe - ubezpieczenie AC/OC:
+                                    |                                      
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rata ubezpieczenia:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#acoc_rata_l.form-control(type='number', name='acoc_rata_l', placeholder='Rata ubezpieczenia')
+                                    |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#acoc_company_l.form-control(type='text', name='acoc_company_l', maxlength='64', placeholder='Nazwa firmy')
+                                    |              
+                                    .row
+                                      .col-lg-9.col-xl-9
+                                        h3.kt-section__title.kt-section__title-sm Warunki dodatkowe - ubezpieczenie GAP:
+                                    |                 
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rata ubezpieczenia:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#gap_rata_l.form-control(type='number', name='gap_rata_l', placeholder='Rata ubezpieczenia')
+                                    |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Okres ubezpieczenia:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#gap_okres_l.form-control(type='text', name='gap_okres_l', placeholder='Okres ubezpieczenia')
+                                    |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#gap_company_l.form-control(type='text', name='gap_company_l', maxlength='64', placeholder='Nazwa firmy')
+                                    |              
+                                    .row
+                                      .col-lg-9.col-xl-9
+                                        h3.kt-section__title.kt-section__title-sm Inne warunki:
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Uwagi:
+                                      |
+                                      .col-lg-9.col-xl-9
+                                        textarea.form-control(name='attentions_l', rows='5', placeholder='Uwagi dot. oferty')
                                   #rent_type_box(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='brand_r', placeholder='Marka/model pojazdu')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ nadwozia pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='body_type_r')
                                           option(value='', selected='', disabled='') Wybierz typ nadwozia
                                           option(value='SUV') SUV
@@ -250,7 +294,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rodzaj paliwa:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='fuel_type_r')
                                           option(value='', selected='', disabled='') Wybierz rodzaj paliwa
                                           option(value='diesel') diesel
@@ -262,7 +306,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Skrzynia biegów:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='gear_type_r')
                                           option(value='', selected='', disabled='') Wybierz typ skrzyni biegów
                                           option(value='manualna') manualna
@@ -271,40 +315,52 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wysokość raty miesięcznej:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         .kt-ion-range-slider
                                           input#month_installment(type='hidden', name='installment_val')
                                         .form-text.text-muted.kt-font-bold.kt-font-brand
                                           | Kliknij suwak i modyfikuj wartości za pomocą strzałek w lewo i prawo, ta metoda pozwoli Ci na precyzyjne ustawienie wartości.
                                     |                     
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Wartość pojazdu:
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość pojazdu netto:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#vehicle_val_r.form-control(type='number', name='vehicle_val_r', placeholder='Wartość pojazdu')
                                     |                      
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Okres wynajmu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#rent_time_r.form-control(type='text', name='rent_time_r', placeholder='Okres wynajmu')
                                     |                      
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wpłata własna:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
                                     |                     
                                     .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Wartość wykupu (%):
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#wykup_r.form-control(type='text', name='wykup_r', maxlength="5", placeholder='Wartość wykupu')
+                                    |            
+                                    .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Roczny limit kilometrów:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
+                                    |                     
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Numer rejestracyjny:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#reg_number_r.form-control(type='text', name='reg_number_r', placeholder='Numer rejestracyjny')
                                     |                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Faktura:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='invoice_r')
                                           option(value='', selected='', disabled='') Wybierz rodzaj faktury
                                           option(value='VAT') VAT
@@ -313,37 +369,79 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Pakiety w ofercie: 
                                       |
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         .kt-checkbox-inline
                                           label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                            input(type='checkbox', value='serwis', name='service_pack', disabled='')
+                                            input(type='checkbox', value='1', name='service_pack')
                                             |  Serwis
                                             span
                                           label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                            input(type='checkbox', value='wymiana opon', name='tire_pack', disabled='')
+                                            input(type='checkbox', value='1', name='tire_pack')
                                             |  Wymiana opon
                                             span
                                           label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                            input(type='checkbox', value='ubezpieczenie', name='insurance_pack', disabled='')
+                                            input(type='checkbox', value='1', name='insurance_pack')
                                             |  Ubezpieczenie
                                             span
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Ubezpieczenie GAP: 
+                                      |
+                                      .col-lg-9.col-xl-9
+                                        .kt-radio-inline
+                                          label.kt-radio.kt-radio--bold.kt-radio--brand
+                                            input(type='radio', name='insurance_gap', value='0')
+                                            |  Nie
+                                            |              
+                                            span
+                                          |            
+                                          label.kt-radio.kt-radio--bold.kt-radio--brand
+                                            input(type='radio', name='insurance_gap', value='1')
+                                            |  Tak
+                                            |                      
+                                            span
+                                          |                       
+                                    .row
+                                      .col-lg-9.col-xl-9
+                                        h3.kt-section__title.kt-section__title-sm Warunki dodatkowe - ubezpieczenie AC/OC:
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Rata ubezpieczenia:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#acoc_rata.form-control(type='number', name='acoc_rata', placeholder='Rata ubezpieczenia')
+                                    |              
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
+                                      |                                         
+                                      .col-lg-9.col-xl-9
+                                        input#acoc_company.form-control(type='text', name='acoc_company', maxlength='64', placeholder='Nazwa firmy')
+                                    |              
+                                    .row
+                                      .col-lg-9.col-xl-9
+                                        h3.kt-section__title.kt-section__title-sm Inne warunki:
+                                    |                        
+                                    .form-group.row
+                                      label.col-xl-3.col-lg-3.col-form-label Uwagi:
+                                      |
+                                      .col-lg-9.col-xl-9
+                                        textarea.form-control(name='attentions_r', rows='5', placeholder='Uwagi dot. oferty')
                                   #insurance_type_box(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Marka/model pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='brand_i', placeholder='Marka/model pojazdu')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wersja pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='version_i', placeholder='Wersja pojazdu')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ nadwozia pojazdu: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='body_type_i')
                                           option(value='', selected='', disabled='') Wybierz typ nadwozia
                                           option(value='SUV') SUV
@@ -363,49 +461,49 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Rok produkcji:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#pyear_i.form-control(type='text', name='pyear_i', placeholder='Rok produkcji')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Przebieg pojazdu:
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#km_val_i.form-control(type='text', name='km_val_i', placeholder='Przebieg pojazdu')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Pojemność silnika (w cm³): 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#engine_cap_i.form-control(type='text', name='engine_cap_i', placeholder='Pojemność silnika')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Moc silnika (w km): 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#power_cap_i.form-control(type='text', name='power_cap_i', placeholder='Moc silnika')
                                     |            
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Numer VIN: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#vin_number.form-control(type='text', maxlength='17', name='vin_number', placeholder='Numer VIN')
                                     |         
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Numer rejestracyjny: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#reg_number.form-control(type='text', name='reg_number', placeholder='Numer rejestracyjny')
                                     |         
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Wartość pojazdu netto: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#vehicle_val_i.form-control(type='number', name='vehicle_val_i', placeholder='Wartość pojazdu netto')
                                     |         
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Koszt ubezpieczenia: 
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='number', name='insurance_cost', placeholder='Koszt ubezpieczenia')
                                     |         
                                   |                        
@@ -421,8 +519,7 @@ block content
                         .kt-section.kt-section--first
                           .kt-section__body
                             .row
-                              label.col-xl-3     
-                              .col-lg-9.col-xl-6
+                              .col-lg-9.col-xl-9
                                 h3.kt-section__title Dane klienta:
                             |                                          
                             .kt-widget13
@@ -448,9 +545,8 @@ block content
                                 span.kt-widget13__desc
                                   | Telefon:
                                 span#client_phone.kt-widget13__text.kt-font-brand.kt-widget13__text--bold
-                            .row
-                              label.col-xl-3     
-                              .col-lg-9.col-xl-6
+                            .row 
+                              .col-lg-9.col-xl-9
                                 h3.kt-section__title Dane firmy od której otrzymano ofertę:
                             |                                        
                             .kt-widget13
@@ -491,8 +587,7 @@ block content
                         .kt-section.kt-section--first
                           .kt-section__body
                             .row
-                              label.col-xl-3     
-                              .col-lg-9.col-xl-6
+                              .col-lg-9.col-xl-9
                                 h3.kt-section__title Załączone dokumenty:
                             |                 
                             #attached_files.kt-widget4
@@ -508,9 +603,8 @@ block content
                                         .dropzone-msg.dz-message.needsclick
                                           h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
                                           span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls) 
-                            .row
-                              label.col-xl-3     
-                              .col-lg-9.col-xl-6
+                            .row  
+                              .col-lg-9.col-xl-9
                                 h3.kt-section__title Realizacja:
                             |                 
                             #isRealized_alert
@@ -544,8 +638,7 @@ block content
                             |                    
                             if userPermissions.includes('crm.offers.status_change')  
                               .row
-                                label.col-xl-3     
-                                .col-lg-9.col-xl-6
+                                .col-lg-9.col-xl-9
                                   h3.kt-section__title Zmiana statusu oferty:
                               |                 
                               .kt-form.kt-form--label-right
@@ -554,7 +647,7 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Status
                                       |                                         
-                                      .col-lg-6.col-xl-6
+                                      .col-lg-6.col-xl-9
                                         .input-group
                                           input#idInput3(type='hidden', name='id')
                                           input#typeInput3(type='hidden', name='type')

@@ -140,8 +140,6 @@ var KTOfferListDatatable = function() {
 		$("#kt_form_type").on("change", function() {
       datatable.search($(this).val().toLowerCase(), "offer_type");
     });
-
-		console.log(datatable.getDefaultSortColumn());
 	}
 
 	var initOfferData = function() {
@@ -228,37 +226,43 @@ var KTOfferListDatatable = function() {
 										modalEl.find('input[name="pyear_l"]').val(res.production_year);
 										modalEl.find('input[name="netto_l"]').val(res.netto);
 										modalEl.find('select[name="invoice_l"] option[value="' + res.invoice + '"]').prop('selected', true);
+										modalEl.find('input[name="acoc_rata_l"]').val(res.acoc_rata);
+										modalEl.find('input[name="acoc_company_l"]').val(res.acoc_company);
+										modalEl.find('input[name="gap_rata_l"]').val(res.gap_rata);
+										modalEl.find('input[name="gap_company_l"]').val(res.gap_company);
+										modalEl.find('input[name="gap_okres_l"]').val(res.gap_okres);
+										modalEl.find('textarea[name="attentions_l"]').val(res.attentions);
 
 										res.variants.forEach(function(item, index) {
 											modalEl.find('#leasing_variants').append('\
 												<div class="form-group row">\
 													<input type="hidden" name="variant[' + index + '][id]" value="' + item.id + '" />\
 												  <label class="col-xl-3 col-lg-3 col-form-label">Okres umowy (w miesiącach):</label>\
-												  <div class="col-lg-9 col-xl-6">\
+												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][contract]" placeholder="Okres umowy" value="' + item.okres + '" />\
 												  </div>\
 												</div>\
 												<div class="form-group row">\
 												  <label class="col-xl-3 col-lg-3 col-form-label">Opłata wstępna:</label>\
-												  <div class="col-lg-9 col-xl-6">\
+												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][inital]" placeholder="Opłata wstępna" value="' + item.wklad + '" />\
 												  </div>\
 												</div>\
 												<div class="form-group row">\
 												  <label class="col-xl-3 col-lg-3 col-form-label">Rata miesięczna:</label>\
-												  <div class="col-lg-9 col-xl-6">\
+												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][leasing_install]" placeholder="Rata miesięczna" value="' + item.leasing_install + '" />\
 												  </div>\
 												</div>\
 												<div class="form-group row">\
 												  <label class="col-xl-3 col-lg-3 col-form-label">Wykup (%):</label>\
-												  <div class="col-lg-9 col-xl-6">\
+												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][repurchase]" placeholder="Wykup" value="' + item.wykup + '" />\
 												  </div>\
 												</div>\
 												<div class="form-group row">\
 												  <label class="col-xl-3 col-lg-3 col-form-label">Suma opłat:</label>\
-												  <div class="col-lg-9 col-xl-6">\
+												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][sum_fee]" placeholder="Suma opłat" value="' + item.total_fees + '" />\
 												  </div>\
 												</div><div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">\</div>\
@@ -307,7 +311,16 @@ var KTOfferListDatatable = function() {
 										modalEl.find('input[name="vehicle_val_r"]').val(res.netto);
 										modalEl.find('input[name="rent_time_r"]').val(res.okres);
 										modalEl.find('input[name="self_deposit_r"]').val(res.wplata);
+										modalEl.find('input[name="wykup_r"]').val(res.wykup);
 										modalEl.find('input[name="km_limit_r"]').val(res.limit);
+										modalEl.find('input[name="reg_number_r"]').val(res.reg_number);
+										modalEl.find('input[name="service_pack"]').prop('checked', res.service);
+										modalEl.find('input[name="tire_pack"]').prop('checked', res.tire);
+										modalEl.find('input[name="insurance_pack"]').prop('checked', res.insurance);
+										modalEl.find('input[name="insurance_gap"][value="' + res.gap + '"]').prop('checked', true);
+										modalEl.find('input[name="acoc_rata"]').val(res.acoc_rata);
+										modalEl.find('input[name="acoc_company"]').val(res.acoc_company);
+										modalEl.find('textarea[name="attentions_r"]').val(res.attentions);
 										modalEl.find('select[name="invoice_r"] option[value="' + res.invoice + '"]').prop('selected', true);
 									} else {
 										$('#leasing_type_box').hide();
@@ -526,9 +539,11 @@ var KTOfferListDatatable = function() {
 	var initValidation = function() {
     $("#pyear_l").inputmask('9999');
 		$("#pyear_i").inputmask('9999');
+		$('#wykup_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
 		$("#rent_time_r").inputmask('99 miesięcy');
+		$("#gap_okres_l").inputmask('99 miesięcy');
 		$("#km_limit_r").inputmask('999999 km', { numericInput: true, placeholder: "" });
 		$("#power_cap_i").inputmask('999 km', { numericInput: true, placeholder: "" });
 
@@ -586,7 +601,13 @@ var KTOfferListDatatable = function() {
 				self_deposit_r: {
 					required: true
 				},
+				wykup_r: {
+					required: true
+				},
 				km_limit_r: {
+					required: true
+				},
+				reg_number_r: {
 					required: true
 				},
 				invoice_r: {
@@ -673,6 +694,12 @@ var KTOfferListDatatable = function() {
 					required: 'To pole jest wymagane.'
 				},
 				self_deposit_r: {
+					required: 'To pole jest wymagane.'
+				},
+				wykup_r: {
+					required: 'To pole jest wymagane.'
+				},
+				reg_number_r: {
 					required: 'To pole jest wymagane.'
 				},
 				km_limit_r: {

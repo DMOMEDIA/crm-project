@@ -202,13 +202,37 @@ block content
                                   |                
                                 .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                           |                      
-                          .form-group.form-group-last.row
+                          .form-group
                             label.col-lg-2.col-form-label
                             |                         
                             .col-lg-4
                               a.btn.btn-bold.btn-sm.btn-label-brand(href='javascript:;', data-repeater-create='')
                                 i.la.la-plus
                                 | Dodaj wariant
+                          h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie AC/OC:
+                          |                      
+                          .form-group
+                            label Rata ubezpieczenia:                     
+                            input.form-control(type='number', name='acoc_rata_l', placeholder='Rata ubezpieczenia')
+                          .form-group
+                            label Nazwa firmy: 
+                            input.form-control(type='text', name='acoc_company_l', maxlength='64', placeholder='Nazwa firmy')
+                          h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie GAP:
+                          |                      
+                          .form-group
+                            label Rata ubezpieczenia:                     
+                            input.form-control(type='number', name='gap_rata_l', placeholder='Rata ubezpieczenia')
+                          .form-group
+                            label Okres ubezpieczenia:                     
+                            input#gap_okres_l.form-control(type='text', name='gap_okres_l', placeholder='Okres ubezpieczenia')
+                          .form-group
+                            label Nazwa firmy: 
+                            input.form-control(type='text', name='gap_company_l', maxlength='64', placeholder='Nazwa firmy')
+                          h3.kt-heading.kt-heading--sm Inne warunki:
+                          |                      
+                          .form-group.form-group-last
+                            label Uwagi:
+                            textarea.form-control(name='attentions_l', rows='5', placeholder='Uwagi dot. oferty')
                   #rent_type_box(style='display:none;')
                     .kt-heading.kt-heading--md Dane przedmiotu ofertowego
                     .kt-form__section.kt-form__section--first
@@ -265,8 +289,14 @@ block content
                           label Wpłata własna: 
                           input#self_deposit_r.form-control(type='number', name='self_deposit_r', placeholder='Wpłata własna')
                         .form-group
+                          label Wartość wykupu (%):                     
+                          input#wykup_r.form-control(type='text', name='wykup_r', maxlength="5", placeholder='Wartość wykupu')
+                        .form-group
                           label Roczny limit kilometrów: 
                           input#km_limit_r.form-control(type='text', name='km_limit_r', placeholder='Limit kilometrów')
+                        .form-group
+                          label Numer rejestracyjny:                     
+                          input#reg_number_r.form-control(type='text', name='reg_number_r', placeholder='Numer rejestracyjny')
                         .form-group
                           label Faktura: 
                           select.form-control(name='invoice_r')
@@ -277,17 +307,45 @@ block content
                           label.kt-margin-b-10 Pakiety w ofercie: 
                           .kt-checkbox-inline
                             label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                              input(type='checkbox', value='serwis', name='service_pack')
+                              input(type='checkbox', value='1', name='service_pack')
                               |  Serwis
                               span
                             label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                              input(type='checkbox', value='wymiana opon', name='tire_pack')
+                              input(type='checkbox', value='1', name='tire_pack')
                               |  Wymiana opon
                               span
                             label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                              input(type='checkbox', value='ubezpieczenie', name='insurance_pack')
+                              input(type='checkbox', value='1', name='insurance_pack')
                               |  Ubezpieczenie
                               span
+                        .form-group
+                          label Ubezpieczenie GAP: 
+                          .kt-radio-inline
+                            label.kt-radio.kt-radio--bold.kt-radio--brand
+                              input(type='radio', name='insurance_gap', value='0', checked='')
+                              |  Nie
+                              |              
+                              span
+                            |            
+                            label.kt-radio.kt-radio--bold.kt-radio--brand
+                              input(type='radio', name='insurance_gap', value='1')
+                              |  Tak
+                              |                      
+                              span
+                            |      
+                        h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie AC/OC:
+                        |                      
+                        .form-group
+                          label Rata ubezpieczenia:                     
+                          input.form-control(type='number', name='acoc_rata', placeholder='Rata ubezpieczenia')
+                        .form-group
+                          label Nazwa firmy: 
+                          input.form-control(type='text', name='acoc_company', maxlength='64', placeholder='Nazwa firmy')
+                        h3.kt-heading.kt-heading--sm Inne warunki:
+                        |                      
+                        .form-group
+                          label Uwagi:
+                          textarea.form-control(name='attentions_r', rows='5', placeholder='Uwagi dot. oferty')
                   #insurance_type_box(style='display:none;')
                     .kt-heading.kt-heading--md Dane przedmiotu ofertowego
                     .kt-form__section.kt-form__section--first
@@ -389,6 +447,24 @@ block content
                             .kt-wizard-v1__review-title
                               | Warianty
                             #pull_variants
+                            .kt-wizard-v1__review-title
+                              | Warunki dodatkowe - ubezpieczenie AC/OC
+                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                              span#acoc_rata_lP
+                            p Nazwa firmy: 
+                              span#acoc_company_lP
+                            .kt-wizard-v1__review-title
+                              | Warunki dodatkowe - ubezpieczenie GAP
+                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                              span#gap_rata_lP
+                            p.kt-margin-b-0 Okres ubezpieczenia: 
+                              span#gap_okres_lP
+                            p Nazwa firmy: 
+                              span#gap_company_lP
+                            .kt-wizard-v1__review-title
+                              | Inne warunki
+                            p.kt-margin-b-0 Uwagi: 
+                              span#attentions_lP
                           #rent_offer_type(style='display:none;')
                             p.kt-margin-b-0 Marka/model pojazdu: 
                               span#brand_rP
@@ -406,16 +482,32 @@ block content
                               span#rent_time_rP
                             p.kt-margin-b-0 Wpłata własna: 
                               span#self_deposit_rP
+                            p.kt-margin-b-0 Wartość wykupu (%): 
+                              span#wykup_rP
                             p.kt-margin-b-0 Roczny limit kilometrów: 
                               span#km_limit_rP
+                            p.kt-margin-b-0 Numer rejestracyjny: 
+                              span#reg_number_rP
                             p.kt-margin-b-0 Rodzaj faktury: 
                               span#invoice_rP
-                            p.kt-margin-b-0 Pakiety w ofercie: 
+                            //p.kt-margin-b-0 Pakiety w ofercie: 
                               span#service_packP
                               | ,
                               span#tire_packP
                               | ,
                               span#insurance_packP
+                            p Ubezpieczenie GAP: 
+                              span#insurance_gapP
+                            .kt-wizard-v1__review-title
+                              | Warunki dodatkowe - ubezpieczenie AC/OC
+                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                              span#acoc_rataP
+                            p Nazwa firmy: 
+                              span#acoc_companyP
+                            .kt-wizard-v1__review-title
+                              | Inne warunki
+                            p.kt-margin-b-0 Uwagi: 
+                              span#attentions_rP
                           #insurance_offer_type(style='display:none;')
                             p.kt-margin-b-0 Marka/model pojazdu: 
                               span#brand_iP

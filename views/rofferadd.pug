@@ -265,7 +265,49 @@ block content
                         option(value='benzyna/gaz') benzyna/gaz
                         option(value='hybryda') hybryda
                         option(value='elektryczny') elektryczny 
-                  |                        
+                  |          
+                  .form-group.row
+                    label.col-xl-3.col-lg-3.col-form-label Okres najmu:
+                    |                                         
+                    .col-lg-6.col-xl-6
+                      select.form-control(name='rent_installment')
+                        option(value='', selected='', disabled='') Wybierz okres najmu
+                        option(value='12') 12 miesięcy
+                        option(value='24') 24 miesiące
+                        option(value='36') 36 miesięcy
+                        option(value='48') 48 miesięcy
+                        option(value='60') 60 miesięcy
+                        option(value='72') 72 miesiące
+                        option(value='84') 84 miesiące
+                  |            
+                  .form-group.row
+                    label.col-xl-3.col-lg-3.col-form-label Wkład własny:
+                    |                                         
+                    .col-lg-6.col-xl-6
+                      input#wklad_r.form-control(type='text', name='wklad_r', maxlength="15", placeholder='Wkład własny')
+                  |                                     
+                  .form-group.row
+                    label.col-xl-3.col-lg-3.col-form-label Wartość wykupu (%):
+                    |                                         
+                    .col-lg-6.col-xl-6
+                      input#wykup_r.form-control(type='text', name='wykup_r', maxlength="5", placeholder='Wartość wykupu')
+                  |                               
+                  .form-group.row
+                    label.col-xl-3.col-lg-3.col-form-label Pakiety w ofercie: 
+                    .col-lg-9.col-xl-6
+                      .kt-checkbox-inline
+                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                          input(type='checkbox' value='1' name='service_pack')
+                          |  Serwis
+                          span
+                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                          input(type='checkbox' value='1' name='tire_pack')
+                          |  Wymiana opon
+                          span
+                        label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
+                          input(type='checkbox' value='1' name='insurance_pack')
+                          |  Ubezpieczenie
+                          span
                 #insurance_offer(style='display:none;')
                   .form-group.row
                     label.col-xl-3.col-lg-3.col-form-label Marka i model pojazdu:

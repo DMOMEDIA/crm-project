@@ -128,6 +128,14 @@ var KTWizardOfferAdd = function () {
 					$('#pyear_lP').html($('input[name="pyear_l"]').val()); // Rok produkcji
 					$('#netto_lP').html($('input[name="netto_l"]').val() + ' PLN'); // Wartość netto pojazdu
 					$('#invoice_lP').html($('select[name="invoice_l"] option:selected').text()); // Faktura
+					$('#acoc_rata_lP').html($('input[name="acoc_rata_l"]').val() + ' PLN');
+					$('#acoc_company_lP').html($('input[name="acoc_company_l"]').val());
+					$('#gap_rata_lP').html($('input[name="gap_rata_l"]').val() + ' PLN');
+					$('#gap_okres_lP').html($('input[name="gap_okres_l"]').val());
+					$('#gap_company_lP').html($('input[name="gap_company_l"]').val());
+					$('#attentions_lP').html($('textarea[name="attentions_l"]').val());
+
+					console.log($('textarea[name="attentions_l"]').val());
 
 					// Warianty
 					var contract = [], inital_fee = [], leasing_install = [], repurchase = [], sum_fee = [];
@@ -163,9 +171,16 @@ var KTWizardOfferAdd = function () {
 					$('#self_deposit_rP').html($('input[name="self_deposit_r"]').val() + ' PLN'); // Wpłata własna
 					$('#km_limit_rP').html($('input[name="km_limit_r"]').val()); // Limit kilometrów
 					$('#invoice_rP').html($('select[name="invoice_r"] option:selected').text());
-					if($('input[name="service_pack"]:checked')) $('#service_packP').html($('input[name="service_pack"]:checked').val());
-					if($('input[name="tire_pack"]:checked')) $('#tire_packP').html($('input[name="tire_pack"]:checked').val());
-					if($('input[name="insurance_pack"]:checked')) $('#insurance_packP').html($('input[name="insurance_pack"]:checked').val());
+					//if($('input[name="service_pack"]:checked')) $('#service_packP').html($('input[name="service_pack"]:checked').val());
+					//if($('input[name="tire_pack"]:checked')) $('#tire_packP').html($('input[name="tire_pack"]:checked').val());
+					//if($('input[name="insurance_pack"]:checked')) $('#insurance_packP').html($('input[name="insurance_pack"]:checked').val());
+					$('#wykup_rP').html($('input[name="wykup_r"]').val());
+					$('#reg_number_rP').html($('input[name="reg_number_r"]').val());
+					if($('input[name="insurance_gap"]').val() == 0) $('#insurance_gapP').html('Nie');
+					else $('#insurance_gapP').html('Tak');
+					$('#acoc_rataP').html($('input[name="acoc_rata"]').val() + ' PLN');
+					$('#acoc_companyP').html($('input[name="acoc_company"]').val());
+					$('#attentions_rP').html($('textarea[name="attentions_r"]').val());
 
 					var netto_val = parseFloat($('input[name="vehicle_val_r"]').val());
 					var provision = (netto_val*oprocentowanie); // globalna prowizja 1.5%
@@ -198,9 +213,11 @@ var KTWizardOfferAdd = function () {
 	var initValidation = function() {
     $("#pyear_l").inputmask('9999');
 		$("#pyear_i").inputmask('9999');
+		$('#wykup_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
 		$("#rent_time_r").inputmask('99 miesięcy');
+		$("#gap_okres_l").inputmask('99 miesięcy');
 		$("#km_limit_r").inputmask('999999 km', { numericInput: true, placeholder: "" });
 		$("#power_cap_i").inputmask('999 km', { numericInput: true, placeholder: "" });
 
@@ -261,15 +278,19 @@ var KTWizardOfferAdd = function () {
 					required: true
 				},
 				vehicle_val_r: {
-					required: true,
-					digits: true
+					required: true
 				},
 				rent_time_r: {
 					required: true
 				},
 				self_deposit_r: {
-					required: true,
-					digits: true
+					required: true
+				},
+				wykup_r: {
+					required: true
+				},
+				reg_number_r: {
+					required: true
 				},
 				km_limit_r: {
 					required: true
@@ -361,6 +382,12 @@ var KTWizardOfferAdd = function () {
 				self_deposit_r: {
 					required: 'To pole jest wymagane.',
 					digits: 'To pole może zawierać jedynie cyfry.'
+				},
+				wykup_r: {
+					required: 'To pole jest wymagane.'
+				},
+				reg_number_r: {
+					required: 'To pole jest wymagane.'
 				},
 				km_limit_r: {
 					required: 'To pole jest wymagane.'

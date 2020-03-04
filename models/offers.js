@@ -421,6 +421,12 @@ module.exports.createOffer = (req, callback) => {
       condition: value.condition_l,
       netto: value.netto_l,
       invoice: value.invoice_l,
+      acoc_rata: value.acoc_rata_l,
+      acoc_company: value.acoc_company_l,
+      gap_rata: value.gap_rata_l,
+      gap_company: value.gap_company_l,
+      gap_okres: value.gap_okres_l,
+      attentions: value.attentions_l,
       state: value.o_state
     }).save().then(function(result) {
       module.exports.getUserByOfferId(result.get('id'), value.offer_type, function(cb) {
@@ -481,8 +487,17 @@ module.exports.createOffer = (req, callback) => {
       okres: value.rent_time_r,
       netto: value.vehicle_val_r,
       wplata: value.self_deposit_r,
+      wykup: value.wykup_r,
       limit: value.km_limit_r,
       invoice: value.invoice_r,
+      reg_number: value.reg_number_r,
+      service: value.service_pack,
+      tire: value.tire_pack,
+      insurance: value.insurance_pack,
+      gap: value.insurance_gap,
+      acoc_rata: value.acoc_rata,
+      acoc_company: value.acoc_company,
+      attentions: value.attentions_r,
       state: value.o_state
     }).save().then(function(result) {
       module.exports.getUserByOfferId(result.get('id'), value.offer_type, function(cb) {
@@ -514,6 +529,19 @@ module.exports.changeData = (value, callback) => {
         if(value.pyear_l) model.set('production_year', value.pyear_l);
         if(value.netto_l) model.set('netto', value.netto_l);
         if(value.invoice_l) model.set('invoice', value.invoice_l);
+
+        if(value.acoc_rata_l) model.set('acoc_rata', value.acoc_rata_l);
+        else model.set('acoc_rata', null);
+        if(value.acoc_company_l) model.set('acoc_company', value.acoc_company_l);
+        else model.set('acoc_company', null);
+        if(value.gap_rata_l) model.set('gap_rata', value.gap_rata_l);
+        else model.set('gap_rata', null);
+        if(value.gap_okres_l) model.set('gap_okres', value.gap_okres_l);
+        else model.set('gap_okres', null);
+        if(value.gap_company_l) model.set('gap_company', value.gap_company_l);
+        else model.set('gap_company', null);
+        if(value.attentions_l) model.set('attentions', value.attentions_l);
+        else model.set('attentions', null);
 
         model.save().then(function(result) {
           // Prowizje
@@ -554,8 +582,23 @@ module.exports.changeData = (value, callback) => {
         if(value.vehicle_val_r) model.set('netto', value.vehicle_val_r);
         if(value.rent_time_r) model.set('okres', value.rent_time_r);
         if(value.self_deposit_r) model.set('wplata', value.self_deposit_r);
+        if(value.wykup_r) model.set('wykup', value.wykup_r);
         if(value.km_limit_r) model.set('limit', value.km_limit_r);
+        if(value.reg_number_r) model.set('reg_number', value.reg_number_r);
+        if(value.service_pack) model.set('service', value.service_pack);
+        else model.set('service', null);
+        if(value.tire_pack) model.set('tire', value.tire_pack);
+        else model.set('tire', null);
+        if(value.insurance_pack) model.set('insurance', value.insurance_pack);
+        else model.set('insurance', null);
+        if(value.insurance_gap) model.set('gap', value.insurance_gap);
+        if(value.acoc_rata) model.set('acoc_rata', value.acoc_rata);
+        else model.set('acoc_rata', null);
+        if(value.acoc_company) model.set('acoc_company', value.acoc_company);
+        else model.set('acoc_company', null);
         if(value.invoice_r) model.set('invoice', value.invoice_r);
+        if(value.attentions_r) model.set('attentions', value.attentions_r);
+        else model.set('attentions', null);
 
         model.save().then(function(done) {
           module.exports.getUserByOfferId(done.get('id'), done.get('offer_type'), function(cb) {

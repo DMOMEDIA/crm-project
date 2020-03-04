@@ -4,12 +4,8 @@ const pdfFiller = require('pdffiller');
 const fs = require('fs');
 
 var data = {
-  "nr_zapytania": "001/I/2019",
-  "nazwafirmy": "DMO Trans Daniel Ostałowski",
-  "REGON": "4255545664554",
-  "NIP": "5092940491",
-  "email": "daniel@dmomedia.pl",
-  "nazwaprzedmiotu": "ą|ę|ź|ć|ż|ł|ó|ń|ś|"
+  "nr_zapytania": "0056/2019",
+  "c_name": "DMO Trans Daniel Ostałowski"
 };
 
 exports.parseFields = (sourcePDF) => {
@@ -30,5 +26,5 @@ exports.fillPDF = (sourcePDF, destPDF, data) => {
   });
 };
 
-//exports.parseFields('./build/pdf_files/rent-company.pdf');
-//exports.fillPDF('./build/pdf_files/leasing-company.pdf', './test.pdf', data);
+//exports.parseFields('./build/pdf_files/rent_draft.pdf');
+//exports.fillPDF('./build/pdf_files/rent_draft.pdf', './test.pdf', data);

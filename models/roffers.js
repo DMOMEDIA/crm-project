@@ -113,6 +113,15 @@ module.exports.uploadOffer = (value, callback) => {
         if(value.installment_val) model.set('installment_val', value.installment_val);
         if(value.body_type_r) model.set('body_type', value.body_type_r);
         if(value.fuel_type_r) model.set('fuel_type', value.fuel_type_r);
+        if(value.rent_installment) model.set('instalments', value.rent_installment);
+        if(value.wklad_r) model.set('contribution', value.wklad_r);
+        if(value.wykup_r) model.set('red_value', value.wykup_r);
+        if(value.service_pack) model.set('service', value.service_pack);
+        else model.set('service', 0);
+        if(value.tire_pack) model.set('tire', value.tire_pack);
+        else model.set('tire', 0);
+        if(value.insurance_pack) model.set('insurance', value.insurance_pack);
+        else model.set('insurance', 0);
         if(value.netto) model.set('netto', value.netto);
         if(value.attentions) model.set('attentions', value.attentions);
         if(value.other) model.set('other', value.other);
@@ -170,6 +179,12 @@ module.exports.addOfferBySystem = (value, callback) => {
         installment_val: value.installment_val,
         body_type: value.body_type_r,
         fuel_type: value.fuel_type_r,
+        instalments: value.rent_installment,
+        contribution: value.wklad_r,
+        red_value: value.wykup_r,
+        service: value.service_pack,
+        tire: value.tire_pack,
+        insurance: value.insurance_pack,
         netto: value.netto,
         attentions: value.attentions,
         other: value.other
@@ -273,6 +288,12 @@ module.exports.addOffer = (value, callback) => {
         installment_val: value.installment_val,
         body_type: value.body_type_r,
         fuel_type: value.fuel_type_r,
+        instalments: value.rent_install,
+        contribution: value.wklad_r,
+        red_value: value.wykup_r,
+        service: value.service_r,
+        tire: value.tires_r,
+        insurance: value.insurance_r,
         netto: value.netto_l,
         attentions: value.attentions,
         other: value.other

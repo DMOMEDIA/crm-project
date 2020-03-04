@@ -203,18 +203,15 @@ exports.resetUserPassword = (req, res) => {
           if(result.status == 'success') {
             User.getUserById(null, req.body.id).then(function(data) {
               Mails.sendMail.send({
-                // template: 'client_offer',
+                template: 'reset_password',
                 message: {
                   from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
                   to: data.get('email'),
-                  subject: 'Twoje hasło zostało zresetowane przez administratora',
-                  html: 'Witaj, ' + data.get('fullname') + '. Twoje nowe hasło zostało wygenerowane.<br/><br/><span style="font-size:18px;font-weight:bold;">' + result.newpassword + '</span><br/><br/>Od teraz możesz posługiwać się nowym hasłem w systemie CRM.'
+                  subject: 'Twoje hasło zostało zresetowane'
                 },
-                /* locals: {
-                  data: offer,
-                  date_format: date_format,
-                  identity: o_identity
-                } */
+                locals: {
+                  newpw: result.newpassword
+                }
               }).then(function() {
                 res.json({ status: result.status, message: result.message });
               });
@@ -674,7 +671,7 @@ exports.sendOfferMail = async (req, res) => {
     if(req.body.o_state == 2) {
       Offer.getOfferById(req.body.o_id, req.body.offer_type, offer => {
         if(offer) {
-          var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
+          var date_format = moment().local().format('DD-MM-YYYY');
           var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
 
           try {
@@ -898,65 +895,65 @@ exports.requestOfferSendMail = (req, res) => {
           var nameGenerated = '00' + req.body.data.id + '-' + req.body.data.type.charAt(0).toUpperCase() + '-' + moment(req.body.data.created_at).local().format('YYYY'),
           savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
 
-          var client_type = { 0: "private", 1: "corp", 2: "company" };
-          var cregon = cb.client_info.regon;
-          if(cregon == null) cregon = '-';
+          var client_name, s_tire = 'No', s_service = 'No', s_insurance = 'No';
 
-          if(cb.type == 'leasing' && cb.client_info.company == 2) {
+          if(cb.tire == 1) s_tire = 'Yes';
+          if(cb.service == 1) s_service = 'Yes';
+          if(cb.insurance == 1) s_insurance = 'Yes';
+
+          if(cb.client_info.company == 0) {
+            if(cb.client_info.nip == null) client_name = cb.client_info.fullname;
+            else client_name = cb.client_info.nip;
+          } else client_name = cb.client_info.nip;
+
+          if(cb.type == 'leasing') {
             var data = {
-              "nazwafirmy": cb.client_info.fullname,
-              "REGON": cregon,
-              "NIP": cb.client_info.nip,
-              "email": cb.client_info.email,
-              "uwagi": cb.attentions,
-              "numertelefonu": cb.client_info.phone,
-              "nazwaprzedmiotu": cb.name,
-              "rokprodukcji": cb.pyear,
-              "okresfinansowania": cb.instalments + ' miesięcy',
-              "wkladwlasny": cb.contribution,
-              "wartoscwykupu": cb.red_value,
-              "wartoscnetto": cb.netto,
+              "c_name": cb.name,
+              "c_nip": client_name,
+              "c_period": cb.instalments + ' miesiecy',
+              "c_wklad": cb.contribution + ' zł',
+              "c_wykup": cb.red_value,
+              "c_pyear": cb.pyear,
+              "c_netto": cb.netto + ' zł',
+              "c_uwagi": cb.attentions,
               "nr_zapytania": nameGenerated
             };
-          } else if(cb.type == 'rent' && cb.client_info.company == 2) {
+          } else if(cb.type == 'rent') {
             var rent_installment = cb.installment_val.split(';'),
             rent_installment = rent_installment[0] + ',00 - ' + rent_installment[1] + ',00';
             var data = {
-              "nazwa": cb.client_info.fullname,
-              "regon": cregon,
-              "nip": cb.client_info.nip,
-              "email": cb.client_info.email,
-              "numertel": cb.client_info.phone,
-              "uwagi": cb.attentions,
-              "marka": cb.name,
-              "rata": rent_installment,
-              "nadwozie": cb.body_type,
-              "rodzajpaliwa": cb.fuel_type,
-              "wartoscnetto": cb.netto,
+              "c_name": cb.name,
+              "c_nip": client_name,
+              "c_uwagi": cb.attentions,
+              "c_nadwozie": cb.body_type,
+              "c_paliwo": cb.fuel_type,
+              "c_rata": rent_installment,
+              "c_wklad": cb.contribution + ' zł',
+              "c_okres": cb.instalments + ' miesiecy',
+              "c_wykup": cb.red_value,
+              "c_netto": cb.netto + ' zł',
+              "s_opony": s_tire,
+              "s_serwis": s_service,
+              "s_inne": s_insurance,
               "nr_zapytania": nameGenerated
             };
-          } else if(cb.type == 'insurance' && cb.client_info.company == 2) {
+          } else if(cb.type == 'insurance') {
             var data = {
-              "nazwafirmy": cb.client_info.fullname,
-              "regon": cregon,
-              "nip": cb.client_info.nip,
-              "email": cb.client_info.email,
-              "numertelefonu": cb.client_info.phone,
-              "marka": cb.name,
-              "rokprodukcji": cb.pyear,
-              "pojemnosc": cb.engine_cap,
-              "moc": cb.power_cap,
-              "vin": cb.vin,
-              "numerrej": cb.reg_number,
-              "przebieg": cb.km_value,
-              "wartoscnetto": cb.netto,
-              "uwagi": cb.attentions,
+              "c_name": cb.name,
+              "c_nip": client_name,
+              "c_uwagi": cb.attentions,
+              "c_pojemnosc": cb.engine_cap,
+              "c_moc": cb.power_cap,
+              "c_vin": cb.vin,
+              "c_rej": cb.reg_number,
+              "c_przebieg": cb.km_value,
+              "c_netto": cb.netto + ' zł',
               "nr_zapytania": nameGenerated
             };
           }
 
           if(data) {
-            await PDF.fillPDF('./build/pdf_files/' + cb.type + '-' + client_type[cb.client_info.company] + '.pdf', savePath, data).then(function() {
+            await PDF.fillPDF('./build/pdf_files/' + cb.type + '_draft.pdf', savePath, data).then(function() {
               var attachments;
 
               if(req.body.path.length == 0) {
@@ -970,12 +967,15 @@ exports.requestOfferSendMail = (req, res) => {
 
               async.each(req.body.mails, async function(email, end) {
                 await Mails.sendMail.send({
+                  template: 'to_company',
                   message: {
                     from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
                     to: email,
                     subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
-                    html: 'Zapytanie ofertowe nr. 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ' przedstawione jest w załączniku tej wiadomości.',
                     attachments: attachments
+                  },
+                  locals: {
+                    document_name: nameGenerated + '.pdf'
                   }
                 });
                 end();

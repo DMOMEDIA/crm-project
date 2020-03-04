@@ -128,8 +128,7 @@ block content
                               .kt-section.kt-section--first
                                 .kt-section__body
                                   .row
-                                    label.col-xl-3     
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       h3.kt-section__title.kt-section__title-sm Dane personalne:
                                   |                                                               
                                   .form-group.row.kt-margin-t-10
@@ -159,32 +158,32 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Imię
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='firstname', placeholder='Imię')
                                     |                                     
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwisko
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='lastname', placeholder='Nazwisko')
                                     |          
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label NIP
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#nipI.form-control(type='text', name='priv_nip', maxlength='10', placeholder='Numer NIP')
                                     |                      
                                   #corp_user(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa spółki
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='corpName', placeholder='Nazwa spółki')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Typ spółki
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select.form-control(name='corp_type')
                                           option(selected='', disabled='', value='') Wybierz typ spółki
                                           option(value='0') akcyjna
@@ -194,38 +193,38 @@ block content
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label REGON
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='corp_regon', placeholder='Numer REGON')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label NIP
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#nipI1.form-control(type='text', name='corp_nip', maxlength='10', placeholder='Numer NIP')
                                     |           
                                   #company_user(style='display:none;')
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa firmy
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='companyName', placeholder='Nazwa firmy')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label REGON
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input.form-control(type='text', name='company_regon', placeholder='Numer REGON')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label NIP
                                       |                                         
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         input#nipI2.form-control(type='text', name='company_nip', maxlength='10', placeholder='Numer NIP')
                                     |                                                            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Numer telefonu
                                     |                                         
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       .input-group
                                         .input-group-prepend
                                           span.input-group-text
@@ -236,7 +235,7 @@ block content
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Adres e-mail
                                     |                                         
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       .input-group
                                         .input-group-prepend
                                           span.input-group-text
@@ -244,23 +243,22 @@ block content
                                         |                                                 
                                         input.form-control(type='email', name='email', placeholder='Adres e-mail', aria-describedby='basic-addon1')
                                   .row
-                                    label.col-xl-3     
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       h3.kt-section__title.kt-section__title-sm Zgody:
                                   |                                              
                                   .form-group.row
                                     .col-xl-3.col-lg-3
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                        input(type='checkbox' name='data_processing' value='1')
+                                        input(type='checkbox', name='data_processing', value='1')
                                         |  Zgoda na przetwarzanie danych w celu realizacji zgłoszenia.
                                         span
                                   |                      
                                   .form-group.row(style='margin-top:-10px;')
                                     .col-xl-3.col-lg-3
-                                    .col-lg-9.col-xl-6
+                                    .col-lg-9.col-xl-9
                                       label.kt-checkbox.kt-checkbox--bold.kt-checkbox--brand
-                                        input(type='checkbox', name='data_marketing' value='1')
+                                        input(type='checkbox', name='data_marketing', value='1')
                                         |  Zgoda na otrzymywanie korespondencji marketingowych drogą e-mailową.
                                         span
                                   |
@@ -269,13 +267,12 @@ block content
                                     .kt-separator.kt-separator--border-dashed.kt-separator--portlet-fit.kt-separator--space-lg
                                     |                            
                                     .row
-                                      label.col-xl-3     
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         h3.kt-section__title.kt-section__title-sm Przypisz konto do pracownika:
                                     |                                                   
                                     .form-group.row
                                       label.col-form-label.col-lg-3.col-sm-12 Pracownik
-                                      .col-lg-9.col-xl-6
+                                      .col-lg-9.col-xl-9
                                         select#remoteEmployeer.form-control.kt-select2(name='param')
                                           option
                               |                             
@@ -291,8 +288,7 @@ block content
                         .kt-section.kt-section--first
                           .kt-section__body
                             .row
-                              label.col-xl-3     
-                              .col-lg-9.col-xl-6
+                              .col-lg-9.col-xl-9
                                 h3.kt-section__title.kt-section__title-sm Załączone pliki:
                             |                                                          
                             #attached_files.kt-widget4
@@ -314,15 +310,14 @@ block content
                             .kt-section.kt-section--first
                               .kt-section__body
                                 .row
-                                  label.col-xl-3     
-                                  .col-lg-9.col-xl-6
+                                  .col-lg-9.col-xl-9
                                     h3.kt-section__title Zmiana statusu klienta:
                                 |                 
                                 form#form_change_status
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Status
                                     |                                         
-                                    .col-lg-6.col-xl-6
+                                    .col-lg-6.col-xl-9
                                       .input-group
                                         input#idInput3_client(type='hidden', name='id')
                                         select.form-control(name='change_status')
