@@ -124,8 +124,20 @@ module.exports.userList = (args, callback) => {
 
 module.exports.userListByAssignedId = (args, id, callback) => {
   if(args != null) {
+    var output = [];
     return new User().where({ assigned_to: id }).fetchAll({ columns: args }).then(function(response) {
-      callback(response, response.toJSON().length);
+      response = response.toJSON();
+      output.push(response);
+
+      async.each(response, function(element, cb) {
+        return new User().where({ assigned_to: element.id }).fetchAll({ columns: args }).then(function(resp) {
+            output.push(resp.toJSON());
+        });
+        cb();
+      }, function() {
+        console.log(output);
+        callback(output, output.length);
+      });
     });
   } else {
     return new User().where({ assigned_to: id }).fetchAll().then(function(response) {
@@ -224,7 +236,7 @@ module.exports.resetPassword = (user, callback) => {
     } else callback(Messages.message('not_found_user_identity', null));
   });
 };
- 
+
 module.exports.deleteUser = (id, callback) => {
   return new User().where({ id: id }).fetch().then(function(model) {
     if(model) {
