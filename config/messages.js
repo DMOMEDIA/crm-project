@@ -16,6 +16,7 @@ exports.message = (type, argument) => {
     case 'err_selected_offers': selected = { status: 'error', message: 'Błąd podczas usuwania ofert, spróbuj ponownie.' }; break;
     case 'err_selected_users': selected = { status: 'error', message: 'Błąd podczas usuwania użytkowników, spróbuj ponownie.' }; break;
     case 'err_selected_clients': selected = { status: 'error', message: 'Błąd podczas usuwania klientów, spróbuj ponownie.' }; break;
+    case 'err_selected_companies': selected = { status: 'error', message: 'Błąd podczas usuwania firm, spróbuj ponownie.' }; break;
     case 'success_delete_selected_users': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' użytkowników.' }; break;
     case 'success_delete_selected_clients': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' klientów.' }; break;
     case 'success_user_deleted': selected = { status: 'success', message: 'Użytkownik został pomyślnie usunięty.' }; break;
@@ -45,6 +46,9 @@ exports.message = (type, argument) => {
     case 'err_selected_roffers': selected = { status: 'error', message: 'Błąd podczas usuwania zapytań ofertowych, spróbuj ponownie.' }; break;
     case 'success_roffer_selected_delete': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' zapytań.'  }; break;
     case 'success_roffer_add': selected = { status: 'success', message: 'Pomyślnie dodano nowe zapytanie ofertowe.' }; break;
+    case 'success_company_deleted': selected = { status: 'success', message: 'Firma została pomyślnie usunięta.' }; break;
+    case 'not_found_company_identity': selected = { status: 'success', message: 'Firma o podanym identyfikatorze nie istnieje.' }; break;
+    case 'success_company_selected_delete': selected = { status: 'success', message: 'Pomyślnie usunięto ' + argument + ' firm/y.' }; break;
   }
 
   return selected;

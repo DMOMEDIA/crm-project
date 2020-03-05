@@ -31,6 +31,7 @@ module.exports.comparePassword = (candidatePassword, password, callback) => {
 };
 
 module.exports.createClient = (client, callback) => {
+  var gpass = generatePassword(10, false);
   // Checking if client is exists
   module.exports.getClientByEmail(client.email).then(function(email) {
     if(!email) {
@@ -49,24 +50,29 @@ module.exports.createClient = (client, callback) => {
         if(client.company_regon) var regon = client.company_regon;
       }
 
-      return new Client({
-        fullname: clientname,
-        regon: regon,
-        nip: nip,
-        phone: client.phone,
-        email: client.email,
-        company: client.client_type,
-        company_type: client.corp_type,
-        state: 3,
-        user_id: client.param,
-        data_process: client.data_processing,
-        marketing: client.data_marketing,
-        hashlink: randomstring.generate(128)
-      }).save().then(function(done) {
-        callback(true);
+      bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(gpass, salt, function(err, npassword) {
+          return new Client({
+            fullname: clientname,
+            regon: regon,
+            nip: nip,
+            phone: client.phone,
+            email: client.email,
+            password: npassword,
+            company: client.client_type,
+            company_type: client.corp_type,
+            state: 4,
+            user_id: client.param,
+            data_process: client.data_processing,
+            marketing: client.data_marketing,
+            hashlink: randomstring.generate(128)
+          }).save().then(function(done) {
+            callback({ status: 'success', newpw: gpass });
+          });
+        });
       });
     } else {
-      callback(false);
+      callback({ status: 'error' });
     }
   });
 };
@@ -105,11 +111,11 @@ module.exports.clientlistByAssignedId = (id, callback) => {
   return new Client().where({ user_id: id }).fetchAll().then(function(response) {
     output = output.concat(response.toJSON());
 
-    User.userListByAssignedId(null, id, function(done, cnt) {
+    User.userListByAssignedId(['id','fullname','role', 'assigned_to'], id, function(done, cnt) {
       if(done) {
-        var data_json = done.toJSON(), counter = 0;
+        var counter = 0;
 
-        async.each(data_json, async function(element, next) {
+        async.each(done, async function(element, next) {
           await Client.where({ user_id: element.id }).fetchAll().then(function(result) {
             if(result) {
               var data = result.toJSON();
@@ -166,12 +172,16 @@ module.exports.activateAccount = (hash, callback) => {
             model.save().then(function(result) {
               if(passwordIsset) {
                 Mails.sendMail.send({
+                  template: 'client_data',
                   message: {
                     from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
                     to: result.get('email'),
-                    subject: 'Dane logowania do panelu klienta',
-                    html: 'Twoje dane do panelu klienta:<br/>Adres e-mail: ' + result.get('email') + '<br/>Hasło: ' + gpass
+                    subject: 'Dane logowania do panelu klienta'
                   },
+                  locals: {
+                    login: result.get('email'),
+                    password: gpass
+                  }
                 });
                 callback({ status: 'success', val: 'activated', message: 'Konto klienta zostało pomyślnie aktywowane.' });
               }

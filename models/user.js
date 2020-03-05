@@ -127,15 +127,16 @@ module.exports.userListByAssignedId = (args, id, callback) => {
     var output = [];
     return new User().where({ assigned_to: id }).fetchAll({ columns: args }).then(function(response) {
       response = response.toJSON();
-      output.push(response);
+      output = output.concat(response);
 
-      async.each(response, function(element, cb) {
-        return new User().where({ assigned_to: element.id }).fetchAll({ columns: args }).then(function(resp) {
-            output.push(resp.toJSON());
+      async.each(response, async function(element, cb) {
+        await User.where({ assigned_to: element.id }).fetchAll({ columns: args }).then(function(resp) {
+          if(resp) {
+           output = output.concat(resp.toJSON());
+          }
         });
         cb();
       }, function() {
-        console.log(output);
         callback(output, output.length);
       });
     });
@@ -222,6 +223,23 @@ module.exports.userChangePassword = (user, callback) => {
 
 module.exports.resetPassword = (user, callback) => {
   return new User().where({ id: user.id }).fetch().then(function(model) {
+    if(model) {
+      var gpass = generatePassword(10, false);
+
+      bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(gpass, salt, function(err, npassword) {
+          model.set('password', npassword);
+          model.save();
+
+          callback({ status: 'success', message: 'Hasło użytkownika zostało poprawnie zmienione i wysłane na adres e-mail', newpassword: gpass });
+        });
+      });
+    } else callback(Messages.message('not_found_user_identity', null));
+  });
+};
+
+module.exports.resetPasswordByEmail = (email, callback) => {
+  return new User().where({ email: email }).fetch().then(function(model) {
     if(model) {
       var gpass = generatePassword(10, false);
 

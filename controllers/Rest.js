@@ -225,6 +225,28 @@ exports.resetUserPassword = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.recoveryUserPwd = (req, res) => {
+  if(req.body.email) {
+    User.resetPasswordByEmail(req.body.email, result => {
+      if(result.status == 'success') {
+        Mails.sendMail.send({
+          template: 'reset_password',
+          message: {
+            from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+            to: req.body.email,
+            subject: 'Twoje hasło zostało zresetowane'
+          },
+          locals: {
+            newpw: result.newpassword
+          }
+        }).then(function() {
+          res.json({ status: 'success', message: 'Wiadomość z kolejnymi krokami odzyskiwania hasła została wysłana na podany adres e-mail.' });
+        });
+      } else res.json(result);
+    });
+  } else res.json({ status: 'error', message: 'Adres e-mail nie został podany.' });
+};
+
 exports.deleteUserById = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.delete')) {
@@ -291,10 +313,23 @@ exports.addClient = (req, res) => {
         else var clientname = req.body.companyName;
 
         Client.createClient(req.body, function(result) {
-          if(result == true) {
-            Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
-            System.createLog('create_client_log', 'Klient ' + clientname.trunc(25) + ' został utworzony (USER=' + req.session.userData.id + ').');
-            res.json(Messages.message('added_new_client', null));
+          if(result.status == 'success') {
+            Mails.sendMail.send({
+              template: 'create_client',
+              message: {
+                from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                to: req.body.email,
+                subject: 'Twoje konto zostało utworzone.'
+              },
+              locals: {
+                login: req.body.email,
+                password: result.newpw
+              }
+            }).then(function() {
+              Notification.sendNotificationToUser(req.body.param, 'flaticon-users-1 kt-font-success', 'Klient <b>' + clientname.trunc(25) + '</b> został przypisany do Twojej obsługi.');
+              System.createLog('create_client_log', 'Klient ' + clientname.trunc(25) + ' został utworzony (USER=' + req.session.userData.id + ').');
+              res.json(Messages.message('added_new_client', null));
+            });
           } else {
             res.json(Messages.message('client_add_fail', null));
           }
@@ -1019,6 +1054,32 @@ exports.loadCompanylist = (req, res) => {
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
 };
+
+exports.deleteCompany = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(res.locals.userPermissions.includes('crm.companies.delete')) {
+      if(req.body.id != null) {
+        Company.deleteCompany(req.body.id, result => { res.send(result) });
+      } else res.json(Messages.message('identity_not_selected', null));
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.deleteSelectedCompanies = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.body.data != null) {
+      var deleted = 0;
+      async.each(req.body.data, async function(value, cb) {
+        await Company.deleteCompany(value, cb => {
+          if(cb.status == 'success') deleted++;
+        });
+      }, function() {
+        if(deleted > 0) res.json(Messages.message('success_company_selected_delete', deleted));
+        else res.json(Messages.message('err_selected_companies', null));
+      });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+}
 
 exports.addCompany = (req, res) => {
   if(req.isAuthenticated()) {

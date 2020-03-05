@@ -90,9 +90,27 @@ var KTCompanyListDatatable = function() {
 				overflow: 'visible',
 				template: function(row) {
 				return '\
-						<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md show_company_data" data-id="' + row.id + '">\
-							<i class="flaticon2-menu-1"></i>\
-						</a>\
+						<div id="dropdown" class="dropdown">\
+							<a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown">\
+								<i class="flaticon2-menu-1"></i>\
+							</a>\
+							<div class="dropdown-menu dropdown-menu-right">\
+								<ul class="kt-nav">\
+									<li class="kt-nav__item show_company_data" data-id="' + row.id + '">\
+										<a href="javascript:;" class="kt-nav__link">\
+											<i class="kt-nav__link-icon flaticon2-contract"></i>\
+											<span class="kt-nav__link-text">Edytuj</span>\
+										</a>\
+									</li>\
+									<li class="kt-nav__item delete_company" data-id="' + row.id + '">\
+										<a href="javascript:;" class="kt-nav__link">\
+											<i class="kt-nav__link-icon flaticon2-trash"></i>\
+											<span class="kt-nav__link-text">Usuń</span>\
+										</a>\
+									</li>\
+								</ul>\
+							</div>\
+						</div>\
 					';
 				}
 			}]
@@ -277,6 +295,47 @@ var KTCompanyListDatatable = function() {
 				});
 			});
 		});
+
+		$(document).on('click', '.delete_company', function() {
+			var id = $(this).attr('data-id');
+
+			swal.fire({
+				html: "Jesteś pewny że chcesz usunąć tę firmę?",
+				type: "info",
+
+				confirmButtonText: "Usuń",
+				confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+
+				showCancelButton: true,
+				cancelButtonText: "Anuluj",
+				cancelButtonClass: "btn btn-sm btn-bold btn-default"
+			}).then(function(result) {
+				if (result.value) {
+					$.ajax({
+						url: '/rest/company/delete',
+						method: 'POST',
+						data: { id: id },
+						success: function(res) {
+							if(res.status == 'success') {
+								swal.fire({
+									title: 'Usunięto',
+									text: res.message,
+									type: 'success',
+									confirmButtonText: "Zamknij",
+									confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+								});
+								datatable.reload();
+							} else {
+								return KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+							}
+						},
+						error: function(err) {
+							KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+						}
+					});
+				}
+			});
+		});
 	}
 
 	var submitData = function() {
@@ -371,8 +430,8 @@ var KTCompanyListDatatable = function() {
 					cancelButtonClass: "btn btn-sm btn-bold btn-default"
 				}).then(function(result) {
 					if (result.value) {
-						/* $.ajax({
-							url: '/rest/user/sdelete',
+						$.ajax({
+							url: '/rest/company/sdelete',
 							method: 'POST',
 							data: { data: data_send },
 							success: function(res) {
@@ -392,7 +451,7 @@ var KTCompanyListDatatable = function() {
 							error: function(err) {
 								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
 							}
-						}); */
+						});
 					}
 				});
 			}

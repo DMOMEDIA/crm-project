@@ -38,6 +38,15 @@ module.exports.getCompanyById = (id) => {
   return new Company().where({ id: id }).fetch();
 };
 
+module.exports.deleteCompany = (id, callback) => {
+  return new Company().where({ id: id }).fetch({ require: true }).then(function(model) {
+    if(model) {
+      callback(Messages.message('success_company_deleted', null));
+      return model.destroy();
+    } else callback(Messages.message('not_found_company_identity', null));
+  });
+};
+
 module.exports.getCompanyProvision = (id) => {
   return new Company().where({ id: id }).fetch({ columns: ['provision_leasing', 'provision_rent'] });
 }
