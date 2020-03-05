@@ -199,7 +199,6 @@ module.exports.getOffers = (req, callback) => {
           });
           if(nums == counter) cb();
         }, function() {
-          console.log(output);
           callback(output, output.length);
         });
       }
