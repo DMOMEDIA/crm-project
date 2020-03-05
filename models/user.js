@@ -100,7 +100,8 @@ module.exports.createUser = (user) => {
         company: parseInt(user.isCompany),
         cname: user.cname,
         cnip: user.cnip,
-        cregon: user.cregon
+        cregon: user.cregon,
+        assigned_to: user.assigned_to
       }).save();
     });
   });
