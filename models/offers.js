@@ -204,45 +204,6 @@ module.exports.getOffers = (req, callback) => {
         });
       }
     });
-    /* return new OfferLeasing()
-      .fetchAll({ withRelated: ['variants', {
-        'client': function(qb) {
-          qb.where('user_id', req.session.userData.id);
-        }
-      }, 'company'] })
-      .then(function(leasing) {
-        output = output.concat(leasing.toJSON());
-        OfferInsurance
-        .fetchAll({ withRelated: [{
-          'client': function(qb) {
-            qb.where('user_id', req.session.userData.id);
-          }
-        }, 'company'] })
-        .then(function(insurance) {
-          output = output.concat(insurance.toJSON());
-          OfferRent
-          .fetchAll({ withRelated: [{
-            'client': function(qb) {
-              qb.where('user_id', req.session.userData.id);
-            }
-          }, 'company'] })
-          .then(function(rent) {
-            output = output.concat(rent.toJSON());
-            var index = output.length-1;
-
-            while(index >= 0) {
-              if(output[index].client.user_id == null) {
-                output.splice(index, 1);
-              }
-
-              index -= 1;
-              if(index == 0) {
-                callback(output, output.length);
-              }
-            }
-          });
-        });
-    }); */
   }
 };
 
