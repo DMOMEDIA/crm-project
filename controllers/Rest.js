@@ -84,7 +84,8 @@ exports.addUser = (req, res) => {
         isCompany: req.body.isCompany,
         cname: req.body.cname,
         cnip: req.body.cnip,
-        cregon: req.body.cregon
+        cregon: req.body.cregon,
+        assigned_to: req.session.userData.id
       });
 
       res.json(Messages.message('added_new_user', req.body.gen_identity));
