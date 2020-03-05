@@ -8,6 +8,7 @@ const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
 const System = require('../models/system');
 const UserModel = require('../models/user');
+const ClientModel = require('../models/clients');
 
 const Client = bookshelf.Model.extend({
   tableName: 'crm_clients',
@@ -171,7 +172,39 @@ module.exports.getOffers = (req, callback) => {
         });
     });
   } else {
-    return new OfferLeasing()
+    ClientModel.clientlistByAssignedId(req.session.userData.id, function(result, nums) {
+      var output = [];
+      if(result) {
+        var counter = 0;
+
+        async.each(result, async function(e, cb) {
+          await new OfferLeasing().where({ client_id: e.id }).fetchAll({ withRelated: ['variants','client','company'] })
+          .then(async function(leasing) {
+            if(leasing) {
+              output = output.concat(leasing.toJSON());
+              await OfferInsurance.where({ client_id: e.id }).fetchAll({ withRelated: ['client','company'] })
+              .then(async function(insurance) {
+                if(insurance) {
+                  output = output.concat(insurance.toJSON());
+                  await OfferRent.where({ client_id: e.id }).fetchAll({ withRelated: ['client','company'] })
+                  .then(function(rent) {
+                    if(rent) {
+                      output = output.concat(rent.toJSON());
+                      counter++;
+                    }
+                  });
+                }
+              });
+            }
+          });
+          if(nums == counter) cb();
+        }, function() {
+          console.log(output);
+          callback(output, output.length);
+        });
+      }
+    });
+    /* return new OfferLeasing()
       .fetchAll({ withRelated: ['variants', {
         'client': function(qb) {
           qb.where('user_id', req.session.userData.id);
@@ -209,7 +242,7 @@ module.exports.getOffers = (req, callback) => {
             }
           });
         });
-    });
+    }); */
   }
 };
 

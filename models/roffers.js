@@ -3,6 +3,7 @@ const randomstring = require("randomstring");
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const crypto = require('crypto');
+const async = require('async');
 const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
 const ClientsModel = require('../models/clients');
@@ -36,26 +37,25 @@ module.exports.getClientOffers = (callback) => {
 };
 
 module.exports.getClientOffersAssigned = (id, callback) => {
-  return new ROffer()
-    .fetchAll({ withRelated: [{
-        'client_info': function(qb) {
-          qb.where('user_id', id);
-        }
-      }]
-    }).then(function(result) {
-      var output = [],
-      nums = 0,
-      data_json = result.toJSON();
+  ClientsModel.clientlistByAssignedId(id, function(result, nums) {
+    var output = [];
+    if(result) {
+      var counter = 0;
 
-      data_json.forEach(function(item) {
-        if(item.client_info.id != null) {
-          output.push(item);
-          nums++;
-        }
+      async.each(result, async function(e, cb) {
+        await new ROffer().where({ client_id: e.id }).fetchAll({ withRelated: ['client_info'] })
+        .then(function(done) {
+          if(done) {
+            output = output.concat(done.toJSON());
+            counter++;
+          }
+        });
+        if(nums == counter) cb();
+      }, function() {
+        callback(output, output.length);
       });
-
-      callback(output, nums);
-    });
+    }
+  });
 };
 
 module.exports.getOfferById = (id, callback) => {
