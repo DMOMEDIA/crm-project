@@ -378,6 +378,8 @@ var KTROfferListDatatable = function() {
 									btn.attr('disabled', false);
 
 									if(res.status == 'success') {
+										initCompanySentList(dataObj);
+										//
 										$('#send_request_notify').show();
 										$('#dropzone_form_roffer').show();
 										$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
@@ -681,6 +683,8 @@ var KTROfferListDatatable = function() {
 										modalEl.find('input[name="netto"]').val(res.netto);
 										modalEl.find('textarea[name="attentions"]').val(res.attentions);
 										modalEl.find('textarea[name="other"]').val(res.other);
+
+										initCompanySentList(res.id);
 
 										/* ========================================
 												@Information Podstrona 'Realizacja zapytania'
@@ -1067,6 +1071,26 @@ var KTROfferListDatatable = function() {
 				},
 				error: function(err) { }
 			});
+		});
+	}
+
+	var initCompanySentList = function(id) {
+		$.ajax({
+			url: '/rest/company/getsentlist',
+			method: 'POST',
+			data: {
+				id: id
+			},
+			success: function(res) {
+				if(res.length != 0) {
+					$('#loc_box').show();
+					$('#list_of_companies').html(res.toString());
+				} else {
+					$('#loc_box').hide();
+					$('#list_of_companies').html('Nie wysłano');
+				}
+			},
+			error: function(err) { }
 		});
 	}
 

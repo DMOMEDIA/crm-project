@@ -28,6 +28,7 @@ router.post('/rest/user/delete', REST.deleteUserById);
 router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
 router.post('/rest/user/resetpwd', REST.resetUserPassword);
 router.post('/rest/user/recovery_pwd', REST.recoveryUserPwd);
+router.post('/rest/users/list_prov', REST.getUserlistProv);
 
 // {REST} dot. klientów
 router.post('/rest/clients/add', REST.addClient);
@@ -84,6 +85,7 @@ router.post('/rest/company/edit', REST.editCompany);
 router.post('/rest/company/provision', REST.getCompanyProvision);
 router.post('/rest/company/sdelete', REST.deleteSelectedCompanies);
 router.post('/rest/company/delete', REST.deleteCompany);
+router.post('/rest/company/getsentlist', REST.getCompanySentList);
 
 // statistics
 router.post('/rest/stats/offers_count', REST.getOfferCount);

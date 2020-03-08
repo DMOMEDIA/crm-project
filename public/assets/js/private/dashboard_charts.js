@@ -2,6 +2,104 @@
 
 var KTDashboardCharts = function() {
 
+  var datatable;
+
+  var init = function() {
+
+    datatable = $('#provision_datatable').KTDatatable({
+			// datasource definition
+			data: {
+				type: 'remote',
+				source: {
+					read: {
+						url: '/rest/users/list_prov'
+					},
+				}
+			},
+
+			// layout definition
+			layout: {
+				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+				footer: false, // display/hide footer
+				icons: {
+					sort: {
+						asc: '',
+						desc: ''
+					}
+				}
+			},
+
+			// column sorting
+			sortable: false,
+
+			pagination: true,
+
+			search: {
+				input: $('#generalSearch'),
+				delay: 400,
+			},
+
+			// columns definition
+			columns: [{
+				field: 'id',
+				title: '#',
+				sortable: 'desc',
+				width: 20,
+				selector: {
+					class: 'kt-checkbox--solid'
+				},
+				textAlign: 'center',
+			}, {
+				field: "fullname",
+				title: "Pracownik",
+				width: 200,
+				autoHide: false,
+				// callback function support for column rendering
+        template: function(data, i) {
+					var urole = data.role;
+					if(urole == 'posrednik') urole = 'pośrednik';
+					var output = '\
+							<div class="kt-user-card-v2">\
+								<div class="kt-user-card-v2__pic">\
+									<div class="kt-badge kt-badge--xl kt-badge--dark">' + data.fullname.substring(0, 1) + '</div>\
+								</div>\
+								<div class="kt-user-card-v2__details">\
+									<a href="javascript:;" class="kt-user-card-v2__name">' + data.fullname + '</a>\
+									<span class="kt-user-card-v2__desc">' + urole + '</span>\
+								</div>\
+							</div>';
+					return output;
+				}
+			}, {
+				field: 'prov_normal',
+				title: 'Prowizja',
+				template: function(row) {
+          var badge = 'danger';
+          if(row.provisions.prov_normal > 0) badge = 'success';
+
+          var output = '<span style="margin-top:-2px;" class="kt-badge kt-badge--' + badge + ' kt-badge--dot kt-badge--xl"></span> ' + row.provisions.prov_normal.toFixed(2) + ' zł';
+					return '<span style="font-size:14px;">' + output + '</span>';
+				}
+			}, {
+				field: 'prov_forecast',
+				title: 'Prowizja prognozowana',
+				template: function(row) {
+          var badge = 'danger';
+          if(row.provisions.prov_forecast > 0) badge = 'success';
+
+          var output = '<span style="margin-top:-2px;" class="kt-badge kt-badge--' + badge + ' kt-badge--dot kt-badge--xl"></span> ' + row.provisions.prov_forecast.toFixed(2) + ' zł';
+					return '<span style="font-size:14px;">' + output + '</span>';
+				},
+			}, {
+        field: 'sells',
+        title: 'Sprzedaż',
+        template: function(row) {
+          return '<span style="font-size:14px;"><span style="margin-top:-2px;" class="kt-badge kt-badge--danger kt-badge--dot kt-badge--xl"></span> 0 zł</span>';
+        },
+      }]
+		});
+  }
+
   // Sparkline Chart helper function
   var _initSparklineChart = function(src, label, data, color, border) {
     if (src.length == 0) {
@@ -164,6 +262,7 @@ var KTDashboardCharts = function() {
 
   return {
     init: function() {
+      init();
       activeCharts();
     }
   }

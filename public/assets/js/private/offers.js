@@ -259,12 +259,6 @@ var KTOfferListDatatable = function() {
 												  <div class="col-lg-9 col-xl-9">\
 												    <input class="form-control" type="number" name="variant[' + index + '][repurchase]" placeholder="Wykup" value="' + item.wykup + '" />\
 												  </div>\
-												</div>\
-												<div class="form-group row">\
-												  <label class="col-xl-3 col-lg-3 col-form-label">Suma opłat:</label>\
-												  <div class="col-lg-9 col-xl-9">\
-												    <input class="form-control" type="number" name="variant[' + index + '][sum_fee]" placeholder="Suma opłat" value="' + item.total_fees + '" />\
-												  </div>\
 												</div><div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">\</div>\
 											');
 										});
@@ -273,7 +267,6 @@ var KTOfferListDatatable = function() {
 										$('[name*="inital"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 										$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 										$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
-										$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 
 										/* modalEl.find('input[name="vid"]').val(res.variants.id);
 										modalEl.find('input[name="contract"]').val(res.variants.okres);
@@ -839,7 +832,6 @@ var KTOfferListDatatable = function() {
 						$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 						$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 						$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
-						$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
         },
         hide: function (deleteElement) {
             $(this).slideUp(deleteElement);

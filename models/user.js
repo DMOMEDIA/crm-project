@@ -123,6 +123,26 @@ module.exports.userList = (args, callback) => {
   }
 };
 
+module.exports.getUserListProvision = (callback) => {
+  var output = [];
+  return new User().fetchAll()
+  .then(function(response) {
+    response = response.toJSON();
+    var number = 0;
+    async.each(response, async function(e, cb) {
+      await module.exports.getUserProvision(e.id, result => {
+        e['provisions'] = result;
+
+        output.push(e);
+        number++;
+      });
+      if(response.length == number) cb();
+    }, function() {
+      callback(output, output.length);
+    });
+  });
+};
+
 module.exports.userListByAssignedId = (args, id, callback) => {
   if(args != null) {
     var output = [];

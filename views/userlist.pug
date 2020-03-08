@@ -66,10 +66,16 @@ block content
                           .kt-form__control
                             select#kt_form_status.form-control
                               option(value='') Wszystkie
-                              option(value='administrator') Administrator
-                              option(value='kierownik') Kierownik
-                              option(value='posrednik') Pośrednik
-                              option(value='pracownik') Pracownik
+                              if userData.role == 'administrator'
+                                option(value='administrator') Administrator
+                                option(value='kierownik') Kierownik
+                                option(value='posrednik') Pośrednik
+                                option(value='pracownik') Pracownik
+                              if userData.role == 'kierownik'
+                                option(value='posrednik') Pośrednik
+                                option(value='pracownik') Pracownik
+                              if userData.role == 'posrednik'
+                                option(value='pracownik') Pracownik
                   | &#x9;&#x9;
                   .col-xl-4.order-1.order-xl-2.kt-align-right
                     a.btn.btn-default.kt-hidden(href='#')

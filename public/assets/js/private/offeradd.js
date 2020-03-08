@@ -52,7 +52,6 @@ var KTWizardOfferAdd = function () {
 				$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 				$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 				$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
-				$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 
 				if($('input[name="offer_type"]:checked').val() == 'leasing') {
 					$('#leasing_type_box').show();
@@ -135,20 +134,18 @@ var KTWizardOfferAdd = function () {
 					$('#gap_company_lP').html($('input[name="gap_company_l"]').val());
 					$('#attentions_lP').html($('textarea[name="attentions_l"]').val());
 
-					console.log($('textarea[name="attentions_l"]').val());
-
 					// Warianty
-					var contract = [], inital_fee = [], leasing_install = [], repurchase = [], sum_fee = [];
+					var contract = [], inital_fee = [], leasing_install = [], repurchase = [];
 					$('input[name*="contract"]').each(function() { contract.push($(this).val()) });
 					$('input[name*="inital"]').each(function() { inital_fee.push($(this).val()) });
 					$('input[name*="leasing_install"]').each(function() { leasing_install.push($(this).val()) });
 					$('input[name*="repurchase"]').each(function() { repurchase.push($(this).val()) });
-					$('input[name*="sum_fee"]').each(function() { sum_fee.push($(this).val()) });
+					// $('input[name*="sum_fee"]').each(function() { sum_fee.push($(this).val()) });
 
 					$('#pull_variants').html('');
 
 					for(var i = 0; i < contract.length; i++) {
-						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Opłata wstępna: ' + inital_fee[i] + ' PLN</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p><p class="kt-margin-b-0">Suma opłat: ' + sum_fee[i] + ' PLN</p></br>');
+						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Opłata wstępna: ' + inital_fee[i] + ' PLN</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p></br>');
 					}
 
 					var netto_val = parseFloat($('input[name="netto_l"]').val());
@@ -476,100 +473,88 @@ var KTWizardOfferAdd = function () {
 				formEl.find('[name="o_state"]').val('2');
 
 				setTimeout(function() {
-					if(dzUpload.files.length != 0) {
-						$.ajax({
-							url: '/rest/offer/insert',
-							method: 'POST',
-							data: formEl.serialize(),
-							success: function(res) {
-								//KTApp.unblock(formEl);
-								if(res.status == 'success') {
+					$.ajax({
+						url: '/rest/offer/insert',
+						method: 'POST',
+						data: formEl.serialize(),
+						success: function(res) {
+							//KTApp.unblock(formEl);
+							if(res.status == 'success') {
+								swal.fire({
+									"title": "",
+									"text": "Przesyłanie załączonych plików do systemu",
+									onBeforeOpen: () => {
+    								swal.showLoading();
+									},
+									allowOutsideClick: false
+								});
+
+								// Send files to system
+								setTimeout(function() {
+									dzUpload.processQueue();
+								}, 500);
+
+								dzUpload.on("successmultiple", function(file, resp) {
+									dzUpload.removeAllFiles();
+									formEl.find('[name="o_path"]').val(res.param.offer_path);
+									formEl.find('[name="o_id"]').val(res.param.offer_id);
+
+									// Send email
+									formEl.ajaxSubmit({
+										url: '/rest/offer/sendmail',
+										method: 'POST',
+										clearForm: true,
+										data: formEl.serialize(),
+										success: function(response) {
+											if(response.status == 'success') {
+												KTApp.unprogress(btn_mail);
+												btn_mail.attr('disabled', false);
+
+												swal.fire({
+													"title": "",
+													"text": res.message,
+													"type": "success",
+													"confirmButtonClass": "btn btn-secondary"
+												});
+
+												wizard.goTo(1, true);
+											} else {
+												swal.fire({
+													"title": "",
+													"text": response.message,
+													"type": response.status,
+													"confirmButtonClass": "btn btn-secondary"
+												});
+											}
+										},
+										error: function(err) {
+              				KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+										}
+									});
+									/* KTApp.unprogress(btn);
+									btn.attr('disabled', false);
+
 									swal.fire({
 										"title": "",
-										"text": "Przesyłanie załączonych plików do systemu",
-										onBeforeOpen: () => {
-	    								swal.showLoading();
-										},
-										allowOutsideClick: false
-									});
+										"text": res.message,
+										"type": "success",
+										"confirmButtonClass": "btn btn-secondary"
+									}); */
+									// wizard.goTo(1, true);
+								});
 
-									// Send files to system
-									setTimeout(function() {
-										dzUpload.processQueue();
-									}, 500);
-
-									dzUpload.on("successmultiple", function(file, resp) {
-										dzUpload.removeAllFiles();
-										formEl.find('[name="o_path"]').val(res.param.offer_path);
-										formEl.find('[name="o_id"]').val(res.param.offer_id);
-
-										// Send email
-										formEl.ajaxSubmit({
-											url: '/rest/offer/sendmail',
-											method: 'POST',
-											clearForm: true,
-											data: formEl.serialize(),
-											success: function(response) {
-												if(response.status == 'success') {
-													KTApp.unprogress(btn_mail);
-													btn_mail.attr('disabled', false);
-
-													swal.fire({
-														"title": "",
-														"text": res.message,
-														"type": "success",
-														"confirmButtonClass": "btn btn-secondary"
-													});
-
-													wizard.goTo(1, true);
-												} else {
-													swal.fire({
-														"title": "",
-														"text": response.message,
-														"type": response.status,
-														"confirmButtonClass": "btn btn-secondary"
-													});
-												}
-											},
-											error: function(err) {
-	              				KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
-											}
-										});
-										/* KTApp.unprogress(btn);
-										btn.attr('disabled', false);
-
-										swal.fire({
-											"title": "",
-											"text": res.message,
-											"type": "success",
-											"confirmButtonClass": "btn btn-secondary"
-										}); */
-										// wizard.goTo(1, true);
-									});
-
-									dzUpload.on("sendingmultiple", function(file, xhr, formData) {
-										formData.append('folder_path', res.param.offer_path);
-									});
-								} else {
-									KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
-									wizard.goTo(1, true);
-								}
-							},
-	            error: function(err) {
-	              KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
-	            }
-						});
-					} else {
-						KTApp.unprogress(btn_mail);
-						btn_mail.attr('disabled', false);
-
-						swal.fire({
-							"title": "",
-							"text": "Nie załączono dokumentów do oferty",
-							"type": "error",
-							"confirmButtonClass": "btn btn-secondary"
-						});
-					}
+								dzUpload.on("sendingmultiple", function(file, xhr, formData) {
+									formData.append('folder_path', res.param.offer_path);
+								});
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
+								wizard.goTo(1, true);
+							}
+						},
+            error: function(err) {
+              KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+            }
+					});
 				}, 1000);
 			}
 		});
@@ -589,66 +574,54 @@ var KTWizardOfferAdd = function () {
 
 				// See: http://malsup.com/jquery/form/#ajaxSubmit
 				setTimeout(function() {
-					if(dzUpload.files.length != 0) {
-						formEl.ajaxSubmit({
-							url: '/rest/offer/insert',
-							method: 'POST',
-							data: formEl.serialize(),
-							clearForm: true,
-							success: function(res) {
-								//KTApp.unblock(formEl);
-								if(res.status == 'success') {
+					formEl.ajaxSubmit({
+						url: '/rest/offer/insert',
+						method: 'POST',
+						data: formEl.serialize(),
+						clearForm: true,
+						success: function(res) {
+							//KTApp.unblock(formEl);
+							if(res.status == 'success') {
+								swal.fire({
+									"title": "",
+									"text": "Przesyłanie załączonych plików do systemu",
+									onBeforeOpen: () => {
+    								swal.showLoading();
+									},
+									allowOutsideClick: false
+								});
+
+								// Send files to system
+								setTimeout(function() {
+									dzUpload.processQueue();
+								}, 500);
+
+								dzUpload.on("successmultiple", function(file, res) {
+									KTApp.unprogress(btn);
+									btn.attr('disabled', false);
+
 									swal.fire({
 										"title": "",
-										"text": "Przesyłanie załączonych plików do systemu",
-										onBeforeOpen: () => {
-	    								swal.showLoading();
-										},
-										allowOutsideClick: false
+										"text": res.message,
+										"type": "success",
+										"confirmButtonClass": "btn btn-secondary"
 									});
-
-									// Send files to system
-									setTimeout(function() {
-										dzUpload.processQueue();
-									}, 500);
-
-									dzUpload.on("successmultiple", function(file, res) {
-										KTApp.unprogress(btn);
-										btn.attr('disabled', false);
-
-										swal.fire({
-											"title": "",
-											"text": res.message,
-											"type": "success",
-											"confirmButtonClass": "btn btn-secondary"
-										});
-										dzUpload.removeAllFiles();
-										wizard.goTo(1, true);
-									});
-
-									dzUpload.on("sendingmultiple", function(file, xhr, formData) {
-										formData.append('folder_path', res.param.offer_path);
-									});
-								} else {
-									KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
+									dzUpload.removeAllFiles();
 									wizard.goTo(1, true);
-								}
-							},
-	            error: function(err) {
-	              KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
-	            }
-						});
-					} else {
-						KTApp.unprogress(btn);
-						btn.attr('disabled', false);
+								});
 
-						swal.fire({
-							"title": "",
-							"text": "Nie załączono dokumentów do oferty",
-							"type": "error",
-							"confirmButtonClass": "btn btn-secondary"
-						});
-					}
+								dzUpload.on("sendingmultiple", function(file, xhr, formData) {
+									formData.append('folder_path', res.param.offer_path);
+								});
+							} else {
+								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
+								wizard.goTo(1, true);
+							}
+						},
+            error: function(err) {
+              KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+            }
+					});
 				}, 1000);
 			}
 		});
@@ -710,7 +683,6 @@ var KTWizardOfferAdd = function () {
 						$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 						$('[name*="leasing_install"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 						$('[name*="repurchase"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
-						$('[name*="sum_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
         },
         hide: function (deleteElement) {
             $(this).slideUp(deleteElement);

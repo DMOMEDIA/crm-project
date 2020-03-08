@@ -93,6 +93,17 @@ exports.addUser = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.getUserlistProv = (req, res) => {
+  if(req.isAuthenticated()) {
+    var output = {};
+    User.getUserListProvision(function(result, nums) {
+      output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'desc', field: 'id' };
+      output['data'] = result;
+      res.json(output);
+    });
+  }
+}
+
 exports.getUserlist = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.employees.show')) {
@@ -129,6 +140,8 @@ exports.getUserlistName = (req, res) => {
         User.userList(['id','fullname','role'], function(result,  nums) {
           res.json(result);
         });
+      } else if(req.session.userData.role == 'pracownik') {
+          res.json({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
       } else {
         User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
           result.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
@@ -1002,6 +1015,8 @@ exports.requestOfferSendMail = (req, res) => {
               }
 
               async.each(req.body.mails, async function(email, end) {
+                Company.insertCompanySent(req.body.data.id, email);
+
                 await Mails.sendMail.send({
                   template: 'to_company',
                   message: {
@@ -1114,6 +1129,14 @@ exports.editCompany = (req, res) => {
       }
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getCompanySentList = (req, res) => {
+  if(req.body) {
+    Company.getCompanySent(req.body.id, result => {
+      res.json(result);
+    });
+  }
 };
 
 exports.getCompanyProvision = (req, res) => {

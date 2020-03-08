@@ -1,8 +1,14 @@
 const bookshelf = require('../config/bookshelf');
+const async = require('async');
 const Messages = require('../config/messages');
 
 const Company = bookshelf.Model.extend({
   tableName: 'crm_companies',
+  hasTimestamps: true
+});
+
+const CompanySent = bookshelf.Model.extend({
+  tableName: 'crm_roffers_history',
   hasTimestamps: true
 });
 
@@ -36,6 +42,10 @@ module.exports.addNewCompany = (value, callback) => {
 
 module.exports.getCompanyById = (id) => {
   return new Company().where({ id: id }).fetch();
+};
+
+module.exports.getCompanyByEmail = (email) => {
+  return new Company().where({ email: email }).fetch();
 };
 
 module.exports.deleteCompany = (id, callback) => {
@@ -74,5 +84,36 @@ module.exports.changeData = (value, callback) => {
         callback(Messages.message('success_company_data_change', null));
       });
     }
+  });
+};
+
+module.exports.getCompanySent = (rid, callback) => {
+  var output = [];
+  return new CompanySent().where({ roffer_id: rid }).fetchAll()
+  .then(function(result) {
+    result = result.toJSON();
+    async.each(result, async function(e, cb) {
+      await module.exports.getCompanyById(e.company_id)
+      .then(function(done) {
+        if(done) output.push(done.get('fullname'));
+      });
+      cb();
+    }, function() {
+      callback(output);
+    });
+  });
+};
+
+module.exports.insertCompanySent = (roffer_id, email) => {
+  module.exports.getCompanyByEmail(email).then(function(result) {
+    return new CompanySent().where({ company_id: result.get('id'), roffer_id: roffer_id }).fetch()
+    .then(function(model) {
+      if(!model) {
+        return new CompanySent({
+          company_id: result.get('id'),
+          roffer_id: roffer_id
+        }).save();
+      }
+    });
   });
 };
