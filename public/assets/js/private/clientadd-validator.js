@@ -232,7 +232,6 @@ var KTClientAdd = function () {
 			method: 'GET',
 			data: {},
 			success: function(res) {
-				console.log(res);
 				if(res.status == null) {
 					for(var i = 0; i < res.length; i++) data.push({ id: res[i].id, text: res[i].fullname + ', ' + res[i].role });
 

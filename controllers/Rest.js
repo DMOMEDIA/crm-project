@@ -135,23 +135,16 @@ exports.getUserlist = (req, res) => {
 
 exports.getUserlistName = (req, res) => {
   if(req.isAuthenticated()) {
-    if(res.locals.userPermissions.includes('crm.client.assign_edit')) {
-      if(req.session.userData.role == 'administrator') {
-        User.userList(['id','fullname','role'], function(result,  nums) {
-          res.json(result);
-        });
-      } else if(req.session.userData.role == 'pracownik') {
-        var results = [];
-        results.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
-        console.log(results);
-        res.json(results);
-      } else {
-        User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
-          result.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
-          res.json(result);
-        });
-      }
-    } else res.json(Messages.message('no_permission', null));
+    if(req.session.userData.role == 'administrator') {
+      User.userList(['id','fullname','role'], function(result,  nums) {
+        res.json(result);
+      });
+    } else {
+      User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
+        result.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
+        res.json(result);
+      });
+    }
   } else res.json(Messages.message('no_authorization', null));
 };
 
