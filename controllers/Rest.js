@@ -143,6 +143,7 @@ exports.getUserlistName = (req, res) => {
       } else if(req.session.userData.role == 'pracownik') {
         var results = [];
         results.push({ id: req.session.userData.id, fullname: req.session.userData.fullname, role: req.session.userData.role });
+        console.log(results);
         res.json(results);
       } else {
         User.userListByAssignedId(['id','fullname','role'], req.session.userData.id, function(result, nums) {
