@@ -1,4 +1,4 @@
- const Roles = require('../models/roles');
+const Roles = require('../models/roles');
 const User = require('../models/user');
 const Client = require('../models/clients');
 const ROffer = require('../models/roffers');
@@ -677,27 +677,28 @@ exports.sendOfferMail_onList = async (req, res) => {
 
           try {
             var attachments = [];
-            var files = fs.readdirSync('./uploads/offer/' + req.body.o_path);
-            async.each(files, function(name, cb) {
-              attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
-              cb();
-            }, function() {
-              Mails.sendMail.send({
-                template: 'client_offer',
-                message: {
-                  from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                  to: offer.client.email,
-                  subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
-                  attachments: attachments
-                },
-                locals: {
-                  data: offer,
-                  date_format: date_format,
-                  identity: o_identity
-                }
-              }).then(function() {
-                Offer.setValueById(offer.id, offer.offer_type, 'state', 2, false).then(function() {
-                  res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+            fs.readdir('./uploads/offer/' + req.body.o_path, function(err, files) {
+              async.each(files, function(name, cb) {
+                attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
+                cb();
+              }, function() {
+                Mails.sendMail.send({
+                  template: 'client_offer',
+                  message: {
+                    from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                    to: offer.client.email,
+                    subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
+                    attachments: attachments
+                  },
+                  locals: {
+                    data: offer,
+                    date_format: date_format,
+                    identity: o_identity
+                  }
+                }).then(function() {
+                  Offer.setValueById(offer.id, offer.offer_type, 'state', 2, false).then(function() {
+                    res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+                  });
                 });
               });
             });
@@ -721,7 +722,8 @@ exports.sendOfferMail = async (req, res) => {
 
           try {
             var attachments = [];
-            var files = fs.readdirSync('./uploads/offer/' + req.body.o_path);
+            if(req.body.o_path.length != 0) var files = fs.readdirSync('./uploads/offer/' + req.body.o_path);
+            else var files = [];
             async.each(files, function(name, cb) {
               attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
               cb();
@@ -955,7 +957,7 @@ exports.requestOfferSendMail = (req, res) => {
             var data = {
               "c_name": cb.name,
               "c_nip": client_name,
-              "c_period": cb.instalments + ' miesiecy',
+              "c_period": cb.instalments + ' miesięcy',
               "c_wklad": cb.contribution + ' zł',
               "c_wykup": cb.red_value,
               "c_pyear": cb.pyear,
@@ -974,7 +976,7 @@ exports.requestOfferSendMail = (req, res) => {
               "c_paliwo": cb.fuel_type,
               "c_rata": rent_installment,
               "c_wklad": cb.contribution + ' zł',
-              "c_okres": cb.instalments + ' miesiecy',
+              "c_okres": cb.instalments + ' miesięcy',
               "c_wykup": cb.red_value,
               "c_netto": cb.netto + ' zł',
               "s_opony": s_tire,

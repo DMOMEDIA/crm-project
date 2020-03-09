@@ -480,25 +480,75 @@ var KTWizardOfferAdd = function () {
 						success: function(res) {
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
-								swal.fire({
-									"title": "",
-									"text": "Przesyłanie załączonych plików do systemu",
-									onBeforeOpen: () => {
-    								swal.showLoading();
-									},
-									allowOutsideClick: false
-								});
-
 								// Send files to system
-								setTimeout(function() {
-									dzUpload.processQueue();
-								}, 500);
+								if(dzUpload.files.length != 0) {
+									swal.fire({
+										"title": "",
+										"text": "Przesyłanie załączonych plików do systemu",
+										onBeforeOpen: () => {
+											swal.showLoading();
+										},
+										allowOutsideClick: false
+									});
 
-								dzUpload.on("successmultiple", function(file, resp) {
-									dzUpload.removeAllFiles();
-									formEl.find('[name="o_path"]').val(res.param.offer_path);
+									setTimeout(function() {
+										dzUpload.processQueue();
+									}, 500);
+
+									dzUpload.on("successmultiple", function(file, resp) {
+										dzUpload.removeAllFiles();
+										formEl.find('[name="o_path"]').val(res.param.offer_path);
+										formEl.find('[name="o_id"]').val(res.param.offer_id);
+
+										// Send email
+										formEl.ajaxSubmit({
+											url: '/rest/offer/sendmail',
+											method: 'POST',
+											clearForm: true,
+											data: formEl.serialize(),
+											success: function(response) {
+												if(response.status == 'success') {
+													KTApp.unprogress(btn_mail);
+													btn_mail.attr('disabled', false);
+
+													swal.fire({
+														"title": "",
+														"text": res.message,
+														"type": "success",
+														"confirmButtonClass": "btn btn-secondary"
+													});
+
+													wizard.goTo(1, true);
+												} else {
+													swal.fire({
+														"title": "",
+														"text": response.message,
+														"type": response.status,
+														"confirmButtonClass": "btn btn-secondary"
+													});
+												}
+											},
+											error: function(err) {
+	              				KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+											}
+										});
+										/* KTApp.unprogress(btn);
+										btn.attr('disabled', false);
+
+										swal.fire({
+											"title": "",
+											"text": res.message,
+											"type": "success",
+											"confirmButtonClass": "btn btn-secondary"
+										}); */
+										// wizard.goTo(1, true);
+									});
+
+									dzUpload.on("sendingmultiple", function(file, xhr, formData) {
+										formData.append('folder_path', res.param.offer_path);
+									});
+								} else {
 									formEl.find('[name="o_id"]').val(res.param.offer_id);
-
 									// Send email
 									formEl.ajaxSubmit({
 										url: '/rest/offer/sendmail',
@@ -528,24 +578,10 @@ var KTWizardOfferAdd = function () {
 											}
 										},
 										error: function(err) {
-              				KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+											KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
 										}
 									});
-									/* KTApp.unprogress(btn);
-									btn.attr('disabled', false);
-
-									swal.fire({
-										"title": "",
-										"text": res.message,
-										"type": "success",
-										"confirmButtonClass": "btn btn-secondary"
-									}); */
-									// wizard.goTo(1, true);
-								});
-
-								dzUpload.on("sendingmultiple", function(file, xhr, formData) {
-									formData.append('folder_path', res.param.offer_path);
-								});
+								}
 							} else {
 								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
 								wizard.goTo(1, true);
@@ -582,21 +618,40 @@ var KTWizardOfferAdd = function () {
 						success: function(res) {
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
-								swal.fire({
-									"title": "",
-									"text": "Przesyłanie załączonych plików do systemu",
-									onBeforeOpen: () => {
-    								swal.showLoading();
-									},
-									allowOutsideClick: false
-								});
 
-								// Send files to system
-								setTimeout(function() {
-									dzUpload.processQueue();
-								}, 500);
+								if(dzUpload.files.length != 0) {
+									swal.fire({
+										"title": "",
+										"text": "Przesyłanie załączonych plików do systemu",
+										onBeforeOpen: () => {
+	    								swal.showLoading();
+										},
+										allowOutsideClick: false
+									});
 
-								dzUpload.on("successmultiple", function(file, res) {
+									// Send files to system
+									setTimeout(function() {
+										dzUpload.processQueue();
+									}, 500);
+
+									dzUpload.on("successmultiple", function(file, res) {
+										KTApp.unprogress(btn);
+										btn.attr('disabled', false);
+
+										swal.fire({
+											"title": "",
+											"text": res.message,
+											"type": "success",
+											"confirmButtonClass": "btn btn-secondary"
+										});
+										dzUpload.removeAllFiles();
+										wizard.goTo(1, true);
+									});
+
+									dzUpload.on("sendingmultiple", function(file, xhr, formData) {
+										formData.append('folder_path', res.param.offer_path);
+									});
+								} else {
 									KTApp.unprogress(btn);
 									btn.attr('disabled', false);
 
@@ -606,13 +661,8 @@ var KTWizardOfferAdd = function () {
 										"type": "success",
 										"confirmButtonClass": "btn btn-secondary"
 									});
-									dzUpload.removeAllFiles();
 									wizard.goTo(1, true);
-								});
-
-								dzUpload.on("sendingmultiple", function(file, xhr, formData) {
-									formData.append('folder_path', res.param.offer_path);
-								});
+								}
 							} else {
 								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
 								wizard.goTo(1, true);

@@ -405,6 +405,9 @@ module.exports.getUserByOfferId = (id, type, callback) => {
 module.exports.createOffer = (req, callback) => {
   var value = req.body;
   if(value.offer_type == 'leasing') {
+    if(value.acoc_rata_l.length == 0) value.acoc_rata_l = null;
+    if(value.gap_rata_l.length == 0) value.gap_rata_l = null;
+    if(value.attentions_l.length == 0) value.attentions_l = null;
     return new OfferLeasing({
       client_id: value.client_id,
       company_id: value.company_id,
@@ -469,6 +472,8 @@ module.exports.createOffer = (req, callback) => {
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
     });
   } else {
+    if(value.acoc_rata.length == 0) value.acoc_rata = null;
+    if(value.attentions_r.length == 0) value.attentions_r = null;
     return new OfferRent({
       client_id: value.client_id,
       company_id: value.company_id,

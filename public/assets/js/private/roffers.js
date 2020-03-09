@@ -378,7 +378,7 @@ var KTROfferListDatatable = function() {
 									btn.attr('disabled', false);
 
 									if(res.status == 'success') {
-										initCompanySentList(dataObj);
+										initCompanySentList(dataObj.id);
 										//
 										$('#send_request_notify').show();
 										$('#dropzone_form_roffer').show();
@@ -431,6 +431,8 @@ var KTROfferListDatatable = function() {
 								btn.attr('disabled', false);
 
 								if(res.status == 'success') {
+									initCompanySentList(dataObj.id);
+									//
 									$('#send_request_notify').show();
 									$('#dropzone_form_roffer').show();
 									$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
