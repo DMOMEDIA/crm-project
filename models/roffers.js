@@ -98,9 +98,9 @@ module.exports.uploadOffer = (value, callback) => {
         if(value.wykup_l) model.set('red_value', value.wykup_l);
         if(value.netto) model.set('netto', value.netto);
         if(value.attentions) model.set('attentions', value.attentions);
-        else model.set('attentions', null);
+        else model.set('attentions', '');
         if(value.other) model.set('other', value.other);
-        else model.set('other', null);
+        else model.set('other', '');
 
         model.save().then(function(done) {
           callback(Messages.message('request_offer_data_change', null));
@@ -126,9 +126,9 @@ module.exports.uploadOffer = (value, callback) => {
         else model.set('insurance', 0);
         if(value.netto) model.set('netto', value.netto);
         if(value.attentions) model.set('attentions', value.attentions);
-        else model.set('attentions', null);
+        else model.set('attentions', '');
         if(value.other) model.set('other', value.other);
-        else model.set('other', null);
+        else model.set('other', '');
 
         model.save().then(function(done) {
           callback(Messages.message('request_offer_data_change', null));
@@ -148,9 +148,9 @@ module.exports.uploadOffer = (value, callback) => {
         if(value.km_val_i) model.set('km_value', value.km_val_i);
         if(value.netto) model.set('netto', value.netto);
         if(value.attentions) model.set('attentions', value.attentions);
-        else model.set('attentions', null);
+        else model.set('attentions', '');
         if(value.other) model.set('other', value.other);
-        else model.set('other', null);
+        else model.set('other', '');
 
         model.save().then(function(done) {
           callback(Messages.message('request_offer_data_change', null));
