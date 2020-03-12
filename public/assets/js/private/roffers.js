@@ -688,6 +688,7 @@ var KTROfferListDatatable = function() {
 										modalEl.find('textarea[name="attentions"]').val(res.attentions);
 										modalEl.find('textarea[name="other"]').val(res.other);
 
+										$('#list_of_companies').html('');
 										initCompanySentList(res.id);
 
 										/* ========================================
@@ -704,6 +705,7 @@ var KTROfferListDatatable = function() {
 											//
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
 										} else if(res.state == 2) {
+											$('#is_realized_notify').hide();
 											$('#send_request_notify').show();
 											$('#dropzone_form_roffer').show();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
