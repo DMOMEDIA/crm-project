@@ -243,9 +243,9 @@ var KTOfferListDatatable = function() {
 												  </div>\
 												</div>\
 												<div class="form-group row">\
-												  <label class="col-xl-3 col-lg-3 col-form-label">Opłata wstępna:</label>\
+												  <label class="col-xl-3 col-lg-3 col-form-label">Wkład własny (%):</label>\
 												  <div class="col-lg-9 col-xl-9">\
-												    <input class="form-control" type="number" name="variant[' + index + '][inital]" placeholder="Opłata wstępna" value="' + item.wklad + '" />\
+												    <input class="form-control" type="number" name="variant[' + index + '][inital]" placeholder="Wkład własny" value="' + item.wklad + '" />\
 												  </div>\
 												</div>\
 												<div class="form-group row">\

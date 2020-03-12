@@ -145,7 +145,7 @@ var KTWizardOfferAdd = function () {
 					$('#pull_variants').html('');
 
 					for(var i = 0; i < contract.length; i++) {
-						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Opłata wstępna: ' + inital_fee[i] + ' PLN</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p></br>');
+						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Wkład własny: ' + inital_fee[i] + ' %</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p></br>');
 					}
 
 					var netto_val = parseFloat($('input[name="netto_l"]').val());
@@ -165,7 +165,7 @@ var KTWizardOfferAdd = function () {
 					else $('#month_install_rP').html(slider_min + ' PLN - ' + slider_max + ' PLN');
 					$('#vehicle_val_rP').html($('input[name="vehicle_val_r"]').val() + ' PLN'); // Wartość pojazdu
 					$('#rent_time_rP').html($('input[name="rent_time_r"]').val()); // Okres wynajmu
-					$('#self_deposit_rP').html($('input[name="self_deposit_r"]').val() + ' PLN'); // Wpłata własna
+					$('#self_deposit_rP').html($('input[name="self_deposit_r"]').val() + ' %'); // Wpłata własna
 					$('#km_limit_rP').html($('input[name="km_limit_r"]').val()); // Limit kilometrów
 					$('#invoice_rP').html($('select[name="invoice_r"] option:selected').text());
 					//if($('input[name="service_pack"]:checked')) $('#service_packP').html($('input[name="service_pack"]:checked').val());
@@ -210,6 +210,7 @@ var KTWizardOfferAdd = function () {
 	var initValidation = function() {
     $("#pyear_l").inputmask('9999');
 		$("#pyear_i").inputmask('9999');
+		$('input[name="self_deposit_r"]').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$('#wykup_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });

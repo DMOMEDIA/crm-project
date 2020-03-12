@@ -151,10 +151,12 @@ var KTROfferListDatatable = function() {
 	}
 
 	var initValidation = function() {
-		$('#wklad_l').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
+		//$('#wklad_l').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
 		$('#wykup_l').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
-		$('#wklad_r').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
+		$('#wklad_l').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
+		//$('#wklad_r').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, prefix: '', clearMaskOnLostFocus: true });
 		$('#wykup_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
+		$('#wklad_r').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false });
 		$('#netto_val').inputmask({ 'alias': 'currency', rightAlign: false, digits: 2, clearMaskOnLostFocus: true, min: 1, prefix: '' });
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
