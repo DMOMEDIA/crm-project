@@ -981,11 +981,12 @@ var KTROfferListDatatable = function() {
 				success: function(res, status, xhr) {
 					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
 					fileName = fileName.replace(/\"/g, '');
+					fileName = fileName.split(';');
 
 					var a = document.createElement('a');
 			    var url = window.URL.createObjectURL(res);
 			    a.href = url;
-			    a.download = fileName;
+			    a.download = fileName[0];
 			    a.click();
 			    window.URL.revokeObjectURL(url);
 				},
