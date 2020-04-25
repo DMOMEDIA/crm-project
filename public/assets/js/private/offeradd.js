@@ -47,6 +47,33 @@ var KTWizardOfferAdd = function () {
 
 			var offerType = $('input[name="offer_type"]:checked').val();
 
+			if(wizard.getStep() == 2) {
+				$('#rofferlistRemote').html('').select2({data: [{id: '', text: ''}]});
+			  var data3 = [];
+
+				$.ajax({
+					url: '/rest/roffer/remotelist',
+					method: 'GET',
+					data: {
+						type: offerType
+					},
+					success: function(res) {
+						if(res.status == null) {
+							for(var i = 0; i < res.length; i++) data3.push({ id: res[i].id, text: res[i].id + '/' + res[i].type.charAt(0).toUpperCase() + '/' + moment(res[i].created_at).local().format('YYYY') + ', ' + res[i].client_info.fullname });
+
+							$('#rofferlistRemote').select2({
+								placeholder: "Wybierz zapytanie ofertowe",
+								width: '100%',
+								data: data3
+							});
+						}
+					},
+					error: function(err) {
+						console.log('Błąd wczytywania');
+					}
+				});
+			}
+
 			if(wizard.getStep() == 3) {
 				$('[name*="contract"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
 				$('[name*="inital_fee"]').each(function() { $(this).rules('add', { required: true, messages: { required: 'To pole jest wymagane.' } }); });
@@ -66,17 +93,6 @@ var KTWizardOfferAdd = function () {
 					$('#rent_type_box').hide();
 					$('#insurance_type_box').show();
 				}
-
-				$.ajax({
-					url: '/rest/company/provision',
-					method: 'POST',
-					data: { id: $('#companiesRemote option:selected').val() },
-					success: function(res) {
-						if(offerType == 'leasing') oprocentowanie = parseFloat(res.provision_leasing)/100;
-						else if(offerType == 'rent') oprocentowanie = parseFloat(res.provision_rent)/100;
-					},
-					error: function() { }
-				});
 			}
 
 			if(wizard.getStep() == 5) {
@@ -118,6 +134,7 @@ var KTWizardOfferAdd = function () {
 
 				$('#clientP').html($('#clientsRemote option:selected').text()); // Klient
 				$('#companyP').html($('#companiesRemote option:selected').text()); // Firma
+				$('#rofferP').html($('#rofferlistRemote option:selected').text().split(',')[0]); // Zapytanie ofertowe
 
 				// Typ - leasing
 				if(offerType == 'leasing') {
@@ -148,11 +165,11 @@ var KTWizardOfferAdd = function () {
 						$('#pull_variants').append('<p class="kt-margin-b-0 kt-font-bold">Wariant ' + (i+1) + '</p><p class="kt-margin-b-0">Okres umowy: ' + contract[i] + ' miesięcy</p><p class="kt-margin-b-0">Wkład własny: ' + inital_fee[i] + ' %</p><p class="kt-margin-b-0">Rata leasingowa: ' + leasing_install[i] + ' PLN</p><p class="kt-margin-b-0">Wykup (%): ' + repurchase[i] + '%</p></br>');
 					}
 
-					var netto_val = parseFloat($('input[name="netto_l"]').val());
+					/* var netto_val = parseFloat($('input[name="netto_l"]').val());
 					var provision = (netto_val*oprocentowanie);
 					provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
 					provision = Math.round((provision*0.45)*100)/100; // 45% dla pośrednika
-					$('#provision').html(provision + ' PLN');
+					$('#provision').html(provision + ' PLN'); */
 				}
 
 				// Typ - wypożyczenie
@@ -179,11 +196,11 @@ var KTWizardOfferAdd = function () {
 					$('#acoc_companyP').html($('input[name="acoc_company"]').val());
 					$('#attentions_rP').html($('textarea[name="attentions_r"]').val());
 
-					var netto_val = parseFloat($('input[name="vehicle_val_r"]').val());
+					/* var netto_val = parseFloat($('input[name="vehicle_val_r"]').val());
 					var provision = (netto_val*oprocentowanie); // globalna prowizja 1.5%
 					provision = Math.round((provision - (provision*0.23))*100)/100; // opodatkowanie 23%
 					provision = Math.round((provision*0.45)*100)/100; // 45% dla pośrednika
-					$('#provision').html(provision + ' PLN');
+					$('#provision').html(provision + ' PLN'); */
 				}
 
 				if(offerType == 'insurance') {
@@ -199,9 +216,9 @@ var KTWizardOfferAdd = function () {
 					$('#vehicle_val_iP').html($('input[name="vehicle_val_i"]').val() + ' PLN'); // Wartość netto
 					$('#insurance_costP').html($('input[name="insurance_cost"]').val() + ' PLN'); // Koszt ubezp.
 
-					var netto_val = parseFloat($('input[name="insurance_cost"]').val());
+					/* var netto_val = parseFloat($('input[name="insurance_cost"]').val());
 					var provision = Math.round((netto_val*0.06)*100)/100; // 6% dla pośrednika
-					$('#provision').html(provision + ' PLN');
+					$('#provision').html(provision + ' PLN'); */
 				}
 			}
 		});
@@ -240,6 +257,9 @@ var KTWizardOfferAdd = function () {
 					required: true
 				},
 				company_id: {
+					required: true
+				},
+				roffer_id: {
 					required: true
 				},
 				//= Step 3
@@ -338,6 +358,9 @@ var KTWizardOfferAdd = function () {
 					required: 'To pole jest wymagane.'
 				},
 				company_id: {
+					required: 'To pole jest wymagane.'
+				},
+				roffer_id: {
 					required: 'To pole jest wymagane.'
 				},
 				item_type_l: {
@@ -462,6 +485,20 @@ var KTWizardOfferAdd = function () {
 				return o;
 		};
 
+		$.ajax({
+			url: '/rest/user/partner',
+			method: 'POST',
+			success: function(res) {
+				if(res.partner) {
+					if(res.message == 'user_has_partner' || res.message == 'partner_and_agent_found')
+						btn_mail.attr('disabled', true);
+				}
+			},
+			error: function(err) {
+				btn_mail.attr('disabled', true);
+			}
+		});
+
 		btn_mail.on('click', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -477,7 +514,7 @@ var KTWizardOfferAdd = function () {
 					$.ajax({
 						url: '/rest/offer/insert',
 						method: 'POST',
-						data: formEl.serialize(),
+						data: formEl.serialize() + '&send_mail=true',
 						success: function(res) {
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
@@ -505,7 +542,7 @@ var KTWizardOfferAdd = function () {
 										formEl.ajaxSubmit({
 											url: '/rest/offer/sendmail',
 											method: 'POST',
-											clearForm: true,
+											clearForm: false,
 											data: formEl.serialize(),
 											success: function(response) {
 												if(response.status == 'success') {
@@ -519,6 +556,7 @@ var KTWizardOfferAdd = function () {
 														"confirmButtonClass": "btn btn-secondary"
 													});
 
+													KTUtil.clearInputInForm(formEl);
 													wizard.goTo(1, true);
 												} else {
 													swal.fire({
@@ -533,16 +571,6 @@ var KTWizardOfferAdd = function () {
 	              				KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
 											}
 										});
-										/* KTApp.unprogress(btn);
-										btn.attr('disabled', false);
-
-										swal.fire({
-											"title": "",
-											"text": res.message,
-											"type": "success",
-											"confirmButtonClass": "btn btn-secondary"
-										}); */
-										// wizard.goTo(1, true);
 									});
 
 									dzUpload.on("sendingmultiple", function(file, xhr, formData) {
@@ -554,7 +582,7 @@ var KTWizardOfferAdd = function () {
 									formEl.ajaxSubmit({
 										url: '/rest/offer/sendmail',
 										method: 'POST',
-										clearForm: true,
+										clearForm: false,
 										data: formEl.serialize(),
 										success: function(response) {
 											if(response.status == 'success') {
@@ -568,6 +596,7 @@ var KTWizardOfferAdd = function () {
 													"confirmButtonClass": "btn btn-secondary"
 												});
 
+												KTUtil.clearInputInForm(formEl);
 												wizard.goTo(1, true);
 											} else {
 												swal.fire({
@@ -584,8 +613,14 @@ var KTWizardOfferAdd = function () {
 									});
 								}
 							} else {
-								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
-								wizard.goTo(1, true);
+								swal.fire({
+									"title": "",
+									"text": res.message,
+									"type": res.status,
+									"confirmButtonClass": "btn btn-secondary"
+								});
+								KTApp.unprogress(btn_mail);
+								btn_mail.attr('disabled', false);
 							}
 						},
             error: function(err) {
@@ -614,8 +649,8 @@ var KTWizardOfferAdd = function () {
 					formEl.ajaxSubmit({
 						url: '/rest/offer/insert',
 						method: 'POST',
-						data: formEl.serialize(),
-						clearForm: true,
+						data: formEl.serialize() + '&send_mail=false',
+						clearForm: false,
 						success: function(res) {
 							//KTApp.unblock(formEl);
 							if(res.status == 'success') {
@@ -646,6 +681,7 @@ var KTWizardOfferAdd = function () {
 											"confirmButtonClass": "btn btn-secondary"
 										});
 										dzUpload.removeAllFiles();
+										KTUtil.clearInputInForm(formEl);
 										wizard.goTo(1, true);
 									});
 
@@ -662,11 +698,18 @@ var KTWizardOfferAdd = function () {
 										"type": "success",
 										"confirmButtonClass": "btn btn-secondary"
 									});
+									KTUtil.clearInputInForm(formEl);
 									wizard.goTo(1, true);
 								}
 							} else {
-								KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
-								wizard.goTo(1, true);
+								swal.fire({
+									"title": "",
+									"text": res.message,
+									"type": res.status,
+									"confirmButtonClass": "btn btn-secondary"
+								});
+								KTApp.unprogress(btn_mail);
+								btn_mail.attr('disabled', false);
 							}
 						},
             error: function(err) {

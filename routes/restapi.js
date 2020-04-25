@@ -7,6 +7,7 @@ const clientAuth = require('../middlewares/clientAuth');
 
 // Kontrolery
 const REST = require('../controllers/Rest');
+const Analytics = require('../controllers/Analytics');
 const ClientController = require('../controllers/ClientController');
 
 // {REST} Pobieranie uprawnień
@@ -28,7 +29,8 @@ router.post('/rest/user/delete', REST.deleteUserById);
 router.post('/rest/user/sdelete', REST.deleteSelectedUsers);
 router.post('/rest/user/resetpwd', REST.resetUserPassword);
 router.post('/rest/user/recovery_pwd', REST.recoveryUserPwd);
-router.post('/rest/users/list_prov', REST.getUserlistProv);
+router.post('/rest/users/list_prov', Analytics.getUserlistProv);
+router.post('/rest/user/partner', REST.getUserPartner);
 
 // {REST} dot. klientów
 router.post('/rest/clients/add', REST.addClient);
@@ -64,8 +66,12 @@ router.post('/rest/offer/sendmail', REST.sendOfferMail);
 router.post('/rest/offer/sendmail_onList', REST.sendOfferMail_onList);
 router.post('/rest/offer/realize', REST.realizeOffer);
 router.post('/rest/offer/cancel', REST.cancelOffer);
+router.post('/rest/offer/calc_prov', REST.calculateProvFromOffer);
+router.post('/rest/offer/save_provision', REST.saveOfferProvision);
+router.post('/rest/offer/get_provision', REST.getOfferProvision);
 router.get('/rest/client/remotelist', REST.clientRemoteList);
 router.get('/rest/company/remotelist', REST.companyRemoteList);
+router.get('/rest/roffer/remotelist', REST.rofferRemoteList);
 
 // {REST} Upload files
 router.post('/rest/files/upload', upload.array('source_file[]'), REST.uploadOfferFiles);
@@ -88,9 +94,10 @@ router.post('/rest/company/delete', REST.deleteCompany);
 router.post('/rest/company/getsentlist', REST.getCompanySentList);
 
 // statistics
-router.post('/rest/stats/offers_count', REST.getOfferCount);
-router.post('/rest/stats/prov_forecast', REST.getProvisionStats);
-router.post('/rest/stats/counts', REST.getStatsCount);
+router.post('/rest/stats/offers_count', Analytics.getOfferCount);
+router.post('/rest/stats/prov_forecast', Analytics.getProvisionStats);
+router.post('/rest/stats/counts', Analytics.getStatsCount);
+router.post('/rest/user/provisions', Analytics.getUserProvision);
 
 // Client controllers
 router.post('/api/client/data', clientAuth.authenticate, ClientController.getClientData);

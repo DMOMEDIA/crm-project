@@ -82,7 +82,7 @@ block content
                                 path#Combined-Shape-Copy(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z', fill='#000000', opacity='0.3', transform='translate(11.500000, 12.000000) rotate(-345.000000) translate(-11.500000, -12.000000) ')
                                 |         
                                 path#Combined-Shape(d='M2,6 L21,6 C21.5522847,6 22,6.44771525 22,7 L22,17 C22,17.5522847 21.5522847,18 21,18 L2,18 C1.44771525,18 1,17.5522847 1,17 L1,7 C1,6.44771525 1.44771525,6 2,6 Z M11.5,16 C13.709139,16 15.5,14.209139 15.5,12 C15.5,9.790861 13.709139,8 11.5,8 C9.290861,8 7.5,9.790861 7.5,12 C7.5,14.209139 9.290861,16 11.5,16 Z M11.5,14 C12.6045695,14 13.5,13.1045695 13.5,12 C13.5,10.8954305 12.6045695,10 11.5,10 C10.3954305,10 9.5,10.8954305 9.5,12 C9.5,13.1045695 10.3954305,14 11.5,14 Z', fill='#000000')
-
+                            br
                             | &#x9;&#x9;&#x9;&#x9;&#x9;Leasing
                         p.form__answer
                           input#match_2(type='radio', name='offer_type', value='rent')
@@ -94,6 +94,7 @@ block content
                                 rect#bound(x='0', y='0', width='24', height='24')
                                 path#Mask(d='M12,22 C7.02943725,22 3,17.9705627 3,13 C3,8.02943725 7.02943725,4 12,4 C16.9705627,4 21,8.02943725 21,13 C21,17.9705627 16.9705627,22 12,22 Z', fill='#000000', opacity='0.3')
                                 path#Path-107(d='M11.9630156,7.5 L12.0475062,7.5 C12.3043819,7.5 12.5194647,7.69464724 12.5450248,7.95024814 L13,12.5 L16.2480695,14.3560397 C16.403857,14.4450611 16.5,14.6107328 16.5,14.7901613 L16.5,15 C16.5,15.2109164 16.3290185,15.3818979 16.1181021,15.3818979 C16.0841582,15.3818979 16.0503659,15.3773725 16.0176181,15.3684413 L11.3986612,14.1087258 C11.1672824,14.0456225 11.0132986,13.8271186 11.0316926,13.5879956 L11.4644883,7.96165175 C11.4845267,7.70115317 11.7017474,7.5 11.9630156,7.5 Z', fill='#000000')
+                            br
                             | &#x9;&#x9;&#x9;&#x9;&#x9;Wynajem
                         p.form__answer
                           input#match_3(type='radio', name='offer_type', value='insurance')
@@ -105,6 +106,7 @@ block content
                                 rect#bound(x='0', y='0', width='24', height='24')
                                 path#Path-50(d='M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z', fill='#000000', opacity='0.3')
                                 path#check-path(d='M11.1750002,14.75 C10.9354169,14.75 10.6958335,14.6541667 10.5041669,14.4625 L8.58750019,12.5458333 C8.20416686,12.1625 8.20416686,11.5875 8.58750019,11.2041667 C8.97083352,10.8208333 9.59375019,10.8208333 9.92916686,11.2041667 L11.1750002,12.45 L14.3375002,9.2875 C14.7208335,8.90416667 15.2958335,8.90416667 15.6791669,9.2875 C16.0625002,9.67083333 16.0625002,10.2458333 15.6791669,10.6291667 L11.8458335,14.4625 C11.6541669,14.6541667 11.4145835,14.75 11.1750002,14.75 Z', fill='#000000')
+                            br
                             | &#x9;&#x9;&#x9;&#x9;&#x9;Ubezpieczenie
                     .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                 // end: Form Wizard Step 1
@@ -123,6 +125,11 @@ block content
                         select#companiesRemote.form-control.kt-select2(name='company_id')
                           option
                         span.form-text.text-muted.kt-font-bold.kt-font-brand Wybierz tą firmę do której została wysłana oferta.
+                      .form-group
+                        label Wybierz zapytanie ofertowe
+                        select#rofferlistRemote.form-control.kt-select2(name='roffer_id')
+                          option
+                        span.form-text.text-muted.kt-font-bold.kt-font-brand Wybierz zapytanie ofertowe na podstawie którego ta oferta będzie tworzona.
                 // end: Form Wizard Step 2
                 // begin: Form Wizard Step 3
                 .kt-wizard-v1__content(data-ktwizard-type='step-content')
@@ -205,16 +212,16 @@ block content
                           h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie AC/OC:
                           |                      
                           .form-group
-                            label Rata ubezpieczenia:                     
-                            input.form-control(type='number', name='acoc_rata_l', placeholder='Rata ubezpieczenia')
+                            label Koszt ubezpieczenia:                     
+                            input.form-control(type='number', name='acoc_rata_l', placeholder='Koszt ubezpieczenia')
                           .form-group
                             label Nazwa firmy: 
                             input.form-control(type='text', name='acoc_company_l', maxlength='64', placeholder='Nazwa firmy')
                           h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie GAP:
                           |                      
                           .form-group
-                            label Rata ubezpieczenia:                     
-                            input.form-control(type='number', name='gap_rata_l', placeholder='Rata ubezpieczenia')
+                            label Koszt ubezpieczenia:                     
+                            input.form-control(type='number', name='gap_rata_l', placeholder='Koszt ubezpieczenia')
                           .form-group
                             label Okres ubezpieczenia:                     
                             input#gap_okres_l.form-control(type='text', name='gap_okres_l', placeholder='Okres ubezpieczenia')
@@ -329,8 +336,8 @@ block content
                         h3.kt-heading.kt-heading--sm Warunki dodatkowe - ubezpieczenie AC/OC:
                         |                      
                         .form-group
-                          label Rata ubezpieczenia:                     
-                          input.form-control(type='number', name='acoc_rata', placeholder='Rata ubezpieczenia')
+                          label Koszt ubezpieczenia:                     
+                          input.form-control(type='number', name='acoc_rata', placeholder='Koszt ubezpieczenia')
                         .form-group
                           label Nazwa firmy: 
                           input.form-control(type='text', name='acoc_company', maxlength='64', placeholder='Nazwa firmy')
@@ -420,6 +427,8 @@ block content
                             span#clientP
                           p.kt-margin-b-0 Firma: 
                             span#companyP
+                          p.kt-margin-b-0 Zapytanie ofertowe: 
+                            span#rofferP
                       .kt-wizard-v1__review-item
                         .kt-wizard-v1__review-title
                           | Dane ofertowe
@@ -442,13 +451,13 @@ block content
                             #pull_variants
                             .kt-wizard-v1__review-title
                               | Warunki dodatkowe - ubezpieczenie AC/OC
-                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                            p.kt-margin-b-0 Koszt ubezpieczenia: 
                               span#acoc_rata_lP
                             p Nazwa firmy: 
                               span#acoc_company_lP
                             .kt-wizard-v1__review-title
                               | Warunki dodatkowe - ubezpieczenie GAP
-                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                            p.kt-margin-b-0 Koszt ubezpieczenia: 
                               span#gap_rata_lP
                             p.kt-margin-b-0 Okres ubezpieczenia: 
                               span#gap_okres_lP
@@ -493,7 +502,7 @@ block content
                               span#insurance_gapP
                             .kt-wizard-v1__review-title
                               | Warunki dodatkowe - ubezpieczenie AC/OC
-                            p.kt-margin-b-0 Rata ubezpieczenia: 
+                            p.kt-margin-b-0 Koszt ubezpieczenia: 
                               span#acoc_rataP
                             p Nazwa firmy: 
                               span#acoc_companyP
@@ -529,8 +538,8 @@ block content
                           | Załączone pliki
                         .kt-wizard-v1__review-content
                           #attached_files.kt-widget4
-                      .kt-heading.kt-heading--md Prowizje
-                      .kt-form__section.kt-form__section--first
+                      //.kt-heading.kt-heading--md Prowizje
+                      //.kt-form__section.kt-form__section--first
                         .kt-wizard-v1__review
                           .kt-wizard-v1__review-item
                             .kt-wizard-v1__review-title.kt-margin-b-10

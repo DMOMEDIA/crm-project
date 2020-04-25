@@ -5,7 +5,7 @@ var KTROfferListDatatable = function() {
 
 	// variables
 	var datatable, validator, formEl, f_path, dz_upload;
-	var formCompanyList, formCompany_valid;
+	var formCompanyList, formCompany_valid, provision_validator;
 
 	var ext = {
 		'odt': 'doc',
@@ -161,6 +161,30 @@ var KTROfferListDatatable = function() {
 		$("#engine_cap_i").inputmask('99999 cm³', { placeholder: "" });
 		$("#km_val_i").inputmask('9999999 km', { numericInput: true, placeholder: "" });
 		$("#power_cap_i").inputmask('999 km', { numericInput: true, placeholder: "" });
+		$('input[name="percentage_partner"]').inputmask({ alias: 'percentage', min:0, max:100 , rightAlign: false, digits: 2 });
+		$('input[name="percentage_gap"]').inputmask({ alias: 'percentage', min:0, max:100 , rightAlign: false, digits: 2 });
+		$('input[name="percentage_acoc"]').inputmask({ alias: 'percentage', min:0, max:100 , rightAlign: false, digits: 2 });
+
+		provision_validator = $('#provisions_form').validate({
+			ignore: ":hidden",
+
+			rules: {
+				percentage_partner: {
+					required: false
+				},
+				percentage_gap: {
+					required: true
+				},
+				percentage_acoc: {
+					required: true
+				}
+			},
+			// Display error
+			invalidHandler: function(event, validator) { },
+
+			// Submit valid form
+			submitHandler: function (form) { }
+		});
 
 		validator = formEl.validate({
 			// Validate only visible fields
@@ -386,6 +410,7 @@ var KTROfferListDatatable = function() {
 										$('#dropzone_form_roffer').show();
 										$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 										$('#summary_element').show();
+										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
 
 										swal.fire({
 											"title": "",
@@ -540,46 +565,48 @@ var KTROfferListDatatable = function() {
 
 										var button = $('#realize_roffer');
 										button.on('click', function() {
-											KTApp.progress(button);
-											button.attr('disabled', true);
-											setTimeout(function() {
-												$.ajax({
-													url: '/rest/roffer/done',
-													method: 'POST',
-													data: { id: res.id },
-													success: function(realize) {
-														KTApp.unprogress(button);
-														button.attr('disabled', false);
-														//
-														if(realize.status == 'success') {
-															$('#is_realized_notify').show();
-															$('#send_request_notify').hide();
-															swal.fire({
-																"title": "",
-																"text": realize.message,
-																"type": realize.status,
-																"confirmButtonClass": "btn btn-secondary"
-															});
-														} else {
-															swal.fire({
-																"title": "",
-																"text": realize.message,
-																"type": realize.status,
-																"confirmButtonClass": "btn btn-secondary"
-															});
+											if(provision_validator.form()) {
+												KTApp.progress(button);
+												button.attr('disabled', true);
+												setTimeout(function() {
+													$.ajax({
+														url: '/rest/roffer/done',
+														method: 'POST',
+														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
+														success: function(realize) {
+															KTApp.unprogress(button);
+															button.attr('disabled', false);
+															//
+															if(realize.status == 'success') {
+																$('#is_realized_notify').show();
+																$('#provisions_form').find('input').prop('disabled',true);
+																$('#send_request_notify').hide();
+																swal.fire({
+																	"title": "",
+																	"text": realize.message,
+																	"type": realize.status,
+																	"confirmButtonClass": "btn btn-secondary"
+																});
+																$('#summary_element').show();
+																button.prop('disabled', true).text('Zapytanie zrealizowane');
+															} else {
+																swal.fire({
+																	"title": "",
+																	"text": realize.message,
+																	"type": realize.status,
+																	"confirmButtonClass": "btn btn-secondary"
+																});
+															}
+															datatable.reload();
+														},
+														error: function(err) {
+															KTApp.unprogress(button);
+															button.attr('disabled', false);
+															KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
 														}
-
-														datatable.reload();
-														$('#summary_element').show();
-														button.prop('disabled', true).text('Zapytanie zrealizowane');
-													},
-													error: function(err) {
-														KTApp.unprogress(button);
-														button.attr('disabled', false);
-														KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-													}
-												});
-											}, 1000);
+													});
+												}, 1000);
+											}
 										});
 
 										var status = {
@@ -635,10 +662,51 @@ var KTROfferListDatatable = function() {
 										modalEl.find('#email_user').html(res.client_info.email);
 										modalEl.find('#phone_user').html(res.client_info.phone);
 
+										modalEl.find('input[name="percentage_partner"]').val(res.percentage_partner);
+
 										if(res.type == 'leasing') {
 											modalEl.find('#leasing_offer').show();
 											modalEl.find('#rent_offer').hide();
 											modalEl.find('#insurance_offer').hide();
+											// Show provs
+											modalEl.find('#provision_gapHide').show();
+											modalEl.find('#provision_acocHide').show();
+
+											if(res.percentage_acoc == null) {
+												modalEl.find('#provision_acocInputHide').hide();
+												modalEl.find('input[name="percentage_acoc"]').val('');
+												$('input[name="exists_acoc"]').filter('[value="0"]').prop('checked', true);
+											} else {
+												modalEl.find('#provision_acocInputHide').show();
+												modalEl.find('input[name="percentage_acoc"]').val(res.percentage_acoc);
+												$('input[name="exists_acoc"]').filter('[value="1"]').prop('checked', true);
+											}
+
+											if(res.percentage_gap == null) {
+												modalEl.find('#provision_gapInputHide').hide();
+												modalEl.find('input[name="percentage_gap"]').val('');
+												$('input[name="exists_gap"]').filter('[value="0"]').prop('checked', true);
+											} else {
+												modalEl.find('#provision_gapInputHide').show();
+												modalEl.find('input[name="percentage_gap"]').val(res.percentage_gap);
+												$('input[name="exists_gap"]').filter('[value="1"]').prop('checked', true);
+											}
+
+											$('input[name="exists_gap"]').on('change', function(e) {
+												if($(this).val() == '1') modalEl.find('#provision_gapInputHide').show();
+												else {
+													 modalEl.find('#provision_gapInputHide').hide();
+													 modalEl.find('input[name="percentage_gap"]').val('');
+												}
+											});
+
+											$('input[name="exists_acoc"]').on('change', function(e) {
+												if($(this).val() == '1') modalEl.find('#provision_acocInputHide').show();
+												else {
+													 modalEl.find('#provision_acocInputHide').hide();
+													 modalEl.find('input[name="percentage_acoc"]').val('');
+												}
+											});
 											//
 											modalEl.find('input[name="nameItem"]').val(res.name);
 											modalEl.find('select[name="pyear_l"] option[value="' + res.pyear + '"]').prop('selected', true);
@@ -649,7 +717,27 @@ var KTROfferListDatatable = function() {
 											modalEl.find('#leasing_offer').hide();
 											modalEl.find('#rent_offer').show();
 											modalEl.find('#insurance_offer').hide();
+											//
+											modalEl.find('#provision_gapHide').hide();
+											modalEl.find('#provision_acocHide').show();
 
+											if(res.percentage_acoc == null) {
+												modalEl.find('#provision_acocInputHide').hide();
+												modalEl.find('input[name="percentage_acoc"]').val('');
+												$('input[name="exists_acoc"]').filter('[value="0"]').prop('checked', true);
+											} else {
+												modalEl.find('#provision_acocInputHide').show();
+												$('input[name="exists_acoc"]').filter('[value="1"]').prop('checked', true);
+												modalEl.find('input[name="percentage_acoc"]').val(res.percentage_acoc);
+											}
+
+											$('input[name="exists_acoc"]').on('change', function(e) {
+												if($(this).val() == '1') modalEl.find('#provision_acocInputHide').show();
+												else {
+													 modalEl.find('#provision_acocInputHide').hide();
+													 modalEl.find('input[name="percentage_acoc"]').val('');
+												}
+											});
 											//
 											modalEl.find('input[name="brand_r"]').val(res.name);
 											var value_installment = res.installment_val.split(';');
@@ -674,7 +762,9 @@ var KTROfferListDatatable = function() {
 											modalEl.find('#leasing_offer').hide();
 											modalEl.find('#rent_offer').hide();
 											modalEl.find('#insurance_offer').show();
-
+											//
+											modalEl.find('#provision_gapHide').hide();
+											modalEl.find('#provision_acocHide').hide();
 											//
 											modalEl.find('input[name="brand_i"]').val(res.name);
 											modalEl.find('select[name="pyear_i"] option[value="' + res.pyear + '"]').prop('selected', true);
@@ -704,20 +794,23 @@ var KTROfferListDatatable = function() {
 											$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
 											//
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
+											$('#provisions_form').find('input').prop('disabled',true);
 										} else if(res.state == 2) {
 											$('#is_realized_notify').hide();
 											$('#send_request_notify').show();
 											$('#dropzone_form_roffer').show();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											$('#summary_element').show();
-											// formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
+											$('#provisions_form').find('input').prop('disabled',false);
 										} else {
 											$('#send_request_notify').hide();
 											$('#is_realized_notify').hide();
 											$('#dropzone_form_roffer').hide();
 											$('#summary_element').hide();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
-											// formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
+											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
+											$('#provisions_form').find('input').prop('disabled',true);
 										}
 
 										if(userDataRole == 'administrator') {

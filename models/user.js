@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const Messages = require('../config/messages.js');
 const async = require('async');
 const generatePassword = require('password-generator');
+const moment = require('moment');
 
 const User = bookshelf.Model.extend({
   tableName: 'crm_users',
@@ -17,22 +18,25 @@ const Provision = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
-module.exports.getUserProvision = (id, callback) => {
+module.exports.getUserProvision = async (id, dateFrom, callback) => {
+  var date = moment(dateFrom).local();
   return new User().where({ id: id }).fetch({ withRelated: ['provision'] })
   .then(function(result) {
     var data = result.toJSON(),
-    provision_f = parseFloat(0),
-    provision = parseFloat(0);
+    provision_f = parseFloat(0), provision = parseFloat(0), provision_c = parseFloat(0);
 
     async.each(data.provision, function(element, cb) {
-      if(element.forecast == true) {
-        provision_f += parseFloat(element.value);
-      } else {
-        provision += parseFloat(element.value);
+      if(moment(element.created_at).local().diff(date) >= 0) {
+        if(element.canceled == true) {
+          provision_c += parseFloat(element.value);
+        } else {
+          if(element.forecast == true) provision_f += parseFloat(element.value);
+          else provision += parseFloat(element.value);
+        }
       }
       cb();
     }, function() {
-      callback({ prov_forecast: provision_f, prov_normal: provision });
+      callback({ prov_forecast: provision_f, prov_normal: provision, prov_canceled: provision_c });
     });
   });
 };
@@ -40,6 +44,47 @@ module.exports.getUserProvision = (id, callback) => {
 module.exports.getUserByIdentity = (user) => {
   const query = { identity: user };
   return new User().where(query).fetch();
+};
+
+module.exports.getUserPartner = (id, callback) => {
+  return new User().where({ id: id }).fetch()
+  .then(function(result) {
+    if(result) {
+      result = result.toJSON();
+      var userRole = result.role;
+
+      if(result.isPartner == true)
+        return callback({ partner: result.id, agent: null, message: 'user_is_partner', role: null });
+
+      if(result.assigned_to) {
+        new User().where({ id: result.assigned_to }).fetch()
+        .then(function(result) {
+          result = result.toJSON();
+
+          if(result.role == 'kierownik') {
+            if(result.isPartner == true) {
+              callback({ partner: result.id, agent: null, message: 'user_has_partner', role: userRole });
+            } else callback({ partner: null, agent: null, message: 'user_no_partner' });
+          } else if(result.role == 'posrednik') {
+            var jsonCallback = { partner: null, agent: result.id, message: null, role: userRole };
+
+            if(result.assigned_to) {
+              new User().where({ id: result.assigned_to }).fetch()
+              .then(function(result) {
+                result = result.toJSON();
+
+                if(result.isPartner == true && result.role == 'kierownik') {
+                  jsonCallback.partner = result.id;
+                  jsonCallback.message = 'partner_and_agent_found';
+                  callback(jsonValue);
+                } else callback({ partner: null, agent: null, message: 'user_no_partner' });
+              });
+            } else callback({ partner: null, agent: null, message: 'user_no_partner' });
+          } else callback({ partner: null, agent: null, message: 'user_no_partner' });
+        });
+      } else callback({ partner: null, agent: null, message: 'user_is_not_assigned' });
+    } else callback(Messages.message('not_found_user_identity', null));
+  });
 };
 
 module.exports.getUserById = (args, id) => {
@@ -101,6 +146,7 @@ module.exports.createUser = (user) => {
         cname: user.cname,
         cnip: user.cnip,
         cregon: user.cregon,
+        isPartner: parseInt(user.partner),
         assigned_to: user.assigned_to
       }).save();
     });
@@ -123,7 +169,7 @@ module.exports.userList = (args, callback) => {
   }
 };
 
-module.exports.getUserListProvision = (callback) => {
+/* module.exports.getUserListProvision = (callback) => {
   var output = [];
   return new User().fetchAll()
   .then(function(response) {
@@ -141,6 +187,54 @@ module.exports.getUserListProvision = (callback) => {
       callback(output, output.length);
     });
   });
+}; */
+
+module.exports.getUserListProvision = async (req, date, callback) => {
+  var output = [];
+  if(req.session.userData.role == 'administrator') {
+    return new User().fetchAll()
+    .then(function(response) {
+      response = response.toJSON(), number = 0;
+
+      async.each(response, async function(e, cb) {
+        await module.exports.getUserProvision(e.id, date, result => {
+          e['provisions'] = result;
+        });
+
+        output.push(e);
+        number++;
+        if(response.length == number) cb();
+      }, function() {
+        callback(output, output.length);
+      });
+    });
+  } else {
+    return new User().where({ assigned_to: req.session.userData.id }).fetchAll()
+    .then(function(response) {
+      response = response.toJSON(), number = 0;
+
+      async.each(response, async function(e, cb) {
+        await module.exports.getUserProvision(e.id, date, result => {
+          e['provisions'] = result;
+        });
+
+        output.push(e);
+        number++;
+        if(response.length == number) cb();
+      }, async function() {
+        await new User().where({ id: req.session.userData.id }).fetch()
+        .then(async function(res) {
+          res = res.toJSON();
+          await module.exports.getUserProvision(res.id, date, result => {
+            res['provisions'] = result;
+          });
+
+          output.push(res);
+        });
+        callback(output, output.length);
+      });
+    });
+  }
 };
 
 module.exports.userListByAssignedId = (args, id, callback) => {
@@ -205,6 +299,7 @@ module.exports.userModify = (user, callback) => {
       if(user.pNumber) model.set('telephone', user.pNumber);
       if(user.param) model.set('assigned_to', user.param);
       if(user.isCompany) model.set('company', parseInt(user.isCompany));
+      if(user.partner) model.set('isPartner', parseInt(user.partner));
       if(user.cname) model.set('cname', user.cname);
       else model.set('cname', null);
       if(user.cnip) model.set('cnip', user.cnip);

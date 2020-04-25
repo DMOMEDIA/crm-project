@@ -222,10 +222,10 @@ block content
                                         h3.kt-section__title.kt-section__title-sm Warunki dodatkowe - ubezpieczenie AC/OC:
                                     |                                      
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Rata ubezpieczenia:
+                                      label.col-xl-3.col-lg-3.col-form-label Koszt ubezpieczenia:
                                       |                                         
                                       .col-lg-9.col-xl-9
-                                        input#acoc_rata_l.form-control(type='number', name='acoc_rata_l', placeholder='Rata ubezpieczenia')
+                                        input#acoc_rata_l.form-control(type='number', name='acoc_rata_l', placeholder='Koszt ubezpieczenia')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Nazwa firmy:
@@ -238,10 +238,10 @@ block content
                                         h3.kt-section__title.kt-section__title-sm Warunki dodatkowe - ubezpieczenie GAP:
                                     |                 
                                     .form-group.row
-                                      label.col-xl-3.col-lg-3.col-form-label Rata ubezpieczenia:
+                                      label.col-xl-3.col-lg-3.col-form-label Koszt ubezpieczenia:
                                       |                                         
                                       .col-lg-9.col-xl-9
-                                        input#gap_rata_l.form-control(type='number', name='gap_rata_l', placeholder='Rata ubezpieczenia')
+                                        input#gap_rata_l.form-control(type='number', name='gap_rata_l', placeholder='Koszt ubezpieczenia')
                                     |              
                                     .form-group.row
                                       label.col-xl-3.col-lg-3.col-form-label Okres ubezpieczenia:
@@ -602,7 +602,56 @@ block content
                                       #kt_dropzone_offer.dropzone.dropzone-default.dropzone-success.dz-clickable
                                         .dropzone-msg.dz-message.needsclick
                                           h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
-                                          span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls) 
+                                          span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
+                            if (userData.role == 'administrator') || (userData.role == 'kierownik' && userData.isPartner == true)
+                              #provisions_element
+                                .row  
+                                  .col-lg-9.col-xl-9
+                                    h3.kt-section__title Regulacja prowizji:
+                                |                  
+                                form#partner_prov_form
+                                  .form-group.row
+                                    .col-xl-4.col-lg-4
+                                    .col-xl-8.col-lg-8.col-form-label(style="font-size:24px;") Otrzymana prowizja: 
+                                      b 
+                                        span#general_perc 0
+                                        | %
+                                      br
+                                      | Prowizja do podziału: 
+                                      b 
+                                        span#general_prov 0.00
+                                        | &nbsp;zł 
+                                  .form-group.row
+                                    label.col-xl-4.col-lg-4.col-form-label Prowizje:
+                                    |                                         
+                                    .col-lg-8.col-xl-8
+                                      input(type='hidden', name='offer_id')
+                                      input(type='hidden', name='offer_type')
+                                      #partner_prov_box(style="display:none;")
+                                        input.form-control(type='text', name='partner_prov', maxlength="15", placeholder='Prowizja partnera (%)')
+                                        span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                          | Należność partnera: 
+                                          span#pay_partner_prov 0.00
+                                          | &nbsp;zł
+                                        br
+                                      #agent_prov_box(style="display:none;")
+                                        input.form-control(type='text', name='agent_prov', maxlength="15", placeholder='Prowizja pośrednika (%)')
+                                        span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                          | Należność pośrednika: 
+                                          span#pay_agent_prov 0.00
+                                          | &nbsp;zł
+                                        br
+                                      #employee_prov_box(style="display:none;")
+                                        input.form-control(type='text', name='employee_prov', maxlength="15", placeholder='Prowizja pracownika (%)')
+                                        span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                          | Należność pracownika: 
+                                          span#pay_employee_prov 0.00
+                                          | &nbsp;zł
+                                  .form-group.form-group-last.row
+                                    .col-xl-4.col-lg-4
+                                    .col-lg-8.col-xl-8
+                                      button.btn.btn-brand.btn-wide.btn-bold.btn-sm(type='submit', name='confirm_provision') Zapisz prowizje
+                                  |            
                             .row  
                               .col-lg-9.col-xl-9
                                 h3.kt-section__title Realizacja:
@@ -614,6 +663,12 @@ block content
                               .alert.alert-danger(role='alert')
                                 .alert-text Ta oferta została anulowana.
                             #send_offer_element(style='display:none;')
+                              #your_prov_box.form-group.row
+                                .col-xl-4.col-lg-4
+                                .col-xl-8.col-lg-8.col-form-label(style="font-size:24px;") Twoja prowizja: 
+                                  b
+                                    span#your_provision 0.00
+                                    | &nbsp;zł
                               .form-group.form-group-last.row
                                 label.col-xl-4.col-lg-4.col-form-label Wysłanie oferty
                                 |                                         

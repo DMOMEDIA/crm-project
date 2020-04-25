@@ -698,6 +698,17 @@ var KTUserListDatatable = function() {
 								modalEl.find('#identityInput').val(res.identity);
 								modalEl.find('#roleInput').val(res.role);
 
+								$('#roleInput').on('change', function(e) {
+									if($(this).val() == 'kierownik') {
+										$('#partnerHide').show();
+									} else {
+										$('#partnerHide').hide();
+									}
+								});
+
+								if(res.role == 'kierownik') modalEl.find('#partnerHide').show();
+								else modalEl.find('#partnerHide').hide();
+
 								if(res.company == 1) {
 									modalEl.find('#isCompanyInput').prop('checked', true);
 									modalEl.find('[name="cname"]').val(res.cname);
@@ -1317,11 +1328,12 @@ var KTUserListDatatable = function() {
 				success: function(res, status, xhr) {
 					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
 					fileName = fileName.replace(/\"/g, '');
+					fileName = fileName.split(';');
 
 					var a = document.createElement('a');
 			    var url = window.URL.createObjectURL(res);
 			    a.href = url;
-			    a.download = fileName;
+			    a.download = fileName[0];
 			    a.click();
 			    window.URL.revokeObjectURL(url);
 				},

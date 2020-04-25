@@ -2,6 +2,9 @@ const bookshelf = require('../config/bookshelf');
 const async = require('async');
 const moment = require('moment');
 const Company = require('../models/companies');
+const Offers = require('../models/offers');
+const RequestOffers = require('../models/roffers');
+const User = require('../models/user');
 
 const Statistics = bookshelf.Model.extend({
   tableName: 'crm_global_statistics',
@@ -49,6 +52,14 @@ module.exports.provisionStatistics = (days, forecast, callback) => {
     module.exports.getGlobalProvision(false, 'today', function(prov) {
       callback(result, prov.prov_forecast);
     });
+  });
+};
+
+module.exports.getOfferProvision = (offer_id, user_id, callback) => {
+  return new Provision().where({ user_id: user_id, offer_id: offer_id }).fetch()
+  .then(function(result) {
+    if(result) callback(result.get('value'));
+    else callback(null);
   });
 };
 
@@ -121,12 +132,226 @@ module.exports.getStatsCounts = (callback) => {
   });
 };
 
+module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
+
+  Offers.getOfferById(offer_id, otype, function(result) {
+    Company.getCompanyProvision(result.company_id).then(function(prov) {
+      prov = prov.toJSON();
+
+      if(otype == 'leasing') var provision = (parseFloat(result.netto)*(prov.provision_leasing/100));
+      else if(otype == 'rent') var provision = (parseFloat(result.netto)*(prov.provision_rent/100));
+      else provision = parseFloat(result.insurance_cost);
+
+      new ROffer().where({ offer_id: offer_id + '/' + otype }).fetch()
+      .then(function(e) {
+        if(e) {
+          e = e.toJSON();
+
+          if(e.percentage_partner) {
+            var i_prov = parseFloat(0),
+            pg_partner = e.percentage_partner.split(' ')[0];
+
+            if(e.percentage_gap) {
+              var pg = e.percentage_gap.split(' ')[0];
+              i_prov += (parseFloat(result.gap_rata)*(pg/100));
+            }
+            if(e.percentage_acoc) {
+              var pg = e.percentage_acoc.split(' ')[0];
+              i_prov += (parseFloat(result.acoc_rata)*(pg/100));
+            }
+
+            provision = Math.round((provision*(pg_partner/100))*100)/100;
+            provision = provision + i_prov;
+
+            if(result.created_by != 0) {
+              User.getUserPartner(result.created_by, cb => {
+                callback({
+                  provision: provision,
+                  percentage: pg_partner,
+                  message: cb.message,
+                  creator_role: cb.role,
+                  partner_id: cb.partner,
+                  agent_id: cb.agent,
+                  creator_id: result.created_by,
+                  prov_partner: result.prov_partner,
+                  prov_agent: result.prov_agent,
+                  prov_employee: result.prov_employee
+                });
+              });
+            } else callback({
+              provision: provision,
+              percentage: pg_partner,
+              prov_partner: result.prov_partner,
+              prov_agent: result.prov_agent,
+              prov_employee: result.prov_employee
+            });
+          } else {
+            var i_prov = parseFloat(0);
+
+            if(e.percentage_gap) {
+              var pg = e.percentage_gap.split(' ')[0];
+              i_prov += (parseFloat(result.gap_rata)*(pg/100));
+            }
+            if(e.percentage_acoc) {
+              var pg = e.percentage_acoc.split(' ')[0];
+              i_prov += (parseFloat(result.acoc_rata)*(pg/100));
+            }
+
+            provision = provision + i_prov;
+
+            callback({
+              provision: provision,
+              percentage: 100,
+              message: 'provision_for_crm',
+              creator_id: result.created_by,
+              partner_id: null,
+              prov_partner: null,
+              prov_agent: null,
+              prov_employee: null
+            });
+          }
+        } else callback({ provision: null, percentage: null });
+      });
+    });
+  });
+};
 
 /** ================================================
     @Information Moduł zmiany prowizji dla określonej oferty.
  =============================================== **/
 
-module.exports.changeProvision = (user, offer_id, offer_type, value, company_id, forecast, cancel) => {
+module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
+  // Kalkulacja procentu z firm oraz ubezpieczeń.
+  module.exports.calculateProvisionFromOffer(offer_id, offer_type, function(result) {
+    var cdata = result, p_partner = 0, p_agent = 0, p_employee = 0, p_crm = 0;
+
+    if(cdata.prov_partner) p_partner = parseFloat(cdata.prov_partner.split(' ')[0]);
+    if(cdata.prov_agent) p_agent = parseFloat(cdata.prov_agent.split(' ')[0]);
+    if(cdata.prov_employee) p_employee = parseFloat(cdata.prov_employee.split(' ')[0]);
+
+    var goNext = false;
+
+    if(cdata.message == 'partner_and_agent_found') {
+      var sum = p_partner + p_agent + p_employee;
+      if(sum == 100) goNext = true;
+    } else if(cdata.message == 'user_is_partner') {
+      if(p_partner == 100) goNext = true;
+    } else if(response.message == 'user_has_partner' && response.role == 'posrednik') {
+      var sum = p_partner + p_agent;
+      if(sum == 100) goNext = true;
+    } else if(response.message == 'provision_for_crm') {
+      p_crm = 100;
+      goNext = true;
+    } else {
+      var sum = p_partner + p_employee;
+      if(sum == 100) goNext = true;
+    }
+
+    if(goNext == true) {
+      if(p_partner > 0) {
+        var provision_partner = Math.round((cdata.provision*(p_partner/100))*100)/100;
+
+        new Provision().where({ for: 'partner', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) {
+            model.set('canceled', cancel);
+            model.set('forecast', forecast);
+            model.set('value', provision_partner);
+            if(cdata.partner_id) model.set('user_id', cdata.partner_id);
+
+            model.save();
+          } else {
+            new Provision({
+              canceled: cancel,
+              for: 'partner',
+              value: provision_partner,
+              user_id: cdata.partner_id,
+              offer_id: offer_id + '/' + offer_type,
+              forecast: forecast
+            }).save();
+          }
+        });
+      }
+
+      if(p_agent > 0) {
+        var provision_agent = Math.round((cdata.provision*(p_agent/100))*100)/100;
+
+        new Provision().where({ for: 'agent', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) {
+            model.set('canceled', cancel);
+            model.set('forecast', forecast);
+            model.set('value', provision_agent);
+            if(cdata.agent_id) model.set('user_id', cdata.agent_id);
+
+            model.save();
+          } else {
+            new Provision({
+              canceled: cancel,
+              for: 'agent',
+              value: provision_agent,
+              user_id: cdata.agent_id,
+              offer_id: offer_id + '/' + offer_type,
+              forecast: forecast
+            }).save();
+          }
+        });
+      }
+
+      if(p_employee > 0) {
+        var provision_employee = Math.round((cdata.provision*(p_employee/100))*100)/100;
+
+        new Provision().where({ for: 'employee', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) {
+            model.set('canceled', cancel);
+            model.set('forecast', forecast);
+            model.set('value', provision_employee);
+            if(cdata.creator_id) model.set('user_id', cdata.creator_id);
+
+            model.save();
+          } else {
+            new Provision({
+              canceled: cancel,
+              for: 'employee',
+              value: provision_employee,
+              user_id: cdata.creator_id,
+              offer_id: offer_id + '/' + offer_type,
+              forecast: forecast
+            }).save();
+          }
+        });
+      }
+
+      if(p_crm > 0) {
+        new Provision().where({ for: 'global', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) {
+            model.set('canceled', cancel);
+            model.set('forecast', forecast);
+            model.set('value', cdata.provision);
+            model.set('sell', 1);
+            if(cdata.creator_id) model.set('user_id', cdata.creator_id);
+
+            model.save();
+          } else {
+            new Provision({
+              canceled: cancel,
+              for: 'global',
+              value: cdata.provision,
+              user_id: cdata.creator_id,
+              sell: 1,
+              offer_id: offer_id + '/' + offer_type,
+              forecast: forecast
+            }).save();
+          }
+        });
+      }
+    } else callback({ status: 'error', message: 'Suma prowizji musi osiągać 100% wartości' });
+  });
+};
+
+/* module.exports.changeProvision = (user, offer_id, offer_type, value, company_id, forecast, cancel) => {
 
   Company.getCompanyProvision(company_id).then(function(prov) {
     prov = prov.toJSON();
@@ -210,4 +435,4 @@ module.exports.changeProvision = (user, offer_id, offer_type, value, company_id,
       }
     });
   });
-};
+}; */

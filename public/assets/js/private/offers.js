@@ -4,7 +4,8 @@
 var KTOfferListDatatable = function() {
 
 	// variables
-	var datatable, formEl, validator, slider_min = 0, slider_max = 0, f_path;
+	var datatable, formEl, validator, slider_min = 0, slider_max = 0, f_path,
+	prov_validator, original_sum_perc = parseFloat(0), prov_form;
 
 	var ext = {
 		'odt': 'doc',
@@ -167,6 +168,8 @@ var KTOfferListDatatable = function() {
 									modalEl.modal('show');
 									modalEl.find('#attached_files').html('');
 									modalEl.find('#leasing_variants').html('');
+									$('#your_provision').html('0.00');
+									$('#partner_prov_box,#agent_prov_box,#employee_prov_box').hide();
 
 									var date = moment(res.created_at).local().format('YYYY');
 
@@ -214,6 +217,104 @@ var KTOfferListDatatable = function() {
 									modalEl.find('#company_voivodeship').html(res.company.voivodeship);
 									modalEl.find('#company_email').html(res.company.email);
 									modalEl.find('#company_phone').html(res.company.phone);
+
+									$.ajax({
+										url: '/rest/offer/calc_prov',
+										method: 'POST',
+										data: {
+											offer_id: res.id,
+											type: res.offer_type
+										},
+										success: function(response) {
+											if(response.partner_id) {
+												if(response.provision) {
+													var provision = parseFloat(response.provision);
+													original_sum_perc = 0;
+
+													$.ajax({
+														url: '/rest/offer/get_provision',
+														method: 'POST',
+														data: {
+															offer_id: res.id + '/' + res.offer_type
+														},
+														success: function(get_prov) {
+															$('#your_prov_box').show();
+															if(get_prov.your_prov) {
+																$('#your_provision').html(get_prov.your_prov);
+															}
+															else $('#your_provision').html('0.00');
+														},
+														error: function(err) { }
+													})
+
+													$('#provisions_element').show();
+													if(response.message == 'partner_and_agent_found') {
+														$('#partner_prov_box,#agent_prov_box,#employee_prov_box').show();
+													} else if(response.message == 'user_is_partner') {
+														$('#partner_prov_box').show();
+													} else if(response.message == 'user_has_partner' && response.role == 'posrednik') {
+														$('#partner_prov_box,#agent_prov_box').show();
+													} else {
+														$('#partner_prov_box,#employee_prov_box').show();
+													}
+
+													if(response.prov_partner) {
+														$('input[name="partner_prov"]').val(response.prov_partner);
+														var a = Math.round((provision*(response.prov_partner.split(' ')[0]/100))*100)/100;
+														$('#pay_partner_prov').html(a);
+														//
+														$('#general_prov').html('0.00');
+														original_sum_perc += parseFloat(response.prov_partner.split(' ')[0]);
+													} else $('#general_prov').html(provision.toFixed(2));
+
+													if(response.prov_agent) {
+														$('input[name="agent_prov"]').val(response.prov_agent);
+														var a = Math.round((provision*(response.prov_agent.split(' ')[0]/100))*100)/100;
+														$('#pay_agent_prov').html(a);
+														original_sum_perc += parseFloat(response.prov_agent.split(' ')[0]);
+													}
+
+													if(response.prov_employee) {
+														$('input[name="employee_prov"]').val(response.prov_employee);
+														var a = Math.round((provision*(response.prov_employee.split(' ')[0]/100))*100)/100;
+														$('#pay_employee_prov').html(a);
+														original_sum_perc += parseFloat(response.prov_employee.split(' ')[0]);
+													}
+
+													$('#general_perc').html(response.percentage);
+
+													prov_form.find('input[name="offer_id"]').val(res.id);
+													prov_form.find('input[name="offer_type"]').val(res.offer_type);
+													$('input[name="partner_prov"],input[name="agent_prov"],input[name="employee_prov"]').inputmask({ 'alias': 'percentage', min:0, max:100, rightAlign: false, digits: 2 });
+													$('input[name="partner_prov"],input[name="agent_prov"],input[name="employee_prov"]').on('change', function(e) {
+														var pzw = Math.round((provision*($(this).val().split(' ')[0]/100))*100)/100,
+														sum_of_percentage = 0,
+														prov_editable = provision;
+
+														if($('input[name="partner_prov"]').val().length != 0) sum_of_percentage += parseFloat($('input[name="partner_prov"]').val().split(' ')[0]);
+														if($('input[name="agent_prov"]').val().length != 0) sum_of_percentage += parseFloat($('input[name="agent_prov"]').val().split(' ')[0]);
+														if($('input[name="employee_prov"]').val().length != 0) sum_of_percentage += parseFloat($('input[name="employee_prov"]').val().split(' ')[0]);
+
+														original_sum_perc = sum_of_percentage;
+														if(original_sum_perc != 100) {
+															$('input[name="partner_prov"],input[name="agent_prov"],input[name="employee_prov"]').css('color', 'red');
+														} else $('input[name="partner_prov"],input[name="agent_prov"],input[name="employee_prov"]').css('color', '#495057');
+														if(sum_of_percentage > 100) sum_of_percentage = 100;
+
+														var total_value = Math.round((provision*(sum_of_percentage/100))*100)/100;
+														prov_editable = provision - total_value;
+
+														$('#general_prov').html(prov_editable.toFixed(2));
+
+														if($(this).attr('name') == 'partner_prov') $('#pay_partner_prov').html(pzw);
+														else if($(this).attr('name') == 'agent_prov') $('#pay_agent_prov').html(pzw);
+														else $('#pay_employee_prov').html(pzw);
+													});
+												}
+											} else $('#your_prov_box,#provisions_element').hide();
+										},
+										error: function(err) { }
+									});
 
 									if(res.offer_type == 'leasing') {
 										$('#leasing_type_box').show();
@@ -433,11 +534,12 @@ var KTOfferListDatatable = function() {
 				success: function(res, status, xhr) {
 					var fileName = xhr.getResponseHeader('Content-Disposition').split("=")[1];
 					fileName = fileName.replace(/\"/g, '');
+					fileName = fileName.split(';');
 
 					var a = document.createElement('a');
 			    var url = window.URL.createObjectURL(res);
 			    a.href = url;
-			    a.download = fileName;
+			    a.download = fileName[0];
 			    a.click();
 			    window.URL.revokeObjectURL(url);
 				},
@@ -545,6 +647,33 @@ var KTOfferListDatatable = function() {
         limitReachedClass: "kt-badge kt-badge--success kt-badge--rounded kt-badge--inline",
 				appendToParent: true
     });
+
+		prov_validator = prov_form.validate({
+			ignore: ":hidden",
+
+			rules: {
+				partner_prov: {
+					required: true
+				},
+				agent_prov: {
+					required: true
+				},
+				employee_prov: {
+					required: true
+				}
+			},
+			messages: {
+				partner_prov: {
+					required: "To pole jest wymagane."
+				},
+				agent_prov: {
+					required: "To pole jest wymagane."
+				},
+				employee_prov: {
+					required: "To pole jest wymagane."
+				}
+			}
+		});
 
 		validator = formEl.validate({
 			// Validate only visible fields
@@ -747,6 +876,64 @@ var KTOfferListDatatable = function() {
 
 			// Submit valid form
 			submitHandler: function (form) { }
+		});
+	}
+
+	var initConfirmProvision = function() {
+		var btn_confirm_prov = $('button[name="confirm_provision"]');
+
+		btn_confirm_prov.on('click', function(e) {
+			e.preventDefault();
+
+			if(prov_validator.form()) {
+				if(original_sum_perc == 100) {
+					KTApp.progress(btn_confirm_prov);
+					btn_confirm_prov.attr('disabled', true);
+
+					setTimeout(function() {
+						$.ajax({
+							url: '/rest/offer/save_provision',
+							method: 'POST',
+							data: prov_form.serialize(),
+							success: function(res) {
+								if(res.status == 'success') {
+									$('#your_provision').html(res.your_prov);
+									swal.fire({
+										title: 'Udało się',
+										text: res.message,
+										type: res.status,
+										confirmButtonText: "Zamknij",
+										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+									});
+								} else {
+									swal.fire({
+										title: 'Błąd',
+										text: res.message,
+										type: res.status,
+										confirmButtonText: "Zamknij",
+										confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+									});
+								}
+								KTApp.unprogress(btn_confirm_prov);
+								btn_confirm_prov.attr('disabled', false);
+							},
+							error: function(err) {
+								KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Coś jest nie tak..', 'flaticon-warning-sign');
+								KTApp.unprogress(btn_confirm_prov);
+								btn_confirm_prov.attr('disabled', false);
+							}
+						});
+					}, 500);
+				} else {
+					swal.fire({
+						title: 'Uwaga',
+						text: 'Suma prowizji musi osiągać 100% wartości',
+						type: 'warning',
+						confirmButtonText: "Zamknij",
+						confirmButtonClass: "btn btn-sm btn-bold btn-brand",
+					});
+				}
+			}
 		});
 	}
 
@@ -1134,7 +1321,8 @@ var KTOfferListDatatable = function() {
 	return {
 		// public functions
 		init: function() {
-			formEl = $('#kt_offer_edit');
+			formEl = $('#kt_offer_edit'),
+			prov_form = $('#partner_prov_form');
 			$('.kt-selectpicker').selectpicker({
 				noneSelectedText : 'Nie wybrano'
 			});
@@ -1149,6 +1337,7 @@ var KTOfferListDatatable = function() {
 			selection();
 			selectedDelete();
 			initRealizeButtons();
+			initConfirmProvision();
 		},
 	};
 }();

@@ -123,6 +123,14 @@ var KTUserAdd = function () {
 			else $('#company_data').hide();
 		});
 
+		$('select[name="urole"]').on('change', function(e) {
+			if($(this).val() == 'kierownik') {
+				$('#partnerHide').show();
+			} else {
+				$('#partnerHide').hide();
+			}
+		});
+
 		validator = formEl.validate({
 			// Validate only visible fields
 			ignore: ":hidden",
@@ -328,6 +336,7 @@ var KTUserAdd = function () {
 		// public functions
 		init: function() {
 			formEl = $('#kt_user_add_form');
+			$('#partnerHide').hide();
 
 			initWizard();
 			initValidation();

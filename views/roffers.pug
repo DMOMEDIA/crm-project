@@ -701,20 +701,69 @@ block content
                                               .dropzone-msg.dz-message.needsclick
                                                 h3.dropzone-msg-title Upuść pliki tutaj lub kliknij, aby przesłać
                                                 span.dropzone-msg-desc Do przesyłania dozwolone są tylko pliki tekstowe (.pdf, .docx, .odt, .xls)
-                                #summary_element
-                                  .row.kt-margin-t-20
-                                    .col-lg-9.col-xl-9
-                                      i.fa.fa-dot-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
-                                      h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
-                                  .form-group.form-group-last.row
-                                    label.col-xl-4.col-lg-4.col-form-label Realizacja zapytania
-                                    |                                         
-                                    .col-lg-8.col-xl-8
-                                      button#realize_roffer.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj zapytanie
-                                      |  
-                                      if userData.role == 'administrator'                                           
-                                        span.form-text.text-muted.kt-font-brand.kt-font-bold
-                                          | Po zrealizowaniu zapytania ofertowego, pracownik przypisany do tego zapytania otrzyma powiadomienie o możliwości wprowadzenia nowej oferty.
+                                  #summary_element
+                                    .row.kt-margin-t-20
+                                      .col-lg-9.col-xl-9
+                                        i.fa.fa-dot-circle.d-inline-block.kt-font-xl.align-top.kt-padding-r-10
+                                        h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
+                                    form#provisions_form
+                                      .form-group.row
+                                        label.col-xl-4.col-lg-4.col-form-label Prowizja dla partnera:
+                                        |                                         
+                                        .col-lg-8.col-xl-8
+                                          input.form-control(type='text', name='percentage_partner', maxlength="15", placeholder='Prowizja partnera')
+                                      |                     
+                                      #provision_gapHide(style="display:none;")
+                                        .form-group.row
+                                          label.col-xl-4.col-lg-4.col-form-label(for="partnerL") Ubezpieczenie GAP?
+                                          .col-lg-8.col-xl-8
+                                            .kt-radio-inline
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand(for="radioYes")
+                                                input#radioYes(type='radio', name='exists_gap', value='1')
+                                                |  Tak
+                                                |              
+                                                span
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand(for="radioNo")
+                                                input#radioNo(type='radio', name='exists_gap', checked='', value='0')
+                                                |  Nie
+                                                |                      
+                                                span
+                                              |                   
+                                        #provision_gapInputHide.form-group.row
+                                          label.col-xl-4.col-lg-4.col-form-label Prowizja z ubezp. GAP:
+                                          |                                         
+                                          .col-lg-8.col-xl-8
+                                            input.form-control(type='text', name='percentage_gap', maxlength="15", placeholder='Prowizja z ubezp. GAP')
+                                        |            
+                                      #provision_acocHide(style="display:none;")
+                                        .form-group.row
+                                          label.col-xl-4.col-lg-4.col-form-label(for="partnerL") Ubezpieczenie AC/OC?
+                                          .col-lg-8.col-xl-8
+                                            .kt-radio-inline
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand(for="radioYes2")
+                                                input#radioYes2(type='radio', name='exists_acoc', value='1')
+                                                |  Tak
+                                                |              
+                                                span
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand(for="radioNo2")
+                                                input#radioNo2(type='radio', name='exists_acoc', checked='', value='0')
+                                                |  Nie
+                                                |                      
+                                                span            
+                                        #provision_acocInputHide.form-group.row
+                                          label.col-xl-4.col-lg-4.col-form-label Prowizja z ubezp. AC/OC:
+                                          |                                         
+                                          .col-lg-8.col-xl-8
+                                            input.form-control(type='text', name='percentage_acoc', maxlength="15", placeholder='Prowizja z ubezp. AC/OC')
+                                        |                        
+                                      .form-group.form-group-last.row
+                                        label.col-xl-4.col-lg-4.col-form-label Realizacja zapytania
+                                        |                                         
+                                        .col-lg-8.col-xl-8
+                                          button#realize_roffer.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj zapytanie
+                                          |                                            
+                                          span.form-text.text-muted.kt-font-brand.kt-font-bold
+                                            | Po zrealizowaniu zapytania ofertowego, pracownik przypisany do tego zapytania otrzyma powiadomienie o możliwości wprowadzenia nowej oferty.
 block scripts
   script(src='./assets/vendors/general/inputmask/dist/inputmask2/inputmask.min.js', type='text/javascript')
   script(src='./assets/vendors/general/inputmask/dist/inputmask2/jquery.inputmask.min.js', type='text/javascript')

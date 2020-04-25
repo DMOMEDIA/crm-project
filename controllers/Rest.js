@@ -5,7 +5,7 @@ const ROffer = require('../models/roffers');
 const Offer = require('../models/offers');
 const Company = require('../models/companies');
 const Notification = require('../models/notifications');
-const Messages = require('../config/messages.js');
+const Messages = require('../config/messages');
 const System = require('../models/system');
 const Mails = require('../controllers/Mails');
 const PDF = require('../controllers/PDFController');
@@ -92,17 +92,6 @@ exports.addUser = (req, res) => {
     }
   } else res.json(Messages.message('no_authorization', null));
 };
-
-exports.getUserlistProv = (req, res) => {
-  if(req.isAuthenticated()) {
-    var output = {};
-    User.getUserListProvision(function(result, nums) {
-      output['meta'] = { page: 1, pages: 1, perpage: 10, total: nums, sort: 'desc', field: 'id' };
-      output['data'] = result;
-      res.json(output);
-    });
-  }
-}
 
 exports.getUserlist = (req, res) => {
   if(req.isAuthenticated()) {
@@ -560,6 +549,16 @@ exports.companyRemoteList = (req, res) => {
   } else res.json(Messages.message('no_authorization', null));
 };
 
+exports.rofferRemoteList = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.query.type) {
+      ROffer.getRemoteROfferList(req.session.userData.id, req.query.type, function(result, nums) {
+        res.json(result);
+      });
+    }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
 exports.deleteSelectedOffers = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.delete')) {
@@ -594,9 +593,35 @@ exports.insertOffer = (req, res) => {
   if(req.isAuthenticated()) {
     if(res.locals.userPermissions.includes('crm.offers.add')) {
       if(req.body != null) {
-        Offer.createOffer(req, function(param, id) {
-          var params = { offer_path: param, offer_id: id };
-          res.json(Messages.message('added_new_offer', params ));
+        User.getUserPartner(req.session.userData.id, result => {
+          if(req.body.send_mail == 'true') {
+            if(result.partner) {
+              if(result.message == 'user_has_partner' || result.message == 'partner_and_agent_found') {
+                res.json({ status: 'error', message: 'Wysłanie oferty do klienta jest niemożliwe.' });
+              } else {
+                Offer.createOffer(req, function(param, id) {
+                  var params = { offer_path: param, offer_id: id };
+                  res.json(Messages.message('added_new_offer', params ));
+                });
+              }
+            } else {
+              Offer.createOffer(req, function(param, id) {
+                var params = { offer_path: param, offer_id: id };
+                res.json(Messages.message('added_new_offer', params ));
+              });
+            }
+          } else {
+            if(result.partner) {
+              if(result.message == 'user_has_partner' || result.message == 'partner_and_agent_found') {
+                Notification.sendNotificationToUser(result.partner, 'flaticon2-percentage kt-font-dark', 'Twój pracownik <b>' + req.session.userData.fullname + '</b> dodał nową ofertę, która oczekuje na nadanie prowizji.');
+              }
+            }
+
+            Offer.createOffer(req, function(param, id) {
+              var params = { offer_path: param, offer_id: id };
+              res.json(Messages.message('added_new_offer', params ));
+            });
+          }
         });
       }
     } else res.json(Messages.message('no_permission', null));
@@ -644,7 +669,7 @@ exports.realizeOffer = (req, res) => {
     Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
       if(offer) {
         if(offer.state == 2) {
-          Offer.setValueById(offer.id, offer.offer_type, 'state', 4, true).then(function() {
+          Offer.setValueById(offer.id, offer.offer_type, 'state', 4).then(function() {
             res.json({ status: 'success', message: 'Oferta została pomyślnie zrealizowana.' });
           });
         } else res.json({ status: 'error', message: 'Oferta została zrealizowana/anulowana, wprowadzenie nowych zmian jest niemożliwe.' });
@@ -658,7 +683,7 @@ exports.cancelOffer = (req, res) => {
     Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
       if(offer) {
         if(offer.state == 2) {
-          Offer.setValueById(offer.id, offer.offer_type, 'state', 3, false).then(function() {
+          Offer.setValueById(offer.id, offer.offer_type, 'state', 3).then(function() {
             res.json({ status: 'success', message: 'Oferta została pomyślnie anulowana.' });
           });
         } else res.json({ status: 'error', message: 'Oferta została zrealizowana/anulowana, wprowadzenie nowych zmian jest niemożliwe.' });
@@ -672,40 +697,49 @@ exports.sendOfferMail_onList = async (req, res) => {
     Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
       if(offer) {
         if(offer.state == 1) {
-          var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
-          var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
+          var p_partner = 0, p_agent = 0, p_employee = 0;
+          if(offer.prov_partner) p_partner = parseFloat(offer.prov_partner.split(' ')[0]);
+          if(offer.prov_agent) p_agent = parseFloat(offer.prov_agent.split(' ')[0]);
+          if(offer.prov_employee) p_employee = parseFloat(offer.prov_employee.split(' ')[0]);
 
-          try {
-            var attachments = [];
-            fs.readdir('./uploads/offer/' + req.body.o_path, function(err, files) {
-              async.each(files, function(name, cb) {
-                attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
-                cb();
-              }, function() {
-                Mails.sendMail.send({
-                  template: 'client_offer',
-                  message: {
-                    from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                    to: offer.client.email,
-                    subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
-                    attachments: attachments
-                  },
-                  locals: {
-                    data: offer,
-                    date_format: date_format,
-                    identity: o_identity
-                  }
-                }).then(function() {
-                  Offer.setValueById(offer.id, offer.offer_type, 'state', 2, false).then(function() {
-                    res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+          var sum_of = p_partner + p_agent + p_employee;
+          if(sum_of == 100) {
+            //
+            var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
+            var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
+
+            try {
+              var attachments = [];
+              fs.readdir('./uploads/offer/' + req.body.o_path, function(err, files) {
+                async.each(files, function(name, cb) {
+                  attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
+                  cb();
+                }, function() {
+                  Mails.sendMail.send({
+                    template: 'client_offer',
+                    message: {
+                      from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                      to: offer.client.email,
+                      subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
+                      attachments: attachments
+                    },
+                    locals: {
+                      data: offer,
+                      date_format: date_format,
+                      identity: o_identity
+                    }
+                  }).then(function() {
+                    Offer.setValueById(offer.id, offer.offer_type, 'state', 2).then(function() {
+                      res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+                    });
                   });
                 });
               });
-            });
-          }
-          catch {
-            res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
-          }
+            }
+            catch {
+              res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
+            }
+          } else res.json({ status: 'error', message: 'Oferta nie może zostać wysłana, nie ustalono prowizji przez partnera.' });
         } else res.json({ status: 'error', message: 'Oferta została już wysłana, ponowne wysłanie oferty jest niemożliwe.' });
       } else res.json(Messages.message('not_found_offer', null));
     });
@@ -796,6 +830,14 @@ exports.uploadClientFiles = (req, res, next) => {
           res.status(200).json(Messages.message('added_new_files', null));
         });
     }
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getUserPartner = (req, res) => {
+  if(req.isAuthenticated()) {
+    User.getUserPartner(req.session.userData.id, result => {
+      res.json(result);
+    });
   } else res.json(Messages.message('no_authorization', null));
 };
 
@@ -1042,18 +1084,60 @@ exports.requestOfferSendMail = (req, res) => {
 exports.requestOfferDone = async (req, res) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role == 'administrator') {
-      await ROffer.getOfferById(req.body.id, function(result) {
+      await ROffer.getOfferById(req.body.roffer_id, function(result) {
         result = result.toJSON();
+
         if(result.state == 2) {
-          ROffer.setValueById(result.id, 'state', 3);
-          Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
-          .then(function(done) {
-            res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
+          User.getUserPartner(result.client_info.user_id, e => {
+            if(e.partner) {
+              if(req.body.percentage_partner.length != 0) {
+                ROffer.updateProvisions(req.body);
+                //
+                Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+                .then(function(done) {
+                  res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
+                });
+              } else res.json({ status: 'error', message: 'Procent prowizji dla partnera nie został ustanowiony, ustaw prowizję dla partnera i spróbuj ponownie.' });
+            } else {
+              ROffer.setValueById(result.id, 'state', 3);
+              Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+              .then(function(done) {
+                res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
+              });
+            }
           });
         } else res.json({ status: 'error', message: 'Zapytanie ofertowe musi zostać wysłane do odpowiednich firm przed jego realizacją.' });
       });
     } else res.json(Messages.message('no_permission', null));
   } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.calculateProvFromOffer = (req, res) => {
+  if(req.isAuthenticated()) {
+    System.calculateProvisionFromOffer(req.body.offer_id, req.body.type, result => {
+      res.json(result);
+    });
+  }
+};
+
+exports.saveOfferProvision = (req, res) => {
+  if(req.isAuthenticated()) {
+    if(req.session.userData.role == 'administrator' || (req.session.userData.role == 'kierownik' && req.session.userData.isPartner)) {
+      if(req.body) {
+        Offer.savePartnerProvision(req.session.userData.id, req.body, result => {
+          res.json(result);
+        });
+      }
+    } else res.json(Messages.message('no_permission', null));
+  } else res.json(Messages.message('no_authorization', null));
+};
+
+exports.getOfferProvision = (req, res) => {
+  if(req.isAuthenticated()) {
+    System.getOfferProvision(req.body.offer_id, req.session.userData.id, result => {
+      res.json({ your_prov: result });
+    });
+  }
 };
 
 exports.loadCompanylist = (req, res) => {
@@ -1150,31 +1234,5 @@ exports.activateClientAccount = (req, res) => {
     });
   } else {
     res.json({ status: 'error', message: 'Brak parametru' });
-  }
-};
-
-// stats
-
-exports.getOfferCount = (req, res) => {
-  if(req.isAuthenticated()) {
-    Offer.getOfferCounts(function(cb) {
-      res.json(cb);
-    });
-  }
-};
-
-exports.getProvisionStats = (req, res) => {
-  if(req.isAuthenticated()) {
-    System.provisionStatistics(7, true, function(values, today_prov) {
-      res.json({ values: values, today_prov: today_prov });
-    });
-  }
-};
-
-exports.getStatsCount = (req, res) => {
-  if(req.isAuthenticated()) {
-    System.getStatsCounts(function(user_cnt, roffer_cnt) {
-      res.json({ client_count: user_cnt, roffer_count: roffer_cnt });
-    });
   }
 };

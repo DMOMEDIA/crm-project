@@ -221,7 +221,22 @@ block content
                                         if userPermissions.includes('crm.employees.add.posrednik')
                                           option(value='posrednik') Pośrednik
                                         if userPermissions.includes('crm.employees.add.pracownik')
-                                          option(value='pracownik') Pracownik                     
+                                          option(value='pracownik') Pracownik    
+                                  #partnerHide.form-group.row(style="display:none;")
+                                    label.col-xl-3.col-lg-3.col-form-label(for="partnerL") Czy kierownik jest partnerem?
+                                    .col-lg-9.col-xl-9
+                                      .kt-radio-inline
+                                        label.kt-radio.kt-radio--bold.kt-radio--brand(for="partnerYes")
+                                          input#partnerYes(type='radio', name='partner', value='1')
+                                          |  Tak
+                                          |              
+                                          span
+                                        label.kt-radio.kt-radio--bold.kt-radio--brand(for="partnerNo")
+                                          input#partnerNo(type='radio', name='partner', checked='', value='0')
+                                          |  Nie
+                                          |                      
+                                          span
+                                        |                            
                                   .form-group.row
                                     label.col-xl-3.col-lg-3.col-form-label Hasło:
                                     .col-lg-9.col-xl-9

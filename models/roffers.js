@@ -25,14 +25,30 @@ const ClientRelated = bookshelf.Model.extend({
   }
 });
 
+module.exports.getRemoteROfferList = (user_id, type, callback) => {
+  var output = [], counter = 0;
+
+  module.exports.getClientOffersAssigned(user_id, result => {
+    async.each(result, async function(e, cb) {
+      if(e.state == 3 && e.type == type && e.offer_id == null) {
+        output.push(e);
+      }
+      counter++;
+      if(counter == result.length) cb();
+    }, function() {
+      callback(output, output.length);
+    });
+  });
+};
+
 module.exports.getClientOffers = (callback) => {
   return new ROffer()
     .fetchAll({ withRelated: ['client_info'] })
     .then(function(data) {
       ROffer.forge().count()
-        .then(function(cnt) {
-          callback(data, cnt);
-        });
+      .then(function(cnt) {
+        callback(data, cnt);
+      });
   });
 };
 
@@ -73,6 +89,19 @@ module.exports.deleteROffer = (id, callback) => {
       callback(Messages.message('success_roffer_delete', null));
       return model.destroy();
     } else callback(Messages.message('not_found_roffer', null));
+  });
+};
+
+module.exports.updateProvisions = (values) => {
+  return new ROffer().where({ id: values.roffer_id }).fetch()
+  .then(function(model) {
+    if(model) {
+      if(values.percentage_partner) model.set('percentage_partner', values.percentage_partner);
+      if(values.percentage_gap.length != 0) model.set('percentage_gap', values.percentage_gap);
+      if(values.percentage_acoc.length != 0) model.set('percentage_acoc', values.percentage_acoc);
+      model.set('state', 3);
+      model.save();
+    }
   });
 };
 

@@ -152,10 +152,10 @@ block content
                                     .kt-section__body
                                       .row
                                         label.col-xl-3     
-                                        .col-lg-9.col-xl-6
+                                        .col-lg-9.col-xl-9
                                           h3.kt-section__title.kt-section__title-sm Dane personalne:
                                       |                                     
-                                      .form-group.row.kt-hidden
+                                      .form-group.kt-hidden
                                         label.col-xl-3.col-lg-3.col-form-label Avatar
                                         |                                         
                                         .col-lg-9.col-xl-6
@@ -212,7 +212,7 @@ block content
                                       .kt-separator.kt-separator--border-dashed.kt-separator--space-lg.kt-separator--portlet-fit
                                       .row
                                         label.col-xl-3     
-                                        .col-lg-9.col-xl-6
+                                        .col-lg-9.col-xl-9
                                           h3.kt-section__title.kt-section__title-sm Dane firmy i/lub adres zamieszkania pracownika:
                                       |                               
                                       .form-group.row
@@ -315,7 +315,7 @@ block content
                                       .row
                                         label.col-xl-3
                                         |                                         
-                                        .col-lg-9.col-xl-6
+                                        .col-lg-9.col-xl-9
                                           h3.kt-section__title.kt-section__title-sm Dane logowania:
                                       |                                     
                                       .form-group.row
@@ -335,11 +335,26 @@ block content
                                               option(value='kierownik') Kierownik
                                               option(value='posrednik') Pośrednik
                                               option(value='pracownik') Pracownik
+                                        #partnerHide.form-group.row(style="display:none;")
+                                          label.col-xl-3.col-lg-3.col-form-label(for="partnerL") Czy kierownik jest partnerem?
+                                          .col-lg-9.col-xl-9
+                                            .kt-radio-inline
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand
+                                                input(type='radio', name='partner', value='1')
+                                                |  Tak
+                                                |              
+                                                span
+                                              label.kt-radio.kt-radio--bold.kt-radio--brand
+                                                input(type='radio', name='partner', checked='', value='0')
+                                                |  Nie
+                                                |                      
+                                                span
+                                              |                            
                                       if userPermissions.includes('crm.users.assign_edit')
                                         .row
                                           label.col-xl-3
                                           |                                         
-                                          .col-lg-9.col-xl-6
+                                          .col-lg-9.col-xl-9
                                             h3.kt-section__title.kt-section__title-sm Przypisz pracownika wyższego szczebla:
                                         |                          
                                         .form-group.row
@@ -362,25 +377,11 @@ block content
                               .kt-form.kt-form--label-right
                                 .kt-form__body
                                   .kt-section.kt-section--first
-                                    .kt-section__body
-                                      .alert.alert-solid-danger.alert-bold.fade.show.kt-margin-t-20.kt-margin-b-40(role='alert')
-                                        .alert-icon
-                                          i.fa.fa-exclamation-triangle
-                                        |                                         
-                                        .alert-text
-                                          | Skonfiguruj hasła użytkowników, aby okresowo wygasały.
-                                          br
-                                          | Użytkownicy będą potrzebować ostrzeżenia, że ​​ich hasła wygasną lub mogą zostać zablokowani w systemie aż do czasu utworzenia nowego hasła!
-                                        |                                         
-                                        .alert-close
-                                          button.close(type='button', data-dismiss='alert', aria-label='Close')
-                                            span(aria-hidden='true')
-                                              i.la.la-close
-                                      |                                     
+                                    .kt-section__body               
                                       .row
                                         label.col-xl-3
                                         |                                         
-                                        .col-lg-9.col-xl-6
+                                        .col-lg-9.col-xl-9
                                           h3.kt-section__title.kt-section__title-sm Zmień hasło użytkownika:
                                       |                                     
                                       .form-group.row

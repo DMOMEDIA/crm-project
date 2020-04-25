@@ -6374,6 +6374,14 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 			/**
 			 * Call ajax for raw JSON data
 			 */
+      getCustomParams: function() {
+        return Plugin.getOption('data.source.read.params');
+      },
+
+      setCustomParams: function(param) {
+        Plugin.setOption('data.source.read.params', param);
+      },
+
 			getData: function() {
 				// Plugin.spinnerCallback(true);
 
@@ -9441,6 +9449,7 @@ var KTQuickSearch = function() {
 
         setTimeout(function() {
             $.ajax({
+                // https://keenthemes.com/metronic/tools/preview/api/quick_search.php
                 url: 'https://keenthemes.com/metronic/themes/themes/metronic/dist/preview/inc/api/quick_search.php',
                 data: {
                     query: query
