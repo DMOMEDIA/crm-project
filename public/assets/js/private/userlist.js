@@ -706,7 +706,10 @@ var KTUserListDatatable = function() {
 									}
 								});
 
-								if(res.role == 'kierownik') modalEl.find('#partnerHide').show();
+								if(res.role == 'kierownik') {
+									 modalEl.find('#partnerHide').show();
+									 $('input[name="partner"][value="' + res.isPartner + '"]').prop('checked', true);
+								}
 								else modalEl.find('#partnerHide').hide();
 
 								if(res.company == 1) {
