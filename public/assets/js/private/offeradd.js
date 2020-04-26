@@ -545,10 +545,9 @@ var KTWizardOfferAdd = function () {
 											clearForm: false,
 											data: formEl.serialize(),
 											success: function(response) {
+												KTApp.unprogress(btn_mail);
+												btn_mail.attr('disabled', false);
 												if(response.status == 'success') {
-													KTApp.unprogress(btn_mail);
-													btn_mail.attr('disabled', false);
-
 													swal.fire({
 														"title": "",
 														"text": res.message,
@@ -585,10 +584,9 @@ var KTWizardOfferAdd = function () {
 										clearForm: false,
 										data: formEl.serialize(),
 										success: function(response) {
+											KTApp.unprogress(btn_mail);
+											btn_mail.attr('disabled', false);
 											if(response.status == 'success') {
-												KTApp.unprogress(btn_mail);
-												btn_mail.attr('disabled', false);
-
 												swal.fire({
 													"title": "",
 													"text": res.message,
@@ -708,8 +706,8 @@ var KTWizardOfferAdd = function () {
 									"type": res.status,
 									"confirmButtonClass": "btn btn-secondary"
 								});
-								KTApp.unprogress(btn_mail);
-								btn_mail.attr('disabled', false);
+								KTApp.unprogress(btn);
+								btn.attr('disabled', false);
 							}
 						},
             error: function(err) {

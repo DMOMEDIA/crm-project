@@ -253,10 +253,12 @@ var KTClientAdd = function () {
 
 		btn.on('click', function(e) {
 			e.preventDefault();
+			e.stopPropagation();
 
 			if (validator.form()) {
 				// See: src\js\framework\base\app.js
 				KTApp.progress(btn);
+				btn.attr('disabled', true);
 				//KTApp.block(formEl);
 
         setTimeout(function() {
@@ -267,6 +269,7 @@ var KTClientAdd = function () {
             clearForm: false,
   					success: function(res) {
   						KTApp.unprogress(btn);
+							btn.attr('disabled', false);
   						//KTApp.unblock(formEl);
               if(res.status == 'success') {
                 KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');

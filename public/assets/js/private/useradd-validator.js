@@ -295,10 +295,12 @@ var KTUserAdd = function () {
 
 		btn.on('click', function(e) {
 			e.preventDefault();
+			e.stopPropagation();
 
 			if (validator.form()) {
 				// See: src\js\framework\base\app.js
 				KTApp.progress(btn);
+				btn.attr('disabled', true);
 				//KTApp.block(formEl);
 
 				// See: http://malsup.com/jquery/form/#ajaxSubmit
@@ -307,16 +309,18 @@ var KTUserAdd = function () {
             url: '/rest/users/add',
             method: 'POST',
             data: formEl.serialize(),
-            clearForm: true,
+            clearForm: false,
   					success: function(res) {
-  						KTApp.unprogress(btn);
+							KTApp.unprogress(btn);
+							btn.attr('disabled', false);
   						//KTApp.unblock(formEl);
               if(res.status == 'success') {
                 KTUtil.showNotifyAlert('success', res.message, 'Udało się!', 'flaticon2-checkmark');
+								KTUtil.clearInputInForm(formEl);
                 wizard.goTo(1, true);
+								//
               } else {
                 KTUtil.showNotifyAlert('danger', res.message, 'Coś jest nie tak..', 'flaticon-warning-sign');
-								wizard.goTo(1, true);
               }
             },
             error: function(err) {
