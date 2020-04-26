@@ -146,7 +146,7 @@ module.exports.createUser = (user) => {
         cname: user.cname,
         cnip: user.cnip,
         cregon: user.cregon,
-        isPartner: parseInt(user.partner),
+        isPartner: parseInt(user.isPartner),
         assigned_to: user.assigned_to
       }).save();
     });
