@@ -179,7 +179,6 @@ var KTStatistics = function() {
 
       init();
       searchAndSort();
-      donutChart();
     }
   }
 }();
