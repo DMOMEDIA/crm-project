@@ -411,6 +411,7 @@ var KTROfferListDatatable = function() {
 										$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 										$('#summary_element').show();
 										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
+										$('#provisions_form').find('input').prop('disabled',false);
 
 										swal.fire({
 											"title": "",

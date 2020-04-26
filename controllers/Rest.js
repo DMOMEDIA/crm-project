@@ -697,49 +697,57 @@ exports.sendOfferMail_onList = async (req, res) => {
     Offer.getOfferById(req.body.id, req.body.offer_type, offer => {
       if(offer) {
         if(offer.state == 1) {
-          var p_partner = 0, p_agent = 0, p_employee = 0;
-          if(offer.prov_partner) p_partner = parseFloat(offer.prov_partner.split(' ')[0]);
-          if(offer.prov_agent) p_agent = parseFloat(offer.prov_agent.split(' ')[0]);
-          if(offer.prov_employee) p_employee = parseFloat(offer.prov_employee.split(' ')[0]);
+          //
+          var goNext = false;
+          var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
+          var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
 
-          var sum_of = p_partner + p_agent + p_employee;
-          if(sum_of == 100) {
-            //
-            var date_format = moment(offer.created_at).local().format('DD-MM-YYYY');
-            var o_identity = '00' + offer.id + '/' + offer.offer_type.charAt(0).toUpperCase() + '/' + moment(offer.created_at).local().format('YYYY');
+          User.getUserPartner(offer.created_by, partner_back => {
+            if(partner_back.partner) {
+              var p_partner = 0, p_agent = 0, p_employee = 0;
+              if(offer.prov_partner) p_partner = parseFloat(offer.prov_partner.split(' ')[0]);
+              if(offer.prov_agent) p_agent = parseFloat(offer.prov_agent.split(' ')[0]);
+              if(offer.prov_employee) p_employee = parseFloat(offer.prov_employee.split(' ')[0]);
 
-            try {
-              var attachments = [];
-              fs.readdir('./uploads/offer/' + req.body.o_path, function(err, files) {
-                async.each(files, function(name, cb) {
-                  attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
-                  cb();
-                }, function() {
-                  Mails.sendMail.send({
-                    template: 'client_offer',
-                    message: {
-                      from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                      to: offer.client.email,
-                      subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
-                      attachments: attachments
-                    },
-                    locals: {
-                      data: offer,
-                      date_format: date_format,
-                      identity: o_identity
-                    }
-                  }).then(function() {
-                    Offer.setValueById(offer.id, offer.offer_type, 'state', 2).then(function() {
-                      res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+              var sum_of = p_partner + p_agent + p_employee;
+              if(sum_of == 100) goNext = true;
+              else res.json({ status: 'error', message: 'Oferta nie może zostać wysłana, nie ustalono prowizji przez partnera.' });
+            } else goNext = true;
+
+            if(goNext) {
+              try {
+                var attachments = [];
+                fs.readdir('./uploads/offer/' + req.body.o_path, function(err, files) {
+                  async.each(files, function(name, cb) {
+                    attachments.push({ filename: name, path: './uploads/offer/' + req.body.o_path + '/' + name });
+                    cb();
+                  }, function() {
+                    Mails.sendMail.send({
+                      template: 'client_offer',
+                      message: {
+                        from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                        to: offer.client.email,
+                        subject: 'Znaleźliśmy dla Ciebie odpowiednią ofertę.',
+                        attachments: attachments
+                      },
+                      locals: {
+                        data: offer,
+                        date_format: date_format,
+                        identity: o_identity
+                      }
+                    }).then(function() {
+                      Offer.setValueById(offer.id, offer.offer_type, 'state', 2).then(function() {
+                        res.json({ status: 'success', message: 'Oferta została pomyślnie wysłana.' });
+                      });
                     });
                   });
                 });
-              });
+              }
+              catch {
+                res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
+              }
             }
-            catch {
-              res.json({ status: 'error', message: 'Wystąpił błąd podczas pobierania załączników, zgłoś problem administratorowi.' });
-            }
-          } else res.json({ status: 'error', message: 'Oferta nie może zostać wysłana, nie ustalono prowizji przez partnera.' });
+          });
         } else res.json({ status: 'error', message: 'Oferta została już wysłana, ponowne wysłanie oferty jest niemożliwe.' });
       } else res.json(Messages.message('not_found_offer', null));
     });
