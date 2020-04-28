@@ -210,7 +210,15 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
               prov_employee: null
             });
           }
-        } else callback({ provision: null, percentage: null });
+        } else callback({
+          provision: null,
+          percentage: null,
+          partner_id: null,
+          message: 'provision_for_crm',
+          prov_partner: null,
+          prov_agent: null,
+          prov_employee: null
+        });
       });
     });
   });
@@ -347,7 +355,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
           }
         });
       }
-    } else callback({ status: 'error', message: 'Suma prowizji musi osiągać 100% wartości' });
+    }
   });
 };
 
