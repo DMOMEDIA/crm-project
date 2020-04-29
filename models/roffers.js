@@ -25,20 +25,34 @@ const ClientRelated = bookshelf.Model.extend({
   }
 });
 
-module.exports.getRemoteROfferList = (user_id, type, callback) => {
+module.exports.getRemoteROfferList = (role, user_id, type, callback) => {
   var output = [], counter = 0;
 
-  module.exports.getClientOffersAssigned(user_id, result => {
-    async.each(result, async function(e, cb) {
-      if(e.state == 3 && e.type == type && e.offer_id == null) {
-        output.push(e);
-      }
-      counter++;
-      if(counter == result.length) cb();
-    }, function() {
-      callback(output, output.length);
+  if(role == 'administrator') {
+    module.exports.getClientOffers(result => {
+      async.each(result, async function(e, cb) {
+        if(e.state == 3 && e.type == type && e.offer_id == null) {
+          output.push(e);
+        }
+        counter++;
+        if(counter == result.length) cb();
+      }, function() {
+        callback(output, output.length);
+      });
     });
-  });
+  } else {
+    module.exports.getClientOffersAssigned(user_id, result => {
+      async.each(result, async function(e, cb) {
+        if(e.state == 3 && e.type == type && e.offer_id == null) {
+          output.push(e);
+        }
+        counter++;
+        if(counter == result.length) cb();
+      }, function() {
+        callback(output, output.length);
+      });
+    });
+  }
 };
 
 module.exports.getClientOffers = (callback) => {

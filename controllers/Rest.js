@@ -553,7 +553,7 @@ exports.companyRemoteList = (req, res) => {
 exports.rofferRemoteList = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.query.type) {
-      ROffer.getRemoteROfferList(req.session.userData.id, req.query.type, function(result, nums) {
+      ROffer.getRemoteROfferList(req.session.userData.role, req.session.userData.id, req.query.type, function(result, nums) {
         res.json(result);
       });
     }
@@ -600,13 +600,13 @@ exports.insertOffer = (req, res) => {
               if(result.message == 'user_has_partner' || result.message == 'partner_and_agent_found') {
                 res.json({ status: 'error', message: 'Wysłanie oferty do klienta jest niemożliwe.' });
               } else {
-                Offer.createOffer(req, function(param, id) {
+                Offer.createOffer(req, 100, function(param, id) {
                   var params = { offer_path: param, offer_id: id };
                   res.json(Messages.message('added_new_offer', params ));
                 });
               }
             } else {
-              Offer.createOffer(req, function(param, id) {
+              Offer.createOffer(req, null, function(param, id) {
                 var params = { offer_path: param, offer_id: id };
                 res.json(Messages.message('added_new_offer', params ));
               });
@@ -618,7 +618,7 @@ exports.insertOffer = (req, res) => {
               }
             }
 
-            Offer.createOffer(req, function(param, id) {
+            Offer.createOffer(req, null, function(param, id) {
               var params = { offer_path: param, offer_id: id };
               res.json(Messages.message('added_new_offer', params ));
             });

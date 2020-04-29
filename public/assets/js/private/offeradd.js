@@ -492,7 +492,7 @@ var KTWizardOfferAdd = function () {
 				if(res.partner) {
 					if(res.message == 'user_has_partner' || res.message == 'partner_and_agent_found')
 						btn_mail.attr('disabled', true);
-				}
+				} else btn_mail.attr('disabled', false);
 			},
 			error: function(err) {
 				btn_mail.attr('disabled', true);

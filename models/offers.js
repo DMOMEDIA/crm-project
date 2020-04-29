@@ -468,8 +468,9 @@ module.exports.getUserByOfferId = (id, type, callback) => {
   }
 };
 
-module.exports.createOffer = (req, callback) => {
-  var value = req.body;
+module.exports.createOffer = (req, partner_val, callback) => {
+  var value = req.body, p_val = null;
+  if(partner_val) p_val = partner_val + ' %';
   if(value.offer_type == 'leasing') {
     if(value.acoc_rata_l.length == 0) value.acoc_rata_l = null;
     if(value.gap_rata_l.length == 0) value.gap_rata_l = null;
@@ -490,6 +491,7 @@ module.exports.createOffer = (req, callback) => {
       gap_okres: value.gap_okres_l,
       attentions: value.attentions_l,
       state: value.o_state,
+      percentage_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
@@ -529,6 +531,7 @@ module.exports.createOffer = (req, callback) => {
       netto: value.vehicle_val_i,
       insurance_cost: value.insurance_cost,
       state: value.o_state,
+      percentage_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
@@ -567,6 +570,7 @@ module.exports.createOffer = (req, callback) => {
       acoc_company: value.acoc_company,
       attentions: value.attentions_r,
       state: value.o_state,
+      percentage_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
