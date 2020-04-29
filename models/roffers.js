@@ -29,7 +29,7 @@ module.exports.getRemoteROfferList = (role, user_id, type, callback) => {
   var output = [], counter = 0;
 
   if(role == 'administrator') {
-    module.exports.getClientOffers(result, cnt => {
+    module.exports.getClientOffers(result => {
       async.each(result, async function(e, cb) {
         if(e.state == 3 && e.type == type && e.offer_id == null) {
           output.push(e);
@@ -59,10 +59,7 @@ module.exports.getClientOffers = (callback) => {
   return new ROffer()
     .fetchAll({ withRelated: ['client_info'] })
     .then(function(data) {
-      ROffer.forge().count()
-      .then(function(cnt) {
-        callback(data, cnt);
-      });
+      callback(data, data.length);
   });
 };
 
