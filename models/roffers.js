@@ -30,7 +30,7 @@ module.exports.getRemoteROfferList = (role, user_id, type, callback) => {
 
   if(role == 'administrator') {
     module.exports.getClientOffers(result => {
-      console.log(result.toJSON());
+      result = result.toJSON();
       async.each(result, async function(e, cb) {
         if(e.state == 3 && e.type == type && e.offer_id == null) {
           output.push(e);
