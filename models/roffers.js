@@ -32,6 +32,7 @@ module.exports.getRemoteROfferList = (role, user_id, type, callback) => {
     module.exports.getClientOffers(result => {
       async.each(result, async function(e, cb) {
         if(e.state == 3 && e.type == type && e.offer_id == null) {
+          console.log(e);
           output.push(e);
         }
         counter++;
