@@ -29,10 +29,9 @@ module.exports.getRemoteROfferList = (role, user_id, type, callback) => {
   var output = [], counter = 0;
 
   if(role == 'administrator') {
-    module.exports.getClientOffers(result => {
+    module.exports.getClientOffers(result, cnt => {
       async.each(result, async function(e, cb) {
         if(e.state == 3 && e.type == type && e.offer_id == null) {
-          console.log(e);
           output.push(e);
         }
         counter++;
