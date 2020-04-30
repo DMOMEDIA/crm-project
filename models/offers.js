@@ -491,7 +491,7 @@ module.exports.createOffer = (req, partner_val, callback) => {
       gap_okres: value.gap_okres_l,
       attentions: value.attentions_l,
       state: value.o_state,
-      percentage_partner: p_val,
+      prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
@@ -531,7 +531,7 @@ module.exports.createOffer = (req, partner_val, callback) => {
       netto: value.vehicle_val_i,
       insurance_cost: value.insurance_cost,
       state: value.o_state,
-      percentage_partner: p_val,
+      prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
@@ -570,7 +570,7 @@ module.exports.createOffer = (req, partner_val, callback) => {
       acoc_company: value.acoc_company,
       attentions: value.attentions_r,
       state: value.o_state,
-      percentage_partner: p_val,
+      prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
       if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
