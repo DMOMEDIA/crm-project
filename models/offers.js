@@ -115,7 +115,8 @@ module.exports.savePartnerProvision = (user_id, values, callback) => {
             else if(done.get('state') == 3) System.changeProvision(done.get('id'), done.get('offer_type'), true, true);
             else System.changeProvision(done.get('id'), done.get('offer_type'), false, false);
 
-            Notification.sendNotificationToUser(done.get('created_by'), 'flaticon2-percentage kt-font-success', 'Twój kierownik ustalił prowizję dla oferty <b>00' + done.get('id') + '/' + done.get('offer_type').charAt(0) + '/' + moment(done.get('created_at')).local().format('YYYY') + '</b>, możesz ją wysłać do klienta.');
+            if(user_id != done.get('created_by'))
+              Notification.sendNotificationToUser(done.get('created_by'), 'flaticon2-percentage kt-font-success', 'Twój kierownik ustalił prowizję dla oferty <b>00' + done.get('id') + '/' + done.get('offer_type').charAt(0) + '/' + moment(done.get('created_at')).local().format('YYYY') + '</b>, możesz ją wysłać do klienta.');
 
             System.getOfferProvision(values.offer_id + '/' + values.offer_type, user_id, function(result) {
               if(result) callback({ status: 'success', message: 'Prowizja została pomyślnie nadana.', your_prov: result });
@@ -142,6 +143,9 @@ module.exports.savePartnerProvision = (user_id, values, callback) => {
             else if(done.get('state') == 3) System.changeProvision(done.get('id'), done.get('offer_type'), true, true);
             else System.changeProvision(done.get('id'), done.get('offer_type'), false, false);
 
+            if(user_id != done.get('created_by'))
+              Notification.sendNotificationToUser(done.get('created_by'), 'flaticon2-percentage kt-font-success', 'Twój kierownik ustalił prowizję dla oferty <b>00' + done.get('id') + '/' + done.get('offer_type').charAt(0) + '/' + moment(done.get('created_at')).local().format('YYYY') + '</b>, możesz ją wysłać do klienta.');
+
             System.getOfferProvision(values.offer_id + '/' + values.offer_type, user_id, function(result) {
               if(result) callback({ status: 'success', message: 'Prowizja została pomyślnie nadana.', your_prov: result });
               else callback({ status: 'success', message: 'Prowizja została pomyślnie nadana.', your_prov: '0.00' });
@@ -166,6 +170,9 @@ module.exports.savePartnerProvision = (user_id, values, callback) => {
             if(done.get('state') < 3) System.changeProvision(done.get('id'), done.get('offer_type'), true, false);
             else if(done.get('state') == 3) System.changeProvision(done.get('id'), done.get('offer_type'), true, true);
             else System.changeProvision(done.get('id'), done.get('offer_type'), false, false);
+
+            if(user_id != done.get('created_by'))
+              Notification.sendNotificationToUser(done.get('created_by'), 'flaticon2-percentage kt-font-success', 'Twój kierownik ustalił prowizję dla oferty <b>00' + done.get('id') + '/' + done.get('offer_type').charAt(0) + '/' + moment(done.get('created_at')).local().format('YYYY') + '</b>, możesz ją wysłać do klienta.');
 
             System.getOfferProvision(values.offer_id + '/' + values.offer_type, user_id, function(result) {
               if(result) callback({ status: 'success', message: 'Prowizja została pomyślnie nadana.', your_prov: result });
