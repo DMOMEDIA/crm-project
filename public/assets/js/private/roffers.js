@@ -559,6 +559,7 @@ var KTROfferListDatatable = function() {
 					method: 'POST',
 					data: { id: id },
 					success: function(res) {
+						console.log('ajax get roffer times');
 						setTimeout(function() {
 								KTApp.unblockPage();
 
