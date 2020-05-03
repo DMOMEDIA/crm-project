@@ -568,6 +568,7 @@ var KTROfferListDatatable = function() {
 
 										var button = $('#realize_roffer');
 										$(document).on('click', button, function(e) {
+											e.preventDefault();
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
