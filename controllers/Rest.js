@@ -990,100 +990,102 @@ exports.requestOfferSendMail = (req, res) => {
         ROffer.getOfferById(req.body.data.id, async function(cb) {
           cb = cb.toJSON();
 
-          var nameGenerated = '00' + req.body.data.id + '-' + req.body.data.type.charAt(0).toUpperCase() + '-' + moment(req.body.data.created_at).local().format('YYYY'),
-          savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
+          if(cb.state == 1 || cb.state == 2) {
+            var nameGenerated = '00' + req.body.data.id + '-' + req.body.data.type.charAt(0).toUpperCase() + '-' + moment(req.body.data.created_at).local().format('YYYY'),
+            savePath = './uploads/pdfs/' + nameGenerated + '.pdf';
 
-          var client_name, s_tire = 'No', s_service = 'No', s_insurance = 'No';
+            var client_name, s_tire = 'No', s_service = 'No', s_insurance = 'No';
 
-          if(cb.tire == 1) s_tire = 'Yes';
-          if(cb.service == 1) s_service = 'Yes';
-          if(cb.insurance == 1) s_insurance = 'Yes';
+            if(cb.tire == 1) s_tire = 'Yes';
+            if(cb.service == 1) s_service = 'Yes';
+            if(cb.insurance == 1) s_insurance = 'Yes';
 
-          if(cb.client_info.company == 0) {
-            if(cb.client_info.nip == null) client_name = cb.client_info.fullname;
-            else client_name = cb.client_info.nip;
-          } else client_name = cb.client_info.nip;
+            if(cb.client_info.company == 0) {
+              if(cb.client_info.nip == null) client_name = cb.client_info.fullname;
+              else client_name = cb.client_info.nip;
+            } else client_name = cb.client_info.nip;
 
-          if(cb.type == 'leasing') {
-            var data = {
-              "c_name": cb.name,
-              "c_nip": client_name,
-              "c_period": cb.instalments + ' miesięcy',
-              "c_wklad": cb.contribution,
-              "c_wykup": cb.red_value,
-              "c_pyear": cb.pyear,
-              "c_netto": cb.netto + ' zł',
-              "c_uwagi": cb.attentions,
-              "nr_zapytania": nameGenerated
-            };
-          } else if(cb.type == 'rent') {
-            var rent_installment = cb.installment_val.split(';'),
-            rent_installment = rent_installment[0] + ',00 - ' + rent_installment[1] + ',00';
-            var data = {
-              "c_name": cb.name,
-              "c_nip": client_name,
-              "c_uwagi": cb.attentions,
-              "c_nadwozie": cb.body_type,
-              "c_paliwo": cb.fuel_type,
-              "c_rata": rent_installment,
-              "c_wklad": cb.contribution,
-              "c_okres": cb.instalments + ' miesięcy',
-              "c_wykup": cb.red_value,
-              "c_netto": cb.netto + ' zł',
-              "s_opony": s_tire,
-              "s_serwis": s_service,
-              "s_inne": s_insurance,
-              "nr_zapytania": nameGenerated
-            };
-          } else if(cb.type == 'insurance') {
-            var data = {
-              "c_name": cb.name,
-              "c_nip": client_name,
-              "c_uwagi": cb.attentions,
-              "c_pojemnosc": cb.engine_cap,
-              "c_moc": cb.power_cap,
-              "c_vin": cb.vin,
-              "c_rej": cb.reg_number,
-              "c_przebieg": cb.km_value,
-              "c_netto": cb.netto + ' zł',
-              "nr_zapytania": nameGenerated
-            };
-          }
+            if(cb.type == 'leasing') {
+              var data = {
+                "c_name": cb.name,
+                "c_nip": client_name,
+                "c_period": cb.instalments + ' miesięcy',
+                "c_wklad": cb.contribution,
+                "c_wykup": cb.red_value,
+                "c_pyear": cb.pyear,
+                "c_netto": cb.netto + ' zł',
+                "c_uwagi": cb.attentions,
+                "nr_zapytania": nameGenerated
+              };
+            } else if(cb.type == 'rent') {
+              var rent_installment = cb.installment_val.split(';'),
+              rent_installment = rent_installment[0] + ',00 - ' + rent_installment[1] + ',00';
+              var data = {
+                "c_name": cb.name,
+                "c_nip": client_name,
+                "c_uwagi": cb.attentions,
+                "c_nadwozie": cb.body_type,
+                "c_paliwo": cb.fuel_type,
+                "c_rata": rent_installment,
+                "c_wklad": cb.contribution,
+                "c_okres": cb.instalments + ' miesięcy',
+                "c_wykup": cb.red_value,
+                "c_netto": cb.netto + ' zł',
+                "s_opony": s_tire,
+                "s_serwis": s_service,
+                "s_inne": s_insurance,
+                "nr_zapytania": nameGenerated
+              };
+            } else if(cb.type == 'insurance') {
+              var data = {
+                "c_name": cb.name,
+                "c_nip": client_name,
+                "c_uwagi": cb.attentions,
+                "c_pojemnosc": cb.engine_cap,
+                "c_moc": cb.power_cap,
+                "c_vin": cb.vin,
+                "c_rej": cb.reg_number,
+                "c_przebieg": cb.km_value,
+                "c_netto": cb.netto + ' zł',
+                "nr_zapytania": nameGenerated
+              };
+            }
 
-          if(data) {
-            await PDF.fillPDF('./build/pdf_files/' + cb.type + '_draft.pdf', savePath, data).then(function() {
-              var attachments;
+            if(data) {
+              await PDF.fillPDF('./build/pdf_files/' + cb.type + '_draft.pdf', savePath, data).then(function() {
+                var attachments;
 
-              if(req.body.path.length == 0) {
-                attachments = [{ filename: nameGenerated + '.pdf', path: savePath }];
-              } else {
-                getFilesFromDir('cache_files/' + req.body.path, attr => {
-                  attr.push({ filename: nameGenerated + '.pdf', path: savePath });
-                  attachments = attr;
+                if(req.body.path.length == 0) {
+                  attachments = [{ filename: nameGenerated + '.pdf', path: savePath }];
+                } else {
+                  getFilesFromDir('cache_files/' + req.body.path, attr => {
+                    attr.push({ filename: nameGenerated + '.pdf', path: savePath });
+                    attachments = attr;
+                  });
+                }
+
+                async.each(req.body.mails, async function(email, end) {
+                  Company.insertCompanySent(req.body.data.id, email);
+
+                  await Mails.sendMail.send({
+                    template: 'to_company',
+                    message: {
+                      from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
+                      to: email,
+                      subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
+                      attachments: attachments
+                    },
+                    locals: {
+                      document_name: nameGenerated + '.pdf'
+                    }
+                  });
+                  end();
+                }, function() {
+                  res.json(Messages.message('success_send_mail_to_company', null));
                 });
-              }
-
-              async.each(req.body.mails, async function(email, end) {
-                Company.insertCompanySent(req.body.data.id, email);
-
-                await Mails.sendMail.send({
-                  template: 'to_company',
-                  message: {
-                    from: '"Wsparcie dla biznesu" <kontakt@wsparciedlabiznesu.eu>',
-                    to: email,
-                    subject: 'Zapytanie ofertowe (ID: 00' + req.body.data.id + '/' + moment(req.body.data.created_at).local().format('YYYY') + ')',
-                    attachments: attachments
-                  },
-                  locals: {
-                    document_name: nameGenerated + '.pdf'
-                  }
-                });
-                end();
-              }, function() {
-                res.json(Messages.message('success_send_mail_to_company', null));
               });
-            });
-          }
+            }
+          } else res.json({ status: 'error', message: 'Nie możesz wysłać zapytania ofertowego do firm, zapytanie jest już zrealizowane.' });
         });
       }
     } else res.json(Messages.message('no_permission', null));
@@ -1095,9 +1097,6 @@ exports.requestOfferDone = async (req, res) => {
     if(req.session.userData.role == 'administrator') {
       await ROffer.getOfferById(req.body.roffer_id, function(result) {
         result = result.toJSON();
-        console.log(result.state);
-        console.log('ID z forma: ' + req.body.roffer_id);
-        console.log('z bazy: ' + result.id);
 
         if(result.state == 2) {
           User.getUserPartner(result.client_info.user_id, e => {

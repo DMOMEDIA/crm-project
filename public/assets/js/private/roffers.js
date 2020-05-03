@@ -565,7 +565,6 @@ var KTROfferListDatatable = function() {
 										modalEl.modal('show');
 
 										button.on('click', function() {
-											console.log('click dwa razy?');
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
