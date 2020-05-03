@@ -543,7 +543,7 @@ var KTROfferListDatatable = function() {
 
 	var initOfferData = function() {
 		datatable.on('kt-datatable--on-layout-updated', function(e) {
-			var modalEl = $('#kt_fetch_offer'), button = $('#realize_roffer');
+			var modalEl = $('#kt_fetch_offer'), button = $('input[name="realize_offer_btn"]');
 
 			$('.show_offer_data').on('click', function() {
 				var id = $(this).attr('data-id');
