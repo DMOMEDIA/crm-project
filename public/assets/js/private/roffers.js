@@ -559,7 +559,6 @@ var KTROfferListDatatable = function() {
 					method: 'POST',
 					data: { id: id },
 					success: function(res) {
-						console.log('ajax get roffer times');
 						setTimeout(function() {
 								KTApp.unblockPage();
 
@@ -577,11 +576,9 @@ var KTROfferListDatatable = function() {
 													$.ajax({
 														url: '/rest/roffer/done',
 														method: 'POST',
+														async: false,
 														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
 														success: function(realize) {
-															console.log('wtf ile razy');
-															KTApp.unprogress(button);
-															button.attr('disabled', false);
 															//
 															if(realize.status == 'success') {
 																$('#is_realized_notify').show();
@@ -594,7 +591,9 @@ var KTROfferListDatatable = function() {
 																	"confirmButtonClass": "btn btn-secondary"
 																});
 																$('#summary_element').show();
+																KTApp.unprogress(button);
 																button.prop('disabled', true).text('Zapytanie zrealizowane');
+																datatable.reload();
 															} else {
 																swal.fire({
 																	"title": "",
@@ -602,8 +601,9 @@ var KTROfferListDatatable = function() {
 																	"type": realize.status,
 																	"confirmButtonClass": "btn btn-secondary"
 																});
+																KTApp.unprogress(button);
+																button.attr('disabled', false);
 															}
-															datatable.reload();
 														},
 														error: function(err) {
 															KTApp.unprogress(button);
