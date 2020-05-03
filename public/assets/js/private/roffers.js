@@ -578,6 +578,7 @@ var KTROfferListDatatable = function() {
 														method: 'POST',
 														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
 														success: function(realize) {
+															button.unbind();
 															//
 															if(realize.status == 'success') {
 																$('#is_realized_notify').show();
