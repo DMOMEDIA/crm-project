@@ -548,6 +548,8 @@ var KTROfferListDatatable = function() {
 			$('.show_offer_data').on('click', function() {
 				var id = $(this).attr('data-id');
 
+				console.log('ID: ' + id);
+
 				KTUtil.clearInputInForm(formEl);
 
 				KTApp.blockPage({ overlayColor: '#000000', type: 'v2', state: 'primary', message: 'Proszę czekać..' });
@@ -575,6 +577,7 @@ var KTROfferListDatatable = function() {
 														method: 'POST',
 														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
 														success: function(realize) {
+															console.log('wtf ile razy');
 															KTApp.unprogress(button);
 															button.attr('disabled', false);
 															//

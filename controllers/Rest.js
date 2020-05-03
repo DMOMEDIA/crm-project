@@ -1095,6 +1095,9 @@ exports.requestOfferDone = async (req, res) => {
     if(req.session.userData.role == 'administrator') {
       await ROffer.getOfferById(req.body.roffer_id, function(result) {
         result = result.toJSON();
+        console.log(result.state);
+        console.log('ID z forma: ' + req.body.roffer_id);
+        console.log('z bazy: ' + result.id);
 
         if(result.state == 2) {
           User.getUserPartner(result.client_info.user_id, e => {
