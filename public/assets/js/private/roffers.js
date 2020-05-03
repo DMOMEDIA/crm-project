@@ -567,7 +567,7 @@ var KTROfferListDatatable = function() {
 										modalEl.modal('show');
 
 										var button = $('#realize_roffer');
-										button.on('click', function() {
+										$(document).on('click', button, function(e) {
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
