@@ -567,7 +567,7 @@ var KTROfferListDatatable = function() {
 										modalEl.modal('show');
 
 										var button = $('#realize_roffer');
-										button.on('click', function(e) {
+										$('#provisions_form').on('submit', function(e) {
 											e.preventDefault();
 											if(provision_validator.form()) {
 												KTApp.progress(button);
@@ -576,7 +576,6 @@ var KTROfferListDatatable = function() {
 													$.ajax({
 														url: '/rest/roffer/done',
 														method: 'POST',
-														async: false,
 														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
 														success: function(realize) {
 															//
