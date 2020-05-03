@@ -548,7 +548,53 @@ var KTROfferListDatatable = function() {
 			$('.show_offer_data').on('click', function() {
 				var id = $(this).attr('data-id');
 
-				console.log('ID: ' + id);
+				var button = $('#realize_roffer');
+				button.on('click', function() {
+					console.log('click dwa razy?');
+					if(provision_validator.form()) {
+						KTApp.progress(button);
+						button.attr('disabled', true);
+						setTimeout(function() {
+							$.ajax({
+								url: '/rest/roffer/done',
+								method: 'POST',
+								data: $('#provisions_form').serialize() + '&roffer_id=' + id,
+								success: function(realize) {
+									//
+									if(realize.status == 'success') {
+										$('#is_realized_notify').show();
+										$('#provisions_form').find('input').prop('disabled',true);
+										$('#send_request_notify').hide();
+										swal.fire({
+											"title": "",
+											"text": realize.message,
+											"type": realize.status,
+											"confirmButtonClass": "btn btn-secondary"
+										});
+										$('#summary_element').show();
+										KTApp.unprogress(button);
+										button.prop('disabled', true).text('Zapytanie zrealizowane');
+										datatable.reload();
+									} else {
+										swal.fire({
+											"title": "",
+											"text": realize.message,
+											"type": realize.status,
+											"confirmButtonClass": "btn btn-secondary"
+										});
+										KTApp.unprogress(button);
+										button.attr('disabled', false);
+									}
+								},
+								error: function(err) {
+									KTApp.unprogress(button);
+									button.attr('disabled', false);
+									KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
+								}
+							});
+						}, 1000);
+					}
+				});
 
 				KTUtil.clearInputInForm(formEl);
 
@@ -565,55 +611,6 @@ var KTROfferListDatatable = function() {
 								if(res.client_info.user_id) {
 									if(res.status == null) {
 										modalEl.modal('show');
-
-										var button = $('#realize_roffer');
-										button.on('click', function() {
-											console.log('click dwa razy?');
-											if(provision_validator.form()) {
-												KTApp.progress(button);
-												button.attr('disabled', true);
-												setTimeout(function() {
-													$.ajax({
-														url: '/rest/roffer/done',
-														method: 'POST',
-														data: $('#provisions_form').serialize() + '&roffer_id=' + res.id,
-														success: function(realize) {
-															button.unbind();
-															//
-															if(realize.status == 'success') {
-																$('#is_realized_notify').show();
-																$('#provisions_form').find('input').prop('disabled',true);
-																$('#send_request_notify').hide();
-																swal.fire({
-																	"title": "",
-																	"text": realize.message,
-																	"type": realize.status,
-																	"confirmButtonClass": "btn btn-secondary"
-																});
-																$('#summary_element').show();
-																KTApp.unprogress(button);
-																button.prop('disabled', true).text('Zapytanie zrealizowane');
-																datatable.reload();
-															} else {
-																swal.fire({
-																	"title": "",
-																	"text": realize.message,
-																	"type": realize.status,
-																	"confirmButtonClass": "btn btn-secondary"
-																});
-																KTApp.unprogress(button);
-																button.attr('disabled', false);
-															}
-														},
-														error: function(err) {
-															KTApp.unprogress(button);
-															button.attr('disabled', false);
-															KTUtil.showNotifyAlert('danger', 'Wystąpił błąd podczas połączenia z serwerem.', 'Wystąpił błąd', 'flaticon-warning-sign');
-														}
-													});
-												}, 1000);
-											}
-										});
 
 										var status = {
 											1: {'title': 'Nowe', 'class': 'kt-font-brand'},
