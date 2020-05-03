@@ -505,7 +505,6 @@ var KTROfferListDatatable = function() {
 		btn = $('button[type="submit"]', formEl);
 
 		btn.on('click', function(e) {
-			console.log('click dwa razy?');
 			e.preventDefault();
 
 			if(validator.form()) {
@@ -569,6 +568,7 @@ var KTROfferListDatatable = function() {
 
 										var button = $('#realize_roffer');
 										button.on('click', function() {
+											console.log('click dwa razy?');
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
