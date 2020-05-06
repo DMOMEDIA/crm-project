@@ -154,10 +154,12 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             if(e.percentage_gap) {
               var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
+              console.log(i_prov);
             }
             if(e.percentage_acoc) {
               var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
+              console.log(i_prov);
             }
 
             provision = Math.round((provision*(pg_partner/100))*100)/100;
