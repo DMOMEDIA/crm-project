@@ -142,8 +142,6 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
       else if(otype == 'rent') var provision = (parseFloat(result.netto)*(prov.provision_rent/100));
       else provision = parseFloat(result.insurance_cost);
 
-      console.log(provision);
-
       new ROffer().where({ offer_id: offer_id + '/' + otype }).fetch()
       .then(function(e) {
         if(e) {
@@ -156,18 +154,14 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             if(e.percentage_gap) {
               var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
-              console.log(i_prov);
             }
             if(e.percentage_acoc) {
               var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
-              console.log(i_prov);
             }
 
-            provision = Math.round((provision*(pg_partner/100))*100)/100;
             provision = provision + i_prov;
-
-            console.log('Prowizja: ' + provision);
+            provision = Math.round((provision*(pg_partner/100))*100)/100;
 
             if(result.created_by != 0) {
               User.getUserPartner(result.created_by, cb => {
@@ -264,7 +258,6 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
     if(goNext == true) {
       if(p_partner > 0) {
         var provision_partner = Math.round((cdata.provision*(p_partner/100))*100)/100;
-        console.log(provision_partner);
 
         new Provision().where({ for: 'partner', offer_id: offer_id + '/' + offer_type }).fetch()
         .then(function(model) {
