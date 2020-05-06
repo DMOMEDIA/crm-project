@@ -163,6 +163,8 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             provision = Math.round((provision*(pg_partner/100))*100)/100;
             provision = provision + i_prov;
 
+            console.log('Prowizja: ' + provision);
+
             if(result.created_by != 0) {
               User.getUserPartner(result.created_by, cb => {
                 callback({
@@ -258,6 +260,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
     if(goNext == true) {
       if(p_partner > 0) {
         var provision_partner = Math.round((cdata.provision*(p_partner/100))*100)/100;
+        console.log(provision_partner);
 
         new Provision().where({ for: 'partner', offer_id: offer_id + '/' + offer_type }).fetch()
         .then(function(model) {
