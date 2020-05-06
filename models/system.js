@@ -149,14 +149,14 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
 
           if(e.percentage_partner) {
             var i_prov = parseFloat(0),
-            pg_partner = e.percentage_partner.split(' ')[0];
+            pg_partner = parseFloat(e.percentage_partner.split(' ')[0]);
 
             if(e.percentage_gap) {
-              var pg = e.percentage_gap.split(' ')[0];
+              var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
             }
             if(e.percentage_acoc) {
-              var pg = e.percentage_acoc.split(' ')[0];
+              var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
             }
 
@@ -189,11 +189,11 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             var i_prov = parseFloat(0);
 
             if(e.percentage_gap) {
-              var pg = e.percentage_gap.split(' ')[0];
+              var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
             }
             if(e.percentage_acoc) {
-              var pg = e.percentage_acoc.split(' ')[0];
+              var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
             }
 
