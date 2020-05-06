@@ -142,6 +142,8 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
       else if(otype == 'rent') var provision = (parseFloat(result.netto)*(prov.provision_rent/100));
       else provision = parseFloat(result.insurance_cost);
 
+      console.log(provision);
+
       new ROffer().where({ offer_id: offer_id + '/' + otype }).fetch()
       .then(function(e) {
         if(e) {
