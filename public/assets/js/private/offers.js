@@ -240,7 +240,7 @@ var KTOfferListDatatable = function() {
 														success: function(get_prov) {
 															$('#your_prov_box').show();
 															if(get_prov.your_prov) {
-																$('#your_provision').html(get_prov.your_prov);
+																$('#your_provision').html(get_prov.your_prov.toFixed(2));
 															}
 															else $('#your_provision').html('0.00');
 														},
@@ -261,7 +261,7 @@ var KTOfferListDatatable = function() {
 													if(response.prov_partner) {
 														$('input[name="partner_prov"]').val(response.prov_partner);
 														var a = Math.round((provision*(response.prov_partner.split(' ')[0]/100))*100)/100;
-														$('#pay_partner_prov').html(a);
+														$('#pay_partner_prov').html(a.toFixed(2));
 														//
 														$('#general_prov').html('0.00');
 														original_sum_perc += parseFloat(response.prov_partner.split(' ')[0]);
@@ -274,7 +274,7 @@ var KTOfferListDatatable = function() {
 													if(response.prov_agent) {
 														$('input[name="agent_prov"]').val(response.prov_agent);
 														var a = Math.round((provision*(response.prov_agent.split(' ')[0]/100))*100)/100;
-														$('#pay_agent_prov').html(a);
+														$('#pay_agent_prov').html(a.toFixed(2));
 														original_sum_perc += parseFloat(response.prov_agent.split(' ')[0]);
 													} else {
 														$('input[name="agent_prov"]').val('');
@@ -284,7 +284,7 @@ var KTOfferListDatatable = function() {
 													if(response.prov_employee) {
 														$('input[name="employee_prov"]').val(response.prov_employee);
 														var a = Math.round((provision*(response.prov_employee.split(' ')[0]/100))*100)/100;
-														$('#pay_employee_prov').html(a);
+														$('#pay_employee_prov').html(a.toFixed(2));
 														original_sum_perc += parseFloat(response.prov_employee.split(' ')[0]);
 													} else {
 														$('input[name="employee_prov"]').val('');
