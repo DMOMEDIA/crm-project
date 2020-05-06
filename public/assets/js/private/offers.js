@@ -265,13 +265,20 @@ var KTOfferListDatatable = function() {
 														//
 														$('#general_prov').html('0.00');
 														original_sum_perc += parseFloat(response.prov_partner.split(' ')[0]);
-													} else $('#general_prov').html(provision.toFixed(2));
+													} else {
+														$('#general_prov').html(provision.toFixed(2));
+														$('input[name="partner_prov"]').val('');
+														$('#pay_partner_prov').html('0.00');
+													}
 
 													if(response.prov_agent) {
 														$('input[name="agent_prov"]').val(response.prov_agent);
 														var a = Math.round((provision*(response.prov_agent.split(' ')[0]/100))*100)/100;
 														$('#pay_agent_prov').html(a);
 														original_sum_perc += parseFloat(response.prov_agent.split(' ')[0]);
+													} else {
+														$('input[name="agent_prov"]').val('');
+														$('#pay_agent_prov').html('0.00');
 													}
 
 													if(response.prov_employee) {
@@ -279,6 +286,9 @@ var KTOfferListDatatable = function() {
 														var a = Math.round((provision*(response.prov_employee.split(' ')[0]/100))*100)/100;
 														$('#pay_employee_prov').html(a);
 														original_sum_perc += parseFloat(response.prov_employee.split(' ')[0]);
+													} else {
+														$('input[name="employee_prov"]').val('');
+														$('#pay_employee_prov').html('0.00');
 													}
 
 													$('#general_perc').html(response.percentage);
