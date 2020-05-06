@@ -127,7 +127,7 @@ module.exports.savePartnerProvision = (user_id, values, callback) => {
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz przypisać prowizje, nie istnieje.' });
     });
   } else if(values.offer_type == 'rent') {
-    return new OfferRent().where({ id: id }).fetch()
+    return new OfferRent().where({ id: values.offer_id }).fetch()
     .then(function(model) {
       if(model) {
         if(model.get('state') < 4) {
@@ -155,7 +155,7 @@ module.exports.savePartnerProvision = (user_id, values, callback) => {
       } else callback({ status: 'error', message: 'Oferta dla której próbujesz przypisać prowizje, nie istnieje.' });
     });
   } else {
-    return new OfferInsurance().where({ id: id }).fetch()
+    return new OfferInsurance().where({ id: values.offer_id }).fetch()
     .then(function(model) {
       if(model) {
         if(model.get('state') < 4) {
