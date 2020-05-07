@@ -568,6 +568,7 @@ var KTROfferListDatatable = function() {
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
+												console.log('test');
 												setTimeout(function() {
 													$.ajax({
 														url: '/rest/roffer/done',
@@ -811,7 +812,7 @@ var KTROfferListDatatable = function() {
 											$('#summary_element').hide();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
-											$('#provisions_form').find('input').prop('disabled',true);
+											$('#provisions_form').find('input').prop('disabled',false);
 										}
 
 										if(userDataRole == 'administrator') {

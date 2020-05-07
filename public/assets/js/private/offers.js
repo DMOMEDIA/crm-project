@@ -450,25 +450,27 @@ var KTOfferListDatatable = function() {
 										method: 'POST',
 										data: { folder_path: 'offer/' + f_path },
 										success: function(res) {
-											if(res.files.length != 0) {
-												res.files.forEach(file => {
-													var extension = file.split('.');
-													modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
-															<div class="kt-widget4__pic kt-widget4__pic--icon">\
-																<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+											if(res.files) {
+												if(res.files.length != 0) {
+													res.files.forEach(file => {
+														var extension = file.split('.');
+														modalEl.find('#attached_files').append('\<div class="kt-widget4__item">\
+																<div class="kt-widget4__pic kt-widget4__pic--icon">\
+																	<img src="./assets/media/files/' + ext[extension[1]] + '.svg" alt="">\
+																</div>\
+																<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
+																<div class="kt-widget4__tools">\
+																	<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
+																		<i class="flaticon2-download"></i>\
+																	</a>\
+																	<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
+																		<i class="flaticon2-delete"></i>\
+																	</a>\
+																</div>\
 															</div>\
-															<a href="javascript:;" class="kt-widget4__title">' + file + '</a>\
-															<div class="kt-widget4__tools">\
-																<a href="javascript:;" data-path="' + f_path + '/' + file + '"  class="btn btn-clean btn-icon btn-sm download_file">\
-																	<i class="flaticon2-download"></i>\
-																</a>\
-																<a href="javascript:;" data-path="' + f_path + '/' + file + '" class="btn btn-clean btn-icon btn-sm remove_file">\
-																	<i class="flaticon2-delete"></i>\
-																</a>\
-															</div>\
-														</div>\
-													');
-												});
+														');
+													});
+												}
 											}
 										},
 										error: function(err) {
