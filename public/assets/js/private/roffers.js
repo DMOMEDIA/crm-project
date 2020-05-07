@@ -474,7 +474,12 @@ var KTROfferListDatatable = function() {
 									});
 									datatable.reload();
 								} else {
-									KTUtil.showNotifyAlert('danger', res.message, 'Wystąpił błąd', 'flaticon-warning-sign');
+									swal.fire({
+										"title": "",
+										"text": res.message,
+										"type": res.status,
+										"confirmButtonClass": "btn btn-secondary"
+									});
 								}
 							},
 							error: function(err) {
@@ -568,7 +573,6 @@ var KTROfferListDatatable = function() {
 											if(provision_validator.form()) {
 												KTApp.progress(button);
 												button.attr('disabled', true);
-												console.log('test');
 												setTimeout(function() {
 													$.ajax({
 														url: '/rest/roffer/done',

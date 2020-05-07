@@ -240,7 +240,7 @@ var KTOfferListDatatable = function() {
 														success: function(get_prov) {
 															$('#your_prov_box').show();
 															if(get_prov.your_prov) {
-																$('#your_provision').html(get_prov.your_prov.toFixed(2));
+																$('#your_provision').html(parseFloat(get_prov.your_prov).toFixed(2));
 															}
 															else $('#your_provision').html('0.00');
 														},
