@@ -538,8 +538,6 @@ var KTWizardOfferAdd = function () {
 										formEl.find('input[name="o_path"]').val(res.param.offer_path);
 										formEl.find('input[name="o_id"]').val(res.param.offer_id);
 
-										console.log(formEl.find('input[name="o_path"]').val());
-
 										// Send email
 										formEl.ajaxSubmit({
 											url: '/rest/offer/sendmail',
@@ -557,6 +555,7 @@ var KTWizardOfferAdd = function () {
 														"confirmButtonClass": "btn btn-secondary"
 													});
 
+													initRemoteData();
 													KTUtil.clearInputInForm(formEl);
 													wizard.goTo(1, true);
 												} else {
@@ -596,6 +595,7 @@ var KTWizardOfferAdd = function () {
 													"confirmButtonClass": "btn btn-secondary"
 												});
 
+												initRemoteData();
 												KTUtil.clearInputInForm(formEl);
 												wizard.goTo(1, true);
 											} else {
@@ -681,6 +681,7 @@ var KTWizardOfferAdd = function () {
 											"confirmButtonClass": "btn btn-secondary"
 										});
 										dzUpload.removeAllFiles();
+										initRemoteData();
 										KTUtil.clearInputInForm(formEl);
 										wizard.goTo(1, true);
 									});
