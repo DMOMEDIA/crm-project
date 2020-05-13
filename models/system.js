@@ -272,7 +272,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'partner',
-              value: provision_partner,
+              value: parseFloat(provision_partner),
               user_id: cdata.partner_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -297,7 +297,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'agent',
-              value: provision_agent,
+              value: parseFloat(provision_agent),
               user_id: cdata.agent_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -322,7 +322,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'employee',
-              value: provision_employee,
+              value: parseFloat(provision_employee),
               user_id: cdata.creator_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -337,7 +337,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
           if(model) {
             model.set('canceled', cancel);
             model.set('forecast', forecast);
-            model.set('value', cdata.provision);
+            model.set('value', parseFloat(cdata.provision));
             model.set('sell', 1);
             if(cdata.creator_id) model.set('user_id', cdata.creator_id);
 
@@ -346,7 +346,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'global',
-              value: cdata.provision,
+              value: parseFloat(cdata.provision),
               user_id: cdata.creator_id,
               sell: 1,
               offer_id: offer_id + '/' + offer_type,
