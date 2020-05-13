@@ -48,7 +48,8 @@ var KTWizardOfferAdd = function () {
 			var offerType = $('input[name="offer_type"]:checked').val();
 
 			if(wizard.getStep() == 1) {
-				initRemoteData();
+				$('#companiesRemote').val(null).trigger('change');
+				$('#clientsRemote').val(null).trigger('change');
 			}
 
 			if(wizard.getStep() == 2) {
