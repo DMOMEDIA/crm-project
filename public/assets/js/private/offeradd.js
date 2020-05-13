@@ -47,6 +47,11 @@ var KTWizardOfferAdd = function () {
 
 			var offerType = $('input[name="offer_type"]:checked').val();
 
+			if(wizard.getStep() == 1) {
+				$('#companiesRemote').html('').select2({data: [{id: '', text: ''}]});
+				$('#clientsRemote').html('').select2({data: [{id: '', text: ''}]});
+			}
+
 			if(wizard.getStep() == 2) {
 				$('#rofferlistRemote').html('').select2({data: [{id: '', text: ''}]});
 			  var data3 = [];
@@ -555,8 +560,6 @@ var KTWizardOfferAdd = function () {
 														"confirmButtonClass": "btn btn-secondary"
 													});
 
-													$('#companiesRemote').val('');
-													$('#clientsRemote').val('');
 													KTUtil.clearInputInForm(formEl);
 													wizard.goTo(1, true);
 												} else {
@@ -596,8 +599,6 @@ var KTWizardOfferAdd = function () {
 													"confirmButtonClass": "btn btn-secondary"
 												});
 
-												$('#companiesRemote').val('');
-												$('#clientsRemote').val('');
 												KTUtil.clearInputInForm(formEl);
 												wizard.goTo(1, true);
 											} else {
@@ -683,8 +684,6 @@ var KTWizardOfferAdd = function () {
 											"confirmButtonClass": "btn btn-secondary"
 										});
 										dzUpload.removeAllFiles();
-										$('#companiesRemote').val('');
-										$('#clientsRemote').val('');
 										KTUtil.clearInputInForm(formEl);
 										wizard.goTo(1, true);
 									});
