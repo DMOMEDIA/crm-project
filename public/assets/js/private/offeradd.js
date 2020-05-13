@@ -555,7 +555,8 @@ var KTWizardOfferAdd = function () {
 														"confirmButtonClass": "btn btn-secondary"
 													});
 
-													initRemoteData();
+													$('#companiesRemote').val('');
+													$('#clientsRemote').val('');
 													KTUtil.clearInputInForm(formEl);
 													wizard.goTo(1, true);
 												} else {
@@ -595,7 +596,8 @@ var KTWizardOfferAdd = function () {
 													"confirmButtonClass": "btn btn-secondary"
 												});
 
-												initRemoteData();
+												$('#companiesRemote').val('');
+												$('#clientsRemote').val('');
 												KTUtil.clearInputInForm(formEl);
 												wizard.goTo(1, true);
 											} else {
@@ -681,7 +683,8 @@ var KTWizardOfferAdd = function () {
 											"confirmButtonClass": "btn btn-secondary"
 										});
 										dzUpload.removeAllFiles();
-										initRemoteData();
+										$('#companiesRemote').val('');
+										$('#clientsRemote').val('');
 										KTUtil.clearInputInForm(formEl);
 										wizard.goTo(1, true);
 									});
