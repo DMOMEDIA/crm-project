@@ -508,7 +508,7 @@ var KTWizardOfferAdd = function () {
 				btn_mail.attr('disabled', true);
 
 				// Status oferty = Oczekująca
-				formEl.find('[name="o_state"]').val('2');
+				formEl.find('input[name="o_state"]').val('2');
 
 				setTimeout(function() {
 					$.ajax({
@@ -535,8 +535,10 @@ var KTWizardOfferAdd = function () {
 
 									dzUpload.on("successmultiple", function(file, resp) {
 										dzUpload.removeAllFiles();
-										formEl.find('[name="o_path"]').val(res.param.offer_path);
-										formEl.find('[name="o_id"]').val(res.param.offer_id);
+										formEl.find('input[name="o_path"]').val(res.param.offer_path);
+										formEl.find('input[name="o_id"]').val(res.param.offer_id);
+
+										console.log(formEl.find('input[name="o_path"]').val());
 
 										// Send email
 										formEl.ajaxSubmit({
@@ -576,7 +578,7 @@ var KTWizardOfferAdd = function () {
 										formData.append('folder_path', res.param.offer_path);
 									});
 								} else {
-									formEl.find('[name="o_id"]').val(res.param.offer_id);
+									formEl.find('input[name="o_id"]').val(res.param.offer_id);
 									// Send email
 									formEl.ajaxSubmit({
 										url: '/rest/offer/sendmail',
