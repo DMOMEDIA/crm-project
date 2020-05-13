@@ -233,6 +233,8 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
   module.exports.calculateProvisionFromOffer(offer_id, offer_type, function(result) {
     var cdata = result, p_partner = 0, p_agent = 0, p_employee = 0, p_crm = 0;
 
+    console.log(cdata);
+
     if(cdata.prov_partner) p_partner = parseFloat(cdata.prov_partner.split(' ')[0]);
     if(cdata.prov_agent) p_agent = parseFloat(cdata.prov_agent.split(' ')[0]);
     if(cdata.prov_employee) p_employee = parseFloat(cdata.prov_employee.split(' ')[0]);
