@@ -151,11 +151,11 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             var i_prov = parseFloat(0),
             pg_partner = parseFloat(e.percentage_partner.split(' ')[0]);
 
-            if(e.percentage_gap) {
+            if(e.percentage_gap && result.gap_rata) {
               var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
             }
-            if(e.percentage_acoc) {
+            if(e.percentage_acoc && result.acoc_rata) {
               var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
             }
@@ -188,11 +188,11 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
           } else {
             var i_prov = parseFloat(0);
 
-            if(e.percentage_gap) {
+            if(e.percentage_gap && result.gap_rata) {
               var pg = parseFloat(e.percentage_gap.split(' ')[0]);
               i_prov += (parseFloat(result.gap_rata)*(pg/100));
             }
-            if(e.percentage_acoc) {
+            if(e.percentage_acoc && result.acoc_rata) {
               var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
               i_prov += (parseFloat(result.acoc_rata)*(pg/100));
             }

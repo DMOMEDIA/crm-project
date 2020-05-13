@@ -501,9 +501,6 @@ module.exports.createOffer = (req, partner_val, callback) => {
       prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
-      if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
-      else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
-      else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
 
       for(var i = 0; i <= value.variant.length-1; i++) {
         new LeasingVariants({
