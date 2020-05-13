@@ -677,14 +677,14 @@ block content
                                   |                                                        
                                   span.form-text.text-muted.kt-font-brand.kt-font-bold
                                     | Przed wysłaniem oferty pamiętaj aby umieścić dokument zawierający ofertę.
-                            #realize_offer_element(style='display:none;')
+                            form#realize_offer_element(style='display:none;')
                               .form-group.form-group-last.row
                                 label.col-xl-4.col-lg-4.col-form-label Realizacja/anulowanie oferty
                                 |                                         
                                 .col-lg-8.col-xl-8
-                                  button#realize_offer_btn.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Zrealizuj ofertę
+                                  button#realize_offer_btn.btn.btn-label-success.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit', name='realize_offer_btn') Zrealizuj ofertę
                                   |                                         
-                                  button#cancel_offer_btn.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit') Anuluj ofertę
+                                  button#cancel_offer_btn.btn.btn-label-danger.btn-bold.btn-sm.kt-margin-t-5.kt-margin-b-5(type='submit', name='cancel_offer_btn') Anuluj ofertę
                                   |                                         
                                   span.form-text.text-muted.kt-font-brand.kt-font-bold
                                     | Przed realizacją oferty należy umieścić w systemie wszystkie wymagane dokumenty klienta (podpisane umowy itp.).

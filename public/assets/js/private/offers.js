@@ -1156,9 +1156,11 @@ var KTOfferListDatatable = function() {
 	}
 
 	var initRealizeButtons = function() {
-		var btn_send = $('#send_offer_btn'),
-		btn_realize = $('#realize_offer_btn'),
-		btn_cancel = $('#cancel_offer_btn');
+		var formSendOffer = $('#send_offer_element'),
+		formRealizeOffer = $('#realize_offer_element');
+		var btn_send = $('button[type="submit"]', formSendOffer),
+		btn_realize = $('button[name="realize_offer_btn"]', formRealizeOffer),
+		btn_cancel = $('button[name="cancel_offer_btn"]', formRealizeOffer);
 
 		btn_send.on('click', function() {
 			KTApp.progress(btn_send);
