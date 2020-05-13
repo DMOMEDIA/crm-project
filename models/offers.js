@@ -501,6 +501,13 @@ module.exports.createOffer = (req, partner_val, callback) => {
       prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
+      // Przypisanie oferty do zapytania ofertowego
+      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
+      });
 
       for(var i = 0; i <= value.variant.length-1; i++) {
         new LeasingVariants({
@@ -512,9 +519,6 @@ module.exports.createOffer = (req, partner_val, callback) => {
           okres: value.variant[i]['contract']
         }).save();
       }
-
-      // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type);
 
       callback('offer_' + result.get('id') + '_L_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/L/' + moment().format('YYYY') + '</b>.');
@@ -538,12 +542,13 @@ module.exports.createOffer = (req, partner_val, callback) => {
       prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
-      if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
-      else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
-      else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
-
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type);
+      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
+      });
 
       callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
@@ -577,12 +582,13 @@ module.exports.createOffer = (req, partner_val, callback) => {
       prov_partner: p_val,
       created_by: req.session.userData.id
     }).save().then(function(result) {
-      if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
-      else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
-      else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
-
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type);
+      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
+      });
 
       callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/R/' + moment().format('YYYY') + '</b>.');
