@@ -502,7 +502,7 @@ module.exports.createOffer = (req, partner_val, callback) => {
       created_by: req.session.userData.id
     }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
       .then(async function() {
         if(result.get('state') < 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
         else if(result.get('state') == 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
@@ -583,7 +583,7 @@ module.exports.createOffer = (req, partner_val, callback) => {
       created_by: req.session.userData.id
     }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
       .then(async function() {
         if(result.get('state') < 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
         else if(result.get('state') == 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
