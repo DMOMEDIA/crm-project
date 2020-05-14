@@ -274,7 +274,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'partner',
-              value: parseFloat(provision_partner),
+              value: provision_partner,
               user_id: cdata.partner_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -299,7 +299,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'agent',
-              value: parseFloat(provision_agent),
+              value: provision_agent,
               user_id: cdata.agent_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -324,7 +324,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'employee',
-              value: parseFloat(provision_employee),
+              value: provision_employee,
               user_id: cdata.creator_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
@@ -348,7 +348,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'global',
-              value: parseFloat(cdata.provision),
+              value: cdata.provision,
               user_id: cdata.creator_id,
               sell: 1,
               offer_id: offer_id + '/' + offer_type,
