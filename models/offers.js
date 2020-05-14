@@ -581,13 +581,13 @@ module.exports.createOffer = (req, partner_val, callback) => {
       state: value.o_state,
       prov_partner: p_val,
       created_by: req.session.userData.id
-    }).save().then(function(result) {
+    }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
-      .then(function() {
-        if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
-        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
-        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(async function() {
+        if(result.get('state') < 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) await System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else await System.changeProvision(result.get('id'), result.get('offer_type'), false, false);
       });
 
       callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'), result.get('id'));
