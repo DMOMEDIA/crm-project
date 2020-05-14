@@ -8,6 +8,7 @@ const Messages = require('../config/messages');
 const Notification = require('../models/notifications');
 const ClientsModel = require('../models/clients');
 const Mails = require('../controllers/Mails');
+const System = require('../models/system');
 
 const ROffer = bookshelf.Model.extend({
   tableName: 'crm_offer_requests',
@@ -117,12 +118,18 @@ module.exports.updateProvisions = (values) => {
   });
 };
 
-module.exports.setValueById = (id, name, data) => {
+module.exports.setValueById = (id, name, data, o_result) => {
   return new ROffer().where({ id: id }).fetch()
   .then(function(model) {
     if(model) {
       if(data) model.set(name, data);
-      model.save();
+      model.save().then(function(done) {
+        if(o_result) {
+          if(o_result.get('state') < 3) System.changeProvision(o_result.get('id'), o_result.get('offer_type'), true, false);
+          else if(o_result.get('state') == 3) System.changeProvision(o_result.get('id'), o_result.get('offer_type'), true, true);
+          else System.changeProvision(o_result.get('id'), o_result.get('offer_type'), false, false);
+        }
+      });
     }
   });
 };
