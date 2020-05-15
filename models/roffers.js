@@ -123,7 +123,6 @@ module.exports.setValueById = (id, name, data) => {
   .then(function(model) {
     if(model) {
       if(data) model.set(name, data);
-      console.log('Set value ' + name + ' successfully.');
       model.save();
     }
   });
