@@ -37,7 +37,7 @@ module.exports.getUserProvision = async (id, dateFrom, callback) => {
       }
       cb();
     }, function() {
-      callback({ prov_forecast: provision_f, prov_normal: provision, prov_canceled: provision_c, prov_sell:  });
+      callback({ prov_forecast: provision_f, prov_normal: provision, prov_canceled: provision_c, prov_sell: provision_s });
     });
   });
 };
