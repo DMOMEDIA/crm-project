@@ -1125,7 +1125,7 @@ exports.requestOfferDone = async (req, res) => {
 
 exports.calculateProvFromOffer = (req, res) => {
   if(req.isAuthenticated()) {
-    System.calculateProvisionFromOffer(req.body.offer_id, null, req.body.type, result => {
+    System.calculateProvisionFromOffer(req.body.offer_id, req.body.type, result => {
       res.json(result);
     });
   }

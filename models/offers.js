@@ -504,9 +504,11 @@ module.exports.createOffer = (req, partner_val, callback) => {
       // Przypisanie oferty do zapytania ofertowego
       await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
       .then(function() {
-        if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
-        else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
-        else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        if(value.o_state > 1) {
+          if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
+          else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
+          else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        }
       });
 
       for(var i = 0; i <= value.variant.length-1; i++) {
@@ -545,9 +547,11 @@ module.exports.createOffer = (req, partner_val, callback) => {
       // Przypisanie oferty do zapytania ofertowego
       await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
       .then(function() {
-        if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
-        else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
-        else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        if(value.o_state > 1) {
+          if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
+          else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
+          else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        }
       });
 
       callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'), result.get('id'));
@@ -585,9 +589,11 @@ module.exports.createOffer = (req, partner_val, callback) => {
       // Przypisanie oferty do zapytania ofertowego
       await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
       .then(function() {
-        if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
-        else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
-        else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        if(value.o_state > 1) {
+          if(result.get('state') < 3) System.changeProvision(result.get('id'), value.offer_type, true, false);
+          else if(result.get('state') == 3) System.changeProvision(result.get('id'), value.offer_type, true, true);
+          else System.changeProvision(result.get('id'), value.offer_type, false, false);
+        }
       });
 
       callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'), result.get('id'));
