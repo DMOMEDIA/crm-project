@@ -161,10 +161,11 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             }
 
             provision = provision + i_prov;
-            provision = Math.round((provision*(pg_partner/100))*100)/100;
 
             if(result.created_by != 0) {
               User.getUserPartner(result.created_by, cb => {
+                if(cb.partner) provision = Math.round((provision*(pg_partner/100))*100)/100;
+
                 callback({
                   provision: provision,
                   percentage: pg_partner,
@@ -178,13 +179,7 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
                   prov_employee: result.prov_employee
                 });
               });
-            } else callback({
-              provision: provision,
-              percentage: pg_partner,
-              prov_partner: result.prov_partner,
-              prov_agent: result.prov_agent,
-              prov_employee: result.prov_employee
-            });
+            }
           } else {
             var i_prov = parseFloat(0);
 
@@ -247,12 +242,12 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
     } else if(cdata.message == 'user_has_partner' && cdata.role == 'posrednik') {
       var sum = p_partner + p_agent;
       if(sum == 100) goNext = true;
-    } else if(cdata.message == 'provision_for_crm' || cdata.message == 'user_no_partner') {
-      p_crm = 100;
-      goNext = true;
-    } else {
+    } else if(cdata.message == 'user_has_partner' && cdata.role == 'pracownik') {
       var sum = p_partner + p_employee;
       if(sum == 100) goNext = true;
+    } else {
+      p_crm = 100;
+      goNext = true;
     }
 
     if(goNext == true) {
