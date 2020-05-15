@@ -171,6 +171,7 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
 
                 callback({
                   provision: provision,
+                  percentage: pg_partner,
                   prov_crm: prov_crm,
                   perc_crm: (100-pg_partner),
                   message: cb.message,
@@ -200,6 +201,7 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
 
             callback({
               provision: null,
+              percentage: null,
               prov_crm: provision,
               perc_crm: 100,
               message: 'provision_for_crm',
@@ -212,6 +214,7 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
           }
         } else callback({
           provision: null,
+          percentage: null,
           prov_crm: null,
           perc_crm: null,
           partner_id: null,
