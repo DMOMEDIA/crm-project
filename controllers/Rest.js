@@ -986,7 +986,7 @@ exports.requestOfferSendMail = (req, res) => {
   if(req.isAuthenticated()) {
     if(req.session.userData.role == 'administrator') {
       if(req.body != null) {
-        ROffer.setValueById(req.body.data.id, 'state', 2, null);
+        ROffer.setValueById(req.body.data.id, 'state', 2);
         ROffer.getOfferById(req.body.data.id, async function(cb) {
           cb = cb.toJSON();
 
@@ -1110,7 +1110,7 @@ exports.requestOfferDone = async (req, res) => {
                 });
               } else res.json({ status: 'error', message: 'Procent prowizji dla partnera nie został ustanowiony, ustaw prowizję dla partnera i spróbuj ponownie.' });
             } else {
-              ROffer.setValueById(result.id, 'state', 3, null);
+              ROffer.setValueById(result.id, 'state', 3);
               Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
               .then(function(done) {
                 res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });

@@ -118,19 +118,13 @@ module.exports.updateProvisions = (values) => {
   });
 };
 
-module.exports.setValueById = (id, name, data, o_result) => {
+module.exports.setValueById = (id, name, data) => {
   return new ROffer().where({ id: id }).fetch()
   .then(function(model) {
     if(model) {
       if(data) model.set(name, data);
-      model.save().then(function(done) {
-        if(o_result) {
-          console.log('Before: ' + o_result.get('id') + '/' + o_result.get('offer_type'));
-          if(o_result.get('state') < 3) System.changeProvision(o_result.get('id'), o_result.get('offer_type'), true, false);
-          else if(o_result.get('state') == 3) System.changeProvision(o_result.get('id'), o_result.get('offer_type'), true, true);
-          else System.changeProvision(o_result.get('id'), o_result.get('offer_type'), false, false);
-        }
-      });
+      console.log('Set value ' + name + ' successfully.');
+      model.save();
     }
   });
 };

@@ -502,7 +502,14 @@ module.exports.createOffer = (req, partner_val, callback) => {
       created_by: req.session.userData.id
     }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type, result);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        result = result.toJSON();
+        console.log(result);
+        /* if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false); */
+      });
 
       for(var i = 0; i <= value.variant.length-1; i++) {
         new LeasingVariants({
@@ -536,9 +543,16 @@ module.exports.createOffer = (req, partner_val, callback) => {
       state: value.o_state,
       prov_partner: p_val,
       created_by: req.session.userData.id
-    }).save().then(function(result) {
+    }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type, result);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        result = result.toJSON();
+        console.log(result);
+        /* if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false); */
+      });
 
       callback('offer_' + result.get('id') + '_I_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/I/' + moment().format('YYYY') + '</b>.');
@@ -571,9 +585,16 @@ module.exports.createOffer = (req, partner_val, callback) => {
       state: value.o_state,
       prov_partner: p_val,
       created_by: req.session.userData.id
-    }).save().then(function(result) {
+    }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type, result);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type)
+      .then(function() {
+        result = result.toJSON();
+        console.log(result);
+        /* if(result.get('state') < 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, false);
+        else if(result.get('state') == 3) System.changeProvision(result.get('id'), result.get('offer_type'), true, true);
+        else System.changeProvision(result.get('id'), result.get('offer_type'), false, false); */
+      });
 
       callback('offer_' + result.get('id') + '_R_' + moment().format('YYYY'), result.get('id'));
       Notification.sendNotificationByRole('administrator', 'flaticon2-add-square kt-font-success', 'Pracownik <b>' + req.session.userData.fullname + '</b> dodał ofertę <b>00' + result.get('id') + '/R/' + moment().format('YYYY') + '</b>.');
