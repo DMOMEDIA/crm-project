@@ -242,10 +242,10 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
       if(sum == 100) goNext = true;
     } else if(cdata.message == 'user_is_partner') {
       if(p_partner == 100) goNext = true;
-    } else if(cdata.message == 'user_has_partner' && cdata.role == 'posrednik') {
+    } else if(cdata.message == 'user_has_partner' && cdata.creator_role == 'posrednik') {
       var sum = p_partner + p_agent;
       if(sum == 100) goNext = true;
-    } else if(cdata.message == 'user_has_partner' && cdata.role == 'pracownik') {
+    } else if(cdata.message == 'user_has_partner' && cdata.creator_role == 'pracownik') {
       var sum = p_partner + p_employee;
       if(sum == 100) goNext = true;
     } else {

@@ -253,7 +253,7 @@ var KTOfferListDatatable = function() {
 														$('#partner_prov_box,#agent_prov_box,#employee_prov_box').show();
 													} else if(response.message == 'user_is_partner') {
 														$('#partner_prov_box').show();
-													} else if(response.message == 'user_has_partner' && response.role == 'posrednik') {
+													} else if(response.message == 'user_has_partner' && response.creator_role == 'posrednik') {
 														$('#partner_prov_box,#agent_prov_box').show();
 													} else {
 														$('#partner_prov_box,#employee_prov_box').show();
