@@ -500,9 +500,9 @@ module.exports.createOffer = (req, partner_val, callback) => {
       state: value.o_state,
       prov_partner: p_val,
       created_by: req.session.userData.id
-    }).save().then(function(result) {
+    }).save().then(async function(result) {
       // Przypisanie oferty do zapytania ofertowego
-      RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type, result);
+      await RequestOffers.setValueById(value.roffer_id, 'offer_id', result.get('id') + '/' + value.offer_type, result);
 
       for(var i = 0; i <= value.variant.length-1; i++) {
         new LeasingVariants({
