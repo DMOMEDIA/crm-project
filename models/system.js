@@ -291,7 +291,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             model.set('canceled', cancel);
             model.set('forecast', forecast);
             model.set('value', provision_agent);
-            if(cdata.agent_id) model.set('user_id', cdata.agent_id);
+            if(cdata.creator_id) model.set('user_id', cdata.creator_id);
 
             model.save();
           } else {
