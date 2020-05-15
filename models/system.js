@@ -164,7 +164,10 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
 
             if(result.created_by != 0) {
               User.getUserPartner(result.created_by, cb => {
-                if(cb.partner) provision = Math.round((provision*(pg_partner/100))*100)/100;
+                if(cb.partner) {
+                   provision = Math.round((provision*(pg_partner/100))*100)/100;
+                   prov_crm = Math.round((provision*((100-pg_partner)/100))*100)/100;
+                }
 
                 callback({
                   provision: provision,
