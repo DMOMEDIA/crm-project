@@ -23,21 +23,21 @@ module.exports.getUserProvision = async (id, dateFrom, callback) => {
   return new User().where({ id: id }).fetch({ withRelated: ['provision'] })
   .then(function(result) {
     var data = result.toJSON(),
-    provision_f = parseFloat(0), provision = parseFloat(0), provision_c = parseFloat(0);
+    provision_f = parseFloat(0), provision = parseFloat(0), provision_c = parseFloat(0), provision_s = parseFloat(0);
 
     async.each(data.provision, function(element, cb) {
       if(moment(element.created_at).local().diff(date) >= 0) {
-        if(element.sell == true || element.sell == false) return;
         if(element.canceled == true) {
           provision_c += parseFloat(element.value);
         } else {
-          if(element.forecast == true) provision_f += parseFloat(element.value);
+          if(element.sell == true) provision_s += parseFloat(element.value);
+          else if(element.forecast == true) provision_f += parseFloat(element.value);
           else provision += parseFloat(element.value);
         }
       }
       cb();
     }, function() {
-      callback({ prov_forecast: provision_f, prov_normal: provision, prov_canceled: provision_c });
+      callback({ prov_forecast: provision_f, prov_normal: provision, prov_canceled: provision_c, prov_sell:  });
     });
   });
 };
