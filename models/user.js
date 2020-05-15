@@ -27,7 +27,7 @@ module.exports.getUserProvision = async (id, dateFrom, callback) => {
 
     async.each(data.provision, function(element, cb) {
       if(moment(element.created_at).local().diff(date) >= 0) {
-        if(element.sell == true || element.sell == false) continue;
+        if(element.sell == true || element.sell == false) return;
         if(element.canceled == true) {
           provision_c += parseFloat(element.value);
         } else {
