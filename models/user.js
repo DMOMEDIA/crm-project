@@ -82,7 +82,7 @@ module.exports.getUserPartner = (id, callback) => {
             } else callback({ partner: null, agent: null, message: 'user_no_partner' });
           } else callback({ partner: null, agent: null, message: 'user_no_partner' });
         });
-      } else callback({ partner: null, agent: null, message: 'user_is_not_assigned' });
+      } else callback({ partner: null, agent: null, message: 'user_no_partner' });
     } else callback(Messages.message('not_found_user_identity', null));
   });
 };
