@@ -171,7 +171,8 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
 
                 callback({
                   provision: provision,
-                  percentage: pg_partner,
+                  prov_crm: prov_crm,
+                  perc_crm: (100-pg_partner),
                   message: cb.message,
                   creator_role: cb.role,
                   partner_id: cb.partner,
@@ -198,8 +199,9 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             provision = provision + i_prov;
 
             callback({
-              provision: provision,
-              percentage: 100,
+              provision: null,
+              prov_crm: provision,
+              perc_crm: 100,
               message: 'provision_for_crm',
               creator_id: result.created_by,
               partner_id: null,
@@ -210,7 +212,8 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
           }
         } else callback({
           provision: null,
-          percentage: null,
+          prov_crm: null,
+          perc_crm: null,
           partner_id: null,
           message: 'provision_for_crm',
           prov_partner: null,
@@ -248,10 +251,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
     } else if(cdata.message == 'user_has_partner' && cdata.creator_role == 'pracownik') {
       var sum = p_partner + p_employee;
       if(sum == 100) goNext = true;
-    } else {
-      p_crm = 100;
-      goNext = true;
-    }
+    } else goNext = true;
 
     if(goNext == true) {
       if(p_partner > 0) {
@@ -296,7 +296,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
               canceled: cancel,
               for: 'agent',
               value: parseFloat(provision_agent),
-              user_id: cdata.agent_id,
+              user_id: cdata.creator_id,
               offer_id: offer_id + '/' + offer_type,
               forecast: forecast
             }).save();
@@ -329,13 +329,13 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
         });
       }
 
-      if(p_crm > 0) {
+      if(cdata.perc_crm > 0) {
         new Provision().where({ for: 'global', offer_id: offer_id + '/' + offer_type }).fetch()
         .then(function(model) {
           if(model) {
             model.set('canceled', cancel);
             model.set('forecast', forecast);
-            model.set('value', parseFloat(cdata.provision));
+            model.set('value', parseFloat(cdata.prov_crm));
             model.set('sell', 1);
             if(cdata.creator_id) model.set('user_id', cdata.creator_id);
 
@@ -344,7 +344,7 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             new Provision({
               canceled: cancel,
               for: 'global',
-              value: parseFloat(cdata.provision),
+              value: parseFloat(cdata.prov_crm),
               user_id: cdata.creator_id,
               sell: 1,
               offer_id: offer_id + '/' + offer_type,
