@@ -77,7 +77,7 @@ module.exports.getUserPartner = (id, callback) => {
                 if(result.isPartner == true && result.role == 'kierownik') {
                   jsonCallback.partner = result.id;
                   jsonCallback.message = 'partner_and_agent_found';
-                  callback(jsonValue);
+                  callback(jsonCallback);
                 } else callback({ partner: null, agent: null, message: 'user_no_partner' });
               });
             } else callback({ partner: null, agent: null, message: 'user_no_partner' });
