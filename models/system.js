@@ -280,6 +280,11 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             }).save();
           }
         });
+      } else {
+        new Provision().where({ for: 'partner', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) model.destroy();
+        });
       }
 
       if(p_agent > 0) {
@@ -305,6 +310,11 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
             }).save();
           }
         });
+      } else {
+        new Provision().where({ for: 'agent', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) model.destroy();
+        });
       }
 
       if(p_employee > 0) {
@@ -329,6 +339,11 @@ module.exports.changeProvision = (offer_id, offer_type, forecast, cancel) => {
               forecast: forecast
             }).save();
           }
+        });
+      } else {
+        new Provision().where({ for: 'employee', offer_id: offer_id + '/' + offer_type }).fetch()
+        .then(function(model) {
+          if(model) model.destroy();
         });
       }
 
