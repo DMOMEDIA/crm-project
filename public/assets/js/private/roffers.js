@@ -1304,6 +1304,7 @@ var KTROfferListDatatable = function() {
 			initValidationCompany();
 			initSubmitData();
 			initSendOfferCompanies();
+			initProvisionForm();
 			initFileButtons();
 			initDropzone();
 			selection();
