@@ -66,7 +66,7 @@ app.use(function(req, res, next) {
  res.locals.userPermissions = req.session.userPermissions || null;
 
  // Wersja aplikacji
- res.locals.version_app = '1.7.1.9 beta';
+ res.locals.version_app = '1.8.1.2 beta';
 
  ExpireSession.sessionStatus(req, res, next);
  next();
