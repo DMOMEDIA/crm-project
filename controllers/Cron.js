@@ -7,3 +7,9 @@ exports.ScheduleEveryDay = () => {
     System.archiveStats('provision_forecast');
   }, null, true, 'Europe/Warsaw');
 };
+
+exports.loopHandler = () => {
+  setInterval(function() {
+    System.checkExpiredOffers();
+  }, 10000);
+};

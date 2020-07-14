@@ -5,7 +5,8 @@ var KTDashboard = function() {
 		var topbar_notify = $('#topbar_notifications_notify'),
 		cnt_notify = $('#count_notify'),
 		unread = 0,
-		audioElement = null;
+		audioElement = null,
+		app_version = '1.8.1.2 beta';
 
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
@@ -118,6 +119,20 @@ var KTDashboard = function() {
 
 						if(res.unread > 0 && res.unread < 5) cnt_notify.html(res.unread + ' nowe');
 						else cnt_notify.html(res.unread + ' nowych');
+					}
+
+					if($('h3.kt-subheader__title').html() == 'Pulpit nawigacyjny') {
+						if(unread > 0) {
+							if(unread == 1) var string = 'Masz ' + unread + ' nieodczytane powiadomienie.';
+							if(unread >= 2 && unread <= 4) var string = 'Masz ' + unread + ' nieodczytane powiadomienia.';
+							if(unread >= 5) var string = 'Masz ' + unread + ' nieodczytanych powiadomień.';
+
+							KTUtil.showNotifyAlert('warning', string, 'Powiadomienia', 'flaticon-alert');
+							audioElement.play();
+						}
+
+						if(moment('2020-07-17 00:00:00').unix() > moment().unix())
+							KTUtil.showNotifyAlert('success', 'Aplikacja została zaktualizowana do najnowszej wersji.</br>Sprawdź <a href="/dashboard/system"><b>historię zmian</b></a>.', 'Aktualizacja ' + app_version, 'flaticon-download');
 					}
 
 					if(res.notifications.length > 0) {

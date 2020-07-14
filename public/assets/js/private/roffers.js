@@ -177,6 +177,9 @@ var KTROfferListDatatable = function() {
 				},
 				percentage_acoc: {
 					required: true
+				},
+				realise_time: {
+					required: true
 				}
 			},
 			// Display error
@@ -411,7 +414,7 @@ var KTROfferListDatatable = function() {
 										$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 										$('#summary_element').show();
 										formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
-										$('#provisions_form').find('input').prop('disabled',false);
+										$('#provisions_form').find('input,select').prop('disabled',false);
 
 										swal.fire({
 											"title": "",
@@ -738,6 +741,8 @@ var KTROfferListDatatable = function() {
 										modalEl.find('textarea[name="attentions"]').val(res.attentions);
 										modalEl.find('textarea[name="other"]').val(res.other);
 
+										modalEl.find('select[name="realise_time"] option[value="' + res.realise_add + '"]').prop('selected', true);
+
 										$('#list_of_companies').html('');
 										initCompanySentList(res.id);
 
@@ -754,7 +759,7 @@ var KTROfferListDatatable = function() {
 											$('#realize_roffer').prop('disabled', true).text('Zapytanie zrealizowane');
 											//
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
-											$('#provisions_form').find('input').prop('disabled',true);
+											$('#provisions_form').find('input,select').prop('disabled',true);
 										} else if(res.state == 2) {
 											$('#is_realized_notify').hide();
 											$('#send_request_notify').show();
@@ -762,7 +767,7 @@ var KTROfferListDatatable = function() {
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											$('#summary_element').show();
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', true);
-											$('#provisions_form').find('input').prop('disabled',false);
+											$('#provisions_form').find('input,select').prop('disabled',false);
 										} else {
 											$('#send_request_notify').hide();
 											$('#is_realized_notify').hide();
@@ -770,8 +775,10 @@ var KTROfferListDatatable = function() {
 											$('#summary_element').hide();
 											$('#realize_roffer').prop('disabled', false).text('Zrealizuj zapytanie');
 											formEl.find('input,select,textarea,button').not('button[data-dismiss="modal"],#realize_roffer,[type=hidden]').prop('disabled', false);
-											$('#provisions_form').find('input').prop('disabled',false);
+											$('#provisions_form').find('input,select').prop('disabled',false);
 										}
+
+										$('#realise_time').selectpicker('refresh');
 
 										if(userDataRole == 'administrator') {
 											$.ajax({
@@ -931,7 +938,8 @@ var KTROfferListDatatable = function() {
 							//
 							if(realize.status == 'success') {
 								$('#is_realized_notify').show();
-								$('#provisions_form').find('input').prop('disabled',true);
+								$('#provisions_form').find('input,select').prop('disabled',true);
+								$('#realise_time').selectpicker('refresh');
 								$('#send_request_notify').hide();
 								swal.fire({
 									"title": "",

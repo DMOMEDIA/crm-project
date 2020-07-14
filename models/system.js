@@ -4,6 +4,7 @@ const moment = require('moment');
 const Company = require('../models/companies');
 const Offers = require('../models/offers');
 const RequestOffers = require('../models/roffers');
+const Notification = require('../models/notifications');
 const User = require('../models/user');
 
 const Statistics = bookshelf.Model.extend({
@@ -40,6 +41,70 @@ module.exports.createLog = (type, log) => {
     type: type,
     log: log
   }).save();
+};
+
+module.exports.checkExpiredOffers = () => {
+  RequestOffers.getClientOffers(function(data, nums) {
+    data.forEach(element => {
+      element = element.toJSON();
+
+      if(element.realise_time && element.offer_id == null) {
+        var splitted = element.realise_add.split(' ');
+        var expiration_unix = moment(element.realise_time).add(splitted[0], splitted[1]).unix();
+
+        var diff = expiration_unix - moment().unix();
+
+        if(element.realise_add == '30 minutes') {
+          if(diff <= 900) {
+            if(element.warning_notify <= 2) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostało <b>15 minut</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 3);
+            }
+          }
+        } else if(element.realise_add == '1 hours') {
+          if(diff <= 900) {
+            if(element.warning_notify <= 2) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostało <b>15 minut</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 3);
+            }
+          } else if(diff <= 1800) {
+            if(element.warning_notify <= 1) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostało <b>30 minut</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 2);
+            }
+          }
+        } else {
+          if(diff <= 900) {
+            if(element.warning_notify <= 2) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostało <b>15 minut</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 3);
+            }
+          } else if(diff <= 1800) {
+            if(element.warning_notify <= 1) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostało <b>30 minut</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 2);
+            }
+          } else if(diff <= 3600) {
+            if(element.warning_notify == 0) {
+              Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning kt-font-warning', 'Czas realizacji zapytania ofertowego <b>00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiega końca, pozostała <b>1 godzina</b>.');
+              RequestOffers.setValueById(element.id, 'warning_notify', 1);
+            }
+          }
+        }
+
+        if(diff <= 0) {
+          User.getUserById(['fullname'], element.client_info.user_id).then(function(user) {
+            user = user.toJSON();
+
+            Notification.sendNotificationToUser(element.client_info.user_id, 'flaticon2-warning-1 kt-font-danger', 'Czas realizacji zapytania ofertowego <b style="color:red;">00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b> dobiegł końca.');
+            Notification.sendNotificationByRole('administrator', 'flaticon2-warning-1 kt-font-danger', 'Pracownik <b>' + user.fullname + '</b> nie zrealizował oferty dla zapytania ofertowego <b style="color:red;">00' + element.id + '/' + moment(element.created_at).format('YYYY') + '</b>.');
+
+            RequestOffers.setValueById(element.id, 'realise_time', null);
+          });
+        }
+      }
+    });
+  });
 };
 
 module.exports.provisionStatistics = (days, forecast, callback) => {

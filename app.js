@@ -26,6 +26,7 @@ const app = express();
 
 // CronTab events
 Cron.ScheduleEveryDay();
+Cron.loopHandler();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

@@ -1098,20 +1098,36 @@ exports.requestOfferDone = async (req, res) => {
       await ROffer.getOfferById(req.body.roffer_id, function(result) {
         result = result.toJSON();
 
+        var translations = {
+          '30 minutes': '30 minut',
+          '1 hours': '1 godzina',
+          '2 hours': '2 godziny',
+          '3 hours': '3 godziny',
+          '4 hours': '4 godziny',
+          '6 hours': '6 godzin',
+          '9 hours': '9 godzin',
+          '12 hours': '12 godzin',
+          '1 days': '1 dzień',
+          '2 days': '2 dni',
+          '3 days': '3 dni',
+          '4 days': '4 dni',
+          '7 days': '7 dni'
+        };
+
         if(result.state == 2) {
           User.getUserPartner(result.client_info.user_id, e => {
             if(e.partner) {
               if(req.body.percentage_partner.length != 0) {
-                ROffer.updateProvisions(req.body);
+                ROffer.updateSummaryData(req.body);
                 //
-                Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+                Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane. Czas na realizację oferty: <b>' + translations[req.body.realise_time] + '</b>.')
                 .then(function(done) {
                   res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
                 });
               } else res.json({ status: 'error', message: 'Procent prowizji dla partnera nie został ustanowiony, ustaw prowizję dla partnera i spróbuj ponownie.' });
             } else {
-              ROffer.setValueById(result.id, 'state', 3);
-              Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane przez administratora <b>' + req.session.userData.fullname + '</b>.')
+              ROffer.updateSummaryData(req.body);
+              Notification.sendNotificationToUser(result.client_info.user_id, 'flaticon-questions-circular-button kt-font-brand', 'Zapytanie ofertowe <b>00' + result.id + '/' + moment(result.created_at).local().format('YYYY') + '</b> zostało zrealizowane. Czas na realizację oferty: <b>' + translations[req.body.realise_time] + '</b>.')
               .then(function(done) {
                 res.json({ status: 'success', message: 'Zapytanie zostało zrealizowane pomyślnie.' });
               });

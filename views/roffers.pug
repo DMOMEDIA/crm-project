@@ -708,6 +708,24 @@ block content
                                         h5.kt-section__title.kt-section__title-sm.d-inline-block Podsumowanie:
                                     form#provisions_form
                                       .form-group.row
+                                        label.col-xl-4.col-lg-4.col-form-label(for="realise_time") Czas realizacji zapytania:
+                                        .col-lg-8.col-xl-8
+                                          select#realise_time.form-control.kt-selectpicker(name='realise_time')
+                                            option(value='', selected='', disabled='') Nie wybrano
+                                            option(value='30 minutes') 30 minut
+                                            option(value='1 hours') 1 godzina
+                                            option(value='2 hours') 2 godziny
+                                            option(value='3 hours') 3 godziny
+                                            option(value='4 hours') 4 godziny
+                                            option(value='6 hours') 6 godzin
+                                            option(value='9 hours') 9 godzin
+                                            option(value='12 hours') 12 godzin
+                                            option(value='1 days') 1 dzień
+                                            option(value='2 days') 2 dni
+                                            option(value='3 days') 3 dni
+                                            option(value='4 days') 4 dni
+                                            option(value='7 days') 7 dni
+                                      .form-group.row
                                         label.col-xl-4.col-lg-4.col-form-label Prowizja dla partnera:
                                         |                                         
                                         .col-lg-8.col-xl-8
@@ -728,7 +746,7 @@ block content
                                                 |  Nie
                                                 |                      
                                                 span
-                                              |                   
+                                              |            
                                         #provision_gapInputHide.form-group.row
                                           label.col-xl-4.col-lg-4.col-form-label Prowizja z ubezp. GAP:
                                           |                                         

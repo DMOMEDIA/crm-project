@@ -259,6 +259,13 @@ var KTClientListDatatable = function() {
 			// Submit valid form
 			submitHandler: function (form) { }
 		});
+
+		/* $.validator.addMethod("dateGreater", function(value) {
+			var currentDate = moment().unix(); // current timestamp
+			var dateVal = moment(value).unix();
+
+			if(currentDate < dateVal) return true;
+		}); */
 	}
 
 	var initClientData = function() {
@@ -771,6 +778,15 @@ var KTClientListDatatable = function() {
 			form_personal = $('#kt_client_edit_personal');
 			$('.kt-selectpicker').selectpicker({
 				noneSelectedText : 'Nie wybrano'
+			});
+
+			$('#kt_datetimepicker_3').datetimepicker({
+				todayHighlight: true,
+				autoclose: true,
+				pickerPosition: 'top-left',
+				todayBtn: true,
+				format: 'yyyy/mm/dd hh:ii',
+				minDate: new Date()
 			});
 
 			init();

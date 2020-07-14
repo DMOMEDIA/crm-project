@@ -200,6 +200,7 @@ module.exports.saveClientData = (req, callback) => {
       if(client.client_type == 0) {
         if(client.firstname && client.lastname) model.set('fullname', client.firstname + ' ' + client.lastname);
         if(client.priv_nip) model.set('nip', client.priv_nip);
+        else model.set('nip', null);
         model.set('company', client.client_type);
       }
       else if(client.client_type == 1) {
@@ -208,6 +209,7 @@ module.exports.saveClientData = (req, callback) => {
         if(client.corp_regon) model.set('regon', client.corp_regon);
         else model.set('regon', null);
         if(client.corp_nip) model.set('nip', client.corp_nip);
+        else model.set('nip', null);
         model.set('company', client.client_type);
       } else {
         model.set('company', client.client_type);
@@ -215,9 +217,11 @@ module.exports.saveClientData = (req, callback) => {
         if(client.company_regon) model.set('regon', client.company_regon);
         else model.set('regon', null);
         if(client.company_nip) model.set('nip', client.company_nip);
+        else model.set('nip', null);
       }
 
       if(client.pNumber) model.set('phone', client.pNumber);
+      else model.set('phone', null);
       if(client.email) model.set('email', client.email);
       if(client.data_processing) model.set('data_process', client.data_processing);
       else model.set('data_process', 0);
@@ -225,7 +229,25 @@ module.exports.saveClientData = (req, callback) => {
       else model.set('marketing', 0);
 
       if(client.param) {
-        if(model.get('user_id') != client.param) user_defined = true;
+        if(model.get('user_id') != client.param) {
+          user_defined = true;
+
+          /**
+            @Info Zmiana przypisanego pracownika, należy pobrać wszystkie zapytania ofertowe klienta,
+            zweryfikować czy:
+
+              - posiadają status Zweryfikowany (3)
+              - mają nadaną wartość realise_add
+              - realise_time jest null
+              - offer_id jest null
+
+              Jeśli zapytania klienta spełniają ww. wymagania, należy nadać nową wartość realise_time = aktualna data.
+              Wysłane zostaną powiadomienia dla każdego zapytania oddzielnie z czasami realizacji.
+
+            Jeśli są zweryfikowane, nie mają nadanej wartości realise_add, to znaczy że są zapytaniami
+            stworzonymi przed aktualizacją 1.8.1.2 beta oraz czasy realizacji nie będą wymagane.
+          **/
+        }
 
         model.set('user_id', client.param);
         if(model.get('state') != 4) {

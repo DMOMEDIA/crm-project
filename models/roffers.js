@@ -105,13 +105,17 @@ module.exports.deleteROffer = (id, callback) => {
   });
 };
 
-module.exports.updateProvisions = (values) => {
+module.exports.updateSummaryData = (values) => {
   return new ROffer().where({ id: values.roffer_id }).fetch()
   .then(function(model) {
     if(model) {
       if(values.percentage_partner) model.set('percentage_partner', values.percentage_partner);
       if(values.percentage_gap.length != 0) model.set('percentage_gap', values.percentage_gap);
       if(values.percentage_acoc.length != 0) model.set('percentage_acoc', values.percentage_acoc);
+      if(values.realise_time) {
+        model.set('realise_add', values.realise_time);
+        model.set('realise_time', moment().format("YYYY-MM-DD HH:mm:ss"));
+      }
       model.set('state', 3);
       model.save();
     }
@@ -122,7 +126,7 @@ module.exports.setValueById = (id, name, data) => {
   return new ROffer().where({ id: id }).fetch()
   .then(function(model) {
     if(model) {
-      if(data) model.set(name, data);
+      model.set(name, data);
       model.save();
     }
   });
