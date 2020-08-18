@@ -226,6 +226,7 @@ var KTOfferListDatatable = function() {
 											type: res.offer_type
 										},
 										success: function(response) {
+											console.log(response);
 											if(response.partner_id) {
 												if(response.provision) {
 													var provision = parseFloat(response.provision);
@@ -248,7 +249,6 @@ var KTOfferListDatatable = function() {
 													})
 
 													$('#provisions_element').show();
-													console.log(response);
 													if(response.message == 'partner_and_agent_found') {
 														$('#partner_prov_box,#agent_prov_box,#employee_prov_box').show();
 													} else if(response.message == 'user_is_partner') {
