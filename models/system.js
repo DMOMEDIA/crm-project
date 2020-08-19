@@ -210,7 +210,6 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
       new ROffer().where({ offer_id: offer_id + '/' + otype }).fetch()
       .then(function(e) {
         if(e) {
-          console.log('debug 0');
           e = e.toJSON();
 
           if(e.percentage_partner) {
@@ -233,24 +232,50 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
               User.getUserPartner(result.created_by, cb => {
                 if(cb.partner) {
                   console.log('debug 2');
-                   provision = Math.round((provision*(pg_partner/100))*100)/100;
-                   prov_crm = Math.round((provision*((100-pg_partner)/100))*100)/100;
-                }
+                  var provision = Math.round((provision*(pg_partner/100))*100)/100,
+                  prov_crm = Math.round((provision*((100-pg_partner)/100))*100)/100;
 
-                callback({
-                  provision: provision,
-                  percentage: pg_partner,
-                  prov_crm: prov_crm,
-                  perc_crm: (100-pg_partner),
-                  message: cb.message,
-                  creator_role: cb.role,
-                  partner_id: cb.partner,
-                  agent_id: cb.agent,
-                  creator_id: result.created_by,
-                  prov_partner: result.prov_partner,
-                  prov_agent: result.prov_agent,
-                  prov_employee: result.prov_employee
-                });
+                  callback({
+                    provision: provision,
+                    percentage: pg_partner,
+                    prov_crm: prov_crm,
+                    perc_crm: (100-pg_partner),
+                    message: cb.message,
+                    creator_role: cb.role,
+                    partner_id: cb.partner,
+                    agent_id: cb.agent,
+                    creator_id: result.created_by,
+                    prov_partner: result.prov_partner,
+                    prov_agent: result.prov_agent,
+                    prov_employee: result.prov_employee
+                  });
+                } else {
+                  var i_prov = parseFloat(0);
+
+                  if(e.percentage_gap && result.gap_rata) {
+                    var pg = parseFloat(e.percentage_gap.split(' ')[0]);
+                    i_prov += (parseFloat(result.gap_rata)*(pg/100));
+                  }
+                  if(e.percentage_acoc && result.acoc_rata) {
+                    var pg = parseFloat(e.percentage_acoc.split(' ')[0]);
+                    i_prov += (parseFloat(result.acoc_rata)*(pg/100));
+                  }
+
+                  provision = provision + i_prov;
+
+                  callback({
+                    provision: null,
+                    percentage: null,
+                    prov_crm: provision,
+                    perc_crm: 100,
+                    message: 'provision_for_crm',
+                    creator_id: result.created_by,
+                    partner_id: null,
+                    prov_partner: null,
+                    prov_agent: null,
+                    prov_employee: null
+                  });
+                }
               });
             }
           } else {
