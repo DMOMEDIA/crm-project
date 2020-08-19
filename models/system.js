@@ -210,6 +210,7 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
       new ROffer().where({ offer_id: offer_id + '/' + otype }).fetch()
       .then(function(e) {
         if(e) {
+          console.log('debug 0');
           e = e.toJSON();
 
           if(e.percentage_partner) {
@@ -228,8 +229,10 @@ module.exports.calculateProvisionFromOffer = (offer_id, otype, callback) => {
             provision = provision + i_prov;
 
             if(result.created_by != 0) {
+              console.log('debug 1');
               User.getUserPartner(result.created_by, cb => {
                 if(cb.partner) {
+                  console.log('debug 2');
                    provision = Math.round((provision*(pg_partner/100))*100)/100;
                    prov_crm = Math.round((provision*((100-pg_partner)/100))*100)/100;
                 }
