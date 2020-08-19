@@ -226,7 +226,6 @@ var KTOfferListDatatable = function() {
 											type: res.offer_type
 										},
 										success: function(response) {
-											console.log(response);
 											if(response.partner_id) {
 												if(response.provision) {
 													var provision = parseFloat(response.provision);
