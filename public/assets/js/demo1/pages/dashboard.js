@@ -7,7 +7,7 @@ var KTDashboard = function() {
 		unread = 0,
 		audioElement = null,
 		app_version = '1.8.1.5 beta',
-		app_update = '2020-08-19 00:00:00';
+		app_update = '2020-08-24 00:00:00';
 
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
