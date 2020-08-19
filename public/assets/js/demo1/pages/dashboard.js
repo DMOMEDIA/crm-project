@@ -6,7 +6,8 @@ var KTDashboard = function() {
 		cnt_notify = $('#count_notify'),
 		unread = 0,
 		audioElement = null,
-		app_version = '1.8.1.2 beta';
+		app_version = '1.8.1.5 beta',
+		app_update = '2020-08-19 00:00:00';
 
 		function timeDifference(current, previous) {
 			var msPerMinute = 60;
@@ -131,7 +132,7 @@ var KTDashboard = function() {
 							audioElement.play();
 						}
 
-						if(moment('2020-07-17 00:00:00').unix() > moment().unix())
+						if(moment(app_update).unix() > moment().unix())
 							KTUtil.showNotifyAlert('success', 'Aplikacja została zaktualizowana do najnowszej wersji.</br>Sprawdź <a href="/dashboard/system"><b>historię zmian</b></a>.', 'Aktualizacja ' + app_version, 'flaticon-download');
 					}
 
