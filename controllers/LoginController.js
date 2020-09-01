@@ -32,7 +32,11 @@ exports.successLogin = (req, res, next) => {
   req.session.expireSession = (new Date().getTime() + 900000);
   req.session.failLogin = null;
 
-  res.redirect('/dashboard');
+  setTimeout(loading, 10000);
+
+  function loading() {
+      res.redirect('/dashboard');
+  }
 };
 
 exports.getPermissions = async (req, res, next) => {
