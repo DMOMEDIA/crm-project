@@ -35,7 +35,7 @@
     "multer": "^1.4.2",
     "mysql2": "^1.7.0",
     "node-pdftk": "^2.1.1",
-    "nodemailer": "^6.4.2",
+    "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
