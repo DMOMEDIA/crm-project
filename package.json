@@ -27,7 +27,7 @@
     "express-validator": "^6.3.0",
     "fs": "0.0.1-security",
     "http": "0.0.0",
-    "hummus": "^1.0.108",
+    "hummus": "^1.0.111",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.19.5",
     "mime": "^2.4.4",
