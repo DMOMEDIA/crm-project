@@ -28,7 +28,7 @@
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "hummus": "^1.0.108",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.19.5",
     "mime": "^2.4.4",
     "moment": "^2.24.0",
